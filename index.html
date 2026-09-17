@@ -54,7 +54,7 @@
     .modal-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 999px; }
     .progress-ring { transition: stroke-dashoffset .5s ease; transform: rotate(-90deg); transform-origin: 50% 50%; }
     .active-nav { color:#2F8DFD !important; background:rgba(47,141,253,.08); }
-    /* Hide scrollbar for mobile tabs */
+    /* Ocultar barra de desplazamiento en pestañas móviles */
     .hide-scrollbar::-webkit-scrollbar { display: none; }
     .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
@@ -766,21 +766,21 @@
             </div>
           </div>
 
-          <form id="contactForm" data-endpoint="https://formspree.io/f/mdekoyqz" class="p-6 sm:p-10 space-y-5">
+          <form id="contactForm" class="p-6 sm:p-10 space-y-5">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
                 <label for="nombre" class="text-sm font-bold text-slate-700">Nombre completo</label>
-                <input id="nombre" name="nombre" required class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-lutmin-light" />
+                <input id="nombre" required class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-lutmin-light" />
               </div>
               <div>
                 <label for="email" class="text-sm font-bold text-slate-700">Correo electrónico</label>
-                <input id="email" name="email" type="email" required class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-lutmin-light" />
+                <input id="email" type="email" required class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-lutmin-light" />
               </div>
             </div>
 
             <div>
               <label for="asunto" class="text-sm font-bold text-slate-700">Área de interés</label>
-              <select id="asunto" name="asunto" class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-lutmin-light">
+              <select id="asunto" class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-lutmin-light">
                 <option value="Formación / Cursos">Formación / Cursos</option>
                 <option value="Capacitación In-Company">Capacitación In-Company</option>
                 <option value="Reclutamiento y Selección">Reclutamiento y Selección</option>
@@ -793,7 +793,7 @@
 
             <div>
               <label for="mensaje" class="text-sm font-bold text-slate-700">Mensaje</label>
-              <textarea id="mensaje" name="mensaje" rows="5" required class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-lutmin-light"></textarea>
+              <textarea id="mensaje" rows="5" required class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-lutmin-light"></textarea>
             </div>
 
             <button type="submit" class="w-full py-3.5 rounded-xl bg-lutmin-light hover:bg-blue-600 text-white font-extrabold transition">
@@ -1357,42 +1357,15 @@
     }
 
     // =========================================================
-    // ENVÍO DE FORMULARIO VÍA FORMSPREE (AJAX / FETCH)
+    // FORMULARIO DEMO
     // =========================================================
-    document.getElementById('contactForm').addEventListener('submit', async function(event) {
+    document.getElementById('contactForm').addEventListener('submit', event => {
       event.preventDefault();
 
-      const form = event.target;
-      const endpoint = form.getAttribute('data-endpoint');
-      const submitBtn = form.querySelector('button[type="submit"]');
-      const originalBtnText = submitBtn.textContent;
+      const nombre = document.getElementById('nombre').value.trim();
+      const asunto = document.getElementById('asunto').value;
 
-      submitBtn.disabled = true;
-      submitBtn.textContent = "Enviando...";
-
-      const formData = new FormData(form);
-
-      try {
-        const response = await fetch(endpoint, {
-          method: 'POST',
-          body: formData,
-          headers: {
-            'Accept': 'application/json'
-          }
-        });
-
-        if (response.ok) {
-          showToast("¡Gracias! Tu mensaje ha sido enviado con éxito.");
-          form.reset();
-        } else {
-          showToast("Hubo un problema al enviar la consulta. Intenta nuevamente.");
-        }
-      } catch (error) {
-        showToast("Error de conexión. Verifica tu red e intenta más tarde.");
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = originalBtnText;
-      }
+      showToast(`Consulta preparada para ${nombre} (${asunto}).`);
     });
 
     // =========================================================
