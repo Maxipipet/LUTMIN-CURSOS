@@ -63,7 +63,7 @@
 <body class="bg-white text-slate-800 antialiased overflow-x-hidden">
 
   <!-- =========================================================
-        HEADER
+       HEADER
   ========================================================== -->
   <header class="fixed top-0 left-0 right-0 z-50 border-b border-slate-200/80 bg-white/90 backdrop-blur-xl">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
@@ -108,7 +108,7 @@
   </header>
 
   <!-- =========================================================
-        HERO
+       HERO
   ========================================================== -->
   <main>
     <section id="inicio" class="relative min-h-[92vh] pt-28 flex items-center overflow-hidden bg-lutmin-dark text-white">
@@ -756,7 +756,7 @@
             <span class="text-lutmin-light text-xs font-extrabold uppercase tracking-[.18em]">Contacto</span>
             <h2 class="mt-3 text-3xl font-black">Hablemos de tu necesidad.</h2>
             <p class="mt-4 text-sm text-slate-300 leading-relaxed">
-              Elegí el tipo de consulta y dejá tus datos. En producción, este formulario debería conectarse a una API o CRM.
+              Elegí el tipo de consulta y dejá tus datos para ponernos en contacto a la brevedad.
             </p>
 
             <div class="mt-8 space-y-5 text-sm">
@@ -766,7 +766,7 @@
             </div>
           </div>
 
-          <form action="https://formspree.io/f/mdekoyqz" method="POST" class="p-6 sm:p-10 space-y-5">
+          <form id="contactForm" data-endpoint="https://formspree.io/f/mdekoyqz" class="p-6 sm:p-10 space-y-5">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
                 <label for="nombre" class="text-sm font-bold text-slate-700">Nombre completo</label>
@@ -797,12 +797,8 @@
             </div>
 
             <button type="submit" class="w-full py-3.5 rounded-xl bg-lutmin-light hover:bg-blue-600 text-white font-extrabold transition">
-              Preparar consulta
+              Enviar consulta
             </button>
-
-            <p class="text-[11px] text-slate-400">
-              Esta demo no envía datos a un servidor. Al conectar backend, reemplazá el manejador JavaScript por un POST a tu API.
-            </p>
           </form>
         </div>
       </div>
@@ -810,7 +806,7 @@
   </main>
 
   <!-- =========================================================
-        FOOTER
+       FOOTER
   ========================================================== -->
   <footer class="bg-lutmin-dark text-white py-10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row gap-6 md:items-center md:justify-between text-center md:text-left">
@@ -824,7 +820,7 @@
   </footer>
 
   <!-- =========================================================
-        MODAL CURSO
+       MODAL CURSO
   ========================================================== -->
   <div id="courseModal" class="hidden fixed inset-0 z-[80] bg-slate-950/70 backdrop-blur-sm p-4 flex items-center justify-center">
     <div class="w-full max-w-3xl bg-white rounded-[2rem] shadow-2xl max-h-[90vh] overflow-y-auto modal-scroll relative">
@@ -871,7 +867,7 @@
   </div>
 
   <!-- =========================================================
-        MODAL CAMPUS (CON NAVEGACIÓN MÓVIL RESPONSIVA)
+       MODAL CAMPUS (CON NAVEGACIÓN MÓVIL RESPONSIVA)
   ========================================================== -->
   <div id="campusModal" class="hidden fixed inset-0 z-[90] bg-slate-950/80 backdrop-blur-md p-2 sm:p-4 flex items-center justify-center">
     <div class="w-full max-w-7xl mx-auto bg-slate-50 rounded-[1.5rem] shadow-2xl h-[95vh] overflow-hidden relative flex flex-col lg:grid lg:grid-cols-[240px_1fr]">
@@ -1091,7 +1087,7 @@
   </div>
 
   <!-- =========================================================
-        MODAL PERFIL
+       MODAL PERFIL
   ========================================================== -->
   <div id="profileModal" class="hidden fixed inset-0 z-[95] bg-slate-950/80 backdrop-blur-md p-4 flex items-center justify-center">
     <div class="w-full max-w-3xl mx-auto bg-white rounded-[2rem] max-h-[90vh] overflow-y-auto modal-scroll shadow-2xl relative">
@@ -1160,7 +1156,7 @@
   </div>
 
   <!-- =========================================================
-        MODAL CERTIFICADO
+       MODAL CERTIFICADO
   ========================================================== -->
   <div id="certificateModal" class="hidden fixed inset-0 z-[100] bg-slate-950/80 backdrop-blur-md p-4 flex items-center justify-center">
     <div class="w-full max-w-2xl mx-auto bg-white rounded-[2rem] shadow-2xl relative overflow-hidden">
@@ -1197,7 +1193,7 @@
   </div>
 
   <!-- =========================================================
-        TOAST
+       TOAST
   ========================================================== -->
   <div id="toast" class="hidden fixed bottom-5 right-5 z-[120] bg-lutmin-dark text-white px-5 py-4 rounded-2xl shadow-2xl max-w-sm text-sm mx-4 sm:mx-0">
     <div class="flex gap-3">
@@ -1359,6 +1355,45 @@
       document.getElementById('mensaje').value = `Hola, me interesa recibir información sobre el servicio de "${service}".`;
       document.getElementById('contacto').scrollIntoView({ behavior: 'smooth' });
     }
+
+    // =========================================================
+    // ENVÍO DE FORMULARIO VÍA FORMSPREE (AJAX / FETCH)
+    // =========================================================
+    document.getElementById('contactForm').addEventListener('submit', async function(event) {
+      event.preventDefault();
+
+      const form = event.target;
+      const endpoint = form.getAttribute('data-endpoint');
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const originalBtnText = submitBtn.textContent;
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Enviando...";
+
+      const formData = new FormData(form);
+
+      try {
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'Accept': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          showToast("¡Gracias! Tu mensaje ha sido enviado con éxito.");
+          form.reset();
+        } else {
+          showToast("Hubo un problema al enviar la consulta. Intenta nuevamente.");
+        }
+      } catch (error) {
+        showToast("Error de conexión. Verifica tu red e intenta más tarde.");
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalBtnText;
+      }
+    });
 
     // =========================================================
     // TOAST
