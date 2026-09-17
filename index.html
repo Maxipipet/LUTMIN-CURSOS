@@ -766,7 +766,7 @@
             </div>
           </div>
 
-          <form id="contactForm" class="p-6 sm:p-10 space-y-5">
+          <form action="ACA_PEGA_EL_LINK_QUE_TE_DIO_FORMSPREE" method="POST" class="p-6 sm:p-10 space-y-5">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
                 <label for="nombre" class="text-sm font-bold text-slate-700">Nombre completo</label>
@@ -1359,16 +1359,6 @@
       document.getElementById('mensaje').value = `Hola, me interesa recibir información sobre el servicio de "${service}".`;
       document.getElementById('contacto').scrollIntoView({ behavior: 'smooth' });
     }
-
-    // =========================================================
-    // FORMULARIO DEMO
-    // =========================================================
-    document.getElementById('contactForm').addEventListener('submit', event => {
-      event.preventDefault();
-      const nombre = document.getElementById('nombre').value.trim();
-      const asunto = document.getElementById('asunto').value;
-      showToast(`Consulta preparada para ${nombre}. Conectá el backend para enviar.`);
-    });
 
     // =========================================================
     // TOAST
