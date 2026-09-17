@@ -6,7 +6,7 @@
   <meta name="description" content="Lutmin Consultora - Formación, desarrollo organizacional, talento y soluciones para empresas." />
   <title>Lutmin | Formación, Talento y Desarrollo Organizacional</title>
 
-  <!-- FAVICON REFORZADO -->
+  <!-- FAVICON -->
   <link rel="icon" type="image/png" href="LOGO.png" />
   <link rel="shortcut icon" href="LOGO.png" type="image/x-icon" />
   <link rel="apple-touch-icon" href="LOGO.png" />
@@ -52,9 +52,7 @@
     }
     .modal-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
     .modal-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 999px; }
-    .progress-ring { transition: stroke-dashoffset .5s ease; transform: rotate(-90deg); transform-origin: 50% 50%; }
     .active-nav { color:#2F8DFD !important; background:rgba(47,141,253,.08); }
-    /* Ocultar barra de desplazamiento en pestañas móviles */
     .hide-scrollbar::-webkit-scrollbar { display: none; }
     .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
@@ -77,6 +75,7 @@
         <a class="nav-link px-3 py-2 rounded-xl hover:text-lutmin-light hover:bg-lutmin-light/5 transition" href="#consultora">Consultora</a>
         <a class="nav-link px-3 py-2 rounded-xl hover:text-lutmin-light hover:bg-lutmin-light/5 transition" href="#conecta">Lutmin Conecta</a>
         <a class="nav-link px-3 py-2 rounded-xl hover:text-lutmin-light hover:bg-lutmin-light/5 transition" href="#empresas">Empresas</a>
+        <a class="nav-link px-3 py-2 rounded-xl hover:text-lutmin-light hover:bg-lutmin-light/5 transition" href="#faq">Preguntas Frecuentes</a>
       </nav>
 
       <div class="hidden md:flex items-center gap-3">
@@ -100,6 +99,7 @@
         <a class="mobile-link px-4 py-3 rounded-xl hover:bg-slate-50" href="#consultora">Consultora</a>
         <a class="mobile-link px-4 py-3 rounded-xl hover:bg-slate-50" href="#conecta">Lutmin Conecta</a>
         <a class="mobile-link px-4 py-3 rounded-xl hover:bg-slate-50" href="#empresas">Empresas</a>
+        <a class="mobile-link px-4 py-3 rounded-xl hover:bg-slate-50" href="#faq">Preguntas Frecuentes</a>
         <button onclick="openCampus()" class="mt-2 bg-lutmin-dark text-white px-4 py-3 rounded-xl font-bold flex justify-center items-center gap-2">
           <i class="fa-solid fa-graduation-cap"></i> Acceso Campus
         </button>
@@ -747,9 +747,64 @@
     </section>
 
     <!-- =========================================================
+         PREGUNTAS FRECUENTES (FAQ)
+    ========================================================== -->
+    <section id="faq" class="py-20 sm:py-24 bg-slate-50 border-t border-slate-100">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center">
+          <span class="text-lutmin-light text-xs font-extrabold uppercase tracking-[.18em]">Resolvé tus dudas</span>
+          <h2 class="mt-3 text-3xl sm:text-4xl font-black text-lutmin-dark">Preguntas Frecuentes</h2>
+          <p class="mt-4 text-slate-600">Todo lo que necesitás saber sobre la modalidad, certificados y servicios corporativos.</p>
+        </div>
+
+        <div class="mt-12 space-y-4">
+          <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm transition">
+            <button onclick="toggleFaq(this)" class="w-full p-6 text-left font-bold text-lutmin-dark text-lg flex justify-between items-center gap-4">
+              <span>¿Los certificados tienen validez comprobable?</span>
+              <i class="fa-solid fa-chevron-down text-lutmin-light transition-transform duration-300"></i>
+            </button>
+            <div class="hidden px-6 pb-6 text-slate-600 text-sm leading-relaxed border-t border-slate-50 pt-4">
+              Sí. Cada certificado emitido por Lutmin incluye un código de verificación único y un código QR que permite a cualquier empresa o entidad validar de manera pública la autenticidad, la carga horaria y la calificación obtenida.
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm transition">
+            <button onclick="toggleFaq(this)" class="w-full p-6 text-left font-bold text-lutmin-dark text-lg flex justify-between items-center gap-4">
+              <span>¿Cómo funciona la modalidad de dictado de los cursos?</span>
+              <i class="fa-solid fa-chevron-down text-lutmin-light transition-transform duration-300"></i>
+            </button>
+            <div class="hidden px-6 pb-6 text-slate-600 text-sm leading-relaxed border-t border-slate-50 pt-4">
+              Contamos con esquemas flexibles online asincrónicos, clases en vivo e instancias híbridas con talleres prácticos, según el programa elegido. Todos los contenidos quedan respaldados dentro del Campus Lutmin.
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm transition">
+            <button onclick="toggleFaq(this)" class="w-full p-6 text-left font-bold text-lutmin-dark text-lg flex justify-between items-center gap-4">
+              <span>¿Qué beneficios ofrece Lutmin Empresas?</span>
+              <i class="fa-solid fa-chevron-down text-lutmin-light transition-transform duration-300"></i>
+            </button>
+            <div class="hidden px-6 pb-6 text-slate-600 text-sm leading-relaxed border-t border-slate-50 pt-4">
+              Permite a las organizaciones contratar capacitaciones a medida para sus nóminas, obtener un panel de control exclusivo para seguir el porcentaje de avance de cada colaborador y acceder al banco de talentos de Lutmin Conecta.
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm transition">
+            <button onclick="toggleFaq(this)" class="w-full p-6 text-left font-bold text-lutmin-dark text-lg flex justify-between items-center gap-4">
+              <span>¿Cómo solicito un servicio de Consultoría Organizacional?</span>
+              <i class="fa-solid fa-chevron-down text-lutmin-light transition-transform duration-300"></i>
+            </button>
+            <div class="hidden px-6 pb-6 text-slate-600 text-sm leading-relaxed border-t border-slate-50 pt-4">
+              Podés completar el formulario de contacto seleccionando el área de interés o comunicarte directamente con nuestro equipo. Coordinamos una reunión de diagnóstico previa sin costo para relevar la estructura y proponer una solución.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
          CONTACTO
     ========================================================== -->
-    <section id="contacto" class="py-20 sm:py-24 bg-slate-50 border-t border-slate-100">
+    <section id="contacto" class="py-20 sm:py-24 bg-white border-t border-slate-100">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid lg:grid-cols-[.8fr_1.2fr] rounded-[2rem] bg-white overflow-hidden shadow-soft border border-slate-100">
           <div class="bg-lutmin-dark text-white p-8 sm:p-10">
@@ -766,21 +821,21 @@
             </div>
           </div>
 
-          <form id="contactForm" class="p-6 sm:p-10 space-y-5">
+          <form id="contactForm" data-endpoint="https://formspree.io/f/mdekoyqz" class="p-6 sm:p-10 space-y-5">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
                 <label for="nombre" class="text-sm font-bold text-slate-700">Nombre completo</label>
-                <input id="nombre" required class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-lutmin-light" />
+                <input id="nombre" name="nombre" required class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-lutmin-light" />
               </div>
               <div>
                 <label for="email" class="text-sm font-bold text-slate-700">Correo electrónico</label>
-                <input id="email" type="email" required class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-lutmin-light" />
+                <input id="email" name="email" type="email" required class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-lutmin-light" />
               </div>
             </div>
 
             <div>
               <label for="asunto" class="text-sm font-bold text-slate-700">Área de interés</label>
-              <select id="asunto" class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-lutmin-light">
+              <select id="asunto" name="asunto" class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-lutmin-light">
                 <option value="Formación / Cursos">Formación / Cursos</option>
                 <option value="Capacitación In-Company">Capacitación In-Company</option>
                 <option value="Reclutamiento y Selección">Reclutamiento y Selección</option>
@@ -793,7 +848,7 @@
 
             <div>
               <label for="mensaje" class="text-sm font-bold text-slate-700">Mensaje</label>
-              <textarea id="mensaje" rows="5" required class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-lutmin-light"></textarea>
+              <textarea id="mensaje" name="mensaje" rows="5" required class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-lutmin-light"></textarea>
             </div>
 
             <button type="submit" class="w-full py-3.5 rounded-xl bg-lutmin-light hover:bg-blue-600 text-white font-extrabold transition">
@@ -867,7 +922,7 @@
   </div>
 
   <!-- =========================================================
-       MODAL CAMPUS (CON NAVEGACIÓN MÓVIL RESPONSIVA)
+       MODAL CAMPUS
   ========================================================== -->
   <div id="campusModal" class="hidden fixed inset-0 z-[90] bg-slate-950/80 backdrop-blur-md p-2 sm:p-4 flex items-center justify-center">
     <div class="w-full max-w-7xl mx-auto bg-slate-50 rounded-[1.5rem] shadow-2xl h-[95vh] overflow-hidden relative flex flex-col lg:grid lg:grid-cols-[240px_1fr]">
@@ -875,7 +930,6 @@
         <i class="fa-solid fa-xmark"></i>
       </button>
 
-      <!-- Sidebar Desktop -->
       <aside class="hidden lg:flex bg-lutmin-dark text-white p-6 flex-col">
         <img src="LOGO.png" alt="Lutmin" class="h-12 w-auto object-contain self-start">
         <p class="mt-8 text-xs uppercase tracking-widest text-blue-200 font-bold">Campus Lutmin</p>
@@ -891,10 +945,7 @@
         </div>
       </aside>
 
-      <!-- Contenedor Principal (Incluye Navegación Móvil) -->
       <div class="flex flex-col h-full overflow-hidden">
-        
-        <!-- Navegación Móvil (Visible solo en celulares) -->
         <div class="lg:hidden bg-lutmin-dark text-white pt-14 pb-2 px-4 shadow-md z-20">
             <p class="text-[10px] text-blue-200 font-bold uppercase mb-2 ml-1">Campus Lutmin</p>
             <div class="flex overflow-x-auto hide-scrollbar gap-2 pb-2">
@@ -907,9 +958,8 @@
 
         <div class="overflow-y-auto modal-scroll flex-1 p-4 sm:p-8 lg:p-10 relative">
           
-          <!-- Dashboard -->
           <section class="campus-panel" data-campus-panel="dashboard">
-            <p class="text-xs sm:text-sm text-slate-500">Miércoles, 16 de septiembre</p>
+            <p class="text-xs sm:text-sm text-slate-500">Jueves, 17 de septiembre</p>
             <h2 class="mt-1 text-2xl sm:text-3xl font-black text-lutmin-dark">Hola, Maximiliano 👋</h2>
             <p class="mt-1 sm:mt-2 text-sm sm:text-base text-slate-500">Continuemos donde lo dejaste.</p>
 
@@ -1002,7 +1052,6 @@
             </div>
           </section>
 
-          <!-- Courses -->
           <section class="campus-panel hidden" data-campus-panel="courses">
             <p class="text-[10px] sm:text-xs text-lutmin-light font-bold uppercase tracking-widest">Campus</p>
             <h2 class="mt-1 sm:mt-2 text-2xl sm:text-3xl font-black text-lutmin-dark">Mis cursos</h2>
@@ -1029,7 +1078,6 @@
             </div>
           </section>
 
-          <!-- Certificates -->
           <section class="campus-panel hidden" data-campus-panel="certificates">
             <p class="text-[10px] sm:text-xs text-lutmin-light font-bold uppercase tracking-widest">Campus</p>
             <h2 class="mt-1 sm:mt-2 text-2xl sm:text-3xl font-black text-lutmin-dark">Mis certificados</h2>
@@ -1060,7 +1108,6 @@
             </div>
           </section>
 
-          <!-- Profile -->
           <section class="campus-panel hidden" data-campus-panel="profile">
             <p class="text-[10px] sm:text-xs text-lutmin-light font-bold uppercase tracking-widest">Campus</p>
             <h2 class="mt-1 sm:mt-2 text-2xl sm:text-3xl font-black text-lutmin-dark">Mi perfil profesional</h2>
@@ -1239,6 +1286,23 @@
     });
 
     // =========================================================
+    // ACCORDEÓN FAQ
+    // =========================================================
+    function toggleFaq(btn) {
+      const content = btn.nextElementSibling;
+      const icon = btn.querySelector('i');
+      const isHidden = content.classList.contains('hidden');
+
+      document.querySelectorAll('#faq .px-6.pb-6').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('#faq i').forEach(el => el.classList.remove('rotate-180'));
+
+      if (isHidden) {
+        content.classList.remove('hidden');
+        icon.classList.add('rotate-180');
+      }
+    }
+
+    // =========================================================
     // MODALES
     // =========================================================
     function openModal(id) {
@@ -1294,7 +1358,6 @@
       button.addEventListener('click', () => {
         const tab = button.dataset.campusTab;
 
-        // Actualizar todos los botones (escritorio y celular)
         document.querySelectorAll(`.campus-tab`).forEach(btn => {
           if (btn.dataset.campusTab === tab) {
             btn.classList.add('bg-white/10', 'font-bold');
@@ -1305,7 +1368,6 @@
           }
         });
 
-        // Mostrar panel correspondiente
         document.querySelectorAll('.campus-panel').forEach(panel => {
           panel.classList.toggle('hidden', panel.dataset.campusPanel !== tab);
         });
@@ -1357,15 +1419,42 @@
     }
 
     // =========================================================
-    // FORMULARIO DEMO
+    // ENVÍO DE FORMULARIO VÍA FORMSPREE
     // =========================================================
-    document.getElementById('contactForm').addEventListener('submit', event => {
+    document.getElementById('contactForm').addEventListener('submit', async function(event) {
       event.preventDefault();
 
-      const nombre = document.getElementById('nombre').value.trim();
-      const asunto = document.getElementById('asunto').value;
+      const form = event.target;
+      const endpoint = form.getAttribute('data-endpoint');
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const originalBtnText = submitBtn.textContent;
 
-      showToast(`Consulta preparada para ${nombre} (${asunto}).`);
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Enviando...";
+
+      const formData = new FormData(form);
+
+      try {
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'Accept': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          showToast("¡Gracias! Tu mensaje ha sido enviado con éxito.");
+          form.reset();
+        } else {
+          showToast("Hubo un problema al enviar la consulta. Intenta nuevamente.");
+        }
+      } catch (error) {
+        showToast("Error de conexión. Verifica tu red e intenta más tarde.");
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalBtnText;
+      }
     });
 
     // =========================================================
@@ -1383,7 +1472,7 @@
     // =========================================================
     // NAV ACTIVA
     // =========================================================
-    const sections = ['inicio','formacion','consultora','conecta','empresas'];
+    const sections = ['inicio','formacion','consultora','conecta','empresas','faq'];
     const navLinks = [...document.querySelectorAll('.nav-link')];
 
     const observer = new IntersectionObserver(entries => {
