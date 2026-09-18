@@ -1278,13 +1278,79 @@
           <section class="campus-panel hidden" data-campus-panel="admin">
             <div class="flex flex-col xl:flex-row xl:items-end xl:justify-between gap-4">
               <div>
-                <p class="text-[10px] sm:text-xs text-lutmin-light font-bold uppercase tracking-widest">Lutmin V1.8 · Panel interno</p>
+                <p class="text-[10px] sm:text-xs text-lutmin-light font-bold uppercase tracking-widest">Lutmin V1.9 · Administración modular</p>
                 <h2 class="mt-1 sm:mt-2 text-2xl sm:text-3xl font-black text-lutmin-dark">Administración Lutmin</h2>
                 <p class="mt-2 text-sm text-slate-500">Gestión integral con tablero ejecutivo, alertas académicas, metas, operación, formación, empresas, cobranzas, talento y trazabilidad.</p>
               </div>
               <button onclick="loadAdminData()" class="px-4 py-2.5 rounded-xl bg-white border border-slate-200 text-sm font-bold text-lutmin-dark hover:border-lutmin-light">
                 <i class="fa-solid fa-rotate mr-2"></i>Actualizar datos
               </button>
+            </div>
+
+            <!-- =====================================================
+                 ADMINISTRACIÓN MODULAR V1.9
+            ====================================================== -->
+            <div id="adminWorkspaceV19" class="mt-6 sticky top-0 z-20 bg-slate-50/95 backdrop-blur-xl -mx-1 px-1 py-3 border-y border-slate-200/70">
+              <div class="bg-white rounded-3xl border border-slate-200 shadow-sm p-3 sm:p-4">
+                <div class="flex flex-col xl:flex-row xl:items-center gap-3">
+                  <div class="flex-1 min-w-0">
+                    <div class="flex gap-2 overflow-x-auto hide-scrollbar pb-1" id="adminModuleNavV19">
+                      <button data-admin-v19-btn="overview" onclick="setAdminModuleV19('overview')" class="admin-v19-nav shrink-0 px-3 py-2 rounded-xl text-xs font-extrabold bg-lutmin-dark text-white"><i class="fa-solid fa-house mr-2"></i>Resumen <span id="adminBadgeOverviewV19" class="ml-1 opacity-70"></span></button>
+                      <button data-admin-v19-btn="operations" onclick="setAdminModuleV19('operations')" class="admin-v19-nav shrink-0 px-3 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-600"><i class="fa-solid fa-list-check mr-2"></i>Operación <span id="adminBadgeOperationsV19" class="ml-1"></span></button>
+                      <button data-admin-v19-btn="academic" onclick="setAdminModuleV19('academic')" class="admin-v19-nav shrink-0 px-3 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-600"><i class="fa-solid fa-graduation-cap mr-2"></i>Academia <span id="adminBadgeAcademicV19" class="ml-1"></span></button>
+                      <button data-admin-v19-btn="people" onclick="setAdminModuleV19('people')" class="admin-v19-nav shrink-0 px-3 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-600"><i class="fa-solid fa-users mr-2"></i>Personas <span id="adminBadgePeopleV19" class="ml-1"></span></button>
+                      <button data-admin-v19-btn="companies" onclick="setAdminModuleV19('companies')" class="admin-v19-nav shrink-0 px-3 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-600"><i class="fa-solid fa-building mr-2"></i>Empresas <span id="adminBadgeCompaniesV19" class="ml-1"></span></button>
+                      <button data-admin-v19-btn="commercial" onclick="setAdminModuleV19('commercial')" class="admin-v19-nav shrink-0 px-3 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-600"><i class="fa-solid fa-bullseye mr-2"></i>Comercial <span id="adminBadgeCommercialV19" class="ml-1"></span></button>
+                      <button data-admin-v19-btn="finance" onclick="setAdminModuleV19('finance')" class="admin-v19-nav shrink-0 px-3 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-600"><i class="fa-solid fa-wallet mr-2"></i>Finanzas <span id="adminBadgeFinanceV19" class="ml-1"></span></button>
+                      <button data-admin-v19-btn="talent" onclick="setAdminModuleV19('talent')" class="admin-v19-nav shrink-0 px-3 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-600"><i class="fa-solid fa-briefcase mr-2"></i>Talento</button>
+                      <button data-admin-v19-btn="communications" onclick="setAdminModuleV19('communications')" class="admin-v19-nav shrink-0 px-3 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-600"><i class="fa-solid fa-bullhorn mr-2"></i>Comunicación</button>
+                      <button data-admin-v19-btn="system" onclick="setAdminModuleV19('system')" class="admin-v19-nav shrink-0 px-3 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-600"><i class="fa-solid fa-gear mr-2"></i>Sistema</button>
+                    </div>
+                  </div>
+                  <div class="flex gap-2 xl:w-[440px]">
+                    <div class="relative flex-1">
+                      <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400 text-xs"></i>
+                      <input id="adminGlobalSearchV19" oninput="adminGlobalSearchV19()" onfocus="adminGlobalSearchV19()" class="w-full pl-9 pr-16 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs focus:outline-none focus:border-lutmin-light" placeholder="Buscar alumno, empresa, curso o función...">
+                      <span class="absolute right-3 top-2.5 px-2 py-1 rounded-md bg-white border border-slate-200 text-[9px] text-slate-400">Ctrl K</span>
+                      <div id="adminSearchResultsV19" class="hidden absolute top-full mt-2 left-0 right-0 z-50 max-h-[360px] overflow-y-auto bg-white rounded-2xl border border-slate-200 shadow-2xl p-2"></div>
+                    </div>
+                    <button onclick="toggleAdminQuickActionsV19()" class="px-3.5 py-2.5 rounded-xl bg-lutmin-light text-white text-xs font-extrabold shrink-0"><i class="fa-solid fa-plus mr-1"></i>Acción</button>
+                  </div>
+                </div>
+                <div class="mt-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-t border-slate-100 pt-3">
+                  <div><p id="adminModuleTitleV19" class="text-sm font-black text-lutmin-dark">Resumen</p><p id="adminModuleDescriptionV19" class="text-[11px] text-slate-500 mt-0.5">Indicadores y prioridades del sistema.</p></div>
+                  <div class="flex items-center gap-2">
+                    <button onclick="goToCampusTab('support')" class="px-3 py-2 rounded-xl bg-slate-100 text-slate-600 text-[11px] font-bold"><i class="fa-solid fa-headset mr-1"></i>Mesa de ayuda</button>
+                    <button onclick="runAdminDiagnosticsV19()" class="px-3 py-2 rounded-xl bg-slate-100 text-slate-600 text-[11px] font-bold"><i class="fa-solid fa-stethoscope mr-1"></i>Diagnóstico</button>
+                  </div>
+                </div>
+                <div id="adminQuickActionsV19" class="hidden mt-3 grid sm:grid-cols-2 xl:grid-cols-6 gap-2 border-t border-slate-100 pt-3">
+                  <button onclick="adminQuickActionV19('student')" class="p-3 rounded-xl bg-blue-50 text-blue-700 text-left text-[11px] font-extrabold"><i class="fa-solid fa-user-plus mr-1"></i>Nuevo alumno</button>
+                  <button onclick="adminQuickActionV19('company')" class="p-3 rounded-xl bg-cyan-50 text-cyan-700 text-left text-[11px] font-extrabold"><i class="fa-solid fa-building-circle-check mr-1"></i>Nueva empresa</button>
+                  <button onclick="adminQuickActionV19('course')" class="p-3 rounded-xl bg-violet-50 text-violet-700 text-left text-[11px] font-extrabold"><i class="fa-solid fa-book-open mr-1"></i>Nuevo curso</button>
+                  <button onclick="adminQuickActionV19('task')" class="p-3 rounded-xl bg-amber-50 text-amber-700 text-left text-[11px] font-extrabold"><i class="fa-solid fa-list-check mr-1"></i>Nueva tarea</button>
+                  <button onclick="adminQuickActionV19('announcement')" class="p-3 rounded-xl bg-emerald-50 text-emerald-700 text-left text-[11px] font-extrabold"><i class="fa-solid fa-bullhorn mr-1"></i>Comunicado</button>
+                  <button onclick="adminQuickActionV19('support')" class="p-3 rounded-xl bg-rose-50 text-rose-700 text-left text-[11px] font-extrabold"><i class="fa-solid fa-headset mr-1"></i>Ver ayuda</button>
+                </div>
+              </div>
+            </div>
+
+            <div id="adminSystemGuideV19" data-admin-module-v19="system" class="hidden mt-6 bg-white rounded-3xl border border-slate-100 overflow-hidden">
+              <div class="p-5 sm:p-6 border-b border-slate-100 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+                <div><p class="text-[10px] uppercase tracking-widest font-extrabold text-lutmin-light">V1.9</p><h3 class="mt-1 font-extrabold text-lutmin-dark text-lg">Mapa y diagnóstico de Administración</h3><p class="mt-1 text-xs text-slate-500">La Administración ahora está separada por módulos. El diagnóstico indica exactamente qué parte de Supabase está instalada, sin mensajes genéricos de versiones viejas.</p></div>
+                <button onclick="runAdminDiagnosticsV19()" class="px-4 py-2.5 rounded-xl bg-lutmin-dark text-white text-xs font-extrabold"><i class="fa-solid fa-stethoscope mr-2"></i>Revisar instalación</button>
+              </div>
+              <div class="p-5 sm:p-6 grid lg:grid-cols-[1fr_.9fr] gap-5">
+                <div class="grid sm:grid-cols-2 gap-3 text-xs">
+                  <div class="p-4 rounded-2xl bg-slate-50"><strong>Resumen</strong><p class="mt-1 text-slate-500">KPIs, inteligencia y prioridades.</p></div>
+                  <div class="p-4 rounded-2xl bg-slate-50"><strong>Operación</strong><p class="mt-1 text-slate-500">Tareas, señales y salud del sistema.</p></div>
+                  <div class="p-4 rounded-2xl bg-slate-50"><strong>Academia</strong><p class="mt-1 text-slate-500">Cursos, clases, evaluaciones, agenda y certificados.</p></div>
+                  <div class="p-4 rounded-2xl bg-slate-50"><strong>Personas</strong><p class="mt-1 text-slate-500">Alumnos, importaciones y seguimiento.</p></div>
+                  <div class="p-4 rounded-2xl bg-slate-50"><strong>Empresas</strong><p class="mt-1 text-slate-500">Clientes corporativos y planes.</p></div>
+                  <div class="p-4 rounded-2xl bg-slate-50"><strong>Comercial / Finanzas</strong><p class="mt-1 text-slate-500">Interesados, ediciones, matrículas y pagos.</p></div>
+                </div>
+                <div id="adminDiagnosticsV19" class="rounded-2xl border border-slate-100 p-4"><p class="text-sm text-slate-500">Tocá “Revisar instalación” para ver el estado real.</p></div>
+              </div>
             </div>
 
             <div class="mt-6 grid grid-cols-2 xl:grid-cols-6 gap-4">
@@ -1394,7 +1460,7 @@
               <div class="p-5 sm:p-6 border-b border-slate-100 flex flex-col 2xl:flex-row 2xl:items-center 2xl:justify-between gap-4">
                 <div class="flex items-center gap-3">
                   <div class="w-11 h-11 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center"><i class="fa-solid fa-heart-pulse"></i></div>
-                  <div><div class="flex flex-wrap items-center gap-2"><h3 class="font-extrabold text-lutmin-dark text-lg">Salud del sistema · V1.8</h3><span class="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-extrabold">REPARA V1.6</span></div><p class="text-xs text-slate-500 mt-1">Detecta inconsistencias antes de que lleguen al alumno o a una empresa y permite acciones masivas seguras.</p></div>
+                  <div><div class="flex flex-wrap items-center gap-2"><h3 class="font-extrabold text-lutmin-dark text-lg">Salud del sistema · V1.9</h3><span class="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-extrabold">REPARA V1.6</span></div><p class="text-xs text-slate-500 mt-1">Detecta inconsistencias antes de que lleguen al alumno o a una empresa y permite acciones masivas seguras.</p></div>
                 </div>
                 <div class="flex flex-wrap gap-2">
                   <button onclick="runSystemHealthV18()" class="px-4 py-2.5 rounded-xl bg-teal-600 text-white text-xs font-extrabold"><i class="fa-solid fa-stethoscope mr-2"></i>Revisar sistema</button>
@@ -1406,7 +1472,7 @@
                   <div class="rounded-2xl bg-slate-50 p-4"><p class="text-[10px] uppercase font-bold text-slate-500">Hallazgos abiertos</p><p id="healthOpenV18" class="mt-1 text-2xl font-black text-lutmin-dark">0</p></div>
                   <div class="rounded-2xl bg-red-50 p-4"><p class="text-[10px] uppercase font-bold text-red-500">Importantes</p><p id="healthImportantV18" class="mt-1 text-2xl font-black text-red-700">0</p></div>
                   <div class="rounded-2xl bg-emerald-50 p-4"><p class="text-[10px] uppercase font-bold text-emerald-600">Resueltos</p><p id="healthResolvedV18" class="mt-1 text-2xl font-black text-emerald-700">0</p></div>
-                  <div class="rounded-2xl bg-blue-50 p-4"><p class="text-[10px] uppercase font-bold text-blue-600">Versión esquema</p><p id="healthVersionV18" class="mt-1 text-lg font-black text-blue-700">V1.8</p></div>
+                  <div class="rounded-2xl bg-blue-50 p-4"><p class="text-[10px] uppercase font-bold text-blue-600">Versión esquema</p><p id="healthVersionV18" class="mt-1 text-lg font-black text-blue-700">V1.9</p></div>
                 </div>
 
                 <div class="mt-5 grid 2xl:grid-cols-[1.15fr_.85fr] gap-5">
@@ -4283,6 +4349,8 @@
       await loadAdminOpsV16();
       await loadExecutiveV17();
       await loadAdminV18();
+      await loadAdminWorkspacePrefsV19();
+      refreshAdminWorkspaceV19();
       if (activeAdminStudentDetailId && !document.getElementById('adminStudentDetailModal').classList.contains('hidden')) {
         renderAdminStudentDetail(activeAdminStudentDetailId);
       }
@@ -6387,24 +6455,63 @@
 
     async function loadAdminOpsV16(){
       if(!supabaseClient || !currentLutminUser || currentLutminUser.role!=='admin') return;
+
+      // V1.9: las consultas son independientes. Una tabla secundaria faltante ya no bloquea todo el Centro Operativo.
       const [tasks,rules,roles,userRoles,snapshots]=await Promise.all([
         supabaseClient.from('operational_tasks').select('*').order('created_at',{ascending:false}),
-        supabaseClient.from('automation_rules').select('*').order('lane').order('name'),
+        supabaseClient.from('automation_rules').select('*').order('name'),
         supabaseClient.from('internal_roles').select('*').order('name'),
         supabaseClient.from('user_internal_roles').select('*'),
         supabaseClient.from('management_snapshots').select('*').order('created_at',{ascending:false}).limit(20)
       ]);
-      const err=[tasks,rules,roles,userRoles,snapshots].find(x=>x.error)?.error;
-      if(err){ console.warn('V1.6 no disponible:',err.message); const list=document.getElementById('opsTasksListV16'); if(list) list.innerHTML='<div class="p-4 rounded-2xl bg-amber-50 text-amber-800 text-sm">Falta ejecutar el SQL de V1.6.</div>'; return; }
-      adminOpsTasksV16=tasks.data||[];
-      adminAutomationRulesV16=rules.data||[];
-      adminInternalRolesV16=roles.data||[];
-      adminUserInternalRolesV16=userRoles.data||[];
-      adminManagementSnapshotsV16=snapshots.data||[];
-      renderOperationalCenterV16();
-      renderAutomationRulesV16();
-      renderInternalTeamV16();
-      renderSnapshotsV16();
+
+      if(tasks.error){
+        console.warn('Centro Operativo no disponible:',tasks.error.message);
+        adminOpsTasksV16=[];
+        const list=document.getElementById('opsTasksListV16');
+        if(list) list.innerHTML=`<div class="p-4 rounded-2xl bg-amber-50 text-amber-800 text-sm"><strong>Centro Operativo pendiente.</strong><p class="mt-1 text-xs">${escV16(tasks.error.message)}</p><button onclick="setAdminModuleV19('system');runAdminDiagnosticsV19()" class="mt-3 px-3 py-2 rounded-xl bg-white text-amber-800 text-xs font-bold">Ver diagnóstico</button></div>`;
+      }else{
+        adminOpsTasksV16=tasks.data||[];
+        renderOperationalCenterV16();
+      }
+
+      if(rules.error){
+        console.warn('Automatizaciones no disponibles:',rules.error.message);
+        adminAutomationRulesV16=[];
+        const el=document.getElementById('opsAutomationsV16');
+        if(el) el.innerHTML=`<div class="p-4 text-xs text-amber-700">No pude leer las reglas de automatización: ${escV16(rules.error.message)}</div>`;
+      }else{
+        // Compatibilidad V1.5/V1.6/V1.9: normalizamos ambos esquemas en el navegador.
+        adminAutomationRulesV16=(rules.data||[]).map(r=>({
+          ...r,
+          description:r.description||r.body||'',
+          lane:r.lane||(r.target_scope==='student'?'academia':r.target_scope==='company'?'comercial':'general'),
+          threshold_hours:Number(r.threshold_hours ?? Math.abs(Number(r.offset_hours||0)) ?? 0),
+          severity:r.severity||'normal'
+        }));
+        renderAutomationRulesV16();
+      }
+
+      if(roles.error||userRoles.error){
+        console.warn('Roles internos no disponibles:',roles.error?.message||userRoles.error?.message);
+        adminInternalRolesV16=[]; adminUserInternalRolesV16=[];
+        const el=document.getElementById('opsInternalTeamV16');
+        if(el) el.innerHTML='<p class="text-xs text-amber-700">Roles internos pendientes de instalación. Revisá Sistema → Diagnóstico.</p>';
+      }else{
+        adminInternalRolesV16=roles.data||[];
+        adminUserInternalRolesV16=userRoles.data||[];
+        renderInternalTeamV16();
+      }
+
+      if(snapshots.error){
+        console.warn('Fotos de gestión no disponibles:',snapshots.error.message);
+        adminManagementSnapshotsV16=[];
+      }else{
+        adminManagementSnapshotsV16=snapshots.data||[];
+        renderSnapshotsV16();
+      }
+
+      refreshAdminWorkspaceV19();
     }
 
     function setOpsLaneV16(lane){ activeOpsLaneV16=lane; renderOperationalCenterV16(); }
@@ -6663,6 +6770,200 @@
     }
 
     function renderBulkHistoryV18(){const root=document.getElementById('bulkHistoryV18');if(!root)return;if(!bulkOperationsV18.length){root.innerHTML='<p class="text-xs text-slate-500">Todavía no hay operaciones masivas.</p>';return;}root.innerHTML=bulkOperationsV18.slice(0,8).map(x=>`<div class="p-3 rounded-xl bg-slate-50"><p class="text-xs font-extrabold text-lutmin-dark">${escV16(x.description||x.operation_type)}</p><p class="mt-1 text-[10px] text-slate-500">${fmtDateV16(x.created_at)} · solicitadas ${x.requested_count} · afectadas ${x.affected_count} · omitidas ${x.skipped_count}</p></div>`).join('');}
+
+
+
+    // =========================================================
+    // V1.9 · ADMINISTRACIÓN MODULAR + BUSCADOR + DIAGNÓSTICO
+    // =========================================================
+    const ADMIN_MODULES_V19 = {
+      overview:{title:'Resumen',description:'Indicadores, inteligencia y prioridades del sistema.'},
+      operations:{title:'Operación',description:'Centro Operativo, tareas, señales automáticas y salud del sistema.'},
+      academic:{title:'Academia',description:'Cursos, clases, evaluaciones, comisiones, agenda y certificados.'},
+      people:{title:'Personas',description:'Alumnos, importación masiva y seguimiento académico.'},
+      companies:{title:'Empresas',description:'Clientes corporativos, responsables, colaboradores y planes de capacitación.'},
+      commercial:{title:'Comercial',description:'Ediciones, interesados, conversiones y oportunidades de venta.'},
+      finance:{title:'Finanzas',description:'Matrículas, pagos, deuda, vencimientos e indicadores financieros.'},
+      talent:{title:'Talento',description:'Lutmin Conecta, búsquedas laborales y postulaciones.'},
+      communications:{title:'Comunicación',description:'Comunicados y avisos para alumnos, empresas y administradores.'},
+      system:{title:'Sistema',description:'Configuración, roles, auditoría, diagnóstico y salud técnica.'}
+    };
+    let activeAdminModuleV19='overview';
+    let adminWorkspaceTaggedV19=false;
+
+    function tagAdminBlocksV19(){
+      if(adminWorkspaceTaggedV19) return;
+      const admin=document.querySelector('section[data-campus-panel="admin"]');
+      if(!admin) return;
+      [...admin.children].forEach(el=>{
+        if(el.id==='adminWorkspaceV19'||el.id==='adminSystemGuideV19') return;
+        if(el.classList.contains('fixed')){el.dataset.adminAlwaysV19='1';return;}
+        const text=(el.textContent||'').replace(/\s+/g,' ').trim();
+        let module='overview';
+        if(el.querySelector('#adminStudentsStat')) module='overview';
+        else if(text.includes('Inteligencia de gestión')) module='overview';
+        else if(text.includes('Centro de control')) module='overview';
+        else if(text.includes('Centro Operativo')) module='operations';
+        else if(text.includes('Salud del sistema')) module='operations';
+        else if(text.includes('Equipo interno y roles')) module='system';
+        else if(text.includes('Auditoría del sistema')) module='system';
+        else if(text.includes('Publicar comunicado')||text.includes('Comunicados recientes')) module='communications';
+        else if(text.includes('Lutmin Conecta · Empleo y talento')) module='talent';
+        else if(text.includes('Panel financiero y comercial')) module='finance';
+        else if(text.includes('Matrículas y pagos')) module='finance';
+        else if(text.includes('Abrir edición de un curso')||text.includes('Ediciones programadas')) module='commercial';
+        else if(text.includes('Interesados desde la web')) module='commercial';
+        else if(text.includes('Importar alumnos por CSV')) module='people';
+        else if(text.includes('Seguimiento académico')) module='people';
+        else if(text.includes('Empresas y capacitación corporativa')) module='companies';
+        else if(text.includes('Comisiones, agenda y asistencia')) module='academic';
+        else if(text.includes('Cursos y clases')) module='academic';
+        else if(text.includes('Certificados emitidos')) module='academic';
+        else if(text.includes('Crear alumno')&&text.includes('Crear curso')) module='academic';
+        else if(el===admin.firstElementChild) {el.dataset.adminAlwaysV19='1';return;}
+        el.dataset.adminModuleV19=module;
+      });
+      adminWorkspaceTaggedV19=true;
+    }
+
+    function setAdminModuleV19(module,opts={}){
+      if(!ADMIN_MODULES_V19[module]) module='overview';
+      tagAdminBlocksV19();
+      activeAdminModuleV19=module;
+      const admin=document.querySelector('section[data-campus-panel="admin"]');
+      if(admin){
+        [...admin.children].forEach(el=>{
+          if(el.dataset.adminAlwaysV19==='1'||el.id==='adminWorkspaceV19') return;
+          if(el.id==='adminSystemGuideV19'){
+            el.classList.toggle('hidden',module!=='system');
+            return;
+          }
+          const m=el.dataset.adminModuleV19;
+          if(m) el.classList.toggle('hidden',m!==module);
+        });
+      }
+      document.querySelectorAll('.admin-v19-nav').forEach(btn=>{
+        const active=btn.dataset.adminV19Btn===module;
+        btn.classList.toggle('bg-lutmin-dark',active);
+        btn.classList.toggle('text-white',active);
+        btn.classList.toggle('bg-slate-100',!active);
+        btn.classList.toggle('text-slate-600',!active);
+      });
+      const meta=ADMIN_MODULES_V19[module];
+      const t=document.getElementById('adminModuleTitleV19'); if(t)t.textContent=meta.title;
+      const d=document.getElementById('adminModuleDescriptionV19'); if(d)d.textContent=meta.description;
+      localStorage.setItem('lutmin-admin-module-v19',module);
+      if(currentLutminUser?.id && !opts.noSave){
+        supabaseClient?.from('admin_workspace_preferences').upsert({user_id:currentLutminUser.id,last_module:module,updated_at:new Date().toISOString()},{onConflict:'user_id'}).then(()=>{}).catch(()=>{});
+      }
+      const scroller=document.querySelector('#campusModal .modal-scroll');
+      if(scroller && !opts.noScroll) scroller.scrollTo({top:0,behavior:'smooth'});
+      refreshAdminWorkspaceV19();
+    }
+
+    async function loadAdminWorkspacePrefsV19(){
+      tagAdminBlocksV19();
+      let module=localStorage.getItem('lutmin-admin-module-v19')||'overview';
+      if(supabaseClient&&currentLutminUser?.id){
+        const {data,error}=await supabaseClient.from('admin_workspace_preferences').select('last_module').eq('user_id',currentLutminUser.id).maybeSingle();
+        if(!error&&data?.last_module) module=data.last_module;
+      }
+      setAdminModuleV19(module,{noSave:true,noScroll:true});
+    }
+
+    function refreshAdminWorkspaceV19(){
+      const set=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value?`· ${value}`:'';};
+      const activeTasks=(typeof adminOpsTasksV16!=='undefined'?adminOpsTasksV16:[]).filter(x=>['open','in_progress'].includes(x.status)).length;
+      const students=(typeof adminProfiles!=='undefined'?adminProfiles:[]).filter(p=>typeof adminIsStudent==='function'?adminIsStudent(p):p.role==='student').length;
+      const courses=(typeof adminCourses!=='undefined'?adminCourses:[]).length;
+      const companies=(typeof adminCompanies!=='undefined'?adminCompanies:[]).filter(c=>c.active!==false).length;
+      const leads=(typeof adminCourseLeads!=='undefined'?adminCourseLeads:[]).filter(l=>['new','nuevo'].includes(String(l.status||'').toLowerCase())).length;
+      const pending=(typeof adminEnrollments!=='undefined'?adminEnrollments:[]).filter(e=>Number(e.price_amount||0)>0&&!['paid','bonified','waived'].includes(String(e.payment_status||'').toLowerCase())).length;
+      set('adminBadgeOperationsV19',activeTasks); set('adminBadgeAcademicV19',courses); set('adminBadgePeopleV19',students); set('adminBadgeCompaniesV19',companies); set('adminBadgeCommercialV19',leads); set('adminBadgeFinanceV19',pending);
+    }
+
+    function toggleAdminQuickActionsV19(){document.getElementById('adminQuickActionsV19')?.classList.toggle('hidden');}
+    function scrollAdminHeadingV19(text){
+      setTimeout(()=>{
+        const admin=document.querySelector('section[data-campus-panel="admin"]');
+        const h=[...admin.querySelectorAll('h3,h4')].find(x=>(x.textContent||'').includes(text));
+        h?.scrollIntoView({behavior:'smooth',block:'center'});
+      },120);
+    }
+    function adminQuickActionV19(kind){
+      document.getElementById('adminQuickActionsV19')?.classList.add('hidden');
+      if(kind==='student'){setAdminModuleV19('academic');scrollAdminHeadingV19('Crear alumno');setTimeout(()=>document.getElementById('adminStudentName')?.focus(),350);}
+      else if(kind==='company'){setAdminModuleV19('companies');scrollAdminHeadingV19('Empresas y capacitación corporativa');}
+      else if(kind==='course'){setAdminModuleV19('academic');scrollAdminHeadingV19('Crear curso');setTimeout(()=>document.getElementById('adminCourseTitle')?.focus(),350);}
+      else if(kind==='task'){setAdminModuleV19('operations');scrollAdminHeadingV19('Centro Operativo');setTimeout(()=>document.getElementById('opsNewTitleV16')?.focus(),350);}
+      else if(kind==='announcement'){setAdminModuleV19('communications');setTimeout(()=>document.getElementById('adminAnnouncementTitle')?.focus(),350);}
+      else if(kind==='support'){goToCampusTab('support');}
+    }
+
+    function buildAdminSearchIndexV19(){
+      const rows=[];
+      Object.entries(ADMIN_MODULES_V19).forEach(([key,m])=>rows.push({kind:'module',id:key,label:m.title,sub:m.description,module:key,icon:'fa-layer-group'}));
+      (typeof adminProfiles!=='undefined'?adminProfiles:[]).forEach(p=>rows.push({kind:'student',id:p.id,label:p.full_name||p.email||'Persona',sub:p.email||'',module:'people',icon:'fa-user'}));
+      (typeof adminCompanies!=='undefined'?adminCompanies:[]).forEach(c=>rows.push({kind:'company',id:c.id,label:c.display_name||c.name||'Empresa',sub:[c.cuit,c.contact_email].filter(Boolean).join(' · '),module:'companies',icon:'fa-building'}));
+      (typeof adminCourses!=='undefined'?adminCourses:[]).forEach(c=>rows.push({kind:'course',id:c.id,label:c.title||'Curso',sub:[c.category,c.level].filter(Boolean).join(' · '),module:'academic',icon:'fa-book'}));
+      (typeof adminCourseLeads!=='undefined'?adminCourseLeads:[]).forEach(l=>rows.push({kind:'lead',id:l.id,label:l.full_name||l.email||'Interesado',sub:l.email||'',module:'commercial',icon:'fa-bullseye'}));
+      (typeof adminJobs!=='undefined'?adminJobs:[]).forEach(j=>rows.push({kind:'job',id:j.id,label:j.title||'Búsqueda',sub:j.location||'',module:'talent',icon:'fa-briefcase'}));
+      (typeof supportTickets!=='undefined'?supportTickets:[]).forEach(t=>rows.push({kind:'ticket',id:t.id,label:t.subject||'Consulta',sub:t.category||'',module:'support',icon:'fa-headset'}));
+      return rows;
+    }
+
+    function adminGlobalSearchV19(){
+      const input=document.getElementById('adminGlobalSearchV19'),root=document.getElementById('adminSearchResultsV19');if(!input||!root)return;
+      const q=(input.value||'').trim().toLowerCase();
+      if(!q){root.classList.add('hidden');root.innerHTML='';return;}
+      const normalize=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+      const nq=normalize(q);
+      const rows=buildAdminSearchIndexV19().filter(r=>normalize(r.label+' '+r.sub).includes(nq)).slice(0,14);
+      root.classList.remove('hidden');
+      root.innerHTML=rows.length?rows.map(r=>`<button onclick="openAdminSearchResultV19('${r.kind}','${r.id}')" class="w-full text-left p-3 rounded-xl hover:bg-slate-50 flex items-center gap-3"><span class="w-8 h-8 rounded-lg bg-blue-50 text-lutmin-light flex items-center justify-center shrink-0"><i class="fa-solid ${r.icon}"></i></span><span class="min-w-0"><span class="block text-xs font-extrabold text-lutmin-dark truncate">${escapeHtml(r.label)}</span><span class="block text-[10px] text-slate-500 truncate">${escapeHtml(r.sub||ADMIN_MODULES_V19[r.module]?.description||'')}</span></span></button>`).join(''):'<div class="p-4 text-xs text-slate-500">No encontré coincidencias.</div>';
+    }
+
+    function openAdminSearchResultV19(kind,id){
+      document.getElementById('adminSearchResultsV19')?.classList.add('hidden');
+      const input=document.getElementById('adminGlobalSearchV19');if(input)input.value='';
+      if(kind==='module'){setAdminModuleV19(id);return;}
+      if(kind==='student'){setAdminModuleV19('people');setTimeout(()=>openAdminStudentDetail(id),120);return;}
+      if(kind==='company'){setAdminModuleV19('companies');setTimeout(()=>openCompanyEdit(id),120);return;}
+      if(kind==='course'){setAdminModuleV19('academic');setTimeout(()=>openAdminCourseEditor(id),120);return;}
+      if(kind==='ticket'){goToCampusTab('support');setTimeout(()=>openSupportThread(id),200);return;}
+      setAdminModuleV19(kind==='lead'?'commercial':kind==='job'?'talent':'overview');
+    }
+
+    async function runAdminDiagnosticsV19(){
+      setAdminModuleV19('system',{noScroll:true});
+      const root=document.getElementById('adminDiagnosticsV19');if(!root)return;
+      root.innerHTML='<div class="text-sm text-slate-500"><i class="fa-solid fa-spinner fa-spin mr-2"></i>Revisando Supabase...</div>';
+      const {data,error}=await supabaseClient.rpc('admin_v19_schema_check');
+      if(error){root.innerHTML=`<div class="rounded-xl bg-red-50 text-red-700 p-3 text-xs"><strong>No pude ejecutar el diagnóstico.</strong><p class="mt-1">${escapeHtml(error.message)}</p><p class="mt-2">Ejecutá el SQL MASTER V1.9 completo.</p></div>`;return;}
+      const labels={operational_tasks:'Tareas operativas',automation_rules:'Reglas de automatización',internal_roles:'Roles internos',user_internal_roles:'Asignación de roles',management_snapshots:'Fotos de gestión',health_findings:'Salud del sistema',workspace_preferences:'Preferencias de Administración',automation_description_column:'Columna description',automation_lane_column:'Columna lane',automation_threshold_column:'Columna threshold_hours',automation_target_scope_column:'Compatibilidad V1.5',refresh_signals_rpc:'Actualización automática de señales'};
+      const entries=Object.entries(labels);
+      const ok=entries.filter(([k])=>data?.[k]===true).length;
+      root.innerHTML=`<div class="flex items-center justify-between gap-3"><div><p class="font-extrabold text-lutmin-dark">Esquema ${escapeHtml(data?.version||'')}</p><p class="text-[10px] text-slate-500 mt-1">${ok} de ${entries.length} componentes correctos</p></div><span class="px-3 py-1.5 rounded-full ${ok===entries.length?'bg-green-50 text-green-700':'bg-amber-50 text-amber-700'} text-[10px] font-extrabold">${ok===entries.length?'TODO OK':'REVISAR'}</span></div><div class="mt-3 space-y-2">${entries.map(([k,label])=>`<div class="flex items-center justify-between gap-3 p-2.5 rounded-xl bg-slate-50 text-xs"><span>${escapeHtml(label)}</span><span class="font-black ${data?.[k]===true?'text-green-600':'text-red-600'}"><i class="fa-solid ${data?.[k]===true?'fa-circle-check':'fa-circle-xmark'}"></i></span></div>`).join('')}</div>`;
+    }
+
+    document.addEventListener('keydown',e=>{
+      if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){
+        e.preventDefault();
+        if(currentLutminUser?.role==='admin'){
+          goToCampusTab('admin');
+          setTimeout(()=>document.getElementById('adminGlobalSearchV19')?.focus(),120);
+        }
+      }
+      if(e.key==='Escape') document.getElementById('adminSearchResultsV19')?.classList.add('hidden');
+    });
+
+    document.addEventListener('click',e=>{
+      const box=document.getElementById('adminSearchResultsV19'),input=document.getElementById('adminGlobalSearchV19');
+      if(box&&!box.contains(e.target)&&e.target!==input)box.classList.add('hidden');
+    });
+
+    // Etiqueta los bloques aunque Administración todavía esté oculta.
+    setTimeout(()=>{tagAdminBlocksV19();const saved=localStorage.getItem('lutmin-admin-module-v19')||'overview';setAdminModuleV19(saved,{noSave:true,noScroll:true});},0);
 
 </script>
 </body>
