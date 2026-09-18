@@ -648,9 +648,9 @@
           <div class="grid lg:grid-cols-[1fr_.8fr]">
             <div class="p-8 sm:p-12">
               <span class="text-lutmin-light text-xs font-extrabold uppercase tracking-[.18em]">Validación pública</span>
-              <h2 class="mt-3 text-3xl sm:text-4xl font-black">Un certificado útil también tiene que poder verificarse.</h2>
+              <h2 class="mt-3 text-3xl sm:text-4xl font-black">Un certificado privado también tiene que poder verificarse.</h2>
               <p class="mt-5 text-slate-300 leading-relaxed">
-                Los certificados emitidos por Lutmin cuentan con código único, QR y validación pública. El alumno puede descargarlos en PDF y compartir su autenticidad sin entregar acceso a su cuenta.
+                Los certificados privados emitidos por Lutmin cuentan con código único, QR y validación pública. Acreditan participación o aprobación dentro de una capacitación privada y no constituyen título oficial ni habilitación profesional.
               </p>
               <form id="publicCertificateForm" class="mt-7 max-w-lg">
                 <label for="publicCertificateCode" class="text-xs font-bold uppercase tracking-widest text-blue-200">Código del certificado</label>
@@ -2254,11 +2254,34 @@
               <div id="adminCoursesList" class="divide-y divide-slate-100"></div>
             </div>
 
+            <!-- CERTIFICACIÓN PRIVADA Y CONTROL V3.2 -->
+            <div id="adminCertificateComplianceV32" class="mt-6 bg-white rounded-3xl border border-slate-100 overflow-hidden">
+              <div class="p-5 sm:p-6 border-b border-slate-100 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+                <div><h3 class="font-extrabold text-lutmin-dark">Certificación privada · configuración y control</h3><p class="mt-1 text-xs text-slate-500">Define cómo se identifica Lutmin como emisor privado y controla vencimientos y datos faltantes.</p></div>
+                <button onclick="loadCertificateComplianceV32()" class="px-3 py-2 rounded-xl bg-slate-100 text-xs font-bold"><i class="fa-solid fa-rotate mr-2"></i>Revisar</button>
+              </div>
+              <div class="p-5 sm:p-6 grid xl:grid-cols-[1fr_.9fr] gap-5">
+                <form id="certificateIssuerFormV32" class="rounded-2xl bg-slate-50 border border-slate-100 p-4 space-y-3">
+                  <h4 class="font-extrabold text-lutmin-dark">Datos del emisor</h4>
+                  <div class="grid sm:grid-cols-2 gap-3"><input id="certIssuerDisplayV32" required class="px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" placeholder="Nombre visible: Lutmin Consultora"><input id="certIssuerLegalV32" class="px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" placeholder="Nombre / razón legal del emisor"></div>
+                  <div class="grid sm:grid-cols-2 gap-3"><input id="certIssuerTaxIdV32" class="px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" placeholder="CUIT"><input id="certResponsibleNameV32" class="px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" placeholder="Responsable firmante"></div>
+                  <input id="certResponsibleRoleV32" class="w-full px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" placeholder="Cargo del responsable">
+                  <textarea id="certPrivateLegendV32" rows="3" class="w-full px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm"></textarea>
+                  <p class="text-[10px] text-slate-500">No uses expresiones como “título oficial”, “validez nacional”, “habilitación profesional” o “avalado por el Ministerio” salvo que exista un reconocimiento formal específico.</p>
+                  <button class="w-full py-3 rounded-xl bg-lutmin-dark text-white text-sm font-extrabold">Guardar configuración</button>
+                </form>
+                <div>
+                  <div id="certificateComplianceStatusV32" class="rounded-2xl border border-slate-100 p-4"><p class="text-sm text-slate-500">Cargando control...</p></div>
+                  <div class="mt-4 rounded-2xl border border-slate-100 overflow-hidden"><div class="p-4 bg-slate-50"><p class="text-xs font-extrabold text-lutmin-dark">Vencimientos próximos</p></div><div id="certificateExpiringListV32" class="divide-y divide-slate-100"><div class="p-4 text-xs text-slate-500">Sin datos.</div></div></div>
+                </div>
+              </div>
+            </div>
+
             <!-- CERTIFICADOS -->
             <div class="mt-6 bg-white rounded-3xl border border-slate-100 overflow-hidden">
               <div class="p-5 sm:p-6 border-b border-slate-100">
                 <h3 class="font-extrabold text-lutmin-dark">Certificados emitidos</h3>
-                <p class="mt-1 text-xs text-slate-500">Se emiten automáticamente al aprobar. Desde acá podés revocar o restaurar uno.</p>
+                <p class="mt-1 text-xs text-slate-500">Se emiten como constancias privadas de participación o aprobación según la configuración del curso. Desde acá podés revisar, revocar o restaurar uno.</p>
               </div>
               <div id="adminCertificatesList" class="divide-y divide-slate-100"></div>
             </div>
@@ -2514,7 +2537,7 @@
           <div id="certificateStatusIcon" class="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-green-50 text-green-600 flex items-center justify-center text-xl shrink-0"><i class="fa-solid fa-circle-check"></i></div>
         </div>
 
-        <p id="certificateStatusLabel" class="mt-7 text-[10px] sm:text-xs uppercase tracking-[.2em] text-green-600 font-extrabold">Certificado válido</p>
+        <p id="certificateStatusLabel" class="mt-7 text-[10px] sm:text-xs uppercase tracking-[.2em] text-green-600 font-extrabold">Certificado privado válido</p>
         <h2 id="certificateCourseTitle" class="mt-2 text-2xl sm:text-4xl font-black text-lutmin-dark">Curso</h2>
         <p class="mt-3 text-sm sm:text-base text-slate-500">Emitido a <strong id="certificateStudentName" class="text-slate-700">Alumno</strong></p>
 
@@ -2522,6 +2545,15 @@
           <div class="bg-slate-50 rounded-2xl p-4"><p class="text-[10px] text-slate-400 font-bold">CARGA HORARIA</p><p id="certificateHours" class="mt-1 font-extrabold">0 horas</p></div>
           <div class="bg-slate-50 rounded-2xl p-4"><p class="text-[10px] text-slate-400 font-bold">CALIFICACIÓN</p><p id="certificateScore" class="mt-1 font-extrabold">0%</p></div>
           <div class="bg-slate-50 rounded-2xl p-4"><p class="text-[10px] text-slate-400 font-bold">EMISIÓN</p><p id="certificateIssuedAt" class="mt-1 font-extrabold">-</p></div>
+        </div>
+
+        <div class="mt-4 rounded-2xl bg-blue-50/70 border border-blue-100 p-4">
+          <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+            <div><p id="certificateKindLabel" class="text-[10px] uppercase tracking-widest font-extrabold text-blue-700">CERTIFICADO PRIVADO DE APROBACIÓN</p><p id="certificateIssuerLabel" class="mt-1 text-xs font-bold text-lutmin-dark">Lutmin Consultora</p><p id="certificateIssuerLegal" class="mt-1 text-[10px] text-slate-500"></p></div>
+            <div class="text-left sm:text-right"><p id="certificateVersionLabel" class="text-[10px] text-slate-500"></p><p id="certificateExpiryLabel" class="mt-1 text-[10px] font-bold text-slate-600"></p></div>
+          </div>
+          <p id="certificatePrivateLegend" class="mt-3 text-[11px] leading-relaxed text-slate-600">Certificación privada de capacitación. No constituye título oficial ni habilitación profesional.</p>
+          <p id="certificateTrainingMeta" class="mt-2 text-[10px] text-slate-500"></p>
         </div>
 
         <div class="mt-6 grid md:grid-cols-[1fr_auto] gap-5 items-center rounded-3xl border border-slate-100 p-5">
@@ -2559,6 +2591,18 @@
           <div class="flex flex-col gap-3 self-end pb-2">
             <label class="flex items-center gap-2 text-sm font-semibold text-slate-600"><input id="editCoursePublished" type="checkbox" class="w-4 h-4"> Publicado</label>
             <label class="flex items-center gap-2 text-sm font-semibold text-slate-600"><input id="editCourseFeatured" type="checkbox" class="w-4 h-4"> Destacar en la web</label>
+          </div>
+          <div class="sm:col-span-2 rounded-2xl bg-blue-50/60 border border-blue-100 p-4">
+            <p class="text-xs font-extrabold text-lutmin-dark">Certificación privada</p>
+            <p class="mt-1 text-[10px] text-slate-500">Configuración que quedará registrada en los certificados futuros de este curso.</p>
+            <div class="mt-3 grid sm:grid-cols-2 gap-3">
+              <div><label class="text-xs font-bold text-slate-600">Tipo</label><select id="editCourseCertificateKind" class="mt-2 w-full px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm"><option value="approval">Aprobación</option><option value="participation">Participación / finalización</option></select></div>
+              <div><label class="text-xs font-bold text-slate-600">Vigencia en meses</label><input id="editCourseCertificateValidity" type="number" min="1" class="mt-2 w-full px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" placeholder="Vacío = sin vencimiento"></div>
+              <div><label class="text-xs font-bold text-slate-600">Versión del curso</label><input id="editCourseVersion" maxlength="40" class="mt-2 w-full px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" placeholder="Ej: 1.0"></div>
+              <div><label class="text-xs font-bold text-slate-600">Instructor / capacitador</label><input id="editCourseInstructor" maxlength="160" class="mt-2 w-full px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" placeholder="Nombre y apellido"></div>
+              <div><label class="text-xs font-bold text-slate-600">Modalidad</label><input id="editCourseTrainingModality" maxlength="80" class="mt-2 w-full px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" placeholder="Online / Presencial / Híbrida"></div>
+              <div><label class="text-xs font-bold text-slate-600">Sede / lugar</label><input id="editCourseTrainingLocation" maxlength="160" class="mt-2 w-full px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" placeholder="Opcional"></div>
+            </div>
           </div>
           <div class="sm:col-span-2"><label class="text-xs font-bold text-slate-600">Descripción</label><textarea id="editCourseDescription" rows="4" class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200"></textarea></div>
         </div>
@@ -3566,7 +3610,7 @@
 
       const { data: certificateRows, error: certificateError } = await supabaseClient
         .from('certificates')
-        .select('id,user_id,course_id,code,full_name,course_title,duration_hours,score,status,issued_at,revoked_at,revoked_reason')
+        .select('id,user_id,course_id,code,full_name,course_title,duration_hours,score,status,issued_at,revoked_at,revoked_reason,certificate_kind,issuer_display_name,issuer_legal_name,issuer_tax_id,private_legend,verification_note,course_version,modality,training_location,instructor_name,responsible_name,responsible_role,expires_at')
         .eq('user_id', currentLutminUser.id)
         .order('issued_at', { ascending: false });
       if (certificateError) console.error('Error cargando certificados:', certificateError);
@@ -3704,13 +3748,14 @@
       const grid = document.getElementById('campusCertificatesGrid');
       if (!grid) return;
       if (!campusCertificates.length) {
-        grid.innerHTML = `<div class="bg-white p-6 rounded-3xl border border-slate-100 sm:col-span-2 xl:col-span-3"><div class="w-12 h-12 rounded-2xl bg-slate-50 text-slate-400 flex items-center justify-center"><i class="fa-solid fa-award"></i></div><h3 class="mt-4 font-extrabold text-lutmin-dark">Todavía no tenés certificados</h3><p class="mt-2 text-sm text-slate-500">Se emiten automáticamente cuando aprobás la evaluación final de un curso.</p></div>`;
+        grid.innerHTML = `<div class="bg-white p-6 rounded-3xl border border-slate-100 sm:col-span-2 xl:col-span-3"><div class="w-12 h-12 rounded-2xl bg-slate-50 text-slate-400 flex items-center justify-center"><i class="fa-solid fa-award"></i></div><h3 class="mt-4 font-extrabold text-lutmin-dark">Todavía no tenés certificados</h3><p class="mt-2 text-sm text-slate-500">Se emiten según la configuración privada del curso: por aprobación o por participación/finalización.</p></div>`;
         return;
       }
       grid.innerHTML = campusCertificates.map(cert => {
-        const valid = cert.status === 'valid';
+        const valid = cert.status === 'valid' && (!cert.expires_at || new Date(cert.expires_at).getTime() >= Date.now());
+        const expired = cert.status === 'valid' && cert.expires_at && new Date(cert.expires_at).getTime() < Date.now();
         return `<button onclick="openOwnedCertificate('${cert.id}')" class="text-left bg-white p-5 sm:p-6 rounded-3xl border ${valid ? 'border-slate-100 hover:border-lutmin-light' : 'border-red-100'} transition">
-          <div class="flex items-start justify-between gap-4"><div><p class="text-[10px] uppercase tracking-widest font-bold ${valid ? 'text-green-600' : 'text-red-600'}">${valid ? 'Válido' : 'Revocado'}</p><h3 class="mt-1 font-extrabold text-lutmin-dark">${escapeHtml(cert.course_title)}</h3><p class="mt-2 text-xs text-slate-500">${Math.round(Number(cert.score))}% · ${formatCertificateDate(cert.issued_at)}</p></div><i class="fa-solid fa-award text-2xl ${valid ? 'text-lutmin-light' : 'text-red-400'}"></i></div>
+          <div class="flex items-start justify-between gap-4"><div><p class="text-[10px] uppercase tracking-widest font-bold ${valid ? 'text-green-600' : 'text-red-600'}">${valid ? 'Válido' : (expired ? 'Vencido' : 'Revocado')}</p><h3 class="mt-1 font-extrabold text-lutmin-dark">${escapeHtml(cert.course_title)}</h3><p class="mt-2 text-xs text-slate-500">${cert.certificate_kind==='participation'?'Participación':`${Math.round(Number(cert.score))}%`} · ${formatCertificateDate(cert.issued_at)}${cert.expires_at?` · hasta ${formatCertificateDate(cert.expires_at)}`:''}</p></div><i class="fa-solid fa-award text-2xl ${valid ? 'text-lutmin-light' : 'text-red-400'}"></i></div>
           <p class="mt-4 text-[10px] text-slate-400 break-all">${escapeHtml(cert.code)}</p>
         </button>`;
       }).join('');
@@ -3742,6 +3787,10 @@
       const score = Number(cert.score || 0);
       const issued = cert.issued_at;
       const reason = cert.revoked_reason || '';
+      const kind = cert.certificate_kind || 'approval';
+      const expired = status === 'expired' || (status === 'valid' && cert.expires_at && new Date(cert.expires_at).getTime() < Date.now());
+      const effectiveValid = valid && !expired;
+      const privateLegend = cert.private_legend || 'Certificación privada de capacitación. No constituye título oficial ni habilitación profesional.';
 
       document.getElementById('certificateCourseTitle').textContent = courseTitle;
       document.getElementById('certificateStudentName').textContent = fullName;
@@ -3749,15 +3798,24 @@
       document.getElementById('certificateScore').textContent = `${Math.round(score)}%`;
       document.getElementById('certificateIssuedAt').textContent = formatCertificateDate(issued);
       document.getElementById('certificateCode').textContent = code;
-      document.getElementById('certificateStatusLabel').textContent = valid ? 'Certificado válido' : 'Certificado revocado';
-      document.getElementById('certificateStatusLabel').className = `mt-7 text-[10px] sm:text-xs uppercase tracking-[.2em] font-extrabold ${valid ? 'text-green-600' : 'text-red-600'}`;
-      document.getElementById('certificateStatusIcon').className = `w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center text-xl shrink-0 ${valid ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'}`;
-      document.getElementById('certificateStatusIcon').innerHTML = `<i class="fa-solid ${valid ? 'fa-circle-check' : 'fa-circle-xmark'}"></i>`;
+      document.getElementById('certificateStatusLabel').textContent = expired ? 'Certificado privado vencido' : (effectiveValid ? 'Certificado privado válido' : 'Certificado revocado');
+      document.getElementById('certificateStatusLabel').className = `mt-7 text-[10px] sm:text-xs uppercase tracking-[.2em] font-extrabold ${effectiveValid ? 'text-green-600' : (expired ? 'text-amber-600' : 'text-red-600')}`;
+      document.getElementById('certificateStatusIcon').className = `w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center text-xl shrink-0 ${effectiveValid ? 'bg-green-50 text-green-600' : (expired ? 'bg-amber-50 text-amber-600' : 'bg-red-50 text-red-600')}`;
+      document.getElementById('certificateStatusIcon').innerHTML = `<i class="fa-solid ${effectiveValid ? 'fa-circle-check' : (expired ? 'fa-clock' : 'fa-circle-xmark')}"></i>`;
       const reasonEl = document.getElementById('certificateRevokedReason');
       reasonEl.textContent = reason ? `Motivo: ${reason}` : '';
-      reasonEl.classList.toggle('hidden', valid || !reason);
-      document.getElementById('certificatePrintBtn').classList.toggle('hidden', !valid);
-      document.getElementById('certificateDownloadBtn')?.classList.toggle('hidden', !valid);
+      reasonEl.classList.toggle('hidden', effectiveValid || expired || !reason);
+      document.getElementById('certificatePrintBtn').classList.toggle('hidden', !effectiveValid);
+      document.getElementById('certificateDownloadBtn')?.classList.toggle('hidden', !effectiveValid);
+
+      document.getElementById('certificateKindLabel').textContent = kind === 'participation' ? 'CERTIFICADO PRIVADO DE PARTICIPACIÓN' : 'CERTIFICADO PRIVADO DE APROBACIÓN';
+      document.getElementById('certificateIssuerLabel').textContent = cert.issuer_display_name || 'Lutmin Consultora';
+      document.getElementById('certificateIssuerLegal').textContent = [cert.issuer_legal_name, cert.issuer_tax_id ? `CUIT ${cert.issuer_tax_id}` : ''].filter(Boolean).join(' · ');
+      document.getElementById('certificateVersionLabel').textContent = cert.course_version ? `Versión del curso: ${cert.course_version}` : '';
+      document.getElementById('certificateExpiryLabel').textContent = cert.expires_at ? `Vigencia hasta: ${formatCertificateDate(cert.expires_at)}` : 'Sin vencimiento configurado';
+      document.getElementById('certificatePrivateLegend').textContent = privateLegend;
+      document.getElementById('certificateTrainingMeta').textContent = [cert.modality ? `Modalidad: ${cert.modality}` : '', cert.training_location ? `Sede: ${cert.training_location}` : '', cert.instructor_name ? `Instructor: ${cert.instructor_name}` : ''].filter(Boolean).join(' · ');
+      document.getElementById('certificateScore').closest('div').classList.toggle('hidden', kind === 'participation');
 
       const qr = document.getElementById('certificateQr');
       qr.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-3xl text-slate-300"></i>';
@@ -3796,7 +3854,7 @@
         return null;
       }
       if (updateField) document.getElementById('publicCertificateCode').value = cert.certificate_code || clean;
-      if (status) status.textContent = cert.is_valid ? 'Certificado válido.' : 'El certificado existe, pero está revocado.';
+      if (status) status.textContent = cert.is_valid ? 'Certificado privado válido.' : (cert.certificate_status === 'expired' ? 'El certificado privado existe, pero su vigencia finalizó.' : 'El certificado privado existe, pero está revocado.');
       await showCertificate(cert, { public: true });
       return cert;
     }
@@ -3841,7 +3899,8 @@
       const c = currentCertificate;
       if (!c) return;
       const status = c.status || c.certificate_status || 'valid';
-      if (status !== 'valid') { showToast('Un certificado revocado no se puede descargar como válido.'); return; }
+      const expired = status === 'expired' || (status === 'valid' && c.expires_at && new Date(c.expires_at).getTime() < Date.now());
+      if (status !== 'valid' || expired) { showToast(expired ? 'El certificado está vencido.' : 'Un certificado revocado no se puede descargar como válido.'); return; }
       if (!(await ensureJsPdfLib())) { showToast('No se pudo cargar el generador de PDF.'); return; }
 
       const code = c.code || c.certificate_code || '';
@@ -3851,6 +3910,10 @@
       const score = Math.round(Number(c.score || 0));
       const issued = formatCertificateDate(c.issued_at);
       const verify = certificateVerificationUrl(code);
+      const kind = c.certificate_kind || 'approval';
+      const privateLegend = c.private_legend || 'Certificación privada de capacitación. No constituye título oficial ni habilitación profesional.';
+      const certificateHeading = kind === 'participation' ? 'CERTIFICADO PRIVADO DE PARTICIPACIÓN' : 'CERTIFICADO PRIVADO DE APROBACIÓN';
+      const completionPhrase = kind === 'participation' ? 'ha completado la capacitación privada' : 'ha aprobado la capacitación privada';
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
       const W = 297, H = 210;
@@ -3864,16 +3927,16 @@
       } catch (_) {}
 
       doc.setTextColor(47, 141, 253); doc.setFont('helvetica', 'bold'); doc.setFontSize(11);
-      doc.text('CERTIFICADO DE FORMACIÓN', W / 2, 42, { align: 'center' });
+      doc.text(certificateHeading, W / 2, 42, { align: 'center' });
       doc.setTextColor(71, 85, 105); doc.setFont('helvetica', 'normal'); doc.setFontSize(12);
-      doc.text('Lutmin certifica que', W / 2, 57, { align: 'center' });
+      doc.text(`${c.issuer_display_name || 'Lutmin Consultora'} deja constancia de que`, W / 2, 57, { align: 'center' });
 
       doc.setTextColor(0, 11, 60); doc.setFont('helvetica', 'bold'); doc.setFontSize(29);
       const nameLines = doc.splitTextToSize(fullName, 220);
       doc.text(nameLines, W / 2, 75, { align: 'center' });
 
       doc.setTextColor(71, 85, 105); doc.setFont('helvetica', 'normal'); doc.setFontSize(12);
-      doc.text('ha aprobado satisfactoriamente el curso', W / 2, 97, { align: 'center' });
+      doc.text(completionPhrase, W / 2, 97, { align: 'center' });
       doc.setTextColor(0, 11, 60); doc.setFont('helvetica', 'bold'); doc.setFontSize(23);
       const courseLines = doc.splitTextToSize(course, 220);
       doc.text(courseLines, W / 2, 112, { align: 'center' });
@@ -3881,7 +3944,7 @@
       doc.setFillColor(248, 250, 252); doc.roundedRect(55, 130, 187, 22, 4, 4, 'F');
       doc.setFontSize(11); doc.setTextColor(71, 85, 105); doc.setFont('helvetica', 'normal');
       doc.text(`Carga horaria: ${hours} h`, 78, 143);
-      doc.text(`Calificación: ${score}%`, 130, 143);
+      if (kind !== 'participation') doc.text(`Calificación: ${score}%`, 130, 143);
       doc.text(`Emisión: ${issued}`, 184, 143);
 
       const qrCanvas = document.querySelector('#certificateQr canvas');
@@ -3896,7 +3959,15 @@
       doc.setTextColor(100, 116, 139); doc.setFont('helvetica', 'normal'); doc.setFontSize(7.5);
       const verifyLines = doc.splitTextToSize(verify, 185);
       doc.text(verifyLines, 24, 178);
-      doc.setFontSize(7); doc.text('La autenticidad de este certificado puede verificarse mediante el código o QR.', 24, 192);
+      doc.setFontSize(7.2); doc.setTextColor(71,85,105);
+      const legendLines = doc.splitTextToSize(privateLegend, 180);
+      doc.text(legendLines, 24, 190);
+      const signerLeft = c.instructor_name || 'Instructor / capacitador';
+      const signerRight = c.responsible_name || 'Responsable de emisión';
+      doc.setDrawColor(148,163,184); doc.setLineWidth(.25); doc.line(78,168,128,168); doc.line(166,168,216,168);
+      doc.setTextColor(71,85,105); doc.setFontSize(7.2); doc.text(signerLeft,103,172,{align:'center'}); doc.text(c.instructor_name?'Instructor / capacitador':'',103,176,{align:'center'});
+      doc.text(signerRight,191,172,{align:'center'}); doc.text(c.responsible_role || 'Responsable Lutmin',191,176,{align:'center'});
+      if(c.issuer_legal_name || c.issuer_tax_id){ doc.setFontSize(6.8); doc.text([c.issuer_legal_name||'', c.issuer_tax_id?`CUIT ${c.issuer_tax_id}`:''].filter(Boolean).join(' · '),24,202); }
 
       const fileName = `Certificado_Lutmin_${certificateSafeFilename(fullName)}_${certificateSafeFilename(course)}_${certificateSafeFilename(code)}.pdf`;
       doc.save(fileName);
@@ -3907,7 +3978,8 @@
       const c = currentCertificate;
       if (!c) return;
       const status = c.status || c.certificate_status || 'valid';
-      if (status !== 'valid') { showToast('Un certificado revocado no se puede imprimir como válido.'); return; }
+      const expired = status === 'expired' || (status === 'valid' && c.expires_at && new Date(c.expires_at).getTime() < Date.now());
+      if (status !== 'valid' || expired) { showToast(expired ? 'El certificado está vencido.' : 'Un certificado revocado no se puede imprimir como válido.'); return; }
       const code = c.code || c.certificate_code || '';
       const fullName = c.full_name || 'Alumno';
       const course = c.course_title || 'Curso Lutmin';
@@ -3915,11 +3987,21 @@
       const score = Math.round(Number(c.score || 0));
       const issued = formatCertificateDate(c.issued_at);
       const verify = certificateVerificationUrl(code);
+      const kind = c.certificate_kind || 'approval';
+      const heading = kind === 'participation' ? 'CERTIFICADO PRIVADO DE PARTICIPACIÓN' : 'CERTIFICADO PRIVADO DE APROBACIÓN';
+      const phrase = kind === 'participation' ? 'ha completado la capacitación privada' : 'ha aprobado la capacitación privada';
+      const legend = c.private_legend || 'Certificación privada de capacitación. No constituye título oficial ni habilitación profesional.';
+      const issuer = c.issuer_display_name || 'Lutmin Consultora';
+      const issuerLegal = [c.issuer_legal_name, c.issuer_tax_id ? `CUIT ${c.issuer_tax_id}` : ''].filter(Boolean).join(' · ');
+      const trainingMeta = [c.modality ? `Modalidad: ${c.modality}` : '', c.training_location ? `Sede: ${c.training_location}` : '', c.course_version ? `Versión: ${c.course_version}` : ''].filter(Boolean).join(' · ');
+      const expiryText = c.expires_at ? `Vigencia hasta: ${formatCertificateDate(c.expires_at)}` : 'Sin vencimiento configurado';
       const logo = new URL('LOGO.png', window.location.href).href;
       const qrImg = document.querySelector('#certificateQr img')?.src || (document.querySelector('#certificateQr canvas')?.toDataURL ? document.querySelector('#certificateQr canvas').toDataURL('image/png') : '');
       const w = window.open('', '_blank', 'width=1100,height=800');
       if (!w) { showToast('El navegador bloqueó la ventana de impresión.'); return; }
-      w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Certificado ${escapeHtml(code)}</title><style>@page{size:A4 landscape;margin:12mm}body{font-family:Arial,sans-serif;margin:0;color:#000B3C}.sheet{border:4px solid #000B3C;min-height:175mm;padding:18mm;box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;text-align:center}.logo{height:55px;object-fit:contain;margin:auto}.eyebrow{margin-top:24px;letter-spacing:.22em;font-weight:700;font-size:12px;color:#2F8DFD}.name{font-size:38px;font-weight:800;margin:22px 0 8px}.course{font-size:30px;font-weight:800;margin:10px}.meta{font-size:15px;color:#475569;margin-top:18px;line-height:1.8}.code{margin-top:28px;font-size:11px;color:#64748b}.verify{font-size:9px;word-break:break-all;color:#94a3b8;margin-top:6px}</style></head><body><div class="sheet"><img class="logo" src="${logo}"><div class="eyebrow">CERTIFICADO DE FORMACIÓN</div><p>Se certifica que</p><div class="name">${escapeHtml(fullName)}</div><p>ha aprobado satisfactoriamente el curso</p><div class="course">${escapeHtml(course)}</div><div class="meta">Carga horaria: <strong>${hours} h</strong> · Calificación: <strong>${score}%</strong> · Emitido: <strong>${issued}</strong></div>${qrImg ? `<img src="${qrImg}" style="width:110px;height:110px;margin:24px auto 0">` : ''}<div class="code">Código verificable: <strong>${escapeHtml(code)}</strong></div><div class="verify">${escapeHtml(verify)}</div></div><script>window.onload=()=>setTimeout(()=>window.print(),500)<\/script></body></html>`);
+      const scoreMeta = kind !== 'participation' ? ` · Calificación: <strong>${score}%</strong>` : '';
+      const html = `<!doctype html><html><head><meta charset="utf-8"><title>Certificado ${escapeHtml(code)}</title><style>@page{size:A4 landscape;margin:12mm}body{font-family:Arial,sans-serif;margin:0;color:#000B3C}.sheet{border:4px solid #000B3C;min-height:175mm;padding:15mm 18mm;box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;text-align:center}.logo{height:55px;object-fit:contain;margin:auto}.eyebrow{margin-top:20px;letter-spacing:.16em;font-weight:700;font-size:12px;color:#2F8DFD}.name{font-size:36px;font-weight:800;margin:18px 0 8px}.course{font-size:28px;font-weight:800;margin:10px}.meta{font-size:14px;color:#475569;margin-top:15px;line-height:1.8}.code{margin-top:18px;font-size:11px;color:#64748b}.verify{font-size:8px;word-break:break-all;color:#94a3b8;margin-top:6px}.legend{margin:16px auto 0;max-width:850px;font-size:10px;line-height:1.45;color:#64748b}.signatures{display:grid;grid-template-columns:1fr 1fr;gap:70px;max-width:620px;margin:20px auto 0}.sign{border-top:1px solid #94a3b8;padding-top:6px;font-size:10px;color:#475569}</style></head><body><div class="sheet"><img class="logo" src="${logo}"><div class="eyebrow">${escapeHtml(heading)}</div><p>${escapeHtml(issuer)} deja constancia de que</p><div class="name">${escapeHtml(fullName)}</div><p>${escapeHtml(phrase)}</p><div class="course">${escapeHtml(course)}</div><div class="meta">Carga horaria: <strong>${hours} h</strong>${scoreMeta} · Emitido: <strong>${issued}</strong><br>${escapeHtml(trainingMeta)}${trainingMeta?' · ':''}${escapeHtml(expiryText)}</div>${qrImg ? `<img src="${qrImg}" style="width:95px;height:95px;margin:18px auto 0">` : ''}<div class="code">Código verificable: <strong>${escapeHtml(code)}</strong></div><div class="verify">${escapeHtml(verify)}</div><div class="legend">${escapeHtml(legend)}</div><div class="signatures"><div class="sign">${escapeHtml(c.instructor_name || 'Instructor / capacitador')}<br><span>${c.instructor_name?'Instructor / capacitador':''}</span></div><div class="sign">${escapeHtml(c.responsible_name || 'Responsable de emisión')}<br><span>${escapeHtml(c.responsible_role || 'Responsable Lutmin')}</span></div></div>${issuerLegal?`<div style="margin-top:14px;font-size:9px;color:#64748b">${escapeHtml(issuerLegal)}</div>`:''}</div><script>window.onload=()=>setTimeout(()=>window.print(),500)<\/script></body></html>`;
+      w.document.write(html);
       w.document.close();
     }
 
@@ -4642,14 +4724,14 @@
 
       const [profilesRes, coursesRes, lessonsRes, enrollmentsRes, progressRes, assessmentsRes, questionsRes, attemptsRes, certificatesRes, notesRes, offeringsRes, leadsRes, paymentsRes, accessRolesRes] = await Promise.all([
         supabaseClient.from('profiles').select('id,full_name,email,role,active,must_change_password,created_at,last_seen_at').order('full_name'),
-        supabaseClient.from('courses').select('id,slug,title,description,duration_hours,level,category,published,public_featured,created_at,updated_at').order('created_at', { ascending: false }),
+        supabaseClient.from('courses').select('id,slug,title,description,duration_hours,level,category,published,public_featured,certificate_kind,certificate_validity_months,course_version,instructor_name,training_modality,training_location,created_at,updated_at').order('created_at', { ascending: false }),
         supabaseClient.from('lessons').select('id,course_id,title,description,content,duration_minutes,sort_order,video_url,video_path,material_url,material_path,updated_at').order('sort_order'),
         supabaseClient.from('enrollments').select('id,user_id,course_id,offering_id,status,enrolled_at,price_amount,payment_currency,payment_status,payment_due_date,access_granted_at').order('enrolled_at', { ascending: false }),
         supabaseClient.from('lesson_progress').select('user_id,lesson_id,completed,completed_at').eq('completed', true),
         supabaseClient.from('assessments').select('id,course_id,title,description,passing_score,published,created_at').order('created_at', { ascending: false }),
         supabaseClient.from('assessment_questions').select('id,assessment_id,question_text,sort_order,points').order('sort_order'),
         supabaseClient.from('assessment_attempts').select('id,assessment_id,user_id,score,passed,submitted_at').order('submitted_at', { ascending: false }),
-        supabaseClient.from('certificates').select('id,user_id,course_id,code,full_name,course_title,duration_hours,score,status,issued_at,revoked_at,revoked_reason').order('issued_at', { ascending: false }),
+        supabaseClient.from('certificates').select('id,user_id,course_id,code,full_name,course_title,duration_hours,score,status,issued_at,revoked_at,revoked_reason,certificate_kind,issuer_display_name,issuer_legal_name,issuer_tax_id,private_legend,verification_note,course_version,modality,training_location,instructor_name,responsible_name,responsible_role,expires_at').order('issued_at', { ascending: false }),
         supabaseClient.from('student_admin_notes').select('id,student_id,note,created_by,created_at').order('created_at', { ascending: false }),
         supabaseClient.from('course_offerings').select('id,course_id,start_date,end_date,registration_deadline,modality,location,price,currency,capacity,status,published,created_at,updated_at').order('start_date', { ascending: true }),
         supabaseClient.from('course_leads').select('id,course_id,offering_id,full_name,email,phone,city,message,source,status,converted_user_id,consent_at,created_at,updated_at').order('created_at', { ascending: false }),
@@ -5283,6 +5365,12 @@
       document.getElementById('editCourseCategory').value = course.category || 'tecnico';
       document.getElementById('editCoursePublished').checked = !!course.published;
       document.getElementById('editCourseFeatured').checked = !!course.public_featured;
+      document.getElementById('editCourseCertificateKind').value = course.certificate_kind || 'approval';
+      document.getElementById('editCourseCertificateValidity').value = course.certificate_validity_months || '';
+      document.getElementById('editCourseVersion').value = course.course_version || '1.0';
+      document.getElementById('editCourseInstructor').value = course.instructor_name || '';
+      document.getElementById('editCourseTrainingModality').value = course.training_modality || '';
+      document.getElementById('editCourseTrainingLocation').value = course.training_location || '';
       document.getElementById('editCourseDescription').value = course.description || '';
       openModal('adminCourseEditModal');
     }
@@ -5299,7 +5387,13 @@
         level: document.getElementById('editCourseLevel').value,
         category: document.getElementById('editCourseCategory').value,
         published: document.getElementById('editCoursePublished').checked,
-        public_featured: document.getElementById('editCourseFeatured').checked
+        public_featured: document.getElementById('editCourseFeatured').checked,
+        certificate_kind: document.getElementById('editCourseCertificateKind').value,
+        certificate_validity_months: document.getElementById('editCourseCertificateValidity').value ? Number(document.getElementById('editCourseCertificateValidity').value) : null,
+        course_version: document.getElementById('editCourseVersion').value.trim() || '1.0',
+        instructor_name: document.getElementById('editCourseInstructor').value.trim(),
+        training_modality: document.getElementById('editCourseTrainingModality').value.trim(),
+        training_location: document.getElementById('editCourseTrainingLocation').value.trim()
       };
       const { error } = await supabaseClient.from('courses').update(payload).eq('id', editingAdminCourseId);
       btn.disabled = false; btn.textContent = 'Guardar cambios';
@@ -6283,10 +6377,16 @@
         return;
       }
       list.innerHTML = adminCertificates.map(cert => {
-        const valid = cert.status === 'valid';
+        const expired = cert.status === 'valid' && cert.expires_at && new Date(cert.expires_at).getTime() < Date.now();
+        const valid = cert.status === 'valid' && !expired;
+        const kind = cert.certificate_kind === 'participation' ? 'Participación' : 'Aprobación';
+        const statusLabel = valid ? 'Válido' : (expired ? 'Vencido' : 'Revocado');
+        const statusClass = valid ? 'bg-green-50 text-green-700' : (expired ? 'bg-amber-50 text-amber-700' : 'bg-red-50 text-red-700');
+        const scoreText = cert.certificate_kind === 'participation' ? '' : ` · ${Math.round(Number(cert.score))}%`;
+        const expiryText = cert.expires_at ? ` · Vigencia ${formatCertificateDate(cert.expires_at)}` : '';
         return `<div class="p-5 sm:p-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-          <div class="min-w-0"><div class="flex flex-wrap gap-2 items-center"><p class="font-extrabold text-lutmin-dark">${escapeHtml(cert.full_name)}</p><span class="text-[10px] px-2.5 py-1 rounded-full font-bold ${valid ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}">${valid ? 'Válido' : 'Revocado'}</span></div><p class="mt-1 text-sm text-slate-500">${escapeHtml(cert.course_title)} · ${Math.round(Number(cert.score))}% · ${formatCertificateDate(cert.issued_at)}</p><p class="mt-2 text-[10px] text-slate-400 break-all">${escapeHtml(cert.code)}</p>${cert.revoked_reason ? `<p class="mt-1 text-xs text-red-500">${escapeHtml(cert.revoked_reason)}</p>` : ''}</div>
-          <div class="flex flex-wrap gap-2 shrink-0"><button onclick="showAdminCertificate('${cert.id}')" class="px-3 py-2 rounded-xl bg-slate-100 text-xs font-bold">Ver</button>${valid ? `<button onclick="revokeAdminCertificate('${cert.id}')" class="px-3 py-2 rounded-xl bg-red-50 text-red-600 text-xs font-bold">Revocar</button>` : `<button onclick="restoreAdminCertificate('${cert.id}')" class="px-3 py-2 rounded-xl bg-green-50 text-green-700 text-xs font-bold">Restaurar</button>`}</div>
+          <div class="min-w-0"><div class="flex flex-wrap gap-2 items-center"><p class="font-extrabold text-lutmin-dark">${escapeHtml(cert.full_name)}</p><span class="text-[10px] px-2.5 py-1 rounded-full font-bold ${statusClass}">${statusLabel}</span><span class="text-[10px] px-2.5 py-1 rounded-full font-bold bg-blue-50 text-blue-700">${kind}</span></div><p class="mt-1 text-sm text-slate-500">${escapeHtml(cert.course_title)}${scoreText} · ${formatCertificateDate(cert.issued_at)}${expiryText}</p><p class="mt-2 text-[10px] text-slate-400 break-all">${escapeHtml(cert.code)}</p>${cert.revoked_reason ? `<p class="mt-1 text-xs text-red-500">${escapeHtml(cert.revoked_reason)}</p>` : ''}</div>
+          <div class="flex flex-wrap gap-2 shrink-0"><button onclick="showAdminCertificate('${cert.id}')" class="px-3 py-2 rounded-xl bg-slate-100 text-xs font-bold">Ver</button>${cert.status==='valid' ? `<button onclick="revokeAdminCertificate('${cert.id}')" class="px-3 py-2 rounded-xl bg-red-50 text-red-600 text-xs font-bold">Revocar</button>` : `<button onclick="restoreAdminCertificate('${cert.id}')" class="px-3 py-2 rounded-xl bg-green-50 text-green-700 text-xs font-bold">Restaurar</button>`}</div>
         </div>`;
       }).join('');
     }
