@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Lutmin conecta formación, certificación, talento, empresas y desarrollo organizacional en un mismo ecosistema." />
-  <title>Lutmin | Plataforma V1.8</title>
+  <title>Lutmin | Plataforma V2.2</title>
 
   <!-- FAVICON -->
   <link rel="icon" type="image/png" href="LOGO.png" />
@@ -112,6 +112,11 @@
     .hide-scrollbar::-webkit-scrollbar { display: none; }
     .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
+
+<style id="publicPresetsV22">
+body.site-preset-minimal #inicio{background:#fff!important;color:#000B3C!important;border-bottom:1px solid #e2e8f0}body.site-preset-minimal #inicio>div.absolute{display:none!important}body.site-preset-minimal #publicHeroSubtitleV22{color:#475569!important}body.site-preset-minimal #publicHeroKickerV22{color:#2563eb!important;background:#eff6ff!important;border-color:#bfdbfe!important}body.site-preset-minimal #inicio .text-slate-300{color:#64748b!important}
+body.site-preset-editorial #inicio{background:linear-gradient(135deg,#000B3C 0%,#07184F 52%,#153a7a 100%)!important}body.site-preset-editorial #inicio .grid-pattern{opacity:.06!important}body.site-preset-editorial #inicio h1{letter-spacing:-.05em!important}
+</style>
 </head>
 
 <body class="bg-white text-slate-800 antialiased overflow-x-hidden">
@@ -122,7 +127,7 @@
   <header class="fixed top-0 left-0 right-0 z-50 border-b border-slate-200/70 bg-white/95 backdrop-blur-xl shadow-[0_1px_0_rgba(15,23,42,.03)]">
     <div class="max-w-[1380px] mx-auto px-5 sm:px-7 lg:px-10 h-24 flex items-center justify-between gap-5">
       <a href="#inicio" class="flex items-center shrink-0 min-w-[150px]" data-public-event="logo_home" aria-label="Ir al inicio">
-        <img src="LOGO.png" alt="Lutmin" class="h-16 sm:h-[72px] w-auto object-contain scale-[1.16] origin-left">
+        <img id="publicHeaderLogoV22" src="LOGO.png" alt="Lutmin" class="h-16 sm:h-[72px] w-auto object-contain origin-left">
       </a>
 
       <nav class="hidden xl:flex items-center gap-1 text-[13px] font-bold text-lutmin-dark">
@@ -178,21 +183,18 @@
       <div class="relative z-10 max-w-[1380px] mx-auto px-5 sm:px-7 lg:px-10 py-16 lg:py-20 w-full">
         <div class="grid lg:grid-cols-[1.05fr_.95fr] gap-14 xl:gap-20 items-center">
           <div class="max-w-3xl">
-            <div class="inline-flex items-center gap-2 rounded-full border border-blue-300/20 bg-white/[.06] px-4 py-2 text-[11px] font-extrabold uppercase tracking-[.19em] text-blue-100">
+            <div id="publicHeroKickerV22" class="inline-flex items-center gap-2 rounded-full border border-blue-300/20 bg-white/[.06] px-4 py-2 text-[11px] font-extrabold uppercase tracking-[.19em] text-blue-100">
               <span class="w-2 h-2 rounded-full bg-lutmin-light shadow-[0_0_0_5px_rgba(47,141,253,.10)]"></span>
               Formación · Certificación · Talento
             </div>
 
-            <h1 class="mt-7 text-[42px] sm:text-[54px] lg:text-[62px] xl:text-[68px] font-black leading-[.98] tracking-[-.035em]">
-              Aprender es el comienzo.
-              <span class="block mt-2 text-transparent bg-clip-text bg-gradient-to-r from-[#3191ff] via-[#52b6ff] to-[#8bdcff]">Demostrarlo cambia todo.</span>
-            </h1>
+            <h1 class="mt-7 text-[42px] sm:text-[54px] lg:text-[62px] xl:text-[68px] font-black leading-[.98] tracking-[-.035em]"><span id="publicHeroTitleV22">Aprender es el comienzo.</span><span id="publicHeroHighlightV22" class="block mt-2 text-transparent bg-clip-text bg-gradient-to-r from-[#3191ff] via-[#52b6ff] to-[#8bdcff]">Demostrarlo cambia todo.</span></h1>
 
-            <p class="mt-7 max-w-2xl text-base sm:text-lg lg:text-[19px] text-slate-300 leading-relaxed">Formación aplicada, seguimiento real y certificados verificables. Para personas que quieren crecer y empresas que necesitan saber qué está pasando con su capacitación.</p>
+            <p id="publicHeroSubtitleV22" class="mt-7 max-w-2xl text-base sm:text-lg lg:text-[19px] text-slate-300 leading-relaxed">Formación aplicada, seguimiento real y certificados verificables. Para personas que quieren crecer y empresas que necesitan saber qué está pasando con su capacitación.</p>
 
             <div class="mt-8 flex flex-col sm:flex-row gap-3">
-              <a href="#formacion" data-public-event="hero_training" class="inline-flex justify-center items-center gap-2 px-7 py-4 rounded-full bg-lutmin-light hover:bg-blue-500 text-white font-extrabold transition shadow-[0_16px_38px_rgba(47,141,253,.24)]">Ver capacitaciones <i class="fa-solid fa-arrow-right text-xs"></i></a>
-              <a href="#empresas" data-public-event="hero_company" class="inline-flex justify-center items-center gap-2 px-7 py-4 rounded-full border border-white/20 bg-white/[.06] hover:bg-white/[.11] font-bold transition">Capacitar una empresa</a>
+              <a href="#formacion" id="publicPrimaryCtaV22" data-public-event="hero_training" class="inline-flex justify-center items-center gap-2 px-7 py-4 rounded-full bg-lutmin-light hover:bg-blue-500 text-white font-extrabold transition shadow-[0_16px_38px_rgba(47,141,253,.24)]">Ver capacitaciones <i class="fa-solid fa-arrow-right text-xs"></i></a>
+              <a href="#empresas" id="publicSecondaryCtaV22" data-public-event="hero_company" class="inline-flex justify-center items-center gap-2 px-7 py-4 rounded-full border border-white/20 bg-white/[.06] hover:bg-white/[.11] font-bold transition">Capacitar una empresa</a>
             </div>
 
             <div class="mt-9 flex flex-wrap gap-x-6 gap-y-3 text-sm text-slate-300">
@@ -897,6 +899,8 @@
           <button data-student-only="true" class="campus-tab w-full text-left p-3 rounded-xl bg-white/10 font-bold" data-campus-tab="dashboard"><i class="fa-solid fa-house w-7"></i>Inicio</button>
           <button data-student-only="true" class="campus-tab w-full text-left p-3 rounded-xl text-slate-300 hover:bg-white/10" data-campus-tab="courses"><i class="fa-solid fa-book w-7"></i>Mis cursos</button>
           <button data-student-only="true" class="campus-tab w-full text-left p-3 rounded-xl text-slate-300 hover:bg-white/10" data-campus-tab="agenda"><i class="fa-solid fa-calendar-days w-7"></i>Agenda</button>
+          <button data-student-only="true" class="campus-tab w-full text-left p-3 rounded-xl text-slate-300 hover:bg-white/10" data-campus-tab="paths"><i class="fa-solid fa-route w-7"></i>Mis rutas</button>
+          <button data-student-only="true" class="campus-tab w-full text-left p-3 rounded-xl text-slate-300 hover:bg-white/10" data-campus-tab="surveys"><i class="fa-solid fa-star-half-stroke w-7"></i>Encuestas</button>
           <button data-student-only="true" class="campus-tab w-full text-left p-3 rounded-xl text-slate-300 hover:bg-white/10" data-campus-tab="certificates"><i class="fa-solid fa-award w-7"></i>Certificados</button>
           <button data-student-only="true" data-talent-tab="true" class="campus-tab w-full text-left p-3 rounded-xl text-slate-300 hover:bg-white/10" data-campus-tab="talent"><i class="fa-solid fa-briefcase w-7"></i>Lutmin Conecta</button>
           <button class="campus-tab w-full text-left p-3 rounded-xl text-slate-300 hover:bg-white/10 flex items-center" data-campus-tab="notifications"><i class="fa-solid fa-bell w-7"></i><span class="flex-1">Novedades</span><span id="notificationBadgeDesktop" class="hidden min-w-5 h-5 px-1 rounded-full bg-red-500 text-white text-[10px] font-black flex items-center justify-center">0</span></button>
@@ -928,6 +932,8 @@
                 <button data-student-only="true" class="campus-tab whitespace-nowrap px-4 py-2 rounded-xl bg-white/10 font-bold text-xs" data-campus-tab="dashboard">Inicio</button>
                 <button data-student-only="true" class="campus-tab whitespace-nowrap px-4 py-2 rounded-xl text-slate-300 text-xs" data-campus-tab="courses">Cursos</button>
                 <button data-student-only="true" class="campus-tab whitespace-nowrap px-4 py-2 rounded-xl text-slate-300 text-xs" data-campus-tab="agenda">Agenda</button>
+                <button data-student-only="true" class="campus-tab whitespace-nowrap px-4 py-2 rounded-xl text-slate-300 text-xs" data-campus-tab="paths">Rutas</button>
+                <button data-student-only="true" class="campus-tab whitespace-nowrap px-4 py-2 rounded-xl text-slate-300 text-xs" data-campus-tab="surveys">Encuestas</button>
                 <button data-student-only="true" class="campus-tab whitespace-nowrap px-4 py-2 rounded-xl text-slate-300 text-xs" data-campus-tab="certificates">Certificados</button>
                 <button data-student-only="true" data-talent-tab="true" class="campus-tab whitespace-nowrap px-4 py-2 rounded-xl text-slate-300 text-xs" data-campus-tab="talent">Conecta</button>
                 <button class="campus-tab whitespace-nowrap px-4 py-2 rounded-xl text-slate-300 text-xs flex items-center gap-2" data-campus-tab="notifications">Novedades <span id="notificationBadgeMobile" class="hidden min-w-5 h-5 px-1 rounded-full bg-red-500 text-white text-[10px] font-black items-center justify-center">0</span></button>
@@ -1158,6 +1164,20 @@
           <!-- =====================================================
                PORTAL EMPRESAS - ETAPA 13
           ====================================================== -->
+          <section class="campus-panel hidden" data-campus-panel="paths">
+            <p class="text-[10px] sm:text-xs text-lutmin-light font-bold uppercase tracking-widest">Desarrollo</p>
+            <h2 class="mt-1 sm:mt-2 text-2xl sm:text-3xl font-black text-lutmin-dark">Mis rutas de aprendizaje</h2>
+            <p class="mt-2 text-sm text-slate-500">Programas de varios cursos organizados en una secuencia clara.</p>
+            <div id="studentPathsV22" class="mt-6 grid lg:grid-cols-2 gap-5"><div class="p-6 rounded-3xl bg-white border border-slate-100 text-sm text-slate-500">Cargando rutas...</div></div>
+          </section>
+
+          <section class="campus-panel hidden" data-campus-panel="surveys">
+            <p class="text-[10px] sm:text-xs text-lutmin-light font-bold uppercase tracking-widest">Experiencia</p>
+            <h2 class="mt-1 sm:mt-2 text-2xl sm:text-3xl font-black text-lutmin-dark">Encuestas de satisfacción</h2>
+            <p class="mt-2 text-sm text-slate-500">Tu devolución queda asociada a la capacitación, no a tu perfil público.</p>
+            <div id="studentSurveysV22" class="mt-6 space-y-5"><div class="p-6 rounded-3xl bg-white border border-slate-100 text-sm text-slate-500">Cargando encuestas...</div></div>
+          </section>
+
           <section class="campus-panel hidden" data-campus-panel="company">
             <div class="flex flex-col xl:flex-row xl:items-end xl:justify-between gap-4">
               <div class="flex items-center gap-4 min-w-0">
@@ -1257,7 +1277,7 @@
                 <div class="sm:hidden">
                   <label class="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Módulo</label>
                   <select id="adminModuleSelectV20" onchange="setAdminModuleV19(this.value)" class="mt-2 w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-sm font-bold text-lutmin-dark">
-                    <option value="overview">Resumen</option><option value="operations">Operación</option><option value="academic">Academia</option><option value="people">Personas</option><option value="companies">Empresas</option><option value="commercial">Comercial</option><option value="finance">Finanzas</option><option value="talent">Talento</option><option value="communications">Comunicación</option><option value="system">Sistema</option>
+                    <option value="overview">Resumen</option><option value="operations">Operación</option><option value="academic">Academia</option><option value="people">Personas</option><option value="companies">Empresas</option><option value="commercial">Comercial</option><option value="finance">Finanzas</option><option value="talent">Talento</option><option value="communications">Comunicación</option><option value="website">Sitio web</option><option value="system">Sistema</option>
                   </select>
                 </div>
 
@@ -1271,6 +1291,7 @@
                   <button data-admin-v19-btn="finance" onclick="setAdminModuleV19('finance')" class="admin-v19-nav px-3 py-2.5 rounded-xl text-xs font-bold bg-white text-slate-600"><i class="fa-solid fa-wallet mr-2"></i>Finanzas <span id="adminBadgeFinanceV19" class="ml-1"></span></button>
                   <button data-admin-v19-btn="talent" onclick="setAdminModuleV19('talent')" class="admin-v19-nav px-3 py-2.5 rounded-xl text-xs font-bold bg-white text-slate-600"><i class="fa-solid fa-briefcase mr-2"></i>Talento</button>
                   <button data-admin-v19-btn="communications" onclick="setAdminModuleV19('communications')" class="admin-v19-nav px-3 py-2.5 rounded-xl text-xs font-bold bg-white text-slate-600"><i class="fa-solid fa-bullhorn mr-2"></i>Comunicación</button>
+                  <button data-admin-v19-btn="website" onclick="setAdminModuleV19('website')" class="admin-v19-nav px-3 py-2.5 rounded-xl text-xs font-bold bg-white text-slate-600"><i class="fa-solid fa-window-maximize mr-2"></i>Sitio web</button>
                   <button data-admin-v19-btn="system" onclick="setAdminModuleV19('system')" class="admin-v19-nav px-3 py-2.5 rounded-xl text-xs font-bold bg-white text-slate-600"><i class="fa-solid fa-gear mr-2"></i>Sistema</button>
                 </div>
 
@@ -2107,6 +2128,49 @@
               <div id="adminCoursesList" class="divide-y divide-slate-100"></div>
             </div>
 
+            <!-- V2.2 · EDITOR DEL SITIO -->
+            <div id="adminSiteEditorV22" data-admin-module-v19="website" class="mt-6 bg-white rounded-3xl border border-slate-100 overflow-hidden">
+              <div class="p-5 sm:p-6 border-b border-slate-100 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+                <div><p class="text-[10px] uppercase tracking-widest font-extrabold text-lutmin-light">V2.2 · Sitio web</p><h3 class="mt-1 text-xl font-black text-lutmin-dark">Editor del Inicio</h3><p class="mt-1 text-xs text-slate-500">Ajustá el mensaje y el estilo sin volver a modificar el HTML.</p></div>
+                <button onclick="window.open(location.origin+location.pathname,'_blank')" class="px-4 py-2.5 rounded-xl bg-slate-100 text-lutmin-dark text-xs font-extrabold"><i class="fa-solid fa-arrow-up-right-from-square mr-2"></i>Abrir web</button>
+              </div>
+              <form id="siteEditorFormV22" class="p-5 sm:p-6 grid lg:grid-cols-2 gap-5">
+                <div class="space-y-4">
+                  <div><label class="text-xs font-bold text-slate-600">Estilo visual</label><select id="sitePresetV22" class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200"><option value="institucional">Institucional oscuro</option><option value="minimal">Minimal claro</option><option value="editorial">Editorial</option></select></div>
+                  <div><label class="text-xs font-bold text-slate-600">Tamaño del logo</label><input id="siteLogoHeightV22" type="range" min="44" max="105" value="72" class="mt-3 w-full"><p class="text-[10px] text-slate-400 mt-1">Podés hacerlo más visible sin tocar CSS.</p></div>
+                  <div><label class="text-xs font-bold text-slate-600">Frase superior</label><input id="siteKickerV22" class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200"></div>
+                  <div><label class="text-xs font-bold text-slate-600">Título principal</label><input id="siteTitleV22" class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200"></div>
+                  <div><label class="text-xs font-bold text-slate-600">Título destacado</label><input id="siteHighlightV22" class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200"></div>
+                </div>
+                <div class="space-y-4">
+                  <div><label class="text-xs font-bold text-slate-600">Descripción</label><textarea id="siteSubtitleV22" rows="4" class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200"></textarea></div>
+                  <div class="grid sm:grid-cols-2 gap-3"><div><label class="text-xs font-bold text-slate-600">Botón principal</label><input id="sitePrimaryV22" class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200"></div><div><label class="text-xs font-bold text-slate-600">Botón empresas</label><input id="siteSecondaryV22" class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200"></div></div>
+                  <div class="grid sm:grid-cols-2 gap-2 text-xs"><label class="p-3 rounded-xl bg-slate-50"><input id="siteShowMetricsV22" type="checkbox" class="mr-2">Mostrar métricas públicas</label><label class="p-3 rounded-xl bg-slate-50"><input id="siteShowFaqV22" type="checkbox" class="mr-2">Mostrar dudas rápidas</label><label class="p-3 rounded-xl bg-slate-50"><input id="siteShowCertsV22" type="checkbox" class="mr-2">Mostrar certificados</label><label class="p-3 rounded-xl bg-slate-50"><input id="siteShowEcoV22" type="checkbox" class="mr-2">Mostrar ecosistema</label></div>
+                  <button class="w-full py-3 rounded-xl bg-lutmin-light text-white font-extrabold">Guardar y publicar cambios</button>
+                </div>
+              </form>
+            </div>
+
+            <!-- V2.2 · RUTAS DE APRENDIZAJE -->
+            <div id="adminLearningPathsV22" data-admin-module-v19="academic" class="mt-6 bg-white rounded-3xl border border-slate-100 overflow-hidden">
+              <div class="p-5 sm:p-6 border-b border-slate-100"><p class="text-[10px] uppercase tracking-widest font-extrabold text-violet-600">V2.2</p><h3 class="mt-1 text-xl font-black text-lutmin-dark">Rutas de aprendizaje</h3><p class="mt-1 text-xs text-slate-500">Agrupá varios cursos en un recorrido y asignalo de una sola vez.</p></div>
+              <div class="p-5 sm:p-6 grid xl:grid-cols-[.8fr_1.2fr] gap-6">
+                <form id="createPathFormV22" class="space-y-3"><input id="pathTitleV22" required placeholder="Ej: Ruta Técnico de Mantenimiento" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200"><textarea id="pathDescriptionV22" rows="3" placeholder="Objetivo de la ruta" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200"></textarea><button class="w-full py-3 rounded-xl bg-violet-600 text-white font-extrabold">Crear ruta</button></form>
+                <div id="adminPathsListV22" class="space-y-4"><p class="text-sm text-slate-500">Cargando rutas...</p></div>
+              </div>
+            </div>
+
+            <!-- V2.2 · ENCUESTAS -->
+            <div id="adminSurveysV22" data-admin-module-v19="academic" class="mt-6 bg-white rounded-3xl border border-slate-100 overflow-hidden">
+              <div class="p-5 sm:p-6 border-b border-slate-100"><p class="text-[10px] uppercase tracking-widest font-extrabold text-amber-600">Experiencia del alumno</p><h3 class="mt-1 text-xl font-black text-lutmin-dark">Encuestas y NPS</h3><p class="mt-1 text-xs text-slate-500">Medí satisfacción al finalizar un curso y centralizá los comentarios.</p></div>
+              <div class="p-5 sm:p-6 grid xl:grid-cols-[.8fr_1.2fr] gap-6"><form id="surveyConfigFormV22" class="space-y-3"><select id="surveyCourseV22" required class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200"></select><input id="surveyTitleV22" value="Encuesta de satisfacción" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200"><label class="flex items-center gap-2 text-xs font-bold"><input id="surveyActiveV22" type="checkbox" checked>Encuesta activa</label><button class="w-full py-3 rounded-xl bg-amber-500 text-white font-extrabold">Guardar encuesta</button></form><div id="adminSurveyResultsV22"><p class="text-sm text-slate-500">Cargando resultados...</p></div></div>
+            </div>
+
+            <!-- V2.2 · LISTA DE ESPERA -->
+            <div id="adminWaitlistV22" data-admin-module-v19="commercial" class="mt-6 bg-white rounded-3xl border border-slate-100 overflow-hidden">
+              <div class="p-5 sm:p-6 border-b border-slate-100"><p class="text-[10px] uppercase tracking-widest font-extrabold text-cyan-600">Demanda</p><h3 class="mt-1 text-xl font-black text-lutmin-dark">Lista de espera</h3><p class="mt-1 text-xs text-slate-500">Cuando una edición se llena, los interesados no se pierden: quedan acá.</p></div><div id="adminWaitlistListV22" class="divide-y divide-slate-100"><div class="p-6 text-sm text-slate-500">Cargando lista de espera...</div></div>
+            </div>
+
             <!-- CERTIFICADOS -->
             <div class="mt-6 bg-white rounded-3xl border border-slate-100 overflow-hidden">
               <div class="p-5 sm:p-6 border-b border-slate-100">
@@ -2865,7 +2929,7 @@
       const offers = Array.isArray(course.offerings) ? course.offerings : [];
       offersArea.classList.remove('hidden');
       offersArea.innerHTML = offers.length
-        ? `<h4 class="font-extrabold text-lutmin-dark">Próximas ediciones</h4><div class="mt-3 space-y-3">${offers.map(o => `<div class="rounded-2xl border border-blue-100 bg-blue-50 p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3"><div><p class="font-bold text-lutmin-dark">${formatPublicDate(o.start_date)} · ${escapeHtml(String(o.modality || '').replace(/^./, x => x.toUpperCase()))}</p><p class="mt-1 text-xs text-slate-600">${o.location ? `${escapeHtml(o.location)} · ` : ''}${formatPublicMoney(o.price, o.currency)}${o.available_seats === null ? '' : ` · ${o.available_seats} cupos`}</p></div><button onclick="openInterestModal('${course.id}','${o.id}')" class="px-4 py-2.5 rounded-xl bg-lutmin-light text-white text-xs font-extrabold">Me interesa esta edición</button></div>`).join('')}</div>`
+        ? `<h4 class="font-extrabold text-lutmin-dark">Próximas ediciones</h4><div class="mt-3 space-y-3">${offers.map(o => `<div class="rounded-2xl border border-blue-100 bg-blue-50 p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3"><div><p class="font-bold text-lutmin-dark">${formatPublicDate(o.start_date)} · ${escapeHtml(String(o.modality || '').replace(/^./, x => x.toUpperCase()))}</p><p class="mt-1 text-xs text-slate-600">${o.location ? `${escapeHtml(o.location)} · ` : ''}${formatPublicMoney(o.price, o.currency)}${o.available_seats === null ? '' : ` · ${o.available_seats} cupos`}</p></div>${Number(o.available_seats)===0?`<button onclick="openWaitlistV22('${course.id}','${o.id}')" class="px-4 py-2.5 rounded-xl bg-amber-500 text-white text-xs font-extrabold"><i class="fa-solid fa-hourglass-half mr-1"></i>Lista de espera</button>`:`<button onclick="openInterestModal('${course.id}','${o.id}')" class="px-4 py-2.5 rounded-xl bg-lutmin-light text-white text-xs font-extrabold">Me interesa esta edición</button>`}</div>`).join('')}</div>`
         : '<div class="rounded-2xl bg-slate-50 border border-slate-100 p-4 text-sm text-slate-600"><strong>Próxima fecha a confirmar.</strong> Podés dejar tus datos y te contactamos cuando abramos una edición.</div>';
       openModal('courseModal');
     }
@@ -3616,7 +3680,93 @@
       const qrImg = document.querySelector('#certificateQr img')?.src || (document.querySelector('#certificateQr canvas')?.toDataURL ? document.querySelector('#certificateQr canvas').toDataURL('image/png') : '');
       const w = window.open('', '_blank', 'width=1100,height=800');
       if (!w) { showToast('El navegador bloqueó la ventana de impresión.'); return; }
-      w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Certificado ${escapeHtml(code)}</title><style>@page{size:A4 landscape;margin:12mm}body{font-family:Arial,sans-serif;margin:0;color:#000B3C}.sheet{border:4px solid #000B3C;min-height:175mm;padding:18mm;box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;text-align:center}.logo{height:55px;object-fit:contain;margin:auto}.eyebrow{margin-top:24px;letter-spacing:.22em;font-weight:700;font-size:12px;color:#2F8DFD}.name{font-size:38px;font-weight:800;margin:22px 0 8px}.course{font-size:30px;font-weight:800;margin:10px}.meta{font-size:15px;color:#475569;margin-top:18px;line-height:1.8}.code{margin-top:28px;font-size:11px;color:#64748b}.verify{font-size:9px;word-break:break-all;color:#94a3b8;margin-top:6px}</style></head><body><div class="sheet"><img class="logo" src="${logo}"><div class="eyebrow">CERTIFICADO DE FORMACIÓN</div><p>Se certifica que</p><div class="name">${escapeHtml(fullName)}</div><p>ha aprobado satisfactoriamente el curso</p><div class="course">${escapeHtml(course)}</div><div class="meta">Carga horaria: <strong>${hours} h</strong> · Calificación: <strong>${score}%</strong> · Emitido: <strong>${issued}</strong></div>${qrImg ? `<img src="${qrImg}" style="width:110px;height:110px;margin:24px auto 0">` : ''}<div class="code">Código verificable: <strong>${escapeHtml(code)}</strong></div><div class="verify">${escapeHtml(verify)}</div></div><script>window.onload=()=>setTimeout(()=>window.print(),500)<\/script></body></html>`);
+      w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Certificado ${escapeHtml(code)}</title><style>@page{size:A4 landscape;margin:12mm}body{font-family:Arial,sans-serif;margin:0;color:#000B3C}.sheet{border:4px solid #000B3C;min-height:175mm;padding:18mm;box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;text-align:center}.logo{height:55px;object-fit:contain;margin:auto}.eyebrow{margin-top:24px;letter-spacing:.22em;font-weight:700;font-size:12px;color:#2F8DFD}.name{font-size:38px;font-weight:800;margin:22px 0 8px}.course{font-size:30px;font-weight:800;margin:10px}.meta{font-size:15px;color:#475569;margin-top:18px;line-height:1.8}.code{margin-top:28px;font-size:11px;color:#64748b}.verify{font-size:9px;word-break:break-all;color:#94a3b8;margin-top:6px}</style></head><body><div class="sheet"><img class="logo" src="${logo}"><div class="eyebrow">CERTIFICADO DE FORMACIÓN</div><p>Se certifica que</p><div class="name">${escapeHtml(fullName)}</div><p>ha aprobado satisfactoriamente el curso</p><div class="course">${escapeHtml(course)}</div><div class="meta">Carga horaria: <strong>${hours} h</strong> · Calificación: <strong>${score}%</strong> · Emitido: <strong>${issued}</strong></div>${qrImg ? `<img src="${qrImg}" style="width:110px;height:110px;margin:24px auto 0">` : ''}<div class="code">Código verificable: <strong>${escapeHtml(code)}</strong></div><div class="verify">${escapeHtml(verify)}</div></div><script>window.onload=()=>setTimeout(()=>window.print(),500)<\/script>
+<script id="lutminV22Script">
+// =========================================================
+// LUTMIN V2.2 · CMS + RUTAS + ENCUESTAS + LISTA DE ESPERA
+// =========================================================
+let siteConfigV22=null, adminPathsV22=[], adminPathCoursesV22=[], adminPathAssignmentsV22=[];
+
+function slugV22(v){return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');}
+function publicSectionV22(id,show){const el=document.getElementById(id);if(el)el.classList.toggle('hidden',!show);}
+
+async function loadPublicSiteConfigV22(){
+  if(!supabaseClient)return;
+  const {data,error}=await supabaseClient.from('public_site_config').select('*').eq('id',1).maybeSingle();
+  if(error||!data)return;
+  siteConfigV22=data; applyPublicSiteConfigV22(data);
+}
+function applyPublicSiteConfigV22(c){
+  document.body.classList.remove('site-preset-minimal','site-preset-editorial','site-preset-institucional');
+  document.body.classList.add(`site-preset-${c.preset||'institucional'}`);
+  const logo=document.getElementById('publicHeaderLogoV22');if(logo){logo.style.height=`${Number(c.logo_height||72)}px`;logo.style.transform='none';}
+  const kicker=document.getElementById('publicHeroKickerV22');if(kicker)kicker.innerHTML=`<span class="w-2 h-2 rounded-full bg-lutmin-light shadow-[0_0_0_5px_rgba(47,141,253,.10)]"></span>${escapeHtml(c.hero_kicker||'')}`;
+  const title=document.getElementById('publicHeroTitleV22');if(title)title.textContent=c.hero_title||'';
+  const hi=document.getElementById('publicHeroHighlightV22');if(hi)hi.textContent=c.hero_highlight||'';
+  const sub=document.getElementById('publicHeroSubtitleV22');if(sub)sub.textContent=c.hero_subtitle||'';
+  const p=document.getElementById('publicPrimaryCtaV22');if(p)p.childNodes[0].textContent=(c.primary_cta_label||'Ver capacitaciones')+' ';
+  const q=document.getElementById('publicSecondaryCtaV22');if(q)q.textContent=c.secondary_cta_label||'Capacitar una empresa';
+  const metric=document.getElementById('publicStatsV21');if(metric)metric.classList.toggle('hidden',c.show_public_metrics===false);
+  publicSectionV22('faq',c.show_faq!==false); publicSectionV22('certificados-publicos',c.show_certificates!==false);
+  const eco=document.querySelector('[data-public-ecosystem-v21]');if(eco)eco.classList.toggle('hidden',c.show_ecosystem===false);
+}
+
+async function loadSiteEditorV22(){
+  if(!supabaseClient||currentLutminUser?.role!=='admin')return;
+  let c=siteConfigV22; if(!c){const r=await supabaseClient.from('public_site_config').select('*').eq('id',1).maybeSingle();if(r.error)return showToast('No pude cargar la configuración web.');c=r.data;siteConfigV22=c;}
+  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.value=v??''};
+  set('sitePresetV22',c.preset);set('siteLogoHeightV22',c.logo_height);set('siteKickerV22',c.hero_kicker);set('siteTitleV22',c.hero_title);set('siteHighlightV22',c.hero_highlight);set('siteSubtitleV22',c.hero_subtitle);set('sitePrimaryV22',c.primary_cta_label);set('siteSecondaryV22',c.secondary_cta_label);
+  [['siteShowMetricsV22','show_public_metrics'],['siteShowFaqV22','show_faq'],['siteShowCertsV22','show_certificates'],['siteShowEcoV22','show_ecosystem']].forEach(([id,k])=>{const e=document.getElementById(id);if(e)e.checked=c[k]!==false;});
+}
+document.getElementById('siteEditorFormV22')?.addEventListener('submit',async e=>{e.preventDefault();if(currentLutminUser?.role!=='admin')return;const payload={id:1,preset:document.getElementById('sitePresetV22').value,logo_height:Number(document.getElementById('siteLogoHeightV22').value||72),hero_kicker:document.getElementById('siteKickerV22').value.trim(),hero_title:document.getElementById('siteTitleV22').value.trim(),hero_highlight:document.getElementById('siteHighlightV22').value.trim(),hero_subtitle:document.getElementById('siteSubtitleV22').value.trim(),primary_cta_label:document.getElementById('sitePrimaryV22').value.trim(),secondary_cta_label:document.getElementById('siteSecondaryV22').value.trim(),show_public_metrics:document.getElementById('siteShowMetricsV22').checked,show_faq:document.getElementById('siteShowFaqV22').checked,show_certificates:document.getElementById('siteShowCertsV22').checked,show_ecosystem:document.getElementById('siteShowEcoV22').checked,updated_by:currentLutminUser.id,updated_at:new Date().toISOString()};const {data,error}=await supabaseClient.from('public_site_config').upsert(payload).select().single();if(error)return showToast('No pude guardar el sitio: '+error.message);siteConfigV22=data;applyPublicSiteConfigV22(data);showToast('Cambios publicados en el Inicio.');});
+
+// -------------------------- RUTAS --------------------------
+async function loadAdminPathsV22(){
+  if(!supabaseClient||currentLutminUser?.role!=='admin')return;
+  const [p,c,a]=await Promise.all([supabaseClient.from('learning_paths').select('*').order('created_at',{ascending:false}),supabaseClient.from('learning_path_courses').select('*,course:courses(id,title,duration_hours)').order('position'),supabaseClient.from('learning_path_assignments').select('*,profile:profiles(id,full_name,email)').order('assigned_at',{ascending:false})]);
+  const err=[p,c,a].find(x=>x.error)?.error;if(err){console.error(err);return;}
+  adminPathsV22=p.data||[];adminPathCoursesV22=c.data||[];adminPathAssignmentsV22=a.data||[];renderAdminPathsV22();
+}
+function renderAdminPathsV22(){
+  const root=document.getElementById('adminPathsListV22');if(!root)return;
+  if(!adminPathsV22.length){root.innerHTML='<div class="p-5 rounded-2xl bg-slate-50 text-sm text-slate-500">Todavía no creaste rutas.</div>';return;}
+  const courseOptions=(adminCourses||[]).filter(c=>c.published!==false).map(c=>`<option value="${c.id}">${escapeHtml(c.title)}</option>`).join('');
+  const studentOptions=(adminProfiles||[]).filter(p=>typeof adminIsStudent==='function'?adminIsStudent(p):p.role==='student').map(p=>`<option value="${p.id}">${escapeHtml(p.full_name||p.email)}</option>`).join('');
+  root.innerHTML=adminPathsV22.map(path=>{const pcs=adminPathCoursesV22.filter(x=>x.path_id===path.id).sort((a,b)=>a.position-b.position);const ass=adminPathAssignmentsV22.filter(x=>x.path_id===path.id);return `<div class="rounded-2xl border border-slate-200 p-4"><div class="flex items-start justify-between gap-3"><div><h4 class="font-extrabold text-lutmin-dark">${escapeHtml(path.title)}</h4><p class="mt-1 text-xs text-slate-500">${escapeHtml(path.description||'')} · ${pcs.length} cursos · ${ass.length} asignaciones</p></div><button onclick="deletePathV22('${path.id}')" class="text-xs text-red-500 font-bold">Eliminar</button></div><div class="mt-3 flex flex-wrap gap-2">${pcs.map(pc=>`<span class="px-3 py-1.5 rounded-full bg-violet-50 text-violet-700 text-[10px] font-bold">${pc.position}. ${escapeHtml(pc.course?.title||'Curso')} <button onclick="removeCourseFromPathV22('${pc.id}')" class="ml-1">×</button></span>`).join('')||'<span class="text-xs text-slate-400">Sin cursos todavía</span>'}</div><div class="mt-4 grid sm:grid-cols-[1fr_auto] gap-2"><select id="pathCourse-${path.id}" class="px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs"><option value="">Agregar curso...</option>${courseOptions}</select><button onclick="addCourseToPathV22('${path.id}')" class="px-4 py-2.5 rounded-xl bg-violet-100 text-violet-700 text-xs font-extrabold">Agregar</button></div><div class="mt-2 grid sm:grid-cols-[1fr_auto] gap-2"><select id="pathStudent-${path.id}" class="px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs"><option value="">Asignar a alumno...</option>${studentOptions}</select><button onclick="assignPathV22('${path.id}')" class="px-4 py-2.5 rounded-xl bg-lutmin-dark text-white text-xs font-extrabold">Asignar ruta</button></div></div>`}).join('');
+}
+document.getElementById('createPathFormV22')?.addEventListener('submit',async e=>{e.preventDefault();const title=document.getElementById('pathTitleV22').value.trim();if(!title)return;const {error}=await supabaseClient.from('learning_paths').insert({title,slug:`${slugV22(title)}-${Date.now().toString(36)}`,description:document.getElementById('pathDescriptionV22').value.trim(),created_by:currentLutminUser.id});if(error)return showToast(error.message);e.target.reset();showToast('Ruta creada.');await loadAdminPathsV22();});
+async function addCourseToPathV22(pathId){const select=document.getElementById(`pathCourse-${pathId}`);const courseId=select?.value;if(!courseId)return;const position=adminPathCoursesV22.filter(x=>x.path_id===pathId).length+1;const {error}=await supabaseClient.from('learning_path_courses').upsert({path_id:pathId,course_id:courseId,position},{onConflict:'path_id,course_id'});if(error)return showToast(error.message);await loadAdminPathsV22();}
+async function removeCourseFromPathV22(id){await supabaseClient.from('learning_path_courses').delete().eq('id',id);await loadAdminPathsV22();}
+async function deletePathV22(id){if(!confirm('¿Eliminar esta ruta?'))return;const {error}=await supabaseClient.from('learning_paths').delete().eq('id',id);if(error)return showToast(error.message);await loadAdminPathsV22();}
+async function assignPathV22(pathId){const userId=document.getElementById(`pathStudent-${pathId}`)?.value;if(!userId)return;const {error}=await supabaseClient.from('learning_path_assignments').upsert({path_id:pathId,user_id:userId,assigned_by:currentLutminUser.id},{onConflict:'path_id,user_id'});if(error)return showToast(error.message);const courseIds=adminPathCoursesV22.filter(x=>x.path_id===pathId).sort((a,b)=>a.position-b.position).map(x=>x.course_id);for(const courseId of courseIds){await supabaseClient.from('enrollments').upsert({user_id:userId,course_id:courseId,status:'active',price_amount:0,payment_currency:'ARS',payment_status:'not_required',access_granted_at:new Date().toISOString()},{onConflict:'user_id,course_id'});}showToast(`Ruta asignada. ${courseIds.length} cursos quedaron vinculados.`);await loadAdminPathsV22();}
+async function loadStudentPathsV22(){if(!supabaseClient||!currentLutminUser?.id)return;const {data:as,error}=await supabaseClient.from('learning_path_assignments').select('id,path_id,path:learning_paths(id,title,description)').eq('user_id',currentLutminUser.id);const root=document.getElementById('studentPathsV22');if(error){root.innerHTML='<div class="p-5 rounded-2xl bg-amber-50 text-amber-700 text-sm">Rutas todavía no disponibles.</div>';return;}const pathIds=(as||[]).map(x=>x.path_id);let pcs=[];if(pathIds.length){const r=await supabaseClient.from('learning_path_courses').select('*,course:courses(id,title)').in('path_id',pathIds).order('position');pcs=r.data||[];}if(!(as||[]).length){root.innerHTML='<div class="lg:col-span-2 p-7 rounded-3xl bg-white border border-slate-100"><h3 class="font-extrabold text-lutmin-dark">Todavía no tenés rutas asignadas</h3><p class="mt-2 text-sm text-slate-500">Tus cursos individuales siguen disponibles normalmente.</p></div>';return;}root.innerHTML=as.map(a=>{const courses=pcs.filter(x=>x.path_id===a.path_id);const completed=courses.filter(pc=>{const s=campusCourseSummaries.find(x=>x.course.id===pc.course_id);return s?.passedAttempt||s?.percent===100;}).length;const pct=courses.length?Math.round(completed/courses.length*100):0;return `<div class="p-6 rounded-3xl bg-white border border-slate-100"><div class="flex items-start justify-between gap-3"><div><p class="text-[10px] uppercase tracking-widest font-bold text-violet-600">Ruta de aprendizaje</p><h3 class="mt-1 text-xl font-black text-lutmin-dark">${escapeHtml(a.path?.title||'Ruta')}</h3></div><span class="text-2xl font-black text-violet-600">${pct}%</span></div><p class="mt-2 text-sm text-slate-500">${escapeHtml(a.path?.description||'')}</p><div class="mt-4 h-2 rounded-full bg-slate-100"><div class="h-full rounded-full bg-violet-500" style="width:${pct}%"></div></div><div class="mt-4 space-y-2">${courses.map((pc,i)=>{const sm=campusCourseSummaries.find(x=>x.course.id===pc.course_id);const done=!!(sm?.passedAttempt||sm?.percent===100);return `<div class="flex items-center justify-between p-3 rounded-xl ${done?'bg-green-50':'bg-slate-50'} text-xs"><span><strong>${i+1}.</strong> ${escapeHtml(pc.course?.title||'Curso')}</span><span class="font-bold ${done?'text-green-600':'text-slate-400'}">${done?'Completado':`${sm?.percent||0}%`}</span></div>`}).join('')}</div></div>`}).join('');}
+
+// -------------------------- ENCUESTAS --------------------------
+async function loadAdminSurveysV22(){if(!supabaseClient||currentLutminUser?.role!=='admin')return;const select=document.getElementById('surveyCourseV22');if(select)select.innerHTML='<option value="">Elegir curso...</option>'+((adminCourses||[]).map(c=>`<option value="${c.id}">${escapeHtml(c.title)}</option>`).join(''));const [s,r]=await Promise.all([supabaseClient.from('course_surveys').select('*,course:courses(id,title)').order('created_at',{ascending:false}),supabaseClient.from('course_survey_responses').select('*').order('submitted_at',{ascending:false})]);const root=document.getElementById('adminSurveyResultsV22');if(s.error||r.error){root.innerHTML='<p class="text-sm text-amber-600">Encuestas todavía no disponibles.</p>';return;}const surveys=s.data||[],responses=r.data||[];root.innerHTML=surveys.length?surveys.map(sv=>{const rr=responses.filter(x=>x.survey_id===sv.id);const avg=rr.filter(x=>x.rating).length?(rr.reduce((a,x)=>a+Number(x.rating||0),0)/rr.filter(x=>x.rating).length).toFixed(1):'-';const nps=rr.filter(x=>x.nps!==null).length?(rr.reduce((a,x)=>a+Number(x.nps||0),0)/rr.filter(x=>x.nps!==null).length).toFixed(1):'-';return `<div class="p-4 rounded-2xl border border-slate-200 mb-3"><div class="flex justify-between"><div><h4 class="font-extrabold text-lutmin-dark">${escapeHtml(sv.course?.title||'Curso')}</h4><p class="text-xs text-slate-500">${rr.length} respuestas · Satisfacción ${avg}/5 · NPS prom. ${nps}/10</p></div><span class="text-[10px] font-bold ${sv.active?'text-green-600':'text-slate-400'}">${sv.active?'ACTIVA':'PAUSADA'}</span></div>${rr.filter(x=>x.comment).slice(0,3).map(x=>`<p class="mt-2 p-2 rounded-lg bg-slate-50 text-[11px] text-slate-600">“${escapeHtml(x.comment)}”</p>`).join('')}</div>`}).join(''):'<p class="text-sm text-slate-500">Todavía no configuraste encuestas.</p>';}
+document.getElementById('surveyConfigFormV22')?.addEventListener('submit',async e=>{e.preventDefault();const courseId=document.getElementById('surveyCourseV22').value;if(!courseId)return;const payload={course_id:courseId,title:document.getElementById('surveyTitleV22').value.trim()||'Encuesta de satisfacción',active:document.getElementById('surveyActiveV22').checked,created_by:currentLutminUser.id,updated_at:new Date().toISOString()};const {error}=await supabaseClient.from('course_surveys').upsert(payload,{onConflict:'course_id'});if(error)return showToast(error.message);showToast('Encuesta configurada.');await loadAdminSurveysV22();});
+async function loadStudentSurveysV22(){if(!supabaseClient||!currentLutminUser?.id)return;const root=document.getElementById('studentSurveysV22');const courseIds=campusCourseSummaries.map(x=>x.course.id);if(!courseIds.length){root.innerHTML='<div class="p-6 rounded-3xl bg-white border border-slate-100 text-sm text-slate-500">No tenés cursos para evaluar todavía.</div>';return;}const [s,r]=await Promise.all([supabaseClient.from('course_surveys').select('*,course:courses(id,title)').in('course_id',courseIds).eq('active',true),supabaseClient.from('course_survey_responses').select('*').eq('user_id',currentLutminUser.id)]);if(s.error||r.error){root.innerHTML='<div class="p-6 rounded-3xl bg-amber-50 text-amber-700 text-sm">Encuestas todavía no disponibles.</div>';return;}const answered=new Set((r.data||[]).map(x=>x.survey_id));const eligible=(s.data||[]).filter(sv=>campusCertificates.some(c=>c.course_id===sv.course_id&&c.status==='valid'));if(!eligible.length){root.innerHTML='<div class="p-6 rounded-3xl bg-white border border-slate-100"><h3 class="font-extrabold text-lutmin-dark">No tenés encuestas pendientes</h3><p class="mt-2 text-sm text-slate-500">Aparecen después de completar una capacitación.</p></div>';return;}root.innerHTML=eligible.map(sv=>answered.has(sv.id)?`<div class="p-5 rounded-3xl bg-green-50 border border-green-100"><p class="font-extrabold text-green-700">${escapeHtml(sv.course?.title||'Curso')}</p><p class="mt-1 text-xs text-green-600">Gracias. Ya recibimos tu devolución.</p></div>`:`<form onsubmit="submitSurveyV22(event,'${sv.id}')" class="p-6 rounded-3xl bg-white border border-slate-100"><h3 class="text-lg font-black text-lutmin-dark">${escapeHtml(sv.course?.title||'Curso')}</h3><p class="mt-1 text-sm text-slate-500">${escapeHtml(sv.intro||'Tu opinión nos ayuda a mejorar.')}</p><div class="mt-5 grid sm:grid-cols-2 gap-4"><div><label class="text-xs font-bold">Satisfacción general · 1 a 5</label><select name="rating" class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200"><option value="5">5 · Excelente</option><option value="4">4 · Muy buena</option><option value="3">3 · Buena</option><option value="2">2 · Regular</option><option value="1">1 · Mala</option></select></div><div><label class="text-xs font-bold">¿Recomendarías Lutmin? · 0 a 10</label><input name="nps" type="number" min="0" max="10" value="10" class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200"></div></div><textarea name="comment" rows="3" placeholder="Comentario opcional" class="mt-4 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200"></textarea><button class="mt-4 px-5 py-3 rounded-xl bg-lutmin-light text-white font-extrabold">Enviar devolución</button></form>`).join('');}
+async function submitSurveyV22(event,surveyId){event.preventDefault();const f=new FormData(event.target);const payload={survey_id:surveyId,user_id:currentLutminUser.id,rating:Number(f.get('rating')),nps:Number(f.get('nps')),comment:String(f.get('comment')||'').trim()};const {error}=await supabaseClient.from('course_survey_responses').insert(payload);if(error)return showToast(error.message);showToast('Gracias por tu devolución.');await loadStudentSurveysV22();}
+
+// -------------------------- LISTA DE ESPERA --------------------------
+function ensureWaitlistModalV22(){if(document.getElementById('waitlistModalV22'))return;document.body.insertAdjacentHTML('beforeend',`<div id="waitlistModalV22" class="hidden fixed inset-0 z-[210] bg-slate-950/80 backdrop-blur-md p-4 flex items-center justify-center"><div class="w-full max-w-lg bg-white rounded-[2rem] shadow-2xl relative p-6 sm:p-8"><button onclick="closeModal('waitlistModalV22')" class="absolute right-4 top-4 w-10 h-10 rounded-full bg-slate-100 text-slate-500"><i class="fa-solid fa-xmark"></i></button><p class="text-[10px] uppercase tracking-widest font-extrabold text-amber-600">Edición completa</p><h2 class="mt-2 text-2xl font-black text-lutmin-dark">Sumarme a la lista de espera</h2><p class="mt-2 text-sm text-slate-500">Si se libera un lugar o abrimos otra edición, el equipo de Lutmin puede contactarte.</p><form id="waitlistFormV22" class="mt-6 space-y-3"><input id="waitlistCourseV22" type="hidden"><input id="waitlistOfferingV22" type="hidden"><input id="waitlistNameV22" required placeholder="Nombre completo" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200"><input id="waitlistEmailV22" type="email" required placeholder="Correo" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200"><input id="waitlistPhoneV22" placeholder="Teléfono / WhatsApp" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200"><button class="w-full py-3 rounded-xl bg-amber-500 text-white font-extrabold">Quiero quedar en espera</button></form></div></div>`);document.getElementById('waitlistFormV22').addEventListener('submit',submitWaitlistV22);}
+function openWaitlistV22(courseId,offeringId){ensureWaitlistModalV22();document.getElementById('waitlistCourseV22').value=courseId;document.getElementById('waitlistOfferingV22').value=offeringId||'';closeModal('courseModal');openModal('waitlistModalV22');}
+async function submitWaitlistV22(e){e.preventDefault();const {data,error}=await supabaseClient.rpc('join_course_waitlist',{p_course_id:document.getElementById('waitlistCourseV22').value,p_offering_id:document.getElementById('waitlistOfferingV22').value||null,p_full_name:document.getElementById('waitlistNameV22').value.trim(),p_email:document.getElementById('waitlistEmailV22').value.trim(),p_phone:document.getElementById('waitlistPhoneV22').value.trim()});if(error||!data?.ok)return showToast(data?.error||error?.message||'No pude registrarte.');closeModal('waitlistModalV22');showToast('Listo. Quedaste en la lista de espera.');}
+async function loadAdminWaitlistV22(){if(!supabaseClient||currentLutminUser?.role!=='admin')return;const {data,error}=await supabaseClient.from('course_waitlist').select('*,course:courses(id,title),offering:course_offerings(id,start_date)').order('created_at',{ascending:false});const root=document.getElementById('adminWaitlistListV22');if(error){root.innerHTML='<div class="p-6 text-sm text-amber-700">Lista de espera todavía no disponible.</div>';return;}root.innerHTML=(data||[]).length?(data||[]).map(x=>`<div class="p-5 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3"><div><p class="font-extrabold text-lutmin-dark">${escapeHtml(x.full_name)}</p><p class="mt-1 text-xs text-slate-500">${escapeHtml(x.email)} · ${escapeHtml(x.phone||'Sin teléfono')}</p><p class="mt-1 text-xs text-slate-500">${escapeHtml(x.course?.title||'Curso')}${x.offering?.start_date?' · '+formatPublicDate(x.offering.start_date):''}</p></div><div class="flex items-center gap-2"><span class="px-3 py-1.5 rounded-full bg-amber-50 text-amber-700 text-[10px] font-bold">${escapeHtml(x.status)}</span><button onclick="updateWaitlistV22('${x.id}','contacted')" class="px-3 py-2 rounded-xl bg-blue-50 text-blue-700 text-xs font-bold">Contactado</button><button onclick="updateWaitlistV22('${x.id}','converted')" class="px-3 py-2 rounded-xl bg-green-50 text-green-700 text-xs font-bold">Convertido</button></div></div>`).join(''):'<div class="p-6 text-sm text-slate-500">No hay personas en lista de espera.</div>';}
+async function updateWaitlistV22(id,status){const {error}=await supabaseClient.from('course_waitlist').update({status,updated_at:new Date().toISOString()}).eq('id',id);if(error)return showToast(error.message);await loadAdminWaitlistV22();}
+
+// Lazy loading de nuevas áreas.
+document.addEventListener('click',e=>{const b=e.target.closest('[data-campus-tab]');if(!b)return;const tab=b.dataset.campusTab;if(tab==='paths')setTimeout(loadStudentPathsV22,50);if(tab==='surveys')setTimeout(loadStudentSurveysV22,50);});
+
+// Extiende el selector modular sin romper la V2.0/V2.1.
+if(typeof setAdminModuleV19==='function'){
+  const originalSetAdminModuleV22=setAdminModuleV19;
+  setAdminModuleV19=function(module,opts={}){const out=originalSetAdminModuleV22(module,opts);if(module==='website')setTimeout(loadSiteEditorV22,30);if(module==='academic')setTimeout(()=>{loadAdminPathsV22();loadAdminSurveysV22();},30);if(module==='commercial')setTimeout(loadAdminWaitlistV22,30);return out;};
+}
+
+window.addEventListener('load',()=>{setTimeout(loadPublicSiteConfigV22,900);});
+</script>
+
+</body></html>`);
       w.document.close();
     }
 
@@ -6771,6 +6921,7 @@
       finance:{title:'Finanzas',description:'Matrículas, pagos, deuda, vencimientos e indicadores financieros.'},
       talent:{title:'Talento',description:'Lutmin Conecta, búsquedas laborales y postulaciones.'},
       communications:{title:'Comunicación',description:'Comunicados y avisos para alumnos, empresas y administradores.'},
+      website:{title:'Sitio web',description:'Contenido público, identidad visual y configuración del Inicio.'},
       system:{title:'Sistema',description:'Configuración, roles, auditoría, diagnóstico y salud técnica.'}
     };
     let activeAdminModuleV19='overview';
@@ -6782,6 +6933,7 @@
       if(!admin) return;
       [...admin.children].forEach(el=>{
         if(el.id==='adminWorkspaceV19'||el.id==='adminSystemGuideV19') return;
+        if(el.dataset.adminModuleV19) return;
         if(el.classList.contains('fixed')){el.dataset.adminAlwaysV19='1';return;}
         const text=(el.textContent||'').replace(/\s+/g,' ').trim();
         let module='overview';
