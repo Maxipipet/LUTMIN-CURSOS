@@ -2644,8 +2644,6 @@
   </div>
 
   <!-- QR / PDF para certificados + Supabase -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
@@ -2654,6 +2652,50 @@
     // =========================================================
     // PASO SIMPLE: reemplazá estos dos textos con los datos de tu proyecto Supabase.
     // NUNCA pegues acá una clave service_role. Solo la clave pública/publishable (o anon).
+    // =========================================================
+    // V2.4 - CARGA DIFERIDA DE LIBRERÍAS PESADAS
+    // Mantiene exactamente la estética V2.1 y evita descargar
+    // QR/PDF hasta que realmente se usan.
+    // =========================================================
+    const lutminExternalScripts = new Map();
+    function loadExternalScriptOnce(src, testFn) {
+      if (typeof testFn === 'function' && testFn()) return Promise.resolve(true);
+      if (lutminExternalScripts.has(src)) return lutminExternalScripts.get(src);
+      const promise = new Promise(resolve => {
+        const existing = [...document.scripts].find(s => s.src === src);
+        if (existing) {
+          if (typeof testFn !== 'function' || testFn()) return resolve(true);
+          existing.addEventListener('load', () => resolve(typeof testFn !== 'function' || testFn()), { once:true });
+          existing.addEventListener('error', () => resolve(false), { once:true });
+          return;
+        }
+        const script = document.createElement('script');
+        script.src = src;
+        script.async = true;
+        script.onload = () => resolve(typeof testFn !== 'function' || testFn());
+        script.onerror = () => resolve(false);
+        document.head.appendChild(script);
+      });
+      lutminExternalScripts.set(src, promise);
+      return promise;
+    }
+    const ensureQRCodeLib = () => loadExternalScriptOnce('https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js', () => Boolean(window.QRCode));
+    const ensureJsPdfLib = () => loadExternalScriptOnce('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js', () => Boolean(window.jspdf?.jsPDF));
+
+    const LUTMIN_PUBLIC_CACHE_TTL = 2 * 60 * 1000;
+    function getSessionCache(key) {
+      try {
+        const raw = sessionStorage.getItem(key);
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        if (!parsed || Date.now() - Number(parsed.at || 0) > LUTMIN_PUBLIC_CACHE_TTL) { sessionStorage.removeItem(key); return null; }
+        return parsed.data;
+      } catch (_) { return null; }
+    }
+    function setSessionCache(key, data) {
+      try { sessionStorage.setItem(key, JSON.stringify({ at:Date.now(), data })); } catch (_) {}
+    }
+
     const SUPABASE_URL = 'https://kkpzycsjozrvbimpvfnl.supabase.co';
     const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_SVmP0GZYPBDCRJEopfaVew_AEdawzyJ';
 
@@ -2791,11 +2833,16 @@
       catch (_) { return `${currency} ${Math.round(amount).toLocaleString('es-AR')}`; }
     }
 
-    async function loadPublicSiteStatsV21() {
+    async function loadPublicSiteStatsV21({ force = false } = {}) {
       if (!supabaseClient) return;
       try {
-        const { data, error } = await supabaseClient.rpc('get_public_site_stats');
-        if (error || !data) return;
+        let data = force ? null : getSessionCache('lutmin:v24:public-stats');
+        if (!data) {
+          const response = await supabaseClient.rpc('get_public_site_stats');
+          if (response.error || !response.data) return;
+          data = response.data;
+          setSessionCache('lutmin:v24:public-stats', data);
+        }
         const set = (id, value) => { const el = document.getElementById(id); if (el) el.textContent = String(value ?? 0); };
         set('publicStatCourses', data.published_courses);
         set('publicStatCertificates', data.valid_certificates);
@@ -2804,15 +2851,25 @@
       } catch (_) {}
     }
 
-    async function loadPublicCatalog() {
+    let publicCatalogLoadPromise = null;
+    async function loadPublicCatalog({ force = false } = {}) {
       if (!supabaseClient) return;
-      const { data, error } = await supabaseClient.rpc('get_public_course_catalog');
-      if (error) {
-        console.error('Catálogo público:', error);
-        return; // dejamos las tarjetas de respaldo del HTML si todavía no se ejecutó Etapa 10
-      }
-      publicCatalog = Array.isArray(data) ? data : [];
-      renderPublicCatalog();
+      if (publicCatalogLoadPromise && !force) return publicCatalogLoadPromise;
+      publicCatalogLoadPromise = (async () => {
+        let data = force ? null : getSessionCache('lutmin:v24:catalog');
+        if (!data) {
+          const response = await supabaseClient.rpc('get_public_course_catalog');
+          if (response.error) {
+            console.error('Catálogo público:', response.error);
+            return;
+          }
+          data = response.data;
+          setSessionCache('lutmin:v24:catalog', data);
+        }
+        publicCatalog = Array.isArray(data) ? data : [];
+        renderPublicCatalog();
+      })();
+      try { await publicCatalogLoadPromise; } finally { publicCatalogLoadPromise = null; }
     }
 
     function renderPublicCatalog() {
@@ -2829,7 +2886,7 @@
           ? `<div class="mt-4 p-3 rounded-2xl bg-blue-50 border border-blue-100"><p class="text-[10px] font-extrabold text-blue-600 uppercase">Próxima edición</p><p class="mt-1 text-xs font-bold text-lutmin-dark">${formatPublicDate(next.start_date)} · ${escapeHtml(String(next.modality || '').replace(/^./, x => x.toUpperCase()))}</p><p class="mt-1 text-xs text-slate-600">${formatPublicMoney(next.price, next.currency)}${next.available_seats === null ? '' : ` · ${next.available_seats} cupos disponibles`}</p></div>`
           : '<div class="mt-4 p-3 rounded-2xl bg-slate-50 text-xs text-slate-500"><strong>Próxima fecha:</strong> a confirmar. Podés dejarnos tus datos.</div>';
         return `<article data-category="${escapeHtml(course.category || 'tecnico')}" class="course-card bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-soft transition group">
-          <div class="h-52 overflow-hidden relative"><img src="${publicCourseImage(course.category)}" alt="${escapeHtml(course.title)}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500"><span class="absolute top-4 left-4 bg-white/95 px-3 py-1 rounded-full text-xs font-extrabold text-lutmin-dark">${categoryLabel(course.category)}</span>${course.featured?'<span class="absolute top-4 right-4 bg-lutmin-dark/95 text-white px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wide"><i class="fa-solid fa-star text-amber-300 mr-1"></i>Destacado</span>':''}</div>
+          <div class="h-52 overflow-hidden relative"><img src="${publicCourseImage(course.category)}" alt="${escapeHtml(course.title)}" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition duration-500"><span class="absolute top-4 left-4 bg-white/95 px-3 py-1 rounded-full text-xs font-extrabold text-lutmin-dark">${categoryLabel(course.category)}</span>${course.featured?'<span class="absolute top-4 right-4 bg-lutmin-dark/95 text-white px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wide"><i class="fa-solid fa-star text-amber-300 mr-1"></i>Destacado</span>':''}</div>
           <div class="p-6"><div class="flex items-center gap-4 text-xs text-slate-500 font-semibold"><span><i class="fa-regular fa-clock mr-1"></i>${Number(course.duration_hours || 0)} h</span><span><i class="fa-solid fa-signal mr-1"></i>${escapeHtml(course.level || 'Inicial')}</span></div><h3 class="mt-3 text-xl font-extrabold text-lutmin-dark">${escapeHtml(course.title)}</h3><p class="mt-2 text-sm text-slate-600 leading-relaxed">${escapeHtml(course.description || '')}</p>${commercial}<div class="mt-5 flex items-center justify-between gap-3"><button onclick="openPublicCourse('${course.id}')" class="text-lutmin-light font-extrabold text-sm">Ver curso →</button><span class="text-xs bg-blue-50 text-blue-700 px-3 py-1 rounded-full font-bold">Certificado</span></div></div>
         </article>`;
       }).join('');
@@ -3429,7 +3486,7 @@
       return url.toString();
     }
 
-    function showCertificate(cert, options = {}) {
+    async function showCertificate(cert, options = {}) {
       if (!cert) return;
       currentCertificate = cert;
       const valid = cert.status === 'valid' || cert.certificate_status === 'valid' || cert.is_valid === true;
@@ -3459,6 +3516,8 @@
       document.getElementById('certificateDownloadBtn')?.classList.toggle('hidden', !valid);
 
       const qr = document.getElementById('certificateQr');
+      qr.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-3xl text-slate-300"></i>';
+      if (code) await ensureQRCodeLib();
       qr.innerHTML = '';
       if (code && window.QRCode) {
         new QRCode(qr, { text: certificateVerificationUrl(code), width: 116, height: 116, correctLevel: QRCode.CorrectLevel.M });
@@ -3494,7 +3553,7 @@
       }
       if (updateField) document.getElementById('publicCertificateCode').value = cert.certificate_code || clean;
       if (status) status.textContent = cert.is_valid ? 'Certificado válido.' : 'El certificado existe, pero está revocado.';
-      showCertificate(cert, { public: true });
+      await showCertificate(cert, { public: true });
       return cert;
     }
 
@@ -3539,7 +3598,7 @@
       if (!c) return;
       const status = c.status || c.certificate_status || 'valid';
       if (status !== 'valid') { showToast('Un certificado revocado no se puede descargar como válido.'); return; }
-      if (!window.jspdf?.jsPDF) { showToast('No se pudo cargar el generador de PDF.'); return; }
+      if (!(await ensureJsPdfLib())) { showToast('No se pudo cargar el generador de PDF.'); return; }
 
       const code = c.code || c.certificate_code || '';
       const fullName = c.full_name || 'Alumno';
@@ -4145,7 +4204,7 @@
     }
 
     async function downloadCompanyExecutivePdf(){
-      if(!companyPortalData?.company)return showToast('No hay empresa cargada.'); if(!window.jspdf?.jsPDF)return showToast('No pude iniciar el generador PDF.');
+      if(!companyPortalData?.company)return showToast('No hay empresa cargada.'); if(!(await ensureJsPdfLib()))return showToast('No pude iniciar el generador PDF.');
       const {jsPDF}=window.jspdf,doc=new jsPDF({unit:'mm',format:'a4'}),company=companyPortalData.company,m=companyExecutiveMetrics(),name=company.display_name||company.name||'Empresa'; let y=20;
       doc.setFont('helvetica','bold');doc.setFontSize(21);doc.text(name,18,y);y+=8;doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(90);doc.text('Reporte ejecutivo de capacitación · Lutmin',18,y);y+=12;doc.setTextColor(0);
       const cards=[['Colaboradores',String(m.members.length)],['Avance promedio',`${m.avg}%`],['Asistencia',m.attendance===null?'—':`${m.attendance}%`],['Certificados',String(companyPortalCertificates.filter(c=>c.status==='valid').length)],['Próximos encuentros',String(m.upcoming)],['Requieren atención',String(m.alerts.length)]];
@@ -4323,18 +4382,27 @@
       adminPayments = paymentsRes.data || [];
       adminAccessRoles = accessRolesRes.data || [];
       renderAdminPanel();
-      await loadAdminCompaniesData();
-      await loadAdminTrainingData();
-      await loadAdminV1Ops();
-      await loadAdminConectaData();
-      await loadAdminOpsV16();
-      await loadExecutiveV17();
-      await loadAdminV18();
-      await loadAdminWorkspacePrefsV19();
-      refreshAdminWorkspaceV19();
-      if (activeAdminStudentDetailId && !document.getElementById('adminStudentDetailModal').classList.contains('hidden')) {
-        renderAdminStudentDetail(activeAdminStudentDetailId);
-      }
+
+      // V2.4: Administración muestra primero la información principal.
+      // Los módulos secundarios se completan en segundo plano.
+      const loadSecondaryAdminModules = async () => {
+        await Promise.allSettled([
+          loadAdminCompaniesData(),
+          loadAdminTrainingData(),
+          loadAdminV1Ops(),
+          loadAdminConectaData(),
+          loadAdminOpsV16(),
+          loadExecutiveV17(),
+          loadAdminV18(),
+          loadAdminWorkspacePrefsV19()
+        ]);
+        refreshAdminWorkspaceV19();
+        if (activeAdminStudentDetailId && !document.getElementById('adminStudentDetailModal').classList.contains('hidden')) {
+          renderAdminStudentDetail(activeAdminStudentDetailId);
+        }
+      };
+      if ('requestIdleCallback' in window) requestIdleCallback(() => loadSecondaryAdminModules(), { timeout: 900 });
+      else setTimeout(loadSecondaryAdminModules, 80);
     }
 
 
@@ -6286,7 +6354,7 @@
     async function applyTalentJob(jobId){const message=window.prompt('Mensaje opcional para acompañar tu postulación:','')||'';const {error}=await supabaseClient.from('job_applications').insert({job_id:jobId,user_id:currentLutminUser.id,message:message||null});if(error)return showToast(error.code==='23505'?'Ya estás postulado/a a esta búsqueda.':error.message||'No pude registrar la postulación.');showToast('Postulación enviada.');await loadTalentCenter();}
     async function withdrawTalentApplication(id){if(!confirm('¿Retirar esta postulación?'))return;const {error}=await supabaseClient.from('job_applications').update({status:'withdrawn',updated_at:new Date().toISOString()}).eq('id',id);if(error)return showToast(error.message||'No pude retirar la postulación.');await loadTalentCenter();}
     async function copyMyTalentProfileLink(){if(!talentData.profile?.visible)return showToast('Primero activá “Mostrarme a empresas” y guardá el perfil.');const url=publicTalentUrl(talentData.profile.public_slug);try{await navigator.clipboard.writeText(url);showToast('Enlace público copiado.');}catch(_){window.prompt('Copiá este enlace:',url);}}
-    async function downloadTalentCvPdf(){if(!window.jspdf?.jsPDF)return showToast('No se pudo cargar el generador PDF.');if(!talentData.profile)return showToast('Primero completá tu perfil.');const {jsPDF}=window.jspdf;const doc=new jsPDF({unit:'mm',format:'a4'});const p=talentData.profile;let y=20;doc.setFont('helvetica','bold');doc.setFontSize(22);doc.text(currentLutminUser.fullName||'Perfil profesional',18,y);y+=8;doc.setFontSize(12);doc.setTextColor(47,141,253);doc.text(p.headline||'Perfil profesional Lutmin',18,y);y+=10;doc.setTextColor(80);doc.setFont('helvetica','normal');doc.setFontSize(9);doc.text([p.city,p.province].filter(Boolean).join(', ')||'Ubicación no informada',18,y);y+=5;doc.text(`${talentAvailabilityLabel(p.availability)}${p.willing_travel?' · Disponible para viajar':''}`,18,y);y+=10;if(p.bio){doc.setFont('helvetica','bold');doc.setTextColor(10,24,79);doc.text('Sobre mí',18,y);y+=6;doc.setFont('helvetica','normal');doc.setTextColor(70);const lines=doc.splitTextToSize(p.bio,174);doc.text(lines,18,y);y+=lines.length*4.5+6;}doc.setFont('helvetica','bold');doc.setTextColor(10,24,79);doc.text('Competencias',18,y);y+=6;doc.setFont('helvetica','normal');doc.setTextColor(70);doc.text(doc.splitTextToSize(talentData.skills.map(x=>`${x.skill} (${x.level}/5)`).join(' · ')||'Sin competencias cargadas',174),18,y);y+=12;if(talentData.experiences.length){doc.setFont('helvetica','bold');doc.setTextColor(10,24,79);doc.text('Experiencia',18,y);y+=7;for(const x of talentData.experiences){if(y>270){doc.addPage();y=20;}doc.setFont('helvetica','bold');doc.setTextColor(40);doc.text(`${x.position_title} · ${x.company_name}`,18,y);y+=5;doc.setFont('helvetica','normal');doc.setTextColor(100);doc.text(`${x.start_date||''} - ${x.current_job?'Actualidad':x.end_date||''}`,18,y);y+=4;if(x.description){const lines=doc.splitTextToSize(x.description,170);doc.text(lines,18,y);y+=lines.length*4+4;}}}if(talentData.certificates.length){if(y>235){doc.addPage();y=20;}y+=4;doc.setFont('helvetica','bold');doc.setTextColor(10,24,79);doc.text('Certificaciones Lutmin',18,y);y+=7;doc.setFont('helvetica','normal');doc.setTextColor(70);for(const c of talentData.certificates){doc.text(`• ${c.course_title} · ${c.duration_hours} h · ${Math.round(Number(c.score||0))}% · ${c.code}`,18,y);y+=5;}}doc.setFontSize(7);doc.setTextColor(140);doc.text('CV generado desde Lutmin Conecta. Los certificados pueden verificarse mediante su código.',18,290);doc.save(`CV_${slugifyLutmin(currentLutminUser.fullName||'Lutmin')}.pdf`);}
+    async function downloadTalentCvPdf(){if(!(await ensureJsPdfLib()))return showToast('No se pudo cargar el generador PDF.');if(!talentData.profile)return showToast('Primero completá tu perfil.');const {jsPDF}=window.jspdf;const doc=new jsPDF({unit:'mm',format:'a4'});const p=talentData.profile;let y=20;doc.setFont('helvetica','bold');doc.setFontSize(22);doc.text(currentLutminUser.fullName||'Perfil profesional',18,y);y+=8;doc.setFontSize(12);doc.setTextColor(47,141,253);doc.text(p.headline||'Perfil profesional Lutmin',18,y);y+=10;doc.setTextColor(80);doc.setFont('helvetica','normal');doc.setFontSize(9);doc.text([p.city,p.province].filter(Boolean).join(', ')||'Ubicación no informada',18,y);y+=5;doc.text(`${talentAvailabilityLabel(p.availability)}${p.willing_travel?' · Disponible para viajar':''}`,18,y);y+=10;if(p.bio){doc.setFont('helvetica','bold');doc.setTextColor(10,24,79);doc.text('Sobre mí',18,y);y+=6;doc.setFont('helvetica','normal');doc.setTextColor(70);const lines=doc.splitTextToSize(p.bio,174);doc.text(lines,18,y);y+=lines.length*4.5+6;}doc.setFont('helvetica','bold');doc.setTextColor(10,24,79);doc.text('Competencias',18,y);y+=6;doc.setFont('helvetica','normal');doc.setTextColor(70);doc.text(doc.splitTextToSize(talentData.skills.map(x=>`${x.skill} (${x.level}/5)`).join(' · ')||'Sin competencias cargadas',174),18,y);y+=12;if(talentData.experiences.length){doc.setFont('helvetica','bold');doc.setTextColor(10,24,79);doc.text('Experiencia',18,y);y+=7;for(const x of talentData.experiences){if(y>270){doc.addPage();y=20;}doc.setFont('helvetica','bold');doc.setTextColor(40);doc.text(`${x.position_title} · ${x.company_name}`,18,y);y+=5;doc.setFont('helvetica','normal');doc.setTextColor(100);doc.text(`${x.start_date||''} - ${x.current_job?'Actualidad':x.end_date||''}`,18,y);y+=4;if(x.description){const lines=doc.splitTextToSize(x.description,170);doc.text(lines,18,y);y+=lines.length*4+4;}}}if(talentData.certificates.length){if(y>235){doc.addPage();y=20;}y+=4;doc.setFont('helvetica','bold');doc.setTextColor(10,24,79);doc.text('Certificaciones Lutmin',18,y);y+=7;doc.setFont('helvetica','normal');doc.setTextColor(70);for(const c of talentData.certificates){doc.text(`• ${c.course_title} · ${c.duration_hours} h · ${Math.round(Number(c.score||0))}% · ${c.code}`,18,y);y+=5;}}doc.setFontSize(7);doc.setTextColor(140);doc.text('CV generado desde Lutmin Conecta. Los certificados pueden verificarse mediante su código.',18,290);doc.save(`CV_${slugifyLutmin(currentLutminUser.fullName||'Lutmin')}.pdf`);}
 
     async function showPublicTalentProfile(slug){if(!supabaseClient||!slug)return;openModal('publicTalentModal');const root=document.getElementById('publicTalentContent');root.innerHTML='<div class="text-sm text-slate-500">Cargando perfil...</div>';const {data,error}=await supabaseClient.rpc('get_public_talent_profile',{p_slug:slug});if(error||!data){root.innerHTML='<div class="p-8 text-center"><h3 class="text-xl font-black text-lutmin-dark">Perfil no disponible</h3><p class="mt-2 text-sm text-slate-500">La persona puede haber desactivado la visibilidad.</p></div>';return;}const p=data.profile||{},skills=data.skills||[],exp=data.experiences||[],certs=data.certificates||[];const initials=String(p.full_name||'L').split(' ').filter(Boolean).slice(0,2).map(x=>x[0]).join('').toUpperCase();root.innerHTML=`<div class="flex flex-col sm:flex-row gap-5 sm:items-center"><div class="w-20 h-20 rounded-3xl bg-lutmin-dark text-white flex items-center justify-center text-2xl font-black">${escapeHtml(initials)}</div><div><p class="text-[10px] uppercase tracking-widest font-bold text-lutmin-light">Lutmin Conecta</p><h2 class="mt-1 text-3xl font-black text-lutmin-dark">${escapeHtml(p.full_name||'Perfil profesional')}</h2><p class="mt-1 text-sm text-slate-500">${escapeHtml(p.headline||'Perfil profesional')}</p><div class="mt-3 flex flex-wrap gap-2"><span class="px-3 py-1 rounded-full bg-green-50 text-green-700 text-xs font-bold">${escapeHtml(talentAvailabilityLabel(p.availability))}</span>${p.city||p.province?`<span class="px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold">${escapeHtml([p.city,p.province].filter(Boolean).join(', '))}</span>`:''}${p.willing_travel?'<span class="px-3 py-1 rounded-full bg-slate-100 text-slate-600 text-xs font-bold">Disponible para viajar</span>':''}</div></div></div>${p.bio?`<div class="mt-7"><h3 class="font-extrabold text-lutmin-dark">Sobre mí</h3><p class="mt-2 text-sm text-slate-600 leading-relaxed">${escapeHtml(p.bio)}</p></div>`:''}<div class="mt-7 grid lg:grid-cols-2 gap-5"><div><h3 class="font-extrabold text-lutmin-dark">Competencias</h3><div class="mt-3 flex flex-wrap gap-2">${skills.length?skills.map(x=>`<span class="px-3 py-2 rounded-xl bg-blue-50 text-blue-700 text-xs font-bold">${escapeHtml(x.skill)} · ${x.level}/5</span>`).join(''):'<span class="text-xs text-slate-400">Sin competencias cargadas.</span>'}</div></div><div><h3 class="font-extrabold text-lutmin-dark">Certificaciones verificadas</h3><div class="mt-3 space-y-2">${certs.length?certs.map(c=>`<div class="rounded-xl bg-green-50 p-3"><p class="font-bold text-sm text-green-900">${escapeHtml(c.course_title)}</p><p class="text-[11px] text-green-700">${c.duration_hours} h · ${Math.round(Number(c.score||0))}% · ${escapeHtml(c.code)}</p></div>`).join(''):'<p class="text-xs text-slate-400">Sin certificados visibles.</p>'}</div></div></div><div class="mt-7"><h3 class="font-extrabold text-lutmin-dark">Experiencia</h3><div class="mt-3 space-y-2">${exp.length?exp.map(x=>`<div class="rounded-2xl bg-slate-50 p-4"><p class="font-bold text-sm">${escapeHtml(x.position_title)} · ${escapeHtml(x.company_name)}</p><p class="mt-1 text-xs text-slate-500">${x.start_date||''} → ${x.current_job?'Actualidad':x.end_date||''}</p>${x.description?`<p class="mt-2 text-xs text-slate-600">${escapeHtml(x.description)}</p>`:''}</div>`).join(''):'<p class="text-xs text-slate-400">Sin experiencia cargada.</p>'}</div></div>`;}
 
@@ -6565,8 +6633,8 @@
       const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='lutmin_centro_operativo.csv';a.click();URL.revokeObjectURL(a.href);
     }
 
-    function downloadExecutiveOpsPdfV16(){
-      if(!window.jspdf?.jsPDF){showToast('No pude cargar el generador PDF.');return;}
+    async function downloadExecutiveOpsPdfV16(){
+      if(!(await ensureJsPdfLib())){showToast('No pude cargar el generador PDF.');return;}
       const {jsPDF}=window.jspdf;const doc=new jsPDF();const m=getOpsMetricsV16();let y=20;
       doc.setFontSize(18);doc.text('LUTMIN · Reporte Ejecutivo Operativo',14,y);y+=10;doc.setFontSize(10);doc.text('Generado: '+new Date().toLocaleString('es-AR'),14,y);y+=12;
       const k=[['Tareas activas',m.active_tasks],['Tareas críticas',m.critical_tasks],['Tareas vencidas',m.overdue_tasks],['Interesados nuevos',m.new_leads],['Pagos pendientes',m.pending_payments],['Alumnos',m.students],['Cursos',m.courses],['Certificados válidos',m.certificates]];
@@ -6681,7 +6749,7 @@
     async function saveExecutiveSnapshotV17(){if(!executiveMetricsV17)return;const b=monthBoundsV17();const metrics={revenue:executiveMetricsV17.revenue,new_leads:executiveMetricsV17.monthLeads,conversion:executiveMetricsV17.conversion,completion:executiveMetricsV17.completion,certificates:executiveMetricsV17.certs,overdue_debt:executiveMetricsV17.overdueDebt,active_companies:executiveMetricsV17.activeCompanies,risk_students:executiveMetricsV17.risks.length};const {error}=await supabaseClient.from('executive_metric_snapshots').insert({label:`Gestión ${new Date().toLocaleDateString('es-AR')}`,period_start:b.month,period_end:new Date(b.end.getTime()-86400000).toISOString().slice(0,10),metrics,created_by:currentLutminUser.id});if(error){showToast(error.message);return;}showToast('Foto ejecutiva guardada.');await loadExecutiveV17();}
 
     function downloadExecutiveV17Csv(){if(!executiveMetricsV17)return;const m=executiveMetricsV17;const rows=[['Indicador','Valor'],['Cobrado mes',m.revenue],['Leads mes',m.monthLeads],['Conversión %',m.conversion.toFixed(1)],['Finalización %',m.completion.toFixed(1)],['Certificados mes',m.certs],['Deuda vencida',m.overdueDebt],['Empresas activas',m.activeCompanies],['Alumnos en riesgo',m.risks.length],[],['Alumno en riesgo','Motivos'],...m.risks.map(r=>[r.name,r.reasons.join(' | ')])];const csv='\ufeff'+rows.map(r=>r.map(v=>`"${String(v??'').replace(/"/g,'""')}"`).join(';')).join('\n');const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`Lutmin_Ejecutivo_${new Date().toISOString().slice(0,10)}.csv`;a.click();URL.revokeObjectURL(a.href);}
-    function downloadExecutiveV17Pdf(){if(!executiveMetricsV17||!window.jspdf?.jsPDF){showToast('No pude generar el PDF.');return;}const {jsPDF}=window.jspdf,doc=new jsPDF(),m=executiveMetricsV17;let y=18;doc.setFont('helvetica','bold');doc.setFontSize(20);doc.text('Lutmin · Informe ejecutivo',14,y);y+=9;doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(100);doc.text(`Generado ${new Date().toLocaleString('es-AR')}`,14,y);y+=10;doc.setTextColor(20);const metrics=[['Cobrado del mes',moneyV17(m.revenue)],['Interesados del mes',String(m.monthLeads)],['Conversión',pctV17(m.conversion)],['Finalización',pctV17(m.completion)],['Certificados del mes',String(m.certs)],['Deuda vencida',moneyV17(m.overdueDebt)],['Empresas activas',String(m.activeCompanies)],['Alumnos que requieren atención',String(m.risks.length)]];metrics.forEach(([k,v])=>{doc.setFont('helvetica','bold');doc.text(k,14,y);doc.setFont('helvetica','normal');doc.text(v,80,y);y+=7;});y+=4;doc.setFont('helvetica','bold');doc.text('Principales alertas',14,y);y+=7;doc.setFont('helvetica','normal');m.risks.slice(0,12).forEach(r=>{const lines=doc.splitTextToSize(`${r.name}: ${r.reasons.join(' · ')}`,180);if(y+lines.length*5>280){doc.addPage();y=20;}doc.text(lines,14,y);y+=lines.length*5+2;});doc.save(`Lutmin_Informe_Ejecutivo_${new Date().toISOString().slice(0,10)}.pdf`);}
+    async function downloadExecutiveV17Pdf(){if(!executiveMetricsV17||!(await ensureJsPdfLib())){showToast('No pude generar el PDF.');return;}const {jsPDF}=window.jspdf,doc=new jsPDF(),m=executiveMetricsV17;let y=18;doc.setFont('helvetica','bold');doc.setFontSize(20);doc.text('Lutmin · Informe ejecutivo',14,y);y+=9;doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(100);doc.text(`Generado ${new Date().toLocaleString('es-AR')}`,14,y);y+=10;doc.setTextColor(20);const metrics=[['Cobrado del mes',moneyV17(m.revenue)],['Interesados del mes',String(m.monthLeads)],['Conversión',pctV17(m.conversion)],['Finalización',pctV17(m.completion)],['Certificados del mes',String(m.certs)],['Deuda vencida',moneyV17(m.overdueDebt)],['Empresas activas',String(m.activeCompanies)],['Alumnos que requieren atención',String(m.risks.length)]];metrics.forEach(([k,v])=>{doc.setFont('helvetica','bold');doc.text(k,14,y);doc.setFont('helvetica','normal');doc.text(v,80,y);y+=7;});y+=4;doc.setFont('helvetica','bold');doc.text('Principales alertas',14,y);y+=7;doc.setFont('helvetica','normal');m.risks.slice(0,12).forEach(r=>{const lines=doc.splitTextToSize(`${r.name}: ${r.reasons.join(' · ')}`,180);if(y+lines.length*5>280){doc.addPage();y=20;}doc.text(lines,14,y);y+=lines.length*5+2;});doc.save(`Lutmin_Informe_Ejecutivo_${new Date().toISOString().slice(0,10)}.pdf`);}
 
   
 
@@ -6950,6 +7018,17 @@
 
     // Etiqueta los bloques aunque Administración todavía esté oculta.
     setTimeout(()=>{tagAdminBlocksV19();const saved=localStorage.getItem('lutmin-admin-module-v19')||'overview';setAdminModuleV19(saved,{noSave:true,noScroll:true});},0);
+
+
+    // V2.4: pequeños ajustes de rendimiento, sin tocar el diseño V2.1.
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('img').forEach((img, index) => {
+        img.decoding = 'async';
+        if (index > 1 && !img.hasAttribute('loading')) img.loading = 'lazy';
+      });
+    });
+    window.addEventListener('online', () => { if (typeof showToast === 'function') showToast('Conexión restablecida.'); });
+    window.addEventListener('offline', () => { if (typeof showToast === 'function') showToast('Sin conexión. Algunas acciones pueden quedar temporalmente no disponibles.'); });
 
 </script>
 </body>
