@@ -3269,11 +3269,12 @@
       button.addEventListener('click', async () => {
         const tab = button.dataset.campusTab;
         if (tab === 'admin' && currentLutminUser?.role !== 'admin') return;
-        if (tab === 'company' && currentLutminUser?.role !== 'company_admin') return;
-        if (currentLutminUser?.role === 'company_admin' && !['company','profile','notifications','support'].includes(tab)) return;
+        if ((tab === 'company' || tab === 'company-conecta') && currentLutminUser?.role !== 'company_admin') return;
+        if (currentLutminUser?.role === 'company_admin' && !['company','company-conecta','profile','notifications','support'].includes(tab)) return;
         goToCampusTab(tab);
         if (tab === 'admin') await loadAdminData();
         if (tab === 'company') await loadCompanyPortalData();
+        if (tab === 'company-conecta') await loadCompanyConectaData();
         if (tab === 'agenda') await loadStudentAgenda();
         if (tab === 'talent') await loadTalentCenter();
         if (tab === 'notifications') await loadNotificationCenter();
