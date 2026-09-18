@@ -902,6 +902,7 @@
           <button class="campus-tab w-full text-left p-3 rounded-xl text-slate-300 hover:bg-white/10 flex items-center" data-campus-tab="notifications"><i class="fa-solid fa-bell w-7"></i><span class="flex-1">Novedades</span><span id="notificationBadgeDesktop" class="hidden min-w-5 h-5 px-1 rounded-full bg-red-500 text-white text-[10px] font-black flex items-center justify-center">0</span></button>
           <button class="campus-tab w-full text-left p-3 rounded-xl text-slate-300 hover:bg-white/10" data-campus-tab="support"><i class="fa-solid fa-headset w-7"></i>Ayuda</button>
           <button class="campus-tab w-full text-left p-3 rounded-xl text-slate-300 hover:bg-white/10" data-campus-tab="profile"><i class="fa-solid fa-user w-7"></i>Mi perfil</button>
+          <button id="companyConectaDesktopTab" class="campus-tab hidden w-full text-left p-3 rounded-xl text-slate-300 hover:bg-white/10" data-campus-tab="company-conecta"><i class="fa-solid fa-briefcase w-7"></i>Lutmin Conecta</button>
           <button id="companyDesktopTab" class="campus-tab hidden w-full text-left p-3 rounded-xl text-slate-300 hover:bg-white/10" data-campus-tab="company"><i class="fa-solid fa-building w-7"></i>Mi empresa</button>
           <button id="adminDesktopTab" class="campus-tab hidden w-full text-left p-3 rounded-xl text-slate-300 hover:bg-white/10" data-campus-tab="admin"><i class="fa-solid fa-shield-halved w-7"></i>Administración</button>
         </nav>
@@ -933,6 +934,7 @@
                 <button class="campus-tab whitespace-nowrap px-4 py-2 rounded-xl text-slate-300 text-xs flex items-center gap-2" data-campus-tab="notifications">Novedades <span id="notificationBadgeMobile" class="hidden min-w-5 h-5 px-1 rounded-full bg-red-500 text-white text-[10px] font-black items-center justify-center">0</span></button>
                 <button class="campus-tab whitespace-nowrap px-4 py-2 rounded-xl text-slate-300 text-xs" data-campus-tab="support">Ayuda</button>
                 <button class="campus-tab whitespace-nowrap px-4 py-2 rounded-xl text-slate-300 text-xs" data-campus-tab="profile">Perfil</button>
+                <button id="companyConectaMobileTab" class="campus-tab hidden whitespace-nowrap px-4 py-2 rounded-xl text-slate-300 text-xs" data-campus-tab="company-conecta">Conecta</button>
                 <button id="companyMobileTab" class="campus-tab hidden whitespace-nowrap px-4 py-2 rounded-xl text-slate-300 text-xs" data-campus-tab="company">Mi empresa</button>
                 <button id="adminMobileTab" class="campus-tab hidden whitespace-nowrap px-4 py-2 rounded-xl text-slate-300 text-xs" data-campus-tab="admin">Administración</button>
             </div>
@@ -1176,6 +1178,84 @@
           </section>
 
 
+
+          <!-- =====================================================
+               LUTMIN CONECTA · PORTAL EMPRESA - V2.8
+          ====================================================== -->
+          <section class="campus-panel hidden" data-campus-panel="company-conecta">
+            <div class="flex flex-col xl:flex-row xl:items-end xl:justify-between gap-4">
+              <div>
+                <p class="text-[10px] sm:text-xs text-violet-600 font-extrabold uppercase tracking-[.18em]">Lutmin Conecta · Empresa</p>
+                <h2 class="mt-1 text-2xl sm:text-3xl font-black text-lutmin-dark">Empleo y talento</h2>
+                <p class="mt-2 text-sm text-slate-500">Publicá búsquedas, revisá postulaciones y conocé el perfil completo de cada candidato desde un solo lugar.</p>
+              </div>
+              <button onclick="loadCompanyConectaData()" class="px-4 py-2.5 rounded-xl bg-lutmin-dark text-white text-sm font-bold"><i class="fa-solid fa-rotate mr-2"></i>Actualizar</button>
+            </div>
+
+            <div class="mt-6 grid grid-cols-2 xl:grid-cols-4 gap-4">
+              <div class="bg-white rounded-2xl border border-slate-100 p-5"><p class="text-xs text-slate-400 font-bold">BÚSQUEDAS</p><p id="companyConectaJobsStat" class="mt-2 text-3xl font-black text-lutmin-dark">0</p></div>
+              <div class="bg-white rounded-2xl border border-slate-100 p-5"><p class="text-xs text-slate-400 font-bold">POSTULACIONES</p><p id="companyConectaAppsStat" class="mt-2 text-3xl font-black text-violet-600">0</p></div>
+              <div class="bg-white rounded-2xl border border-slate-100 p-5"><p class="text-xs text-slate-400 font-bold">NUEVAS</p><p id="companyConectaNewStat" class="mt-2 text-3xl font-black text-blue-600">0</p></div>
+              <div class="bg-white rounded-2xl border border-slate-100 p-5"><p class="text-xs text-slate-400 font-bold">FAVORITOS</p><p id="companyConectaFavStat" class="mt-2 text-3xl font-black text-amber-500">0</p></div>
+            </div>
+
+            <div class="mt-6 bg-white rounded-3xl border border-slate-100 p-2 flex flex-wrap gap-2">
+              <button onclick="setCompanyConectaView('overview')" data-company-conecta-nav="overview" class="company-conecta-nav px-4 py-2.5 rounded-xl bg-lutmin-dark text-white text-xs font-bold"><i class="fa-solid fa-chart-pie mr-2"></i>Panel</button>
+              <button onclick="setCompanyConectaView('publish')" data-company-conecta-nav="publish" class="company-conecta-nav px-4 py-2.5 rounded-xl text-slate-600 text-xs font-bold"><i class="fa-solid fa-plus mr-2"></i>Nueva búsqueda</button>
+              <button onclick="setCompanyConectaView('jobs')" data-company-conecta-nav="jobs" class="company-conecta-nav px-4 py-2.5 rounded-xl text-slate-600 text-xs font-bold"><i class="fa-solid fa-rectangle-list mr-2"></i>Mis publicaciones</button>
+              <button onclick="setCompanyConectaView('applications')" data-company-conecta-nav="applications" class="company-conecta-nav px-4 py-2.5 rounded-xl text-slate-600 text-xs font-bold"><i class="fa-solid fa-user-check mr-2"></i>Postulaciones</button>
+              <button onclick="setCompanyConectaView('talent')" data-company-conecta-nav="talent" class="company-conecta-nav px-4 py-2.5 rounded-xl text-slate-600 text-xs font-bold"><i class="fa-solid fa-magnifying-glass mr-2"></i>Banco de talento</button>
+              <button onclick="setCompanyConectaView('favorites')" data-company-conecta-nav="favorites" class="company-conecta-nav px-4 py-2.5 rounded-xl text-slate-600 text-xs font-bold"><i class="fa-solid fa-star mr-2"></i>Favoritos</button>
+            </div>
+
+            <div data-company-conecta-view="overview" class="company-conecta-view mt-6">
+              <div class="grid xl:grid-cols-[1.25fr_.75fr] gap-5">
+                <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden">
+                  <div class="p-5 sm:p-6 border-b border-slate-100"><h3 class="font-extrabold text-lutmin-dark">Postulaciones recientes</h3><p class="mt-1 text-xs text-slate-500">Abrí cualquier candidato para ver experiencia, competencias, certificados y CV.</p></div>
+                  <div id="companyConectaRecentApps" class="divide-y divide-slate-100"></div>
+                </div>
+                <div class="space-y-4">
+                  <button onclick="setCompanyConectaView('publish')" class="w-full text-left bg-lutmin-dark text-white rounded-3xl p-6"><i class="fa-solid fa-plus text-lutmin-light text-xl"></i><p class="mt-4 font-extrabold">Solicitar nueva búsqueda</p><p class="mt-1 text-xs text-slate-300">Cargá el puesto y Lutmin lo revisa antes de publicarlo.</p></button>
+                  <button onclick="setCompanyConectaView('talent')" class="w-full text-left bg-white border border-slate-100 rounded-3xl p-6"><i class="fa-solid fa-users-viewfinder text-violet-600 text-xl"></i><p class="mt-4 font-extrabold text-lutmin-dark">Explorar banco de talento</p><p class="mt-1 text-xs text-slate-500">Buscá perfiles por experiencia, ubicación o competencia.</p></button>
+                </div>
+              </div>
+            </div>
+
+            <div data-company-conecta-view="publish" class="company-conecta-view hidden mt-6">
+              <form id="companyJobRequestForm" class="bg-white rounded-3xl border border-slate-100 p-5 sm:p-7 max-w-4xl">
+                <div class="flex items-center gap-3"><div class="w-11 h-11 rounded-2xl bg-violet-50 text-violet-600 flex items-center justify-center"><i class="fa-solid fa-briefcase"></i></div><div><h3 class="font-extrabold text-lutmin-dark">Solicitar una búsqueda</h3><p class="mt-1 text-xs text-slate-500">La empresa carga el pedido. Lutmin lo revisa antes de publicarlo.</p></div></div>
+                <div class="mt-5 grid md:grid-cols-2 gap-4">
+                  <div class="md:col-span-2"><label class="text-xs font-bold text-slate-600">Puesto</label><input id="companyJobTitle" required maxlength="180" class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Ej: Coordinador/a de mantenimiento"></div>
+                  <div class="md:col-span-2"><label class="text-xs font-bold text-slate-600">Descripción</label><textarea id="companyJobDescription" required rows="4" class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Responsabilidades, objetivo del puesto, contexto..."></textarea></div>
+                  <div class="md:col-span-2"><label class="text-xs font-bold text-slate-600">Requisitos</label><textarea id="companyJobRequirements" rows="3" class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Experiencia, conocimientos, disponibilidad..."></textarea></div>
+                  <div><label class="text-xs font-bold text-slate-600">Ubicación</label><input id="companyJobLocation" class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Ciudad / Provincia"></div>
+                  <div><label class="text-xs font-bold text-slate-600">Modalidad</label><select id="companyJobModality" class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"><option value="presencial">Presencial</option><option value="hibrido">Híbrido</option><option value="remoto">Remoto</option></select></div>
+                  <div><label class="text-xs font-bold text-slate-600">Tipo</label><select id="companyJobType" class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"><option value="full_time">Jornada completa</option><option value="part_time">Media jornada</option><option value="temporary">Temporal</option><option value="contract">Contrato</option><option value="internship">Pasantía</option></select></div>
+                </div>
+                <button type="submit" class="mt-5 px-6 py-3 rounded-xl bg-cyan-700 text-white font-bold">Enviar a revisión de Lutmin</button>
+              </form>
+            </div>
+
+            <div data-company-conecta-view="jobs" class="company-conecta-view hidden mt-6">
+              <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden"><div class="p-5 sm:p-6 border-b border-slate-100"><h3 class="font-extrabold text-lutmin-dark">Mis publicaciones</h3><p class="mt-1 text-xs text-slate-500">Borradores enviados, búsquedas publicadas y procesos cerrados.</p></div><div id="companyConectaJobsList" class="divide-y divide-slate-100"></div></div>
+            </div>
+
+            <div data-company-conecta-view="applications" class="company-conecta-view hidden mt-6">
+              <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden">
+                <div class="p-5 sm:p-6 border-b border-slate-100"><div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4"><div><h3 class="font-extrabold text-lutmin-dark">Postulaciones</h3><p class="mt-1 text-xs text-slate-500">Filtrá, revisá el perfil completo y mové cada candidato por el proceso.</p></div><div class="flex flex-wrap gap-2"><select id="companyApplicationJobFilter" onchange="renderCompanyConectaApplications()" class="px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs"><option value="">Todas las búsquedas</option></select><select id="companyApplicationStatusFilter" onchange="renderCompanyConectaApplications()" class="px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs"><option value="">Todos los estados</option><option value="new">Nuevas</option><option value="reviewing">En revisión</option><option value="interview">Entrevista</option><option value="hired">Seleccionados</option><option value="rejected">Finalizadas</option></select></div></div></div>
+                <div id="companyConectaApplicationsList" class="divide-y divide-slate-100"></div>
+              </div>
+            </div>
+
+            <div data-company-conecta-view="talent" class="company-conecta-view hidden mt-6">
+              <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden"><div class="p-5 sm:p-6 border-b border-slate-100"><div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4"><div><h3 class="font-extrabold text-lutmin-dark">Banco de talento</h3><p class="mt-1 text-xs text-slate-500">Personas que decidieron voluntariamente hacer visible su perfil profesional.</p></div><div class="flex flex-wrap gap-2"><input id="companyTalentQuery" class="px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Nombre, ciudad, perfil"><input id="companyTalentSkill" class="px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Competencia"><button onclick="searchCompanyTalent()" class="px-4 py-2.5 rounded-xl bg-lutmin-dark text-white text-xs font-bold">Buscar</button></div></div></div><div id="companyTalentResults" class="p-5 sm:p-6 grid md:grid-cols-2 gap-4"><div class="md:col-span-2 text-sm text-slate-500">Cargando perfiles...</div></div></div>
+            </div>
+
+            <div data-company-conecta-view="favorites" class="company-conecta-view hidden mt-6">
+              <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden"><div class="p-5 sm:p-6 border-b border-slate-100"><h3 class="font-extrabold text-lutmin-dark">Candidatos guardados</h3><p class="mt-1 text-xs text-slate-500">Tu shortlist de perfiles favoritos.</p></div><div id="companyConectaFavoritesList" class="p-5 sm:p-6 grid md:grid-cols-2 gap-4"></div></div>
+            </div>
+          </section>
+
           <!-- =====================================================
                PORTAL EMPRESAS - ETAPA 13
           ====================================================== -->
@@ -1238,15 +1318,10 @@
               <div class="p-5 sm:p-6 border-b border-slate-100"><h3 class="font-extrabold text-lutmin-dark">Agenda corporativa</h3><p class="mt-1 text-xs text-slate-500">Comisiones, próximos encuentros y asistencia del equipo.</p></div>
               <div id="companyPortalAgenda" class="p-5 sm:p-6 grid lg:grid-cols-2 gap-4"><div class="text-sm text-slate-500">Todavía no hay comisiones programadas.</div></div>
             </div>
-
-            <div class="mt-6 grid xl:grid-cols-[1.15fr_.85fr] gap-5">
-              <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden">
-                <div class="p-5 sm:p-6 border-b border-slate-100"><div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3"><div><h3 class="font-extrabold text-lutmin-dark">Banco de talento Lutmin Conecta</h3><p class="mt-1 text-xs text-slate-500">Solo aparecen personas que activaron voluntariamente la visibilidad de su perfil.</p></div><div class="flex gap-2"><input id="companyTalentQuery" class="px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Nombre, ciudad, perfil"><input id="companyTalentSkill" class="px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Competencia"><button onclick="searchCompanyTalent()" class="px-4 py-2.5 rounded-xl bg-lutmin-dark text-white text-xs font-bold">Buscar</button></div></div></div>
-                <div id="companyTalentResults" class="p-5 sm:p-6 grid md:grid-cols-2 gap-4"><div class="md:col-span-2 text-sm text-slate-500">Usá los filtros para buscar perfiles.</div></div>
-              </div>
-              <form id="companyJobRequestForm" class="bg-white rounded-3xl border border-slate-100 p-5 sm:p-6"><h3 class="font-extrabold text-lutmin-dark">Solicitar una búsqueda</h3><p class="mt-1 text-xs text-slate-500">La empresa carga el pedido como borrador. Lutmin lo revisa antes de publicarlo.</p><div class="mt-4 space-y-3"><input id="companyJobTitle" required maxlength="180" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Puesto"><textarea id="companyJobDescription" required rows="4" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Descripción de la posición"></textarea><textarea id="companyJobRequirements" rows="3" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Requisitos"></textarea><div class="grid grid-cols-2 gap-2"><input id="companyJobLocation" class="px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Ubicación"><select id="companyJobModality" class="px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm"><option value="presencial">Presencial</option><option value="hibrido">Híbrido</option><option value="remoto">Remoto</option></select></div><select id="companyJobType" class="w-full px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm"><option value="full_time">Jornada completa</option><option value="part_time">Media jornada</option><option value="temporary">Temporal</option><option value="contract">Contrato</option><option value="internship">Pasantía</option></select></div><button type="submit" class="mt-4 w-full py-3 rounded-xl bg-cyan-700 text-white font-bold">Enviar a revisión de Lutmin</button></form>
+            <div class="mt-6 rounded-3xl bg-gradient-to-r from-violet-50 to-blue-50 border border-violet-100 p-6 sm:p-7 flex flex-col md:flex-row md:items-center md:justify-between gap-5">
+              <div><p class="text-[10px] uppercase tracking-widest text-violet-600 font-extrabold">Lutmin Conecta</p><h3 class="mt-2 text-xl font-black text-lutmin-dark">Empleo y talento ahora tiene su propio espacio</h3><p class="mt-2 text-sm text-slate-600">Publicaciones, postulaciones, perfiles completos, CV y banco de talento sin mezclarlo con la capacitación de tu empresa.</p></div>
+              <button onclick="goToCampusTab('company-conecta');loadCompanyConectaData()" class="shrink-0 px-5 py-3 rounded-xl bg-violet-600 text-white font-bold text-sm"><i class="fa-solid fa-briefcase mr-2"></i>Abrir Lutmin Conecta</button>
             </div>
-            <div class="mt-6 bg-white rounded-3xl border border-slate-100 overflow-hidden"><div class="p-5 sm:p-6 border-b border-slate-100"><h3 class="font-extrabold text-lutmin-dark">Mis búsquedas y postulaciones</h3><p class="mt-1 text-xs text-slate-500">Seguimiento de vacantes solicitadas y candidatos postulados.</p></div><div id="companyJobPipeline" class="divide-y divide-slate-100"></div></div>
 
           </section>
 
@@ -2303,6 +2378,17 @@
     <div class="w-full max-w-4xl bg-white rounded-[2rem] shadow-2xl max-h-[92vh] overflow-y-auto modal-scroll relative"><button onclick="closeModal('publicTalentModal')" class="absolute right-4 top-4 w-10 h-10 rounded-full bg-slate-100 text-slate-500 z-10"><i class="fa-solid fa-xmark"></i></button><div id="publicTalentContent" class="p-6 sm:p-9"><div class="text-sm text-slate-500">Cargando perfil...</div></div></div>
   </div>
 
+
+  <!-- =========================================================
+       PERFIL DE CANDIDATO · EMPRESA - V2.8
+  ========================================================== -->
+  <div id="companyCandidateModal" class="hidden fixed inset-0 z-[129] bg-slate-950/80 backdrop-blur-md p-2 sm:p-4 flex items-center justify-center">
+    <div class="w-full max-w-5xl bg-white rounded-[1.5rem] sm:rounded-[2rem] shadow-2xl max-h-[95vh] overflow-y-auto modal-scroll relative">
+      <button onclick="closeModal('companyCandidateModal')" class="absolute right-4 top-4 w-10 h-10 rounded-full bg-slate-100 text-slate-500 z-10"><i class="fa-solid fa-xmark"></i></button>
+      <div id="companyCandidateContent" class="p-6 sm:p-9"><div class="text-sm text-slate-500">Cargando candidato...</div></div>
+    </div>
+  </div>
+
   <!-- =========================================================
        MODAL PERFIL
   ========================================================== -->
@@ -2830,7 +2916,7 @@
 
     document.addEventListener('keydown', event => {
       if (event.key === 'Escape') {
-        ['courseModal','interestModal','campusModal','lessonModal','assessmentModal','publicTalentModal','profileModal','accessSwitcherModal','adminAccountPasswordModal','supportThreadModal','certificateModal','authModal','passwordModal','adminCourseEditModal','adminLessonEditModal','adminStudentDetailModal','leadConvertModal','paymentModal','adminCompanyEditModal','attendanceModal'].forEach(id => {
+        ['courseModal','interestModal','campusModal','lessonModal','assessmentModal','publicTalentModal','companyCandidateModal','profileModal','accessSwitcherModal','adminAccountPasswordModal','supportThreadModal','certificateModal','authModal','passwordModal','adminCourseEditModal','adminLessonEditModal','adminStudentDetailModal','leadConvertModal','paymentModal','adminCompanyEditModal','attendanceModal'].forEach(id => {
           const el = document.getElementById(id);
           if (id === 'passwordModal' && (passwordModalMode === 'first' || passwordModalMode === 'recovery')) return;
           if (!el.classList.contains('hidden')) closeModal(id);
@@ -3124,7 +3210,7 @@
       document.getElementById('campusGreetingName').textContent=firstName; document.getElementById('campusSidebarName').textContent=name; document.getElementById('campusProfileName').textContent=name; document.getElementById('campusProfileInitials').textContent=initials;
       const isAdmin=currentLutminUser.role==='admin', isCompanyAdmin=currentLutminUser.role==='company_admin';
       document.getElementById('adminDesktopTab')?.classList.toggle('hidden',!isAdmin); document.getElementById('adminMobileTab')?.classList.toggle('hidden',!isAdmin);
-      document.getElementById('companyDesktopTab')?.classList.toggle('hidden',!isCompanyAdmin); document.getElementById('companyMobileTab')?.classList.toggle('hidden',!isCompanyAdmin);
+      document.getElementById('companyDesktopTab')?.classList.toggle('hidden',!isCompanyAdmin); document.getElementById('companyMobileTab')?.classList.toggle('hidden',!isCompanyAdmin); document.getElementById('companyConectaDesktopTab')?.classList.toggle('hidden',!isCompanyAdmin); document.getElementById('companyConectaMobileTab')?.classList.toggle('hidden',!isCompanyAdmin);
       document.querySelectorAll('[data-student-only="true"]').forEach(el=>el.classList.toggle('hidden',isCompanyAdmin||isAdmin));
       document.querySelectorAll('[data-talent-tab="true"]').forEach(el=>el.classList.toggle('hidden',currentLutminUser.role!=='student'));
       const roleLabel=document.getElementById('campusSidebarRole'); if(roleLabel)roleLabel.textContent=isAdmin?'Administrador':isCompanyAdmin?'Empresa':'Alumno';
@@ -3764,9 +3850,9 @@
 
     function goToCampusTab(tab) {
       if (tab === 'admin' && currentLutminUser?.role !== 'admin') tab = currentLutminUser?.role === 'company_admin' ? 'company' : 'dashboard';
-      if (tab === 'company' && currentLutminUser?.role !== 'company_admin') tab = 'dashboard';
+      if ((tab === 'company' || tab === 'company-conecta') && currentLutminUser?.role !== 'company_admin') tab = 'dashboard';
       if (tab === 'talent' && currentLutminUser?.role !== 'student') tab = currentLutminUser?.role === 'company_admin' ? 'company' : 'dashboard';
-      if (currentLutminUser?.role === 'company_admin' && !['company','profile','notifications','support'].includes(tab)) tab = 'company';
+      if (currentLutminUser?.role === 'company_admin' && !['company','company-conecta','profile','notifications','support'].includes(tab)) tab = 'company';
       document.querySelectorAll('.campus-tab').forEach(btn => {
         if (btn.dataset.campusTab === tab) {
           btn.classList.add('bg-white/10', 'font-bold');
@@ -6505,15 +6591,113 @@
     async function showPublicTalentProfile(slug){if(!supabaseClient||!slug)return;openModal('publicTalentModal');const root=document.getElementById('publicTalentContent');root.innerHTML='<div class="text-sm text-slate-500">Cargando perfil...</div>';const {data,error}=await supabaseClient.rpc('get_public_talent_profile',{p_slug:slug});if(error||!data){root.innerHTML='<div class="p-8 text-center"><h3 class="text-xl font-black text-lutmin-dark">Perfil no disponible</h3><p class="mt-2 text-sm text-slate-500">La persona puede haber desactivado la visibilidad.</p></div>';return;}const p=data.profile||{},skills=data.skills||[],exp=data.experiences||[],certs=data.certificates||[];const initials=String(p.full_name||'L').split(' ').filter(Boolean).slice(0,2).map(x=>x[0]).join('').toUpperCase();root.innerHTML=`<div class="flex flex-col sm:flex-row gap-5 sm:items-center"><div class="w-20 h-20 rounded-3xl bg-lutmin-dark text-white flex items-center justify-center text-2xl font-black">${escapeHtml(initials)}</div><div><p class="text-[10px] uppercase tracking-widest font-bold text-lutmin-light">Lutmin Conecta</p><h2 class="mt-1 text-3xl font-black text-lutmin-dark">${escapeHtml(p.full_name||'Perfil profesional')}</h2><p class="mt-1 text-sm text-slate-500">${escapeHtml(p.headline||'Perfil profesional')}</p><div class="mt-3 flex flex-wrap gap-2"><span class="px-3 py-1 rounded-full bg-green-50 text-green-700 text-xs font-bold">${escapeHtml(talentAvailabilityLabel(p.availability))}</span>${p.city||p.province?`<span class="px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold">${escapeHtml([p.city,p.province].filter(Boolean).join(', '))}</span>`:''}${p.willing_travel?'<span class="px-3 py-1 rounded-full bg-slate-100 text-slate-600 text-xs font-bold">Disponible para viajar</span>':''}</div></div></div>${p.bio?`<div class="mt-7"><h3 class="font-extrabold text-lutmin-dark">Sobre mí</h3><p class="mt-2 text-sm text-slate-600 leading-relaxed">${escapeHtml(p.bio)}</p></div>`:''}<div class="mt-7 grid lg:grid-cols-2 gap-5"><div><h3 class="font-extrabold text-lutmin-dark">Competencias</h3><div class="mt-3 flex flex-wrap gap-2">${skills.length?skills.map(x=>`<span class="px-3 py-2 rounded-xl bg-blue-50 text-blue-700 text-xs font-bold">${escapeHtml(x.skill)} · ${x.level}/5</span>`).join(''):'<span class="text-xs text-slate-400">Sin competencias cargadas.</span>'}</div></div><div><h3 class="font-extrabold text-lutmin-dark">Certificaciones verificadas</h3><div class="mt-3 space-y-2">${certs.length?certs.map(c=>`<div class="rounded-xl bg-green-50 p-3"><p class="font-bold text-sm text-green-900">${escapeHtml(c.course_title)}</p><p class="text-[11px] text-green-700">${c.duration_hours} h · ${Math.round(Number(c.score||0))}% · ${escapeHtml(c.code)}</p></div>`).join(''):'<p class="text-xs text-slate-400">Sin certificados visibles.</p>'}</div></div></div><div class="mt-7"><h3 class="font-extrabold text-lutmin-dark">Experiencia</h3><div class="mt-3 space-y-2">${exp.length?exp.map(x=>`<div class="rounded-2xl bg-slate-50 p-4"><p class="font-bold text-sm">${escapeHtml(x.position_title)} · ${escapeHtml(x.company_name)}</p><p class="mt-1 text-xs text-slate-500">${x.start_date||''} → ${x.current_job?'Actualidad':x.end_date||''}</p>${x.description?`<p class="mt-2 text-xs text-slate-600">${escapeHtml(x.description)}</p>`:''}</div>`).join(''):'<p class="text-xs text-slate-400">Sin experiencia cargada.</p>'}</div></div>`;}
 
     // EMPRESAS: banco de talento + búsquedas
-    async function loadCompanyConectaData(){if(!supabaseClient||currentLutminUser?.role!=='company_admin')return;const {data,error}=await supabaseClient.rpc('company_job_pipeline');if(error){console.error(error);return;}companyJobPipelineData=data||{jobs:[],applications:[]};renderCompanyJobPipeline();}
-    async function searchCompanyTalent(){if(currentLutminUser?.role!=='company_admin')return;const q=document.getElementById('companyTalentQuery').value.trim(),skill=document.getElementById('companyTalentSkill').value.trim();const {data,error}=await supabaseClient.rpc('company_search_talent',{p_query:q||null,p_skill:skill||null});if(error)return showToast(error.message||'No pude buscar talento.');companyTalentData=Array.isArray(data)?data:[];renderCompanyTalentResults();}
-    function renderCompanyTalentResults(){const root=document.getElementById('companyTalentResults');if(!root)return;if(!companyTalentData.length){root.innerHTML='<div class="md:col-span-2 text-sm text-slate-500">No encontramos perfiles con esos filtros.</div>';return;}root.innerHTML=companyTalentData.map(x=>`<div class="rounded-2xl bg-slate-50 border border-slate-100 p-4"><div class="flex justify-between gap-3"><div><p class="font-extrabold text-lutmin-dark">${escapeHtml(x.full_name||'Perfil')}</p><p class="mt-1 text-xs text-slate-500">${escapeHtml(x.headline||'Perfil profesional')} · ${escapeHtml([x.city,x.province].filter(Boolean).join(', ')||'Sin ubicación')}</p></div><button onclick="toggleCompanyTalentFavorite('${x.user_id}')" class="text-lg ${x.favorite?'text-amber-500':'text-slate-300'}"><i class="fa-solid fa-star"></i></button></div><div class="mt-3 flex flex-wrap gap-1.5">${(x.skills||[]).slice(0,5).map(s=>`<span class="px-2 py-1 rounded-lg bg-white text-[10px] font-bold">${escapeHtml(s.skill)} ${s.level}/5</span>`).join('')}</div><p class="mt-3 text-[11px] text-slate-500">${(x.certificates||[]).length} certificados Lutmin · ${x.years_experience||0} años de experiencia</p>${x.email||x.phone?`<p class="mt-2 text-[11px] text-cyan-700 font-bold">${escapeHtml([x.email,x.phone].filter(Boolean).join(' · '))}</p>`:''}<div class="mt-3 flex flex-wrap gap-3"><button onclick="openCompanyTalentProfile('${escapeHtml(x.public_slug)}','${x.user_id}')" class="text-xs text-lutmin-light font-bold">Ver perfil completo →</button>${x.external_cv_url?`<button onclick="openCompanyExternalCv('${x.user_id}','${escapeHtml(x.external_cv_url)}')" class="text-xs text-emerald-700 font-bold"><i class="fa-solid fa-file-arrow-down mr-1"></i>${escapeHtml(x.external_cv_label||'Ver CV externo')}</button>`:''}</div></div>`).join('');}
-    async function openCompanyTalentProfile(slug,userId){try{await supabaseClient.rpc('record_company_talent_view',{p_user_id:userId});}catch(_){ }await showPublicTalentProfile(slug);}
+    let companyConectaCurrentView='overview';
+    let companyCandidateData=null;
+    let companyConectaSummary=null;
+
+    async function loadCompanyConectaData(){
+      if(!supabaseClient||currentLutminUser?.role!=='company_admin')return;
+      const [pipelineRes,summaryRes]=await Promise.all([
+        supabaseClient.rpc('company_job_pipeline'),
+        supabaseClient.rpc('company_conecta_summary')
+      ]);
+      if(pipelineRes.error){console.error(pipelineRes.error);showToast('No pude cargar las búsquedas de la empresa.');return;}
+      companyJobPipelineData=pipelineRes.data||{jobs:[],applications:[]};
+      companyConectaSummary=summaryRes.error?null:(summaryRes.data||null);
+      renderCompanyConectaHub();
+    }
+
+    function setCompanyConectaView(view){
+      companyConectaCurrentView=view||'overview';
+      document.querySelectorAll('.company-conecta-view').forEach(el=>el.classList.toggle('hidden',el.dataset.companyConectaView!==companyConectaCurrentView));
+      document.querySelectorAll('.company-conecta-nav').forEach(btn=>{
+        const active=btn.dataset.companyConectaNav===companyConectaCurrentView;
+        btn.classList.toggle('bg-lutmin-dark',active);btn.classList.toggle('text-white',active);btn.classList.toggle('text-slate-600',!active);
+      });
+      if((view==='talent'||view==='favorites')&&!companyTalentData.length)searchCompanyTalent();
+      if(view==='applications')renderCompanyConectaApplications();
+      if(view==='favorites')renderCompanyConectaFavorites();
+    }
+
+    function renderCompanyConectaHub(){
+      const jobs=companyJobPipelineData?.jobs||[],apps=companyJobPipelineData?.applications||[];
+      const stat=(id,val)=>{const el=document.getElementById(id);if(el)el.textContent=String(val)};
+      stat('companyConectaJobsStat',companyConectaSummary?.jobs??jobs.length);stat('companyConectaAppsStat',companyConectaSummary?.applications??apps.length);stat('companyConectaNewStat',companyConectaSummary?.new_applications??apps.filter(a=>a.status==='new').length);stat('companyConectaFavStat',companyConectaSummary?.favorites??(companyTalentData||[]).filter(x=>x.favorite).length);
+
+      const recent=document.getElementById('companyConectaRecentApps');
+      if(recent)recent.innerHTML=apps.length?apps.slice(0,6).map(a=>companyApplicationCard(a,true)).join(''):'<div class="p-6 text-sm text-slate-500">Todavía no hay postulaciones.</div>';
+
+      const jobsRoot=document.getElementById('companyConectaJobsList');
+      if(jobsRoot)jobsRoot.innerHTML=jobs.length?jobs.map(j=>{const count=apps.filter(a=>a.job_id===j.id).length;return `<div class="p-5 sm:p-6"><div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4"><div><div class="flex items-center gap-2"><h4 class="font-extrabold text-lutmin-dark">${escapeHtml(j.title)}</h4><span class="px-2.5 py-1 rounded-full bg-slate-100 text-[10px] font-bold">${escapeHtml(jobStatusLabel(j.status))}</span></div><p class="mt-1 text-xs text-slate-500">${escapeHtml(j.location||'A definir')} · ${escapeHtml(j.modality||'')} · ${count} postulaciones</p>${j.description?`<p class="mt-3 text-sm text-slate-600 line-clamp-2">${escapeHtml(j.description)}</p>`:''}</div><div class="flex gap-2"><button onclick="companyOpenApplicationsForJob('${j.id}')" class="px-3 py-2 rounded-xl bg-violet-50 text-violet-700 text-xs font-bold">Ver postulaciones (${count})</button></div></div></div>`}).join(''):'<div class="p-6 text-sm text-slate-500">Todavía no solicitaste búsquedas laborales.</div>';
+
+      const filter=document.getElementById('companyApplicationJobFilter');
+      if(filter){const val=filter.value;filter.innerHTML='<option value="">Todas las búsquedas</option>'+jobs.map(j=>`<option value="${j.id}">${escapeHtml(j.title)}</option>`).join('');if([...filter.options].some(o=>o.value===val))filter.value=val;}
+      renderCompanyConectaApplications();
+      renderCompanyTalentResults();
+      renderCompanyConectaFavorites();
+      setCompanyConectaView(companyConectaCurrentView);
+    }
+
+    function companyApplicationCard(a,compact=false){
+      return `<div class="${compact?'p-5':'p-5 sm:p-6'}"><div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4"><div class="min-w-0"><p class="text-[10px] uppercase font-bold text-violet-600">${escapeHtml(a.job_title||'Búsqueda')}</p><h4 class="mt-1 font-extrabold text-lutmin-dark">${escapeHtml(a.full_name||a.email||'Candidato')}</h4><p class="mt-1 text-xs text-slate-500">${escapeHtml(a.headline||a.desired_role||'Perfil profesional')} · ${escapeHtml([a.city,a.province].filter(Boolean).join(', ')||'Ubicación no informada')}</p><p class="mt-1 text-[11px] text-slate-400">Postulación: ${new Date(a.created_at).toLocaleDateString('es-AR')}</p></div><div class="flex flex-wrap items-center gap-2"><button onclick="openCompanyCandidateProfile('${a.user_id}','${a.id}')" class="px-3 py-2 rounded-xl bg-lutmin-dark text-white text-xs font-bold"><i class="fa-solid fa-user mr-1"></i>Ver perfil</button>${a.external_cv_url?`<button onclick="openCompanyExternalCv('${a.user_id}','${escapeHtml(a.external_cv_url)}')" class="px-3 py-2 rounded-xl bg-emerald-50 text-emerald-700 text-xs font-bold"><i class="fa-solid fa-file-arrow-down mr-1"></i>CV</button>`:''}<select onchange="companySetApplicationStatus('${a.id}',this.value)" class="px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs"><option value="new" ${a.status==='new'?'selected':''}>Nueva</option><option value="reviewing" ${a.status==='reviewing'?'selected':''}>En revisión</option><option value="interview" ${a.status==='interview'?'selected':''}>Entrevista</option><option value="hired" ${a.status==='hired'?'selected':''}>Seleccionado/a</option><option value="rejected" ${a.status==='rejected'?'selected':''}>Finalizada</option></select></div></div></div>`;
+    }
+
+    function renderCompanyConectaApplications(){
+      const root=document.getElementById('companyConectaApplicationsList');if(!root)return;
+      const job=document.getElementById('companyApplicationJobFilter')?.value||'',status=document.getElementById('companyApplicationStatusFilter')?.value||'';
+      let rows=[...(companyJobPipelineData?.applications||[])];
+      if(job)rows=rows.filter(x=>x.job_id===job);if(status)rows=rows.filter(x=>x.status===status);
+      root.innerHTML=rows.length?rows.map(a=>companyApplicationCard(a,false)).join(''):'<div class="p-6 text-sm text-slate-500">No hay postulaciones con estos filtros.</div>';
+    }
+
+    function companyOpenApplicationsForJob(jobId){
+      setCompanyConectaView('applications');const sel=document.getElementById('companyApplicationJobFilter');if(sel){sel.value=jobId;renderCompanyConectaApplications();}
+    }
+
+    async function searchCompanyTalent(){
+      if(currentLutminUser?.role!=='company_admin')return;
+      const q=document.getElementById('companyTalentQuery')?.value.trim()||'',skill=document.getElementById('companyTalentSkill')?.value.trim()||'';
+      const {data,error}=await supabaseClient.rpc('company_search_talent',{p_query:q||null,p_skill:skill||null});
+      if(error)return showToast(error.message||'No pude buscar talento.');
+      companyTalentData=Array.isArray(data)?data:[];renderCompanyTalentResults();renderCompanyConectaFavorites();
+      const fav=document.getElementById('companyConectaFavStat');if(fav)fav.textContent=String(companyTalentData.filter(x=>x.favorite).length);
+    }
+
+    function companyTalentCard(x){return `<div class="rounded-2xl bg-slate-50 border border-slate-100 p-4"><div class="flex justify-between gap-3"><div><p class="font-extrabold text-lutmin-dark">${escapeHtml(x.full_name||'Perfil')}</p><p class="mt-1 text-xs text-slate-500">${escapeHtml(x.headline||x.desired_role||'Perfil profesional')} · ${escapeHtml([x.city,x.province].filter(Boolean).join(', ')||'Sin ubicación')}</p></div><button onclick="toggleCompanyTalentFavorite('${x.user_id}')" class="w-9 h-9 rounded-xl bg-white text-lg ${x.favorite?'text-amber-500':'text-slate-300'}"><i class="fa-solid fa-star"></i></button></div><div class="mt-3 flex flex-wrap gap-1.5">${(x.skills||[]).slice(0,5).map(s=>`<span class="px-2 py-1 rounded-lg bg-white text-[10px] font-bold">${escapeHtml(s.skill)} ${s.level}/5</span>`).join('')}</div><p class="mt-3 text-[11px] text-slate-500">${(x.certificates||[]).length} certificados Lutmin · ${x.years_experience||0} años de experiencia</p><div class="mt-3 flex flex-wrap gap-2"><button onclick="openCompanyCandidateProfile('${x.user_id}')" class="px-3 py-2 rounded-xl bg-lutmin-dark text-white text-xs font-bold">Ver perfil completo</button>${x.external_cv_url?`<button onclick="openCompanyExternalCv('${x.user_id}','${escapeHtml(x.external_cv_url)}')" class="px-3 py-2 rounded-xl bg-emerald-50 text-emerald-700 text-xs font-bold">Ver CV</button>`:''}</div></div>`;}
+
+    function renderCompanyTalentResults(){const root=document.getElementById('companyTalentResults');if(!root)return;root.innerHTML=companyTalentData.length?companyTalentData.map(companyTalentCard).join(''):'<div class="md:col-span-2 text-sm text-slate-500">No encontramos perfiles con esos filtros.</div>';}
+    function renderCompanyConectaFavorites(){const root=document.getElementById('companyConectaFavoritesList');if(!root)return;const rows=(companyTalentData||[]).filter(x=>x.favorite);root.innerHTML=rows.length?rows.map(companyTalentCard).join(''):'<div class="md:col-span-2 text-sm text-slate-500">Todavía no guardaste candidatos como favoritos.</div>';}
+
+    async function openCompanyCandidateProfile(userId,applicationId=null){
+      if(!userId)return;openModal('companyCandidateModal');const root=document.getElementById('companyCandidateContent');root.innerHTML='<div class="text-sm text-slate-500">Cargando perfil...</div>';
+      try{await supabaseClient.rpc('record_company_talent_view',{p_user_id:userId});}catch(_){ }
+      const {data,error}=await supabaseClient.rpc('company_get_candidate_profile',{p_user_id:userId});
+      if(error||!data){root.innerHTML='<div class="p-8 text-center"><h3 class="text-xl font-black text-lutmin-dark">No pude abrir el perfil</h3><p class="mt-2 text-sm text-slate-500">'+escapeHtml(error?.message||'Perfil no disponible.')+'</p></div>';return;}
+      companyCandidateData={...data,userId,applicationId};renderCompanyCandidateProfile();
+    }
+
+    function renderCompanyCandidateProfile(){
+      const root=document.getElementById('companyCandidateContent');if(!root||!companyCandidateData)return;const d=companyCandidateData,p=d.profile||{},skills=d.skills||[],exp=d.experiences||[],certs=d.certificates||[],apps=d.applications||[];const initials=String(p.full_name||'C').split(' ').filter(Boolean).slice(0,2).map(x=>x[0]).join('').toUpperCase();const activeApp=d.applicationId?apps.find(x=>x.id===d.applicationId):apps[0];
+      root.innerHTML=`<div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-5 pr-10"><div class="flex gap-4"><div class="w-16 h-16 rounded-2xl bg-lutmin-dark text-white flex items-center justify-center text-xl font-black shrink-0">${escapeHtml(initials)}</div><div><p class="text-[10px] uppercase tracking-widest text-violet-600 font-extrabold">Perfil de candidato</p><h2 class="mt-1 text-2xl sm:text-3xl font-black text-lutmin-dark">${escapeHtml(p.full_name||'Candidato')}</h2><p class="mt-1 text-sm text-slate-500">${escapeHtml(p.headline||p.desired_role||'Perfil profesional')}</p><div class="mt-2 flex flex-wrap gap-2"><span class="px-2.5 py-1 rounded-full bg-slate-100 text-[10px] font-bold">${escapeHtml([p.city,p.province].filter(Boolean).join(', ')||'Ubicación no informada')}</span>${p.years_experience!=null?`<span class="px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 text-[10px] font-bold">${Number(p.years_experience)||0} años experiencia</span>`:''}${p.favorite?'<span class="px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 text-[10px] font-bold">★ Favorito</span>':''}</div></div></div><button onclick="toggleCompanyCandidateFavorite()" class="px-3 py-2.5 rounded-xl bg-amber-50 text-amber-700 text-xs font-bold">${p.favorite?'Quitar favorito':'★ Guardar candidato'}</button></div>
+      <div class="mt-6 grid lg:grid-cols-[1.2fr_.8fr] gap-5"><div class="space-y-5"><div class="rounded-3xl bg-slate-50 p-5"><h3 class="font-extrabold text-lutmin-dark">Sobre el perfil</h3><p class="mt-3 text-sm text-slate-600 leading-relaxed">${escapeHtml(p.bio||'La persona todavía no agregó una presentación.')}</p><div class="mt-4 grid sm:grid-cols-2 gap-3 text-xs"><div><span class="text-slate-400">Busca</span><p class="font-bold text-lutmin-dark">${escapeHtml(p.desired_role||'No informado')}</p></div><div><span class="text-slate-400">Modalidad</span><p class="font-bold text-lutmin-dark">${escapeHtml(p.desired_modality||'Indistinto')}</p></div><div><span class="text-slate-400">Zona buscada</span><p class="font-bold text-lutmin-dark">${escapeHtml(p.desired_location||'No informada')}</p></div><div><span class="text-slate-400">Viajes / reubicación</span><p class="font-bold text-lutmin-dark">${p.willing_travel?'Viajes · ':''}${p.open_to_relocation?'Acepta reubicación':'Sin reubicación informada'}</p></div></div></div>
+      <div><h3 class="font-extrabold text-lutmin-dark">Competencias</h3><div class="mt-3 flex flex-wrap gap-2">${skills.length?skills.map(x=>`<span class="px-3 py-2 rounded-xl bg-blue-50 text-blue-800 text-xs font-bold">${escapeHtml(x.skill)} · ${x.level}/5</span>`).join(''):'<span class="text-sm text-slate-400">Sin competencias cargadas.</span>'}</div></div>
+      <div><h3 class="font-extrabold text-lutmin-dark">Experiencia laboral</h3><div class="mt-3 space-y-3">${exp.length?exp.map(x=>`<div class="rounded-2xl border border-slate-100 p-4"><p class="font-bold text-sm text-lutmin-dark">${escapeHtml(x.position_title)} · ${escapeHtml(x.company_name)}</p><p class="mt-1 text-[11px] text-slate-500">${escapeHtml(x.start_date||'')} ${x.current_job?'→ Actualidad':x.end_date?'→ '+escapeHtml(x.end_date):''}</p>${x.description?`<p class="mt-2 text-xs text-slate-600">${escapeHtml(x.description)}</p>`:''}</div>`).join(''):'<p class="text-sm text-slate-400">Sin experiencia cargada.</p>'}</div></div>
+      <div><h3 class="font-extrabold text-lutmin-dark">Certificados Lutmin</h3><div class="mt-3 space-y-2">${certs.length?certs.map(c=>`<div class="rounded-xl bg-green-50 p-3 flex justify-between gap-3"><div><p class="font-bold text-xs text-green-900">${escapeHtml(c.course_title)}</p><p class="text-[10px] text-green-700">${c.duration_hours||0} h · ${Math.round(Number(c.score||0))}% · ${escapeHtml(c.code||'')}</p></div><i class="fa-solid fa-circle-check text-green-500"></i></div>`).join(''):'<p class="text-sm text-slate-400">Sin certificados Lutmin.</p>'}</div></div></div>
+      <div class="space-y-4"><div class="rounded-3xl bg-lutmin-dark text-white p-5"><p class="text-xs uppercase tracking-widest text-blue-200 font-bold">Contacto y CV</p>${p.email?`<p class="mt-4 text-sm"><i class="fa-solid fa-envelope w-6 text-lutmin-light"></i>${escapeHtml(p.email)}</p>`:''}${p.phone?`<p class="mt-2 text-sm"><i class="fa-solid fa-phone w-6 text-lutmin-light"></i>${escapeHtml(p.phone)}</p>`:''}${p.linkedin_url?`<a href="${escapeHtml(p.linkedin_url)}" target="_blank" rel="noopener" class="mt-2 block text-sm text-blue-200"><i class="fa-brands fa-linkedin w-6"></i>LinkedIn</a>`:''}${p.external_cv_url?`<button onclick="openCompanyExternalCv('${p.user_id}','${escapeHtml(p.external_cv_url)}')" class="mt-4 w-full py-3 rounded-xl bg-white text-lutmin-dark font-bold text-sm"><i class="fa-solid fa-file-arrow-down mr-2"></i>${escapeHtml(p.external_cv_label||'Abrir CV')}</button>`:'<p class="mt-4 text-xs text-slate-300">El candidato no compartió un CV externo.</p>'}</div>
+      ${activeApp?`<div class="rounded-3xl border border-violet-100 bg-violet-50 p-5"><p class="text-[10px] uppercase font-bold text-violet-600">Postulación</p><p class="mt-2 font-extrabold text-lutmin-dark">${escapeHtml(activeApp.job_title||'Búsqueda')}</p>${activeApp.message?`<p class="mt-2 text-xs text-slate-600">“${escapeHtml(activeApp.message)}”</p>`:''}<select onchange="companySetApplicationStatus('${activeApp.id}',this.value,true)" class="mt-4 w-full px-3 py-2.5 rounded-xl bg-white border border-violet-100 text-xs"><option value="new" ${activeApp.status==='new'?'selected':''}>Nueva</option><option value="reviewing" ${activeApp.status==='reviewing'?'selected':''}>En revisión</option><option value="interview" ${activeApp.status==='interview'?'selected':''}>Entrevista</option><option value="hired" ${activeApp.status==='hired'?'selected':''}>Seleccionado/a</option><option value="rejected" ${activeApp.status==='rejected'?'selected':''}>Finalizada</option></select></div>`:''}
+      <div class="rounded-3xl border border-slate-100 p-5"><label class="text-xs font-bold text-slate-600">Nota privada de la empresa</label><textarea id="companyCandidateNote" rows="5" class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Observaciones internas, próximos pasos, impresión de entrevista...">${escapeHtml(d.company_note||'')}</textarea><button onclick="saveCompanyCandidateNote()" class="mt-3 w-full py-2.5 rounded-xl bg-slate-100 text-lutmin-dark text-xs font-bold">Guardar nota</button></div></div></div>`;
+    }
+
+    async function saveCompanyCandidateNote(){if(!companyCandidateData)return;const note=document.getElementById('companyCandidateNote')?.value||'';const {error}=await supabaseClient.rpc('company_save_candidate_note',{p_user_id:companyCandidateData.userId,p_note:note});if(error)return showToast(error.message||'No pude guardar la nota.');companyCandidateData.company_note=note;showToast('Nota privada guardada.');}
+    async function toggleCompanyCandidateFavorite(){if(!companyCandidateData)return;const {data,error}=await supabaseClient.rpc('company_toggle_talent_favorite',{p_user_id:companyCandidateData.userId});if(error)return showToast(error.message||'No pude actualizar favoritos.');companyCandidateData.profile.favorite=Boolean(data);const item=(companyTalentData||[]).find(x=>x.user_id===companyCandidateData.userId);if(item)item.favorite=Boolean(data);showToast(data?'Candidato guardado.':'Candidato quitado de favoritos.');renderCompanyTalentResults();renderCompanyConectaFavorites();await loadCompanyConectaData();renderCompanyCandidateProfile();}
+    async function openCompanyTalentProfile(slug,userId){await openCompanyCandidateProfile(userId);}
     async function openCompanyExternalCv(userId,url){try{await supabaseClient.rpc('record_company_talent_view',{p_user_id:userId});}catch(_){ }window.open(url,'_blank','noopener,noreferrer');}
-    async function toggleCompanyTalentFavorite(userId){const {error}=await supabaseClient.rpc('company_toggle_talent_favorite',{p_user_id:userId});if(error)return showToast(error.message||'No pude actualizar favoritos.');await searchCompanyTalent();}
-    document.getElementById('companyJobRequestForm')?.addEventListener('submit',async e=>{e.preventDefault();const companyId=companyPortalData?.company?.id;if(!companyId)return showToast('No hay empresa vinculada.');const payload={company_id:companyId,title:document.getElementById('companyJobTitle').value.trim(),description:document.getElementById('companyJobDescription').value.trim(),requirements:document.getElementById('companyJobRequirements').value.trim()||null,location:document.getElementById('companyJobLocation').value.trim()||null,modality:document.getElementById('companyJobModality').value,employment_type:document.getElementById('companyJobType').value,status:'draft',created_by:currentLutminUser.id};const {error}=await supabaseClient.from('job_posts').insert(payload);if(error)return showToast(error.message||'No pude enviar la búsqueda.');e.target.reset();showToast('Búsqueda enviada a revisión de Lutmin.');await loadCompanyConectaData();});
-    function renderCompanyJobPipeline(){const root=document.getElementById('companyJobPipeline');if(!root)return;const jobs=companyJobPipelineData?.jobs||[],apps=companyJobPipelineData?.applications||[];if(!jobs.length){root.innerHTML='<div class="p-6 text-sm text-slate-500">Todavía no solicitaste búsquedas laborales.</div>';return;}root.innerHTML=jobs.map(j=>{const ja=apps.filter(a=>a.job_id===j.id);return `<div class="p-5 sm:p-6"><div class="flex justify-between gap-3"><div><p class="font-extrabold text-lutmin-dark">${escapeHtml(j.title)}</p><p class="mt-1 text-xs text-slate-500">${escapeHtml(j.location||'A definir')} · ${escapeHtml(jobStatusLabel(j.status))} · ${ja.length} postulaciones</p></div><span class="h-fit px-2.5 py-1 rounded-full bg-slate-100 text-[10px] font-bold">${escapeHtml(jobStatusLabel(j.status))}</span></div>${ja.length?`<div class="mt-4 space-y-2">${ja.map(a=>`<div class="rounded-xl bg-slate-50 p-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3"><div><p class="font-bold text-sm">${escapeHtml(a.full_name||a.email)}</p><p class="text-[11px] text-slate-500">${escapeHtml(a.headline||'Perfil profesional')} · ${escapeHtml([a.city,a.province].filter(Boolean).join(', '))}</p><p class="text-[11px] text-slate-400">${escapeHtml(a.email||'')}</p>${a.external_cv_url?`<button onclick="openCompanyExternalCv('${a.user_id}','${escapeHtml(a.external_cv_url)}')" class="mt-2 text-[11px] text-emerald-700 font-bold"><i class="fa-solid fa-file-arrow-down mr-1"></i>${escapeHtml(a.external_cv_label||'Ver CV externo')}</button>`:''}</div><select onchange="companySetApplicationStatus('${a.id}',this.value)" class="px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs"><option value="new" ${a.status==='new'?'selected':''}>Nueva</option><option value="reviewing" ${a.status==='reviewing'?'selected':''}>En revisión</option><option value="interview" ${a.status==='interview'?'selected':''}>Entrevista</option><option value="rejected" ${a.status==='rejected'?'selected':''}>Finalizada</option><option value="hired" ${a.status==='hired'?'selected':''}>Seleccionado/a</option></select></div>`).join('')}</div>`:'<p class="mt-3 text-xs text-slate-400">Sin postulaciones todavía.</p>'}</div>`}).join('');}
-    async function companySetApplicationStatus(id,status){const {error}=await supabaseClient.rpc('set_job_application_status',{p_application_id:id,p_status:status,p_internal_notes:null});if(error)return showToast(error.message||'No pude actualizar la postulación.');showToast('Estado actualizado.');await loadCompanyConectaData();}
+    async function toggleCompanyTalentFavorite(userId){const {data,error}=await supabaseClient.rpc('company_toggle_talent_favorite',{p_user_id:userId});if(error)return showToast(error.message||'No pude actualizar favoritos.');const item=(companyTalentData||[]).find(x=>x.user_id===userId);if(item)item.favorite=Boolean(data);renderCompanyTalentResults();renderCompanyConectaFavorites();await loadCompanyConectaData();}
+
+    document.getElementById('companyJobRequestForm')?.addEventListener('submit',async e=>{e.preventDefault();const companyId=companyPortalData?.company?.id;if(!companyId)return showToast('No hay empresa vinculada.');const payload={company_id:companyId,title:document.getElementById('companyJobTitle').value.trim(),description:document.getElementById('companyJobDescription').value.trim(),requirements:document.getElementById('companyJobRequirements').value.trim()||null,location:document.getElementById('companyJobLocation').value.trim()||null,modality:document.getElementById('companyJobModality').value,employment_type:document.getElementById('companyJobType').value,status:'draft',created_by:currentLutminUser.id};const {error}=await supabaseClient.from('job_posts').insert(payload);if(error)return showToast(error.message||'No pude enviar la búsqueda.');e.target.reset();showToast('Búsqueda enviada a revisión de Lutmin.');companyConectaCurrentView='jobs';await loadCompanyConectaData();});
+
+    function renderCompanyJobPipeline(){renderCompanyConectaHub();}
+    async function companySetApplicationStatus(id,status,keepModal=false){const {error}=await supabaseClient.rpc('set_job_application_status',{p_application_id:id,p_status:status,p_internal_notes:null});if(error)return showToast(error.message||'No pude actualizar la postulación.');showToast('Estado actualizado.');await loadCompanyConectaData();if(keepModal&&companyCandidateData)await openCompanyCandidateProfile(companyCandidateData.userId,id);}
 
     // ADMINISTRACIÓN: búsquedas y postulaciones
     async function loadAdminConectaData(){if(!supabaseClient||currentLutminUser?.role!=='admin')return;const [profilesRes,skillsRes,jobsRes,appsRes]=await Promise.all([supabaseClient.from('talent_profiles').select('*').order('updated_at',{ascending:false}),supabaseClient.from('talent_skills').select('*'),supabaseClient.from('job_posts').select('*').order('created_at',{ascending:false}),supabaseClient.from('job_applications').select('*').order('created_at',{ascending:false})]);const err=[profilesRes,skillsRes,jobsRes,appsRes].find(x=>x.error)?.error;if(err){console.error(err);return showToast('No pude cargar Conecta. Revisá la conexión o el diagnóstico del sistema.');}adminTalentProfiles=profilesRes.data||[];adminTalentSkills=skillsRes.data||[];adminJobs=jobsRes.data||[];adminJobApplications=appsRes.data||[];renderAdminConecta();}
