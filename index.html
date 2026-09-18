@@ -535,7 +535,7 @@
             <h2 class="mt-3 text-3xl sm:text-5xl font-black">Tu aprendizaje también puede construir tu perfil profesional.</h2>
             <p class="mt-5 text-lg text-slate-300 leading-relaxed">Reuní formación, competencias, experiencia y certificados verificables en un perfil que vos decidís cuándo compartir. También podés postularte a oportunidades publicadas en Lutmin.</p>
             <div class="mt-8 flex flex-col sm:flex-row gap-3">
-              <button onclick="openConectaCampus()" class="px-6 py-3.5 rounded-full bg-lutmin-light text-white font-extrabold"><i class="fa-solid fa-id-card mr-2"></i>Solicitar mi perfil profesional</button>
+              <button onclick="openPublicTalentAccountRequest()" class="px-6 py-3.5 rounded-full bg-lutmin-light text-white font-extrabold"><i class="fa-solid fa-id-card mr-2"></i>Solicitar mi perfil profesional</button>
               <button onclick="scrollToPublicJobs()" class="px-6 py-3.5 rounded-full border border-white/20 bg-white/10 font-bold"><i class="fa-solid fa-briefcase mr-2"></i>Ver oportunidades</button>
             </div>
             <div class="mt-8 grid sm:grid-cols-3 gap-3 text-center">
@@ -1705,6 +1705,13 @@
             ====================================================== -->
             <div class="mt-6 bg-white rounded-3xl border border-slate-100 overflow-hidden">
               <div class="p-5 sm:p-6 border-b border-slate-100"><div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-violet-50 text-violet-600 flex items-center justify-center"><i class="fa-solid fa-briefcase"></i></div><div><h3 class="font-extrabold text-lutmin-dark">Lutmin Conecta · Empleo y talento</h3><p class="text-xs text-slate-500">Publicá búsquedas, revisá pedidos de empresas y gestioná postulaciones.</p></div></div><div class="flex gap-2"><span class="px-3 py-2 rounded-xl bg-violet-50 text-violet-700 text-xs font-bold"><span id="adminTalentProfilesStat">0</span> perfiles visibles</span><span class="px-3 py-2 rounded-xl bg-amber-50 text-amber-700 text-xs font-bold"><span id="adminTalentRequestsStat">0</span> solicitudes pendientes</span><span class="px-3 py-2 rounded-xl bg-blue-50 text-blue-700 text-xs font-bold"><span id="adminJobsStat">0</span> búsquedas abiertas</span><span class="px-3 py-2 rounded-xl bg-amber-50 text-amber-700 text-xs font-bold"><span id="adminApplicationsStat">0</span> postulaciones activas</span></div></div></div>
+              <div class="p-5 sm:p-6 border-b border-slate-100 bg-blue-50/50">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                  <div><h4 class="font-extrabold text-lutmin-dark"><i class="fa-solid fa-user-plus text-lutmin-light mr-2"></i>Solicitudes públicas de creación de cuenta</h4><p class="mt-1 text-xs text-slate-500">Personas que todavía no tienen cuenta completaron su perfil desde la web. Revisá los datos y decidí si crearles el acceso.</p></div>
+                  <div class="flex items-center gap-2"><span class="px-3 py-2 rounded-xl bg-white border border-blue-100 text-blue-700 text-xs font-bold"><span id="adminPublicTalentRequestsStat">0</span> pendientes</span><button onclick="loadAdminPublicTalentRequestsV31()" class="px-3 py-2 rounded-xl bg-white border border-blue-100 text-blue-700 text-xs font-bold">Actualizar</button></div>
+                </div>
+                <div id="adminPublicTalentRequestsList" class="mt-4 grid lg:grid-cols-2 gap-3"><div class="lg:col-span-2 text-sm text-slate-500">Cargando solicitudes públicas...</div></div>
+              </div>
               <div class="p-5 sm:p-6 border-b border-slate-100 bg-violet-50/40">
                 <div class="flex items-center justify-between gap-3"><div><h4 class="font-extrabold text-lutmin-dark">Solicitudes de perfiles profesionales</h4><p class="mt-1 text-xs text-slate-500">Los alumnos completan sus datos y vos decidís cuándo habilitar su perfil en Lutmin Conecta.</p></div><button onclick="loadAdminConectaData()" class="px-3 py-2 rounded-xl bg-white border border-violet-100 text-violet-700 text-xs font-bold">Actualizar</button></div>
                 <div id="adminTalentProfileRequestsList" class="mt-4 grid lg:grid-cols-2 gap-3"><div class="lg:col-span-2 text-sm text-slate-500">Cargando solicitudes...</div></div>
@@ -2717,6 +2724,85 @@
   <!-- =========================================================
        HILO DE SOPORTE - V1.3
   ========================================================== -->
+  <!-- V3.1 · Solicitud pública de creación de cuenta Conecta -->
+  <div id="publicTalentAccountModal" class="hidden fixed inset-0 z-[210] bg-slate-950/80 backdrop-blur-md p-3 sm:p-4 flex items-center justify-center">
+    <div class="w-full max-w-4xl bg-white rounded-[2rem] shadow-2xl relative max-h-[95vh] overflow-y-auto modal-scroll">
+      <button onclick="closeModal('publicTalentAccountModal')" class="absolute right-4 top-4 w-10 h-10 bg-slate-100 rounded-full text-slate-500 z-10"><i class="fa-solid fa-xmark"></i></button>
+      <div class="p-6 sm:p-8">
+        <p class="text-xs text-lutmin-light font-extrabold uppercase tracking-widest">Lutmin Conecta</p>
+        <h2 class="mt-2 text-2xl sm:text-3xl font-black text-lutmin-dark">Solicitar creación de perfil profesional</h2>
+        <p class="mt-2 text-sm text-slate-500 max-w-3xl">No necesitás tener una cuenta. Completá tus datos y Lutmin revisará la solicitud. Si es aprobada, recibirás un usuario y una contraseña provisoria asignada por el equipo.</p>
+        <div class="mt-5 rounded-2xl bg-blue-50 border border-blue-100 p-4 text-xs text-blue-800"><i class="fa-solid fa-shield-halved mr-2"></i><strong>No te pediremos una contraseña en este formulario.</strong> La cuenta recién se crea cuando Lutmin aprueba tu solicitud.</div>
+        <form id="publicTalentAccountForm" class="mt-6 space-y-6">
+          <div>
+            <h3 class="font-extrabold text-lutmin-dark">Datos personales y profesionales</h3>
+            <div class="mt-3 grid sm:grid-cols-2 gap-3">
+              <input id="ptaFullName" required maxlength="160" class="px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Nombre y apellido *">
+              <input id="ptaEmail" type="email" required maxlength="220" class="px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Correo electrónico *">
+              <input id="ptaPhone" maxlength="80" class="px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Teléfono / WhatsApp">
+              <input id="ptaHeadline" required maxlength="160" class="px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Título profesional * · Ej: Técnico en mantenimiento">
+              <input id="ptaCity" maxlength="120" class="px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Ciudad">
+              <input id="ptaProvince" maxlength="120" class="px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Provincia">
+              <input id="ptaYears" type="number" min="0" max="60" value="0" class="px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Años de experiencia">
+              <input id="ptaLinkedin" type="url" maxlength="500" class="px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="LinkedIn (opcional)">
+              <input id="ptaDesiredRole" maxlength="160" class="px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Puesto que buscás">
+              <select id="ptaDesiredModality" class="px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"><option value="indistinto">Modalidad indistinta</option><option value="presencial">Presencial</option><option value="hibrido">Híbrido</option><option value="remoto">Remoto</option></select>
+              <select id="ptaAvailability" class="px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"><option value="available">Disponible</option><option value="open">Abierto/a a oportunidades</option><option value="not_available">No disponible actualmente</option></select>
+              <input id="ptaDesiredLocation" maxlength="160" class="px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Zona donde buscás trabajo">
+              <input id="ptaExternalCv" type="url" maxlength="1000" class="px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="CV en Google Drive / OneDrive (opcional)">
+              <textarea id="ptaBio" required rows="5" maxlength="2500" class="sm:col-span-2 px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Contanos sobre tu experiencia, especialidad y objetivos profesionales *"></textarea>
+            </div>
+            <div class="mt-3 flex flex-wrap gap-4 text-xs text-slate-600"><label class="flex items-center gap-2"><input id="ptaTravel" type="checkbox"> Disponible para viajar</label><label class="flex items-center gap-2"><input id="ptaRelocation" type="checkbox"> Consideraría reubicación</label><label class="flex items-center gap-2"><input id="ptaShareContact" type="checkbox" checked> Autorizo compartir mi contacto con empresas cuando corresponda</label><label class="flex items-center gap-2"><input id="ptaShareCv" type="checkbox" checked> Autorizo compartir mi CV con empresas</label></div>
+          </div>
+          <div class="grid lg:grid-cols-2 gap-5">
+            <div class="rounded-2xl border border-slate-100 p-4">
+              <div class="flex items-center justify-between"><div><h3 class="font-extrabold text-lutmin-dark">Competencias</h3><p class="text-xs text-slate-500">Podés agregar varias.</p></div><span id="ptaSkillCount" class="text-xl font-black text-lutmin-light">0</span></div>
+              <div class="mt-3 grid grid-cols-[1fr_90px_auto] gap-2"><input id="ptaSkillName" maxlength="100" class="px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Electricidad"><select id="ptaSkillLevel" class="px-2 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm"><option value="1">1/5</option><option value="2">2/5</option><option value="3" selected>3/5</option><option value="4">4/5</option><option value="5">5/5</option></select><button id="ptaAddSkillBtn" type="button" class="px-3 rounded-xl bg-lutmin-dark text-white"><i class="fa-solid fa-plus"></i></button></div>
+              <div id="ptaSkillsList" class="mt-3 flex flex-wrap gap-2"></div>
+            </div>
+            <div class="rounded-2xl border border-slate-100 p-4">
+              <div><h3 class="font-extrabold text-lutmin-dark">Experiencia laboral</h3><p class="text-xs text-slate-500">Cargá tus experiencias principales.</p></div>
+              <div class="mt-3 grid sm:grid-cols-2 gap-2"><input id="ptaExpCompany" maxlength="160" class="px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Empresa"><input id="ptaExpPosition" maxlength="160" class="px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Puesto"><input id="ptaExpStart" type="date" class="px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm"><input id="ptaExpEnd" type="date" class="px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm"><textarea id="ptaExpDescription" rows="2" class="sm:col-span-2 px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Tareas / logros"></textarea><label class="flex items-center gap-2 text-xs"><input id="ptaExpCurrent" type="checkbox"> Trabajo actualmente acá</label><button id="ptaAddExperienceBtn" type="button" class="sm:justify-self-end px-4 py-2.5 rounded-xl bg-lutmin-dark text-white text-xs font-bold">Agregar experiencia</button></div>
+              <div id="ptaExperiencesList" class="mt-3 space-y-2"></div>
+            </div>
+          </div>
+          <label class="flex items-start gap-3 rounded-2xl bg-slate-50 p-4 text-xs text-slate-600"><input id="ptaConsent" type="checkbox" required class="mt-0.5"><span>Solicito voluntariamente la creación de mi perfil en Lutmin Conecta y autorizo a Lutmin a revisar estos datos para habilitar mi cuenta profesional. *</span></label>
+          <div id="ptaStatus" class="hidden rounded-2xl p-4 text-sm"></div>
+          <button id="ptaSubmitBtn" class="w-full py-3.5 rounded-xl bg-lutmin-light text-white font-extrabold">Enviar solicitud a Lutmin</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- V3.1 · Revisión admin de solicitud pública -->
+  <div id="adminPublicTalentRequestModal" class="hidden fixed inset-0 z-[220] bg-slate-950/80 backdrop-blur-md p-3 sm:p-4 flex items-center justify-center">
+    <div class="w-full max-w-4xl bg-white rounded-[2rem] shadow-2xl relative max-h-[95vh] overflow-y-auto modal-scroll">
+      <button onclick="closeModal('adminPublicTalentRequestModal')" class="absolute right-4 top-4 w-10 h-10 bg-slate-100 rounded-full text-slate-500 z-10"><i class="fa-solid fa-xmark"></i></button>
+      <div class="p-6 sm:p-8">
+        <p class="text-xs text-blue-600 font-extrabold uppercase tracking-widest">Solicitud pública · Lutmin Conecta</p>
+        <h2 id="adminPtaName" class="mt-2 text-2xl sm:text-3xl font-black text-lutmin-dark">Solicitud</h2>
+        <p id="adminPtaEmail" class="mt-1 text-sm text-slate-500"></p>
+        <div id="adminPtaDetails" class="mt-6"></div>
+        <div id="adminPtaApprovalBox" class="mt-6 rounded-3xl border border-green-100 bg-green-50 p-5">
+          <h3 class="font-extrabold text-green-900">Aprobar y crear cuenta</h3>
+          <p class="mt-1 text-xs text-green-800">Definí una contraseña provisoria. El usuario deberá cambiarla al ingresar por primera vez.</p>
+          <div class="mt-4 grid sm:grid-cols-[1fr_auto] gap-2"><input id="adminPtaPassword" type="text" minlength="8" class="px-4 py-3 rounded-xl bg-white border border-green-200 text-sm font-mono" placeholder="Contraseña provisoria"><button type="button" onclick="generateAdminPtaPassword()" class="px-4 py-3 rounded-xl bg-white border border-green-200 text-green-800 text-xs font-bold">Generar</button></div>
+          <button id="adminPtaApproveBtn" type="button" class="mt-3 w-full py-3 rounded-xl bg-green-600 text-white font-extrabold">Aprobar + crear cuenta</button>
+        </div>
+        <div id="adminPtaRejectBox" class="mt-4 rounded-3xl border border-red-100 p-5">
+          <textarea id="adminPtaRejectReason" rows="3" maxlength="1000" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Motivo del rechazo (opcional)"></textarea>
+          <button id="adminPtaRejectBtn" type="button" class="mt-3 w-full py-3 rounded-xl bg-red-50 text-red-700 font-extrabold">Rechazar solicitud</button>
+        </div>
+        <div id="adminPtaCreatedAccess" class="hidden mt-5 rounded-3xl bg-blue-50 border border-blue-100 p-5">
+          <h3 class="font-extrabold text-blue-900">Cuenta creada</h3>
+          <p class="mt-1 text-xs text-blue-700">Podés copiar los datos o abrir tu cliente de correo para enviárselos manualmente, sin usar ninguna API paga.</p>
+          <pre id="adminPtaCredentialText" class="mt-3 whitespace-pre-wrap rounded-xl bg-white p-4 text-xs text-slate-700 border border-blue-100"></pre>
+          <div class="mt-3 grid sm:grid-cols-2 gap-2"><button type="button" onclick="copyAdminPtaCredentials()" class="py-2.5 rounded-xl bg-lutmin-dark text-white text-xs font-bold">Copiar acceso</button><a id="adminPtaMailLink" class="py-2.5 rounded-xl bg-white border border-blue-100 text-blue-700 text-xs font-bold text-center" href="#">Abrir correo</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div id="supportThreadModal" class="hidden fixed inset-0 z-[180] bg-slate-950/80 backdrop-blur-md p-3 sm:p-4 flex items-center justify-center"><div class="w-full max-w-3xl bg-white rounded-[2rem] shadow-2xl relative max-h-[94vh] overflow-y-auto modal-scroll"><button onclick="closeModal('supportThreadModal')" class="absolute right-4 top-4 w-10 h-10 bg-slate-100 rounded-full text-slate-500"><i class="fa-solid fa-xmark"></i></button><div class="p-6 sm:p-8"><p class="text-xs text-lutmin-light font-extrabold uppercase tracking-widest">Mesa de ayuda</p><h2 id="supportThreadTitle" class="mt-2 text-2xl font-black text-lutmin-dark">Consulta</h2><div id="supportAdminStatusWrap" class="hidden mt-4"><label class="text-xs font-bold text-slate-600">Estado</label><select id="supportThreadStatus" class="mt-2 px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm"><option value="open">Abierto</option><option value="in_progress">En gestión</option><option value="waiting_user">Esperando respuesta</option><option value="closed">Cerrado</option></select></div><div id="supportThreadMessages" class="mt-6 space-y-3"></div><form id="supportReplyForm" class="mt-6 border-t border-slate-100 pt-5"><input id="supportActiveTicket" type="hidden"><textarea id="supportReplyText" required rows="4" maxlength="5000" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Escribir respuesta..."></textarea><button class="mt-3 w-full py-3 rounded-xl bg-lutmin-dark text-white font-extrabold">Enviar respuesta</button></form></div></div></div>
 
   <!-- =========================================================
@@ -6785,6 +6871,78 @@
     document.getElementById('adminJobForm')?.addEventListener('submit',async e=>{e.preventDefault();const publish=document.getElementById('adminJobPublish').checked;const payload={company_id:document.getElementById('adminJobCompany').value||null,title:document.getElementById('adminJobTitle').value.trim(),description:document.getElementById('adminJobDescription').value.trim(),requirements:document.getElementById('adminJobRequirements').value.trim()||null,location:document.getElementById('adminJobLocation').value.trim()||null,modality:document.getElementById('adminJobModality').value,employment_type:document.getElementById('adminJobType').value,closes_at:document.getElementById('adminJobCloses').value||null,status:publish?'published':'draft',published_at:publish?new Date().toISOString():null,created_by:currentLutminUser.id};const {error}=await supabaseClient.from('job_posts').insert(payload);if(error)return showToast(error.message||'No pude crear la búsqueda.');e.target.reset();document.getElementById('adminJobPublish').checked=true;showToast('Búsqueda creada.');await loadAdminConectaData();await loadPublicJobs();});
     async function adminSetJobStatus(id,status){const {error}=await supabaseClient.rpc('admin_set_job_status',{p_job_id:id,p_status:status});if(error)return showToast(error.message||'No pude cambiar el estado.');await loadAdminConectaData();await loadPublicJobs();}
     async function adminSetApplicationStatus(id,status){const notes=window.prompt('Nota interna opcional:',adminJobApplications.find(x=>x.id===id)?.internal_notes||'');const {error}=await supabaseClient.rpc('set_job_application_status',{p_application_id:id,p_status:status,p_internal_notes:notes||null});if(error)return showToast(error.message||'No pude actualizar la postulación.');showToast('Postulación actualizada.');await loadAdminConectaData();}
+
+    // =========================================================
+    // V3.1 · SOLICITUD PÚBLICA DE CUENTA / PERFIL CONECTA
+    // =========================================================
+    let publicTalentSkillsDraftV31=[];
+    let publicTalentExperiencesDraftV31=[];
+    let adminPublicTalentRequestsV31=[];
+    let activeAdminPublicTalentRequestV31=null;
+    let lastCreatedTalentCredentialsV31=null;
+
+    async function openPublicTalentAccountRequest(){
+      if(supabaseClient){const {data:{session}}=await supabaseClient.auth.getSession();if(session){await loadCurrentLutminUser(session.user);if(currentLutminUser?.role==='student'){openModal('campusModal');goToCampusTab('talent');await loadTalentCenter();return;}}}
+      publicTalentSkillsDraftV31=[]; publicTalentExperiencesDraftV31=[];
+      const form=document.getElementById('publicTalentAccountForm'); if(form)form.reset();
+      const years=document.getElementById('ptaYears'); if(years)years.value='0';
+      const share=document.getElementById('ptaShareContact'); if(share)share.checked=true;
+      const shareCv=document.getElementById('ptaShareCv'); if(shareCv)shareCv.checked=true;
+      renderPublicTalentDraftsV31();
+      const status=document.getElementById('ptaStatus'); if(status){status.classList.add('hidden');status.textContent='';}
+      openModal('publicTalentAccountModal');
+    }
+    function renderPublicTalentDraftsV31(){
+      const skills=document.getElementById('ptaSkillsList'), exps=document.getElementById('ptaExperiencesList'), count=document.getElementById('ptaSkillCount');
+      if(count)count.textContent=String(publicTalentSkillsDraftV31.length);
+      if(skills)skills.innerHTML=publicTalentSkillsDraftV31.length?publicTalentSkillsDraftV31.map((x,i)=>`<span class="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-blue-50 text-blue-700 text-xs font-bold">${escapeHtml(x.skill)} · ${x.level}/5 <button type="button" onclick="removePublicTalentSkillV31(${i})" class="text-blue-400 hover:text-red-500"><i class="fa-solid fa-xmark"></i></button></span>`).join(''):'<span class="text-xs text-slate-400">Todavía no agregaste competencias.</span>';
+      if(exps)exps.innerHTML=publicTalentExperiencesDraftV31.length?publicTalentExperiencesDraftV31.map((x,i)=>`<div class="rounded-xl bg-slate-50 p-3"><div class="flex justify-between gap-3"><div><p class="text-xs font-bold text-lutmin-dark">${escapeHtml(x.position_title)}</p><p class="text-[11px] text-slate-500">${escapeHtml(x.company_name)}${x.current_job?' · Actualidad':''}</p></div><button type="button" onclick="removePublicTalentExperienceV31(${i})" class="text-slate-400 hover:text-red-500"><i class="fa-solid fa-trash"></i></button></div></div>`).join(''):'<span class="text-xs text-slate-400">Todavía no agregaste experiencia laboral.</span>';
+    }
+    function removePublicTalentSkillV31(i){publicTalentSkillsDraftV31.splice(i,1);renderPublicTalentDraftsV31();}
+    function removePublicTalentExperienceV31(i){publicTalentExperiencesDraftV31.splice(i,1);renderPublicTalentDraftsV31();}
+    document.getElementById('ptaAddSkillBtn')?.addEventListener('click',()=>{const skill=document.getElementById('ptaSkillName').value.trim(),level=Number(document.getElementById('ptaSkillLevel').value||3);if(!skill)return showToast('Escribí una competencia.');if(publicTalentSkillsDraftV31.some(x=>x.skill.toLowerCase()===skill.toLowerCase()))return showToast('Esa competencia ya está agregada.');publicTalentSkillsDraftV31.push({skill,level});document.getElementById('ptaSkillName').value='';renderPublicTalentDraftsV31();});
+    document.getElementById('ptaAddExperienceBtn')?.addEventListener('click',()=>{const company_name=document.getElementById('ptaExpCompany').value.trim(),position_title=document.getElementById('ptaExpPosition').value.trim();if(!company_name||!position_title)return showToast('Completá empresa y puesto.');const current_job=document.getElementById('ptaExpCurrent').checked;publicTalentExperiencesDraftV31.push({company_name,position_title,start_date:document.getElementById('ptaExpStart').value||null,end_date:current_job?null:(document.getElementById('ptaExpEnd').value||null),current_job,description:document.getElementById('ptaExpDescription').value.trim()||null});['ptaExpCompany','ptaExpPosition','ptaExpStart','ptaExpEnd','ptaExpDescription'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});document.getElementById('ptaExpCurrent').checked=false;renderPublicTalentDraftsV31();});
+
+    document.getElementById('publicTalentAccountForm')?.addEventListener('submit',async e=>{
+      e.preventDefault(); if(!supabaseClient)return showToast('No pude conectar con Lutmin.');
+      const cv=document.getElementById('ptaExternalCv').value.trim(),linkedin=document.getElementById('ptaLinkedin').value.trim();
+      if(cv&&!/^https:\/\//i.test(cv))return showToast('El enlace del CV debe comenzar con https://');
+      if(linkedin&&!/^https:\/\//i.test(linkedin))return showToast('El enlace de LinkedIn debe comenzar con https://');
+      if(!document.getElementById('ptaConsent').checked)return showToast('Necesitamos tu autorización para enviar la solicitud.');
+      const payload={
+        p_full_name:document.getElementById('ptaFullName').value.trim(),p_email:document.getElementById('ptaEmail').value.trim().toLowerCase(),p_phone:document.getElementById('ptaPhone').value.trim()||null,p_headline:document.getElementById('ptaHeadline').value.trim(),p_bio:document.getElementById('ptaBio').value.trim(),p_city:document.getElementById('ptaCity').value.trim()||null,p_province:document.getElementById('ptaProvince').value.trim()||null,p_years_experience:Number(document.getElementById('ptaYears').value||0),p_linkedin_url:linkedin||null,p_external_cv_url:cv||null,p_desired_role:document.getElementById('ptaDesiredRole').value.trim()||null,p_desired_modality:document.getElementById('ptaDesiredModality').value||'indistinto',p_availability:document.getElementById('ptaAvailability').value||'available',p_desired_location:document.getElementById('ptaDesiredLocation').value.trim()||null,p_willing_travel:document.getElementById('ptaTravel').checked,p_open_to_relocation:document.getElementById('ptaRelocation').checked,p_share_contact:document.getElementById('ptaShareContact').checked,p_share_cv:document.getElementById('ptaShareCv').checked,p_skills:publicTalentSkillsDraftV31,p_experiences:publicTalentExperiencesDraftV31,p_consent:true
+      };
+      const btn=document.getElementById('ptaSubmitBtn'),status=document.getElementById('ptaStatus');btn.disabled=true;btn.textContent='Enviando solicitud...';
+      try{const {data,error}=await supabaseClient.rpc('submit_public_talent_account_request',payload);if(error)throw error;status.className='rounded-2xl p-4 text-sm bg-green-50 border border-green-100 text-green-800';status.innerHTML='<strong>Solicitud enviada.</strong><br>Lutmin revisará tus datos. Si se aprueba, el equipo se comunicará con vos para enviarte tu acceso.';status.classList.remove('hidden');btn.textContent='Solicitud enviada';setTimeout(()=>closeModal('publicTalentAccountModal'),2600);}catch(err){status.className='rounded-2xl p-4 text-sm bg-red-50 border border-red-100 text-red-700';status.textContent=err?.message||'No pude enviar la solicitud.';status.classList.remove('hidden');btn.disabled=false;btn.textContent='Enviar solicitud a Lutmin';}
+    });
+
+    async function loadAdminPublicTalentRequestsV31(){
+      if(!supabaseClient||currentLutminUser?.role!=='admin')return;
+      const {data,error}=await supabaseClient.rpc('admin_list_public_talent_account_requests');
+      if(error){console.error(error);const root=document.getElementById('adminPublicTalentRequestsList');if(root)root.innerHTML='<div class="lg:col-span-2 text-sm text-red-600">No pude cargar las solicitudes públicas.</div>';return;}
+      adminPublicTalentRequestsV31=Array.isArray(data)?data:[];renderAdminPublicTalentRequestsV31();
+    }
+    function renderAdminPublicTalentRequestsV31(){
+      const root=document.getElementById('adminPublicTalentRequestsList'),stat=document.getElementById('adminPublicTalentRequestsStat');if(!root)return;
+      const pending=adminPublicTalentRequestsV31.filter(x=>x.status==='pending');if(stat)stat.textContent=String(pending.length);
+      const rows=[...adminPublicTalentRequestsV31].sort((a,b)=>(a.status==='pending'?0:1)-(b.status==='pending'?0:1)||new Date(b.submitted_at)-new Date(a.submitted_at));
+      root.innerHTML=rows.length?rows.slice(0,20).map(r=>`<button type="button" onclick="openAdminPublicTalentRequestV31('${r.id}')" class="text-left rounded-2xl bg-white border ${r.status==='pending'?'border-blue-200':'border-slate-100'} p-4 hover:border-blue-300 transition"><div class="flex justify-between gap-3"><div class="min-w-0"><p class="font-extrabold text-lutmin-dark truncate">${escapeHtml(r.full_name)}</p><p class="text-[11px] text-slate-500 truncate">${escapeHtml(r.email)}</p><p class="mt-1 text-xs font-bold text-blue-700 truncate">${escapeHtml(r.headline||r.desired_role||'Perfil profesional')}</p></div><span class="h-fit px-2.5 py-1 rounded-full text-[10px] font-bold ${r.status==='pending'?'bg-amber-50 text-amber-700':r.status==='approved'?'bg-green-50 text-green-700':'bg-red-50 text-red-700'}">${r.status==='pending'?'PENDIENTE':r.status==='approved'?'APROBADA':'RECHAZADA'}</span></div><div class="mt-3 flex flex-wrap gap-2 text-[10px] text-slate-500"><span>${(r.skills||[]).length} competencias</span><span>·</span><span>${(r.experiences||[]).length} experiencias</span><span>·</span><span>${new Date(r.submitted_at).toLocaleDateString('es-AR')}</span></div><p class="mt-3 text-xs text-blue-700 font-bold">Ver solicitud completa →</p></button>`).join(''):'<div class="lg:col-span-2 text-sm text-slate-500">Todavía no hay solicitudes públicas de creación de cuenta.</div>';
+    }
+    function openAdminPublicTalentRequestV31(id){
+      const r=adminPublicTalentRequestsV31.find(x=>x.id===id);if(!r)return;activeAdminPublicTalentRequestV31=r;lastCreatedTalentCredentialsV31=null;
+      document.getElementById('adminPtaName').textContent=r.full_name||'Solicitud';document.getElementById('adminPtaEmail').textContent=r.email||'';
+      const details=document.getElementById('adminPtaDetails');const skills=r.skills||[],exps=r.experiences||[];
+      details.innerHTML=`${r.account_exists?'<div class="mb-4 rounded-2xl bg-amber-50 border border-amber-100 p-4 text-xs text-amber-800"><strong>Este correo ya tiene una cuenta Lutmin.</strong> No crees otra cuenta ni cambies su contraseña desde este flujo. Pedile que ingrese por Acceso Alumno.</div>':''}<div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm"><div class="rounded-2xl bg-slate-50 p-4"><p class="text-[10px] text-slate-400 font-bold uppercase">Perfil</p><p class="mt-1 font-bold">${escapeHtml(r.headline||'—')}</p></div><div class="rounded-2xl bg-slate-50 p-4"><p class="text-[10px] text-slate-400 font-bold uppercase">Ubicación</p><p class="mt-1 font-bold">${escapeHtml([r.city,r.province].filter(Boolean).join(', ')||'—')}</p></div><div class="rounded-2xl bg-slate-50 p-4"><p class="text-[10px] text-slate-400 font-bold uppercase">Contacto</p><p class="mt-1 font-bold">${escapeHtml(r.phone||'—')}</p></div></div><div class="mt-4 rounded-2xl border border-slate-100 p-4"><p class="font-extrabold text-lutmin-dark">Sobre el perfil</p><p class="mt-2 text-sm text-slate-600 whitespace-pre-line">${escapeHtml(r.bio||'—')}</p></div><div class="mt-4 grid lg:grid-cols-2 gap-4"><div class="rounded-2xl border border-slate-100 p-4"><p class="font-extrabold text-lutmin-dark">Competencias</p><div class="mt-3 flex flex-wrap gap-2">${skills.length?skills.map(x=>`<span class="px-2.5 py-1.5 rounded-lg bg-blue-50 text-blue-700 text-xs font-bold">${escapeHtml(x.skill)} ${x.level}/5</span>`).join(''):'<span class="text-xs text-slate-400">Sin competencias cargadas.</span>'}</div></div><div class="rounded-2xl border border-slate-100 p-4"><p class="font-extrabold text-lutmin-dark">Experiencia</p><div class="mt-3 space-y-2">${exps.length?exps.map(x=>`<div class="rounded-xl bg-slate-50 p-3"><p class="text-xs font-bold">${escapeHtml(x.position_title)}</p><p class="text-[11px] text-slate-500">${escapeHtml(x.company_name)}</p></div>`).join(''):'<span class="text-xs text-slate-400">Sin experiencias cargadas.</span>'}</div></div></div><div class="mt-4 flex flex-wrap gap-2">${r.external_cv_url?`<a href="${escapeHtml(r.external_cv_url)}" target="_blank" rel="noopener" class="px-3 py-2 rounded-xl bg-blue-50 text-blue-700 text-xs font-bold">Ver CV externo</a>`:''}${r.linkedin_url?`<a href="${escapeHtml(r.linkedin_url)}" target="_blank" rel="noopener" class="px-3 py-2 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold">LinkedIn</a>`:''}</div>`;
+      document.getElementById('adminPtaApprovalBox').classList.toggle('hidden',r.status!=='pending'||!!r.account_exists);document.getElementById('adminPtaRejectBox').classList.toggle('hidden',r.status!=='pending');document.getElementById('adminPtaCreatedAccess').classList.add('hidden');document.getElementById('adminPtaPassword').value='';document.getElementById('adminPtaRejectReason').value='';openModal('adminPublicTalentRequestModal');
+    }
+    function generateAdminPtaPassword(){const chars='ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$';let out='Lut';for(let i=0;i<9;i++)out+=chars[Math.floor(Math.random()*chars.length)];document.getElementById('adminPtaPassword').value=out;}
+    document.getElementById('adminPtaApproveBtn')?.addEventListener('click',async()=>{const r=activeAdminPublicTalentRequestV31;if(!r)return;const password=document.getElementById('adminPtaPassword').value;if(password.length<8)return showToast('Generá o escribí una contraseña provisoria de al menos 8 caracteres.');const btn=document.getElementById('adminPtaApproveBtn');btn.disabled=true;btn.textContent='Creando cuenta...';try{const {data:{session}}=await supabaseClient.auth.getSession();const response=await fetch(`${SUPABASE_URL}/functions/v1/hyper-create-student`,{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${session.access_token}`,'apikey':SUPABASE_PUBLISHABLE_KEY},body:JSON.stringify({action:'approve_public_talent_request',request_id:r.id,password})});const data=await response.json();if(!response.ok)throw new Error(data?.error||'No pude crear la cuenta.');lastCreatedTalentCredentialsV31={full_name:r.full_name,email:r.email,password};const text=`Lutmin Conecta\nNombre: ${r.full_name}\nUsuario: ${r.email}\nContraseña provisoria: ${password}\n\nIngresá desde Acceso Alumno. Al entrar se te pedirá cambiar la contraseña.`;document.getElementById('adminPtaCredentialText').textContent=text;document.getElementById('adminPtaMailLink').href=`mailto:${encodeURIComponent(r.email)}?subject=${encodeURIComponent('Tu acceso a Lutmin Conecta')}&body=${encodeURIComponent(text)}`;document.getElementById('adminPtaCreatedAccess').classList.remove('hidden');document.getElementById('adminPtaApprovalBox').classList.add('hidden');document.getElementById('adminPtaRejectBox').classList.add('hidden');showToast('Solicitud aprobada y cuenta creada.');await loadAdminPublicTalentRequestsV31();await loadAdminData();}catch(err){showToast(err?.message||'No pude aprobar la solicitud.');}finally{btn.disabled=false;btn.textContent='Aprobar + crear cuenta';}});
+    document.getElementById('adminPtaRejectBtn')?.addEventListener('click',async()=>{const r=activeAdminPublicTalentRequestV31;if(!r)return;const reason=document.getElementById('adminPtaRejectReason').value.trim()||null;if(!window.confirm('¿Rechazar esta solicitud de creación de perfil?'))return;const {error}=await supabaseClient.rpc('admin_reject_public_talent_account_request',{p_request_id:r.id,p_reason:reason});if(error)return showToast(error.message||'No pude rechazar la solicitud.');showToast('Solicitud rechazada.');closeModal('adminPublicTalentRequestModal');await loadAdminPublicTalentRequestsV31();});
+    function copyAdminPtaCredentials(){if(!lastCreatedTalentCredentialsV31)return;const text=document.getElementById('adminPtaCredentialText').textContent;navigator.clipboard?.writeText(text).then(()=>showToast('Acceso copiado.')).catch(()=>showToast('Copiá el acceso manualmente.'));}
+
+    // La carga normal de Conecta admin también incorpora solicitudes públicas.
+    const originalLoadAdminConectaDataV31=loadAdminConectaData;
+    loadAdminConectaData=async function(){await originalLoadAdminConectaDataV31();await loadAdminPublicTalentRequestsV31();};
 
     // Deep link de perfil público
     async function handleTalentDeepLink(){const slug=new URL(window.location.href).searchParams.get('talento');if(slug)await showPublicTalentProfile(slug);}
