@@ -37,7 +37,7 @@
 
 
     // =========================================================
-    // V2.0 · ANALÍTICA PÚBLICA SIN COOKIES / SIN SERVICIOS PAGOS
+    // SISTEMA · ANALÍTICA PÚBLICA SIN COOKIES / SIN SERVICIOS PAGOS
     // =========================================================
     function publicSessionIdV20(){
       let id=sessionStorage.getItem('lutmin-public-session-v20');
@@ -553,7 +553,7 @@
     </section>
 
     <!-- =========================================================
-         EMPRESAS · V2.0
+         EMPRESAS · SISTEMA
     ========================================================== -->
     <section id="empresas" class="py-20 sm:py-24 bg-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1235,7 +1235,7 @@
           <section class="campus-panel hidden" data-campus-panel="admin">
             <div class="flex flex-col xl:flex-row xl:items-end xl:justify-between gap-4">
               <div>
-                <p class="text-[10px] sm:text-xs text-lutmin-light font-bold uppercase tracking-widest">Lutmin V2.0 · Administración modular</p>
+                <p class="text-[10px] sm:text-xs text-lutmin-light font-bold uppercase tracking-widest">Administración modular</p>
                 <h2 class="mt-1 sm:mt-2 text-2xl sm:text-3xl font-black text-lutmin-dark">Administración Lutmin</h2>
                 <p class="mt-2 text-sm text-slate-500">Gestión integral con tablero ejecutivo, alertas académicas, metas, operación, formación, empresas, cobranzas, talento y trazabilidad.</p>
               </div>
@@ -1245,7 +1245,7 @@
             </div>
 
             <!-- =====================================================
-                 ADMINISTRACIÓN MODULAR V2.0 · SIN BARRA STICKY
+                 ADMINISTRACIÓN MODULAR SISTEMA · SIN BARRA STICKY
             ====================================================== -->
             <div id="adminWorkspaceV19" class="mt-6 bg-slate-50 rounded-3xl border border-slate-200 p-3 sm:p-4">
               <div class="flex flex-col gap-4">
@@ -1302,7 +1302,7 @@
 
             <div id="adminSystemGuideV19" data-admin-module-v19="system" class="hidden mt-6 bg-white rounded-3xl border border-slate-100 overflow-hidden">
               <div class="p-5 sm:p-6 border-b border-slate-100 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
-                <div><p class="text-[10px] uppercase tracking-widest font-extrabold text-lutmin-light">V2.0</p><h3 class="mt-1 font-extrabold text-lutmin-dark text-lg">Mapa y diagnóstico de Administración</h3><p class="mt-1 text-xs text-slate-500">La Administración ahora está separada por módulos. El diagnóstico indica exactamente qué parte de Supabase está instalada, sin mensajes genéricos de versiones viejas.</p></div>
+                <div><p class="text-[10px] uppercase tracking-widest font-extrabold text-lutmin-light">SISTEMA</p><h3 class="mt-1 font-extrabold text-lutmin-dark text-lg">Mapa y diagnóstico de Administración</h3><p class="mt-1 text-xs text-slate-500">La Administración ahora está separada por módulos. El diagnóstico indica exactamente qué parte de Supabase está instalada, sin mensajes genéricos de versiones viejas.</p></div>
                 <button onclick="runAdminDiagnosticsV19()" class="px-4 py-2.5 rounded-xl bg-lutmin-dark text-white text-xs font-extrabold"><i class="fa-solid fa-stethoscope mr-2"></i>Revisar instalación</button>
               </div>
               <div class="p-5 sm:p-6 grid lg:grid-cols-[1fr_.9fr] gap-5">
@@ -1425,7 +1425,7 @@
               <div class="p-5 sm:p-6 border-b border-slate-100 flex flex-col 2xl:flex-row 2xl:items-center 2xl:justify-between gap-4">
                 <div class="flex items-center gap-3">
                   <div class="w-11 h-11 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center"><i class="fa-solid fa-heart-pulse"></i></div>
-                  <div><div class="flex flex-wrap items-center gap-2"><h3 class="font-extrabold text-lutmin-dark text-lg">Salud del sistema · V1.9</h3><span class="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-extrabold">REPARA V1.6</span></div><p class="text-xs text-slate-500 mt-1">Detecta inconsistencias antes de que lleguen al alumno o a una empresa y permite acciones masivas seguras.</p></div>
+                  <div><div class="flex flex-wrap items-center gap-2"><h3 class="font-extrabold text-lutmin-dark text-lg">Salud del sistema</h3><span class="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-extrabold">CONTROL DE INTEGRIDAD</span></div><p class="text-xs text-slate-500 mt-1">Detecta inconsistencias antes de que lleguen al alumno o a una empresa y permite acciones masivas seguras.</p></div>
                 </div>
                 <div class="flex flex-wrap gap-2">
                   <button onclick="runSystemHealthV18()" class="px-4 py-2.5 rounded-xl bg-teal-600 text-white text-xs font-extrabold"><i class="fa-solid fa-stethoscope mr-2"></i>Revisar sistema</button>
@@ -1825,15 +1825,22 @@
                     <input id="adminLessonDuration" type="number" min="0" value="30" required class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm">
                   </div>
                   <div>
-                    <label class="text-xs font-bold text-slate-600">Video (opcional)</label>
-                    <input id="adminLessonVideo" type="url" class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="YouTube, Vimeo o enlace directo">
+                    <label class="text-xs font-bold text-slate-600">Video por enlace</label>
+                    <input id="adminLessonVideo" type="url" class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="YouTube no listado, Google Drive o MP4">
+                    <p class="mt-1 text-[10px] text-slate-400">Recomendado: YouTube No listado o un archivo compartido desde Drive. No requiere API.</p>
                   </div>
                   <div>
-                    <label class="text-xs font-bold text-slate-600">Material externo (opcional)</label>
-                    <input id="adminLessonMaterial" type="url" class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="https://...pdf">
+                    <label class="text-xs font-bold text-slate-600">Video privado (opcional)</label>
+                    <input id="adminLessonVideoFile" type="file" class="mt-2 block w-full text-xs text-slate-500 file:mr-3 file:rounded-lg file:border-0 file:bg-blue-50 file:px-3 file:py-2 file:font-bold file:text-blue-700" accept="video/mp4,video/webm,.mp4,.webm">
+                    <p class="mt-1 text-[10px] text-amber-600">Solo para casos puntuales: consume el almacenamiento incluido de Supabase. Máximo 80 MB.</p>
                   </div>
                   <div>
-                    <label class="text-xs font-bold text-slate-600">Subir archivo privado</label>
+                    <label class="text-xs font-bold text-slate-600">Material por enlace</label>
+                    <input id="adminLessonMaterial" type="url" class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Google Drive, PDF, Docs, Slides...">
+                    <p class="mt-1 text-[10px] text-slate-400">Lutmin guarda el enlace, no una copia del archivo.</p>
+                  </div>
+                  <div>
+                    <label class="text-xs font-bold text-slate-600">Subir material privado</label>
                     <input id="adminLessonFile" type="file" class="mt-2 block w-full text-xs text-slate-500 file:mr-3 file:rounded-lg file:border-0 file:bg-blue-50 file:px-3 file:py-2 file:font-bold file:text-blue-700" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.png,.jpg,.jpeg,.webp,.txt,.zip">
                     <p class="mt-1 text-[10px] text-slate-400">Máximo 20 MB. Solo alumnos inscriptos podrán abrirlo.</p>
                   </div>
@@ -1849,6 +1856,9 @@
                     <label class="text-xs font-bold text-slate-600">Contenido de la clase</label>
                     <textarea id="adminLessonContent" rows="6" class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Escribí acá el contenido, instrucciones, puntos importantes, etc."></textarea>
                   </div>
+                </div>
+                <div class="mt-4 rounded-2xl bg-blue-50 border border-blue-100 p-4 text-xs text-slate-600 leading-relaxed">
+                  <strong class="text-lutmin-dark">Recomendación de costo cero:</strong> videos en <strong>YouTube No listado</strong> y documentos/videos grandes en <strong>Google Drive</strong>. YouTube “Privado” normalmente no puede reproducirse dentro de una web externa. El video privado de Supabase queda disponible para casos puntuales y consume tu cuota de almacenamiento.
                 </div>
                 <button type="submit" class="mt-4 px-5 py-3 rounded-xl bg-lutmin-light text-white font-extrabold text-sm">Agregar clase</button>
               </form>
@@ -2423,8 +2433,13 @@
           <div><label class="text-xs font-bold text-slate-600">Nº</label><input id="editLessonOrder" type="number" min="1" required class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200"></div>
           <div><label class="text-xs font-bold text-slate-600">Duración (min)</label><input id="editLessonDuration" type="number" min="0" required class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200"></div>
           <div class="sm:col-span-2"><label class="text-xs font-bold text-slate-600">Título</label><input id="editLessonTitle" required class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200"></div>
-          <div class="sm:col-span-2"><label class="text-xs font-bold text-slate-600">Video</label><input id="editLessonVideo" type="url" class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200" placeholder="YouTube, Vimeo o enlace directo"></div>
-          <div class="sm:col-span-2"><label class="text-xs font-bold text-slate-600">Material externo</label><input id="editLessonMaterialUrl" type="url" class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200" placeholder="https://..."></div>
+          <div class="sm:col-span-2"><label class="text-xs font-bold text-slate-600">Video por enlace</label><input id="editLessonVideo" type="url" class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200" placeholder="YouTube no listado, Google Drive o MP4"><p class="mt-1 text-[10px] text-slate-400">YouTube No listado y Drive no ocupan almacenamiento de Lutmin.</p></div>
+          <div class="sm:col-span-2"><label class="text-xs font-bold text-slate-600">Material por enlace</label><input id="editLessonMaterialUrl" type="url" class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200" placeholder="Google Drive, PDF, Docs, Slides..."></div>
+          <div class="sm:col-span-2 lg:col-span-4 rounded-2xl bg-blue-50/60 border border-blue-100 p-4">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3"><div><p class="text-xs font-bold text-slate-600">Video privado</p><p id="editLessonVideoStatus" class="mt-1 text-xs text-slate-400">Sin video privado cargado.</p></div><button id="removeLessonVideoBtn" type="button" onclick="removeAdminLessonVideo()" class="hidden px-3 py-2 rounded-xl bg-red-50 text-red-600 text-xs font-bold">Quitar video</button></div>
+            <input id="editLessonVideoFile" type="file" class="mt-4 block w-full text-xs text-slate-500 file:mr-3 file:rounded-lg file:border-0 file:bg-white file:px-3 file:py-2 file:font-bold file:text-blue-700" accept="video/mp4,video/webm,.mp4,.webm">
+            <p class="mt-2 text-[10px] text-amber-600">Máximo 80 MB. Para cursos normales recomendamos YouTube No listado o Drive para no consumir almacenamiento.</p>
+          </div>
           <div class="sm:col-span-2 lg:col-span-4"><label class="text-xs font-bold text-slate-600">Descripción corta</label><input id="editLessonDescription" class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200"></div>
           <div class="sm:col-span-2 lg:col-span-4"><label class="text-xs font-bold text-slate-600">Contenido</label><textarea id="editLessonContent" rows="7" class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200"></textarea></div>
           <div class="sm:col-span-2 lg:col-span-4 rounded-2xl bg-slate-50 border border-slate-100 p-4">
@@ -3270,7 +3285,7 @@
 
       if (enrollError) {
         console.error('Error cargando inscripciones:', enrollError);
-        showToast('No pudimos cargar tus cursos. Si recién configuraste la base, ejecutá el SQL de Etapa 2.');
+        showToast('No pudimos cargar tus cursos. Revisá la conexión o consultá a Administración.');
         return;
       }
 
@@ -3281,7 +3296,7 @@
       if (courseIds.length) {
         const { data, error } = await supabaseClient
           .from('lessons')
-          .select('id,course_id,title,description,content,duration_minutes,sort_order,video_url,material_url,material_path')
+          .select('id,course_id,title,description,content,duration_minutes,sort_order,video_url,video_path,material_url,material_path')
           .in('course_id', courseIds)
           .order('sort_order', { ascending: true });
         if (error) console.error('Error cargando clases:', error);
@@ -3783,9 +3798,34 @@
       }
     }
 
+    function getGoogleDrivePreviewUrl(urlValue) {
+      const safe = safeExternalUrl(urlValue);
+      if (!safe) return null;
+      try {
+        const url = new URL(safe);
+        const host = url.hostname.replace(/^www\./, '').toLowerCase();
+        if (!['drive.google.com','docs.google.com'].includes(host)) return null;
+        const parts = url.pathname.split('/').filter(Boolean);
+        let id = null;
+        if (url.searchParams.get('id')) id = url.searchParams.get('id');
+        const dIndex = parts.indexOf('d');
+        if (!id && dIndex >= 0 && parts[dIndex + 1]) id = parts[dIndex + 1];
+        if (!id && parts[0] === 'file' && parts[1] === 'd') id = parts[2];
+        if (!id) return null;
+        if (host === 'drive.google.com') return `https://drive.google.com/file/d/${encodeURIComponent(id)}/preview`;
+        const kind = parts[0];
+        if (['document','presentation','spreadsheets'].includes(kind)) {
+          return `https://docs.google.com/${kind}/d/${encodeURIComponent(id)}/preview`;
+        }
+      } catch (_) {}
+      return null;
+    }
+
     function getVideoEmbed(urlValue) {
       const safe = safeExternalUrl(urlValue);
       if (!safe) return null;
+      const drivePreview = getGoogleDrivePreviewUrl(safe);
+      if (drivePreview) return drivePreview;
       try {
         const url = new URL(safe);
         const host = url.hostname.replace(/^www\./, '').toLowerCase();
@@ -3806,6 +3846,17 @@
         }
       } catch (_) {}
       return null;
+    }
+
+    async function resolveLessonVideoUrl(lesson) {
+      if (lesson?.video_path) {
+        const { data, error } = await supabaseClient.storage
+          .from('course-materials')
+          .createSignedUrl(lesson.video_path, 3600);
+        if (!error && data?.signedUrl) return data.signedUrl;
+        console.error('No pude firmar el video privado:', error);
+      }
+      return safeExternalUrl(lesson?.video_url);
     }
 
     async function resolveLessonMaterialUrl(lesson) {
@@ -3847,20 +3898,36 @@
       return path;
     }
 
-    function renderLessonVideo(lesson) {
+    async function uploadLessonPrivateVideo(courseId, file) {
+      if (!file) return null;
+      const maxBytes = 80 * 1024 * 1024;
+      if (file.size > maxBytes) throw new Error('El video supera el máximo de 80 MB. Para videos largos usá YouTube No listado o Drive.');
+      const ext = String(file.name || '').split('.').pop().toLowerCase();
+      if (!['mp4','webm'].includes(ext)) throw new Error('Para video privado usá MP4 o WEBM.');
+      const safeName = sanitizeStorageFilename(file.name);
+      const path = `${courseId}/videos/${crypto.randomUUID()}-${safeName}`;
+      const { error } = await supabaseClient.storage.from('course-materials').upload(path, file, {
+        cacheControl: '3600', upsert: false, contentType: file.type || undefined
+      });
+      if (error) throw error;
+      return path;
+    }
+
+    async function renderLessonVideo(lesson) {
       const area = document.getElementById('lessonVideoArea');
-      const safe = safeExternalUrl(lesson.video_url);
+      area.innerHTML = `<div class="text-center px-6 text-slate-400"><i class="fa-solid fa-spinner fa-spin text-3xl"></i><p class="mt-3 text-xs">Cargando video...</p></div>`;
+      const safe = await resolveLessonVideoUrl(lesson);
       if (!safe) {
         area.innerHTML = `<div class="text-center px-6 text-slate-400"><i class="fa-solid fa-play-circle text-4xl"></i><p class="mt-3 text-sm font-bold">Esta clase todavía no tiene video cargado.</p><p class="mt-1 text-xs">El contenido escrito igualmente está disponible.</p></div>`;
         return;
       }
-      const embed = getVideoEmbed(safe);
+      const embed = lesson?.video_path ? null : getVideoEmbed(safe);
       if (embed) {
         area.innerHTML = `<iframe class="w-full h-full" src="${escapeHtml(embed)}" title="Video de la clase" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>`;
         return;
       }
-      if (/\.(mp4|webm|ogg)(\?.*)?$/i.test(safe)) {
-        area.innerHTML = `<video class="w-full h-full" controls preload="metadata"><source src="${escapeHtml(safe)}">Tu navegador no puede reproducir este video.</video>`;
+      if (lesson?.video_path || /\.(mp4|webm|ogg)(\?.*)?$/i.test(safe)) {
+        area.innerHTML = `<video class="w-full h-full" controls controlsList="nodownload" preload="metadata"><source src="${escapeHtml(safe)}">Tu navegador no puede reproducir este video.</video>`;
         return;
       }
       area.innerHTML = `<div class="text-center px-6"><i class="fa-solid fa-arrow-up-right-from-square text-white text-3xl"></i><p class="mt-3 text-sm font-bold text-white">El video está alojado externamente.</p><a class="inline-flex mt-4 px-5 py-2.5 rounded-xl bg-white text-lutmin-dark font-bold text-sm" href="${escapeHtml(safe)}" target="_blank" rel="noopener noreferrer">Abrir video</a></div>`;
@@ -3898,13 +3965,14 @@
       const content = String(lesson.content || '').trim() || String(lesson.description || '').trim() || 'El administrador todavía no cargó contenido escrito para esta clase.';
       document.getElementById('lessonContent').innerHTML = escapeHtml(content.replace(/\\n/g, '\n')).replace(/\n/g, '<br>');
 
-      renderLessonVideo(lesson);
+      await renderLessonVideo(lesson);
 
       const materialArea = document.getElementById('lessonMaterialArea');
       materialArea.innerHTML = `<p class="text-sm text-slate-400">Cargando material...</p>`;
       const material = await resolveLessonMaterialUrl(lesson);
+      const isDriveMaterial = !!getGoogleDrivePreviewUrl(material);
       materialArea.innerHTML = material
-        ? `<a href="${escapeHtml(material)}" target="_blank" rel="noopener noreferrer" class="inline-flex w-full items-center justify-center gap-2 px-4 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-lutmin-dark font-bold text-sm"><i class="fa-solid fa-file-arrow-down"></i>Abrir material</a>`
+        ? `<a href="${escapeHtml(material)}" target="_blank" rel="noopener noreferrer" class="inline-flex w-full items-center justify-center gap-2 px-4 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-lutmin-dark font-bold text-sm"><i class="${isDriveMaterial ? 'fa-brands fa-google-drive' : 'fa-solid fa-file-arrow-up'}"></i>${isDriveMaterial ? 'Abrir en Google Drive' : 'Abrir material'}</a>`
         : `<p class="text-sm text-slate-400">Sin material adjunto por el momento.</p>`;
 
       const completed = summary.completedSet.has(lesson.id);
@@ -4346,7 +4414,7 @@
       const [profilesRes, coursesRes, lessonsRes, enrollmentsRes, progressRes, assessmentsRes, questionsRes, attemptsRes, certificatesRes, notesRes, offeringsRes, leadsRes, paymentsRes, accessRolesRes] = await Promise.all([
         supabaseClient.from('profiles').select('id,full_name,email,role,active,must_change_password,created_at,last_seen_at').order('full_name'),
         supabaseClient.from('courses').select('id,slug,title,description,duration_hours,level,category,published,public_featured,created_at,updated_at').order('created_at', { ascending: false }),
-        supabaseClient.from('lessons').select('id,course_id,title,description,content,duration_minutes,sort_order,video_url,material_url,material_path,updated_at').order('sort_order'),
+        supabaseClient.from('lessons').select('id,course_id,title,description,content,duration_minutes,sort_order,video_url,video_path,material_url,material_path,updated_at').order('sort_order'),
         supabaseClient.from('enrollments').select('id,user_id,course_id,offering_id,status,enrolled_at,price_amount,payment_currency,payment_status,payment_due_date,access_granted_at').order('enrolled_at', { ascending: false }),
         supabaseClient.from('lesson_progress').select('user_id,lesson_id,completed,completed_at').eq('completed', true),
         supabaseClient.from('assessments').select('id,course_id,title,description,passing_score,published,created_at').order('created_at', { ascending: false }),
@@ -4363,7 +4431,7 @@
       const firstError = [profilesRes, coursesRes, lessonsRes, enrollmentsRes, progressRes, assessmentsRes, questionsRes, attemptsRes, certificatesRes, notesRes, offeringsRes, leadsRes, paymentsRes, accessRolesRes].find(x => x.error)?.error;
       if (firstError) {
         console.error('Error admin:', firstError);
-        showToast('No pude cargar Administración. Verificá que hayas ejecutado los SQL hasta la Etapa 12.');
+        showToast('No pude cargar Administración. Abrí Diagnóstico para identificar el módulo pendiente.');
         return;
       }
 
@@ -4414,7 +4482,7 @@
       ]);
       if (companiesRes.error || membersRes.error) {
         console.error(companiesRes.error || membersRes.error);
-        showToast('No pude cargar Empresas. Ejecutá el SQL de la Etapa 13.');
+        showToast('No pude cargar Empresas. Abrí Diagnóstico para revisar la configuración.');
         return;
       }
       adminCompanies = companiesRes.data || [];
@@ -5026,6 +5094,16 @@
       document.getElementById('editLessonTitle').value = lesson.title || '';
       document.getElementById('editLessonVideo').value = lesson.video_url || '';
       document.getElementById('editLessonMaterialUrl').value = lesson.material_url || '';
+      const videoStatus = document.getElementById('editLessonVideoStatus');
+      const removeVideoBtn = document.getElementById('removeLessonVideoBtn');
+      if (lesson.video_path) {
+        videoStatus.textContent = `Video privado cargado: ${lesson.video_path.split('/').pop()}`;
+        removeVideoBtn.classList.remove('hidden');
+      } else {
+        videoStatus.textContent = lesson.video_url ? 'Usa un video por enlace.' : 'Sin video privado cargado.';
+        removeVideoBtn.classList.add('hidden');
+      }
+      document.getElementById('editLessonVideoFile').value = '';
       document.getElementById('editLessonDescription').value = lesson.description || '';
       document.getElementById('editLessonContent').value = String(lesson.content || '').replace(/\\n/g, '\n');
       const status = document.getElementById('editLessonMaterialStatus');
@@ -5049,10 +5127,15 @@
       const btn = document.getElementById('editLessonSaveBtn');
       btn.disabled = true; btn.textContent = 'Guardando...';
       const file = document.getElementById('editLessonFile')?.files?.[0] || null;
+      const videoFile = document.getElementById('editLessonVideoFile')?.files?.[0] || null;
       let newPath = null;
+      let newVideoPath = null;
       try {
         if (file) newPath = await uploadLessonMaterial(lesson.course_id, file);
+        if (videoFile) newVideoPath = await uploadLessonPrivateVideo(lesson.course_id, videoFile);
       } catch (uploadError) {
+        if (newPath) await supabaseClient.storage.from('course-materials').remove([newPath]);
+        if (newVideoPath) await supabaseClient.storage.from('course-materials').remove([newVideoPath]);
         btn.disabled = false; btn.textContent = 'Guardar clase';
         console.error(uploadError); showToast(uploadError?.message || 'No pude subir el material.'); return;
       }
@@ -5064,11 +5147,13 @@
         sort_order: Number(document.getElementById('editLessonOrder').value || 1),
         video_url: document.getElementById('editLessonVideo').value.trim() || null,
         material_url: document.getElementById('editLessonMaterialUrl').value.trim() || null,
-        ...(newPath ? { material_path: newPath } : {})
+        ...(newPath ? { material_path: newPath } : {}),
+        ...(newVideoPath ? { video_path: newVideoPath } : {})
       };
       const { error } = await supabaseClient.from('lessons').update(payload).eq('id', lesson.id);
       if (error) {
         if (newPath) await supabaseClient.storage.from('course-materials').remove([newPath]);
+        if (newVideoPath) await supabaseClient.storage.from('course-materials').remove([newVideoPath]);
         btn.disabled = false; btn.textContent = 'Guardar clase';
         console.error(error);
         showToast(error.code === '23505' ? 'Ya existe otra clase con ese número.' : 'No pude guardar la clase.');
@@ -5077,12 +5162,32 @@
       if (newPath && lesson.material_path && lesson.material_path !== newPath) {
         await supabaseClient.storage.from('course-materials').remove([lesson.material_path]);
       }
+      if (newVideoPath && lesson.video_path && lesson.video_path !== newVideoPath) {
+        await supabaseClient.storage.from('course-materials').remove([lesson.video_path]);
+      }
       btn.disabled = false; btn.textContent = 'Guardar clase';
       closeModal('adminLessonEditModal');
       showToast('Clase actualizada.');
       await loadAdminData();
       await loadCampusData();
     });
+
+    async function removeAdminLessonVideo() {
+      if (!editingAdminLessonId || currentLutminUser?.role !== 'admin') return;
+      const lesson = adminLessons.find(l => l.id === editingAdminLessonId);
+      if (!lesson?.video_path) return;
+      if (!confirm('¿Quitar el video privado de esta clase?')) return;
+      const oldPath = lesson.video_path;
+      const { error } = await supabaseClient.from('lessons').update({ video_path: null }).eq('id', lesson.id);
+      if (error) { console.error(error); showToast('No pude quitar el video.'); return; }
+      await supabaseClient.storage.from('course-materials').remove([oldPath]);
+      showToast('Video privado quitado.');
+      await loadAdminData();
+      const refreshed = adminLessons.find(l => l.id === editingAdminLessonId);
+      document.getElementById('editLessonVideoStatus').textContent = refreshed?.video_url ? 'Usa un video por enlace.' : 'Sin video privado cargado.';
+      document.getElementById('removeLessonVideoBtn').classList.add('hidden');
+      await loadCampusData();
+    }
 
     async function removeAdminLessonMaterial() {
       if (!editingAdminLessonId || currentLutminUser?.role !== 'admin') return;
@@ -5115,6 +5220,7 @@
       if (error) { console.error(error); showToast(error.message || 'No pude eliminar la clase.'); return; }
       const oldPath = data?.material_path || lesson.material_path;
       if (oldPath) await supabaseClient.storage.from('course-materials').remove([oldPath]);
+      if (lesson.video_path) await supabaseClient.storage.from('course-materials').remove([lesson.video_path]);
       closeModal('adminLessonEditModal');
       editingAdminLessonId = null;
       showToast('Clase eliminada y numeración reordenada.');
@@ -5734,10 +5840,15 @@
       if (currentLutminUser?.role !== 'admin') return;
       const courseId = document.getElementById('adminLessonCourse').value;
       const file = document.getElementById('adminLessonFile')?.files?.[0] || null;
+      const videoFile = document.getElementById('adminLessonVideoFile')?.files?.[0] || null;
       let uploadedPath = null;
+      let uploadedVideoPath = null;
       try {
         if (file) uploadedPath = await uploadLessonMaterial(courseId, file);
+        if (videoFile) uploadedVideoPath = await uploadLessonPrivateVideo(courseId, videoFile);
       } catch (uploadError) {
+        if (uploadedPath) await supabaseClient.storage.from('course-materials').remove([uploadedPath]);
+        if (uploadedVideoPath) await supabaseClient.storage.from('course-materials').remove([uploadedVideoPath]);
         console.error(uploadError);
         showToast(uploadError?.message || 'No pude subir el material.');
         return;
@@ -5750,6 +5861,7 @@
         duration_minutes: Number(document.getElementById('adminLessonDuration').value || 0),
         sort_order: Number(document.getElementById('adminLessonOrder').value),
         video_url: document.getElementById('adminLessonVideo').value.trim() || null,
+        video_path: uploadedVideoPath,
         material_url: document.getElementById('adminLessonMaterial').value.trim() || null,
         material_path: uploadedPath
       };
@@ -5757,6 +5869,7 @@
       if (error) {
         console.error(error);
         if (uploadedPath) await supabaseClient.storage.from('course-materials').remove([uploadedPath]);
+        if (uploadedVideoPath) await supabaseClient.storage.from('course-materials').remove([uploadedVideoPath]);
         showToast(error.code === '23505' ? 'Ese número de clase ya existe en el curso.' : 'No pude agregar la clase.');
         return;
       }
@@ -6330,7 +6443,7 @@
         supabaseClient.from('certificates').select('code,course_title,duration_hours,score,issued_at,status').eq('user_id',currentLutminUser.id).eq('status','valid').order('issued_at',{ascending:false}),
         supabaseClient.rpc('get_public_jobs')
       ]);
-      const err=[profileRes,skillsRes,expRes,appsRes,certRes,jobsRes].find(x=>x.error)?.error; if(err){console.error(err);return showToast('No pude cargar Lutmin Conecta. Ejecutá el SQL de V1.2.');}
+      const err=[profileRes,skillsRes,expRes,appsRes,certRes,jobsRes].find(x=>x.error)?.error; if(err){console.error(err);return showToast('No pude cargar Lutmin Conecta. Revisá la conexión o el diagnóstico del sistema.');}
       talentData={profile:profileRes.data||null,skills:skillsRes.data||[],experiences:expRes.data||[],applications:appsRes.data||[],certificates:certRes.data||[],jobs:Array.isArray(jobsRes.data)?jobsRes.data:[]};
       renderTalentCenter();
     }
@@ -6772,7 +6885,7 @@
         supabaseClient.from('bulk_operations').select('*').order('created_at',{ascending:false}).limit(20)
       ]);
       const err=f.error||m.error||b.error;
-      if(err){console.warn('V1.8 no disponible:',err.message);const root=document.getElementById('healthFindingsV18');if(root)root.innerHTML='<div class="p-4 rounded-2xl bg-amber-50 text-amber-800 text-sm">Ejecutá el SQL MASTER de V1.8. Ese mismo archivo repara el error de V1.6.</div>';return;}
+      if(err){console.warn('V1.8 no disponible:',err.message);const root=document.getElementById('healthFindingsV18');if(root)root.innerHTML='<div class="p-4 rounded-2xl bg-amber-50 text-amber-800 text-sm">Este módulo necesita una revisión de configuración. Abrí Diagnóstico para ver el detalle.</div>';return;}
       healthFindingsV18=f.data||[];schemaMigrationsV18=m.data||[];bulkOperationsV18=b.data||[];
       renderHealthV18();renderBulkControlsV18();renderBulkHistoryV18();
     }
@@ -7031,5 +7144,206 @@
     window.addEventListener('offline', () => { if (typeof showToast === 'function') showToast('Sin conexión. Algunas acciones pueden quedar temporalmente no disponibles.'); });
 
 </script>
+
+<script>
+// =============================================================
+// LUTMIN V2.6 · ACADEMIA AVANZADA
+// Rutas de aprendizaje + Encuestas / NPS
+// Base visual protegida: V2.1/V2.4
+// =============================================================
+let v25Paths=[];
+let v25PathCourses=[];
+let v25PathAssignments=[];
+let v25Surveys=[];
+let v25SurveyResponses=[];
+let v25UiReady=false;
+
+function initV25Ui(){
+  if(v25UiReady) return;
+  v25UiReady=true;
+
+  const coursesPanel=document.querySelector('section[data-campus-panel="courses"]');
+  if(coursesPanel && !document.getElementById('studentLearningPathsV25')){
+    coursesPanel.insertAdjacentHTML('beforeend', `
+      <div id="studentLearningPathsV25" class="mt-7 bg-white rounded-3xl border border-slate-100 overflow-hidden">
+        <div class="p-5 sm:p-6 border-b border-slate-100">
+          <div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center"><i class="fa-solid fa-route"></i></div><div><h3 class="font-extrabold text-lutmin-dark">Mis rutas de aprendizaje</h3><p class="mt-1 text-xs text-slate-500">Programas formados por varios cursos con un objetivo común.</p></div></div>
+        </div>
+        <div id="studentLearningPathsListV25" class="p-5 sm:p-6 grid lg:grid-cols-2 gap-4"><p class="text-sm text-slate-500 lg:col-span-2">Todavía no tenés rutas asignadas.</p></div>
+      </div>`);
+  }
+
+  const certPanel=document.querySelector('section[data-campus-panel="certificates"]');
+  if(certPanel && !document.getElementById('studentSurveysV25')){
+    certPanel.insertAdjacentHTML('beforeend', `
+      <div id="studentSurveysV25" class="mt-7 bg-white rounded-3xl border border-slate-100 overflow-hidden hidden">
+        <div class="p-5 sm:p-6 border-b border-slate-100"><h3 class="font-extrabold text-lutmin-dark">Tu opinión sobre las capacitaciones</h3><p class="mt-1 text-xs text-slate-500">Las respuestas ayudan a mejorar contenidos, docentes y experiencia.</p></div>
+        <div id="studentSurveyListV25" class="p-5 sm:p-6 space-y-4"></div>
+      </div>`);
+  }
+
+  const admin=document.querySelector('section[data-campus-panel="admin"]');
+  if(admin && !document.getElementById('adminAcademicV25')){
+    admin.insertAdjacentHTML('beforeend', `
+      <div id="adminAcademicV25" data-admin-module-v19="academic" class="mt-6 space-y-6">
+        <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden">
+          <div class="p-5 sm:p-6 border-b border-slate-100 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+            <div class="flex items-center gap-3"><div class="w-11 h-11 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center"><i class="fa-solid fa-route"></i></div><div><h3 class="font-extrabold text-lutmin-dark text-lg">Rutas de aprendizaje</h3><p class="mt-1 text-xs text-slate-500">Agrupá varios cursos en programas y asigná el recorrido completo a una persona.</p></div></div>
+            <span class="px-3 py-1.5 rounded-full bg-indigo-50 text-indigo-700 text-[10px] font-extrabold">ACADEMIA AVANZADA</span>
+          </div>
+          <div class="p-5 sm:p-6 grid xl:grid-cols-[.8fr_1.2fr] gap-5">
+            <form id="createPathFormV25" class="rounded-2xl bg-slate-50 p-4 space-y-3">
+              <h4 class="font-extrabold text-lutmin-dark">Crear ruta</h4>
+              <input id="pathNameV25" required maxlength="140" class="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-sm" placeholder="Ej: Técnico de Mantenimiento">
+              <textarea id="pathDescriptionV25" rows="3" class="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-sm" placeholder="Objetivo y alcance"></textarea>
+              <label class="flex items-center gap-2 text-xs font-bold text-slate-600"><input id="pathPublishedV25" type="checkbox"> Publicar / habilitar para alumnos asignados</label>
+              <button class="w-full px-4 py-3 rounded-xl bg-lutmin-dark text-white text-sm font-extrabold">Crear ruta</button>
+            </form>
+            <div>
+              <div id="adminPathsListV25" class="space-y-3"><p class="text-sm text-slate-500">Cargando rutas...</p></div>
+            </div>
+          </div>
+          <div class="border-t border-slate-100 p-5 sm:p-6 grid lg:grid-cols-2 gap-5">
+            <form id="pathCourseFormV25" class="rounded-2xl border border-slate-100 p-4 space-y-3">
+              <h4 class="font-extrabold text-lutmin-dark">Agregar curso a una ruta</h4>
+              <select id="pathCoursePathV25" required class="w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"></select>
+              <select id="pathCourseCourseV25" required class="w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"></select>
+              <input id="pathCourseOrderV25" type="number" min="1" value="1" class="w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Orden">
+              <button class="w-full px-4 py-3 rounded-xl bg-indigo-600 text-white text-sm font-extrabold">Agregar curso</button>
+            </form>
+            <form id="assignPathFormV25" class="rounded-2xl border border-slate-100 p-4 space-y-3">
+              <h4 class="font-extrabold text-lutmin-dark">Asignar ruta a un alumno</h4>
+              <select id="assignPathPathV25" required class="w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"></select>
+              <select id="assignPathStudentV25" required class="w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"></select>
+              <div><label class="text-[11px] font-bold text-slate-500">Fecha objetivo (opcional)</label><input id="assignPathDueV25" type="date" class="mt-1 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"></div>
+              <button class="w-full px-4 py-3 rounded-xl bg-lutmin-light text-white text-sm font-extrabold">Asignar ruta completa</button>
+            </form>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden">
+          <div class="p-5 sm:p-6 border-b border-slate-100"><div class="flex items-center gap-3"><div class="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center"><i class="fa-solid fa-face-smile"></i></div><div><h3 class="font-extrabold text-lutmin-dark text-lg">Calidad académica · Encuestas y NPS</h3><p class="mt-1 text-xs text-slate-500">Pedí feedback únicamente a alumnos que ya obtuvieron su certificado.</p></div></div></div>
+          <div class="p-5 sm:p-6 grid xl:grid-cols-[.75fr_1.25fr] gap-5">
+            <form id="surveyConfigFormV25" class="rounded-2xl bg-slate-50 p-4 space-y-3">
+              <h4 class="font-extrabold text-lutmin-dark">Configurar encuesta</h4>
+              <select id="surveyCourseV25" required class="w-full px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm"></select>
+              <label class="flex items-center gap-2 text-xs font-bold text-slate-600"><input id="surveyEnabledV25" type="checkbox"> Encuesta activa</label>
+              <button class="w-full px-4 py-3 rounded-xl bg-emerald-600 text-white text-sm font-extrabold">Guardar configuración</button>
+            </form>
+            <div>
+              <div class="grid grid-cols-3 gap-3 mb-4">
+                <div class="rounded-2xl bg-emerald-50 p-4"><p class="text-[10px] font-bold text-emerald-600">RESPUESTAS</p><p id="qualityResponsesV25" class="mt-1 text-2xl font-black text-emerald-700">0</p></div>
+                <div class="rounded-2xl bg-blue-50 p-4"><p class="text-[10px] font-bold text-blue-600">SATISFACCIÓN</p><p id="qualitySatisfactionV25" class="mt-1 text-2xl font-black text-blue-700">-</p></div>
+                <div class="rounded-2xl bg-violet-50 p-4"><p class="text-[10px] font-bold text-violet-600">NPS PROM.</p><p id="qualityNpsV25" class="mt-1 text-2xl font-black text-violet-700">-</p></div>
+              </div>
+              <div id="qualityCoursesV25" class="space-y-2"><p class="text-sm text-slate-500">Sin respuestas todavía.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>`);
+  }
+
+  bindV25Events();
+}
+
+function v25Students(){
+  return (typeof adminProfiles!=='undefined'?adminProfiles:[]).filter(p=>typeof adminIsStudent==='function'?adminIsStudent(p):p.role==='student');
+}
+
+function v25FillSelects(){
+  const pathOptions='<option value="">Seleccionar ruta</option>'+v25Paths.filter(p=>p.active!==false).map(p=>`<option value="${p.id}">${escapeHtml(p.name)}</option>`).join('');
+  ['pathCoursePathV25','assignPathPathV25'].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML=pathOptions;});
+  const courseOptions='<option value="">Seleccionar curso</option>'+(typeof adminCourses!=='undefined'?adminCourses:[]).map(c=>`<option value="${c.id}">${escapeHtml(c.title)}</option>`).join('');
+  ['pathCourseCourseV25','surveyCourseV25'].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML=courseOptions;});
+  const studentOptions='<option value="">Seleccionar alumno</option>'+v25Students().map(p=>`<option value="${p.id}">${escapeHtml(p.full_name||p.email)} · ${escapeHtml(p.email||'')}</option>`).join('');
+  const st=document.getElementById('assignPathStudentV25');if(st)st.innerHTML=studentOptions;
+}
+
+async function loadAdminV25(){
+  if(!supabaseClient||currentLutminUser?.role!=='admin') return;
+  initV25Ui();
+  const [paths,pcs,assigns,surveys,responses,quality]=await Promise.all([
+    supabaseClient.from('learning_paths').select('*').order('created_at',{ascending:false}),
+    supabaseClient.from('learning_path_courses').select('*,course:courses(id,title)').order('sort_order'),
+    supabaseClient.from('learning_path_assignments').select('*').order('assigned_at',{ascending:false}),
+    supabaseClient.from('course_surveys').select('*'),
+    supabaseClient.from('course_survey_responses').select('*').order('created_at',{ascending:false}),
+    supabaseClient.from('course_quality_summary').select('*')
+  ]);
+  const err=[paths,pcs,assigns,surveys,responses,quality].find(x=>x.error)?.error;
+  if(err){console.warn('V2.5 no disponible:',err.message);const root=document.getElementById('adminPathsListV25');if(root)root.innerHTML='<div class="p-4 rounded-2xl bg-amber-50 text-amber-800 text-sm">Academia avanzada todavía no está configurada. Ejecutá el SQL de V2.5.</div>';return;}
+  v25Paths=paths.data||[];v25PathCourses=pcs.data||[];v25PathAssignments=assigns.data||[];v25Surveys=surveys.data||[];v25SurveyResponses=responses.data||[];
+  v25FillSelects();renderAdminPathsV25();renderQualityV25(quality.data||[]);
+}
+
+function renderAdminPathsV25(){
+  const root=document.getElementById('adminPathsListV25');if(!root)return;
+  if(!v25Paths.length){root.innerHTML='<div class="p-4 rounded-2xl bg-slate-50 text-sm text-slate-500">Todavía no hay rutas creadas.</div>';return;}
+  root.innerHTML=v25Paths.map(p=>{
+    const items=v25PathCourses.filter(x=>x.path_id===p.id).sort((a,b)=>a.sort_order-b.sort_order);
+    const assigned=v25PathAssignments.filter(x=>x.path_id===p.id&&x.status!=='cancelled').length;
+    return `<div class="rounded-2xl border border-slate-100 p-4"><div class="flex items-start justify-between gap-3"><div><div class="flex flex-wrap gap-2 items-center"><h4 class="font-extrabold text-lutmin-dark">${escapeHtml(p.name)}</h4><span class="text-[10px] px-2 py-1 rounded-full ${p.published?'bg-green-50 text-green-700':'bg-slate-100 text-slate-500'} font-bold">${p.published?'Publicada':'Borrador'}</span></div><p class="mt-1 text-xs text-slate-500">${escapeHtml(p.description||'Sin descripción')}</p></div><button onclick="togglePathV25('${p.id}',${!p.published})" class="px-3 py-2 rounded-xl bg-slate-100 text-xs font-bold">${p.published?'Ocultar':'Publicar'}</button></div><div class="mt-3 flex flex-wrap gap-2">${items.map(x=>`<span class="px-2.5 py-1.5 rounded-lg bg-indigo-50 text-indigo-700 text-[10px] font-bold">${x.sort_order}. ${escapeHtml(x.course?.title||'Curso')}</span>`).join('')||'<span class="text-xs text-slate-400">Sin cursos todavía</span>'}</div><p class="mt-3 text-[10px] text-slate-400">${items.length} curso${items.length===1?'':'s'} · ${assigned} alumno${assigned===1?'':'s'} asignado${assigned===1?'':'s'}</p></div>`;
+  }).join('');
+}
+
+function renderQualityV25(rows){
+  const total=v25SurveyResponses.length;
+  const sat=total?v25SurveyResponses.reduce((s,r)=>s+Number(r.satisfaction||0),0)/total:null;
+  const nps=total?v25SurveyResponses.reduce((s,r)=>s+Number(r.nps||0),0)/total:null;
+  document.getElementById('qualityResponsesV25').textContent=String(total);
+  document.getElementById('qualitySatisfactionV25').textContent=sat?`${sat.toFixed(1)}/5`:'-';
+  document.getElementById('qualityNpsV25').textContent=nps?nps.toFixed(1):'-';
+  const root=document.getElementById('qualityCoursesV25');if(!root)return;
+  root.innerHTML=rows.length?rows.map(r=>`<div class="flex items-center justify-between gap-3 rounded-xl bg-slate-50 p-3"><div><p class="text-xs font-bold text-lutmin-dark">${escapeHtml(r.course_title)}</p><p class="text-[10px] text-slate-500">${r.responses||0} respuestas · ${r.enabled?'Activa':'Inactiva'}</p></div><div class="text-right"><p class="text-xs font-black text-blue-700">${r.satisfaction_avg?`${r.satisfaction_avg}/5`:'-'}</p><p class="text-[10px] text-violet-600">NPS ${r.nps_avg??'-'}</p></div></div>`).join(''):'<p class="text-sm text-slate-500">Sin encuestas configuradas.</p>';
+}
+
+function bindV25Events(){
+  document.getElementById('createPathFormV25')?.addEventListener('submit',async e=>{e.preventDefault();const name=document.getElementById('pathNameV25').value.trim();if(!name)return;const {error}=await supabaseClient.from('learning_paths').insert({name,description:document.getElementById('pathDescriptionV25').value.trim(),published:document.getElementById('pathPublishedV25').checked,active:true,created_by:currentLutminUser.id});if(error)return showToast(error.message||'No pude crear la ruta.');e.target.reset();showToast('Ruta creada.');await loadAdminV25();});
+  document.getElementById('pathCourseFormV25')?.addEventListener('submit',async e=>{e.preventDefault();const path_id=document.getElementById('pathCoursePathV25').value,course_id=document.getElementById('pathCourseCourseV25').value,sort_order=Math.max(1,Number(document.getElementById('pathCourseOrderV25').value||1));const {error}=await supabaseClient.from('learning_path_courses').upsert({path_id,course_id,sort_order,required:true},{onConflict:'path_id,course_id'});if(error)return showToast(error.message||'No pude agregar el curso.');showToast('Curso agregado a la ruta.');await loadAdminV25();});
+  document.getElementById('assignPathFormV25')?.addEventListener('submit',async e=>{e.preventDefault();const p_path_id=document.getElementById('assignPathPathV25').value,p_user_id=document.getElementById('assignPathStudentV25').value,p_due_date=document.getElementById('assignPathDueV25').value||null;const {data,error}=await supabaseClient.rpc('admin_assign_learning_path',{p_path_id,p_user_id,p_due_date});if(error)return showToast(error.message||'No pude asignar la ruta.');showToast(`Ruta asignada. Cursos nuevos: ${data?.courses_enrolled||0}.`);await loadAdminData();await loadAdminV25();});
+  document.getElementById('surveyConfigFormV25')?.addEventListener('submit',async e=>{e.preventDefault();const course_id=document.getElementById('surveyCourseV25').value,enabled=document.getElementById('surveyEnabledV25').checked;const {error}=await supabaseClient.from('course_surveys').upsert({course_id,enabled,updated_at:new Date().toISOString()},{onConflict:'course_id'});if(error)return showToast(error.message||'No pude guardar la encuesta.');showToast('Encuesta actualizada.');await loadAdminV25();});
+  document.getElementById('surveyCourseV25')?.addEventListener('change',e=>{const row=v25Surveys.find(x=>x.course_id===e.target.value);document.getElementById('surveyEnabledV25').checked=Boolean(row?.enabled);});
+}
+
+async function togglePathV25(id,published){const {error}=await supabaseClient.from('learning_paths').update({published,updated_at:new Date().toISOString()}).eq('id',id);if(error)return showToast(error.message||'No pude actualizar la ruta.');showToast(published?'Ruta publicada.':'Ruta ocultada.');await loadAdminV25();}
+
+async function loadStudentPathsV25(){
+  if(!supabaseClient||currentLutminUser?.role!=='student')return;
+  initV25Ui();
+  const {data:assigns,error}=await supabaseClient.from('learning_path_assignments').select('id,path_id,due_date,status,assigned_at,path:learning_paths(id,name,description,published)').eq('user_id',currentLutminUser.id).neq('status','cancelled').order('assigned_at',{ascending:false});
+  const root=document.getElementById('studentLearningPathsListV25');if(!root)return;
+  if(error){root.innerHTML='<p class="text-sm text-slate-500 lg:col-span-2">Las rutas todavía no están disponibles.</p>';return;}
+  const arr=assigns||[];if(!arr.length){root.innerHTML='<p class="text-sm text-slate-500 lg:col-span-2">Todavía no tenés rutas asignadas.</p>';return;}
+  const pathIds=arr.map(x=>x.path_id);const {data:pcs}=await supabaseClient.from('learning_path_courses').select('path_id,sort_order,course:courses(id,title)').in('path_id',pathIds).order('sort_order');
+  root.innerHTML=arr.map(a=>{
+    const items=(pcs||[]).filter(x=>x.path_id===a.path_id);let total=0;const details=items.map(x=>{const s=campusCourseSummaries.find(c=>c.course.id===x.course?.id);const pct=s?(s.passedAttempt?100:s.percent):0;total+=pct;return {title:x.course?.title||'Curso',pct};});const avg=details.length?Math.round(total/details.length):0;
+    return `<div class="rounded-2xl border border-slate-100 p-4"><div class="flex items-start justify-between gap-3"><div><h4 class="font-extrabold text-lutmin-dark">${escapeHtml(a.path?.name||'Ruta')}</h4><p class="mt-1 text-xs text-slate-500">${escapeHtml(a.path?.description||'')}</p></div><span class="text-lg font-black text-indigo-600">${avg}%</span></div><div class="mt-3 h-2 rounded-full bg-slate-100 overflow-hidden"><div class="h-full bg-indigo-500 rounded-full" style="width:${avg}%"></div></div>${a.due_date?`<p class="mt-2 text-[10px] text-slate-400">Fecha objetivo: ${formatCertificateDate(a.due_date+'T12:00:00')}</p>`:''}<div class="mt-3 space-y-2">${details.map(d=>`<div class="flex items-center justify-between gap-3 text-xs"><span class="truncate ${d.pct===100?'text-slate-700 font-bold':'text-slate-500'}">${d.pct===100?'<i class="fa-solid fa-circle-check text-green-500 mr-1"></i>':''}${escapeHtml(d.title)}</span><span class="font-bold">${d.pct}%</span></div>`).join('')}</div></div>`;
+  }).join('');
+}
+
+async function loadPendingSurveysV25(){
+  if(!supabaseClient||currentLutminUser?.role!=='student')return;
+  initV25Ui();
+  const valid=campusCertificates.filter(c=>c.status==='valid');const wrap=document.getElementById('studentSurveysV25'),root=document.getElementById('studentSurveyListV25');if(!wrap||!root)return;
+  if(!valid.length){wrap.classList.add('hidden');return;}
+  const courseIds=[...new Set(valid.map(c=>c.course_id))];
+  const [{data:surveys},{data:responses}]=await Promise.all([supabaseClient.from('course_surveys').select('*').eq('enabled',true).in('course_id',courseIds),supabaseClient.from('course_survey_responses').select('survey_id').eq('user_id',currentLutminUser.id)]);
+  const answered=new Set((responses||[]).map(x=>x.survey_id));const pending=(surveys||[]).filter(s=>!answered.has(s.id));
+  wrap.classList.toggle('hidden',pending.length===0);if(!pending.length){root.innerHTML='';return;}
+  root.innerHTML=pending.map(s=>{const cert=valid.find(c=>c.course_id===s.course_id);return `<form onsubmit="submitSurveyV25(event,'${s.id}')" class="rounded-2xl bg-slate-50 p-4"><h4 class="font-extrabold text-lutmin-dark">${escapeHtml(cert?.course_title||'Capacitación')}</h4><div class="mt-4 grid md:grid-cols-2 gap-3"><label class="text-xs font-bold text-slate-600">Satisfacción general<select name="satisfaction" required class="mt-2 w-full px-3 py-2.5 rounded-xl bg-white border border-slate-200"><option value="">Elegir</option>${[1,2,3,4,5].map(n=>`<option value="${n}">${n} / 5</option>`).join('')}</select></label><label class="text-xs font-bold text-slate-600">¿La recomendarías?<select name="nps" required class="mt-2 w-full px-3 py-2.5 rounded-xl bg-white border border-slate-200"><option value="">Elegir</option>${Array.from({length:11},(_,n)=>`<option value="${n}">${n} / 10</option>`).join('')}</select></label></div><textarea name="comments" rows="3" class="mt-3 w-full px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-sm" placeholder="Comentario opcional"></textarea><button class="mt-3 px-4 py-2.5 rounded-xl bg-lutmin-dark text-white text-xs font-extrabold">Enviar opinión</button></form>`;}).join('');
+}
+
+async function submitSurveyV25(event,surveyId){event.preventDefault();const fd=new FormData(event.target);const {error}=await supabaseClient.from('course_survey_responses').insert({survey_id:surveyId,user_id:currentLutminUser.id,satisfaction:Number(fd.get('satisfaction')),nps:Number(fd.get('nps')),comments:String(fd.get('comments')||'').trim()});if(error)return showToast(error.message||'No pude guardar tu respuesta.');showToast('¡Gracias por tu opinión!');await loadPendingSurveysV25();}
+
+// Integración sin alterar la base visual ni el flujo existente.
+const originalLoadCampusDataV25=loadCampusData;
+loadCampusData=async function(){await originalLoadCampusDataV25();await Promise.allSettled([loadStudentPathsV25(),loadPendingSurveysV25()]);};
+const originalLoadAdminDataV25=loadAdminData;
+loadAdminData=async function(){await originalLoadAdminDataV25();await loadAdminV25();if(typeof refreshAdminWorkspaceV19==='function')refreshAdminWorkspaceV19();};
+
+document.addEventListener('DOMContentLoaded',()=>{initV25Ui();});
+setTimeout(initV25Ui,0);
+</script>
+
 </body>
 </html>
