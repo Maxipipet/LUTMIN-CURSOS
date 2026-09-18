@@ -117,32 +117,32 @@
 <body class="bg-white text-slate-800 antialiased overflow-x-hidden">
 
   <!-- =========================================================
-       HEADER · LUTMIN V2.0
+       HEADER · LUTMIN V2.1
   ========================================================== -->
-  <header class="fixed top-0 left-0 right-0 z-50 border-b border-slate-200/80 bg-white/95 backdrop-blur-xl">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
-      <a href="#inicio" class="flex items-center gap-3 shrink-0" data-public-event="logo_home">
-        <img src="LOGO.png" alt="Lutmin" class="h-12 sm:h-14 w-auto object-contain">
+  <header class="fixed top-0 left-0 right-0 z-50 border-b border-slate-200/70 bg-white/95 backdrop-blur-xl shadow-[0_1px_0_rgba(15,23,42,.03)]">
+    <div class="max-w-[1380px] mx-auto px-5 sm:px-7 lg:px-10 h-24 flex items-center justify-between gap-5">
+      <a href="#inicio" class="flex items-center shrink-0 min-w-[150px]" data-public-event="logo_home" aria-label="Ir al inicio">
+        <img src="LOGO.png" alt="Lutmin" class="h-16 sm:h-[72px] w-auto object-contain scale-[1.16] origin-left">
       </a>
 
-      <nav class="hidden xl:flex items-center gap-1 text-[13px] font-semibold text-lutmin-dark">
-        <a class="nav-link px-3 py-2 rounded-xl hover:text-lutmin-light hover:bg-lutmin-light/5 transition" href="#formacion">Formación</a>
-        <a class="nav-link px-3 py-2 rounded-xl hover:text-lutmin-light hover:bg-lutmin-light/5 transition" href="#empresas">Empresas</a>
-        <a class="nav-link px-3 py-2 rounded-xl hover:text-lutmin-light hover:bg-lutmin-light/5 transition" href="#conecta">Conecta</a>
-        <a class="nav-link px-3 py-2 rounded-xl hover:text-lutmin-light hover:bg-lutmin-light/5 transition" href="#consultora">Consultora</a>
-        <a class="nav-link px-3 py-2 rounded-xl hover:text-lutmin-light hover:bg-lutmin-light/5 transition" href="#certificados-publicos">Certificados</a>
+      <nav class="hidden xl:flex items-center gap-1 text-[13px] font-bold text-lutmin-dark">
+        <a class="nav-link px-3.5 py-2.5 rounded-xl hover:text-lutmin-light hover:bg-blue-50/70 transition" href="#formacion">Formación</a>
+        <a class="nav-link px-3.5 py-2.5 rounded-xl hover:text-lutmin-light hover:bg-blue-50/70 transition" href="#conecta">Conecta</a>
+        <a class="nav-link px-3.5 py-2.5 rounded-xl hover:text-lutmin-light hover:bg-blue-50/70 transition" href="#empresas">Empresas</a>
+        <a class="nav-link px-3.5 py-2.5 rounded-xl hover:text-lutmin-light hover:bg-blue-50/70 transition" href="#consultora">Consultora</a>
+        <a class="nav-link px-3.5 py-2.5 rounded-xl hover:text-lutmin-light hover:bg-blue-50/70 transition" href="#certificados-publicos">Certificados</a>
       </nav>
 
-      <div class="hidden md:flex items-center gap-2 shrink-0">
-        <button onclick="openStudentAccess()" data-public-event="student_access" class="px-4 py-2.5 rounded-full border border-lutmin-dark text-lutmin-dark font-bold text-xs lg:text-sm hover:bg-lutmin-dark hover:text-white transition">
-          <i class="fa-solid fa-graduation-cap mr-1.5"></i> Acceso Alumno
+      <div class="hidden md:flex items-center gap-2.5 shrink-0">
+        <button onclick="openStudentAccess()" data-public-event="student_access" class="px-5 py-3 rounded-full border border-slate-300 bg-white text-lutmin-dark font-extrabold text-sm hover:border-lutmin-dark hover:bg-slate-50 transition">
+          <i class="fa-solid fa-graduation-cap mr-2"></i>Acceso Alumno
         </button>
-        <button onclick="openCompanyPortalAccess()" data-public-event="company_access" class="px-4 py-2.5 rounded-full bg-lutmin-dark text-white font-bold text-xs lg:text-sm hover:bg-lutmin-light transition">
-          <i class="fa-solid fa-building mr-1.5"></i> Acceso Empresa
+        <button onclick="openCompanyPortalAccess()" data-public-event="company_access" class="px-5 py-3 rounded-full bg-lutmin-dark text-white font-extrabold text-sm hover:bg-lutmin-light shadow-[0_10px_25px_rgba(0,11,60,.12)] transition">
+          <i class="fa-solid fa-building mr-2"></i>Acceso Empresa
         </button>
       </div>
 
-      <button id="menuBtn" class="xl:hidden w-11 h-11 rounded-xl bg-slate-100 text-lutmin-dark text-xl flex items-center justify-center shrink-0">
+      <button id="menuBtn" class="xl:hidden w-12 h-12 rounded-2xl bg-slate-100 text-lutmin-dark text-xl flex items-center justify-center shrink-0" aria-label="Abrir menú">
         <i class="fa-solid fa-bars"></i>
       </button>
     </div>
@@ -150,14 +150,14 @@
     <div id="mobileMenu" class="hidden xl:hidden border-t border-slate-100 bg-white px-5 py-5 shadow-xl absolute w-full">
       <div class="flex flex-col gap-1 font-semibold text-lutmin-dark">
         <a class="mobile-link px-4 py-3 rounded-xl hover:bg-slate-50" href="#formacion">Formación</a>
-        <a class="mobile-link px-4 py-3 rounded-xl hover:bg-slate-50" href="#empresas">Empresas</a>
         <a class="mobile-link px-4 py-3 rounded-xl hover:bg-slate-50" href="#conecta">Lutmin Conecta</a>
+        <a class="mobile-link px-4 py-3 rounded-xl hover:bg-slate-50" href="#empresas">Empresas</a>
         <a class="mobile-link px-4 py-3 rounded-xl hover:bg-slate-50" href="#consultora">Consultora</a>
-        <a class="mobile-link px-4 py-3 rounded-xl hover:bg-slate-50" href="#certificados-publicos">Validar certificado</a>
+        <a class="mobile-link px-4 py-3 rounded-xl hover:bg-slate-50" href="#certificados-publicos">Certificados</a>
         <a class="mobile-link px-4 py-3 rounded-xl hover:bg-slate-50" href="#contacto">Contacto</a>
         <div class="grid sm:grid-cols-2 gap-2 mt-3 pt-3 border-t border-slate-100">
-          <button onclick="openStudentAccess()" data-public-event="student_access" class="bg-white border border-lutmin-dark text-lutmin-dark px-4 py-3 rounded-xl font-bold flex justify-center items-center gap-2"><i class="fa-solid fa-graduation-cap"></i> Acceso Alumno</button>
-          <button onclick="openCompanyPortalAccess()" data-public-event="company_access" class="bg-lutmin-dark text-white px-4 py-3 rounded-xl font-bold flex justify-center items-center gap-2"><i class="fa-solid fa-building"></i> Acceso Empresa</button>
+          <button onclick="openStudentAccess()" data-public-event="student_access" class="bg-white border border-slate-300 text-lutmin-dark px-4 py-3 rounded-xl font-bold flex justify-center items-center gap-2"><i class="fa-solid fa-graduation-cap"></i>Acceso Alumno</button>
+          <button onclick="openCompanyPortalAccess()" data-public-event="company_access" class="bg-lutmin-dark text-white px-4 py-3 rounded-xl font-bold flex justify-center items-center gap-2"><i class="fa-solid fa-building"></i>Acceso Empresa</button>
         </div>
       </div>
     </div>
@@ -167,48 +167,74 @@
        HERO
   ========================================================== -->
   <main>
-    <section id="inicio" class="relative min-h-[88vh] pt-28 flex items-center overflow-hidden bg-lutmin-dark text-white">
+    <section id="inicio" class="relative min-h-[760px] pt-32 lg:pt-36 flex items-center overflow-hidden bg-lutmin-dark text-white">
       <div class="absolute inset-0">
-        <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1900&q=85" class="w-full h-full object-cover opacity-[.14]" alt="Equipo trabajando y aprendiendo">
-        <div class="absolute inset-0 bg-gradient-to-r from-lutmin-dark via-lutmin-dark/95 to-lutmin-dark/65"></div>
-        <div class="absolute inset-0 grid-pattern opacity-20"></div>
+        <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=2000&q=88" class="w-full h-full object-cover opacity-[.12]" alt="Personas trabajando en equipo">
+        <div class="absolute inset-0 bg-gradient-to-r from-[#000B3C] via-[#001047]/95 to-[#07184F]/72"></div>
+        <div class="absolute inset-0 grid-pattern opacity-[.16]"></div>
+        <div class="absolute -top-40 right-[8%] w-[520px] h-[520px] rounded-full bg-blue-500/10 blur-3xl"></div>
       </div>
-      <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 w-full">
-        <div class="grid lg:grid-cols-[1.05fr_.95fr] gap-12 items-center">
-          <div>
-            <div class="inline-flex items-center gap-2 rounded-full border border-lutmin-light/40 bg-lutmin-light/10 px-4 py-2 text-[11px] font-extrabold uppercase tracking-[.18em] text-blue-100">
-              <span class="w-2 h-2 rounded-full bg-lutmin-light"></span> Formación · Certificación · Talento · Empresas
+
+      <div class="relative z-10 max-w-[1380px] mx-auto px-5 sm:px-7 lg:px-10 py-16 lg:py-20 w-full">
+        <div class="grid lg:grid-cols-[1.05fr_.95fr] gap-14 xl:gap-20 items-center">
+          <div class="max-w-3xl">
+            <div class="inline-flex items-center gap-2 rounded-full border border-blue-300/20 bg-white/[.06] px-4 py-2 text-[11px] font-extrabold uppercase tracking-[.19em] text-blue-100">
+              <span class="w-2 h-2 rounded-full bg-lutmin-light shadow-[0_0_0_5px_rgba(47,141,253,.10)]"></span>
+              Formación · Certificación · Talento
             </div>
-            <h1 class="mt-7 text-4xl sm:text-5xl lg:text-7xl font-black leading-[1.02] tracking-tight">
-              Formación que se transforma
-              <span class="block text-transparent bg-clip-text bg-gradient-to-r from-lutmin-light to-cyan-200">en desempeño comprobable.</span>
+
+            <h1 class="mt-7 text-[42px] sm:text-[54px] lg:text-[62px] xl:text-[68px] font-black leading-[.98] tracking-[-.035em]">
+              Aprender es el comienzo.
+              <span class="block mt-2 text-transparent bg-clip-text bg-gradient-to-r from-[#3191ff] via-[#52b6ff] to-[#8bdcff]">Demostrarlo cambia todo.</span>
             </h1>
-            <p class="mt-7 max-w-2xl text-base sm:text-lg lg:text-xl text-slate-300 leading-relaxed">Capacitamos personas, verificamos lo aprendido y ayudamos a las empresas a seguir el avance desde un mismo ecosistema.</p>
-            <div class="mt-9 flex flex-col sm:flex-row gap-3">
-              <a href="#formacion" data-public-event="hero_training" class="inline-flex justify-center items-center gap-2 px-7 py-4 rounded-full bg-lutmin-light hover:bg-blue-500 text-white font-extrabold transition shadow-[0_15px_35px_rgba(47,141,253,.28)]">Explorar capacitaciones <i class="fa-solid fa-arrow-right text-xs"></i></a>
-              <a href="#empresas" data-public-event="hero_company" class="inline-flex justify-center items-center gap-2 px-7 py-4 rounded-full border border-white/25 bg-white/10 hover:bg-white/15 font-bold transition">Soluciones para empresas</a>
+
+            <p class="mt-7 max-w-2xl text-base sm:text-lg lg:text-[19px] text-slate-300 leading-relaxed">Formación aplicada, seguimiento real y certificados verificables. Para personas que quieren crecer y empresas que necesitan saber qué está pasando con su capacitación.</p>
+
+            <div class="mt-8 flex flex-col sm:flex-row gap-3">
+              <a href="#formacion" data-public-event="hero_training" class="inline-flex justify-center items-center gap-2 px-7 py-4 rounded-full bg-lutmin-light hover:bg-blue-500 text-white font-extrabold transition shadow-[0_16px_38px_rgba(47,141,253,.24)]">Ver capacitaciones <i class="fa-solid fa-arrow-right text-xs"></i></a>
+              <a href="#empresas" data-public-event="hero_company" class="inline-flex justify-center items-center gap-2 px-7 py-4 rounded-full border border-white/20 bg-white/[.06] hover:bg-white/[.11] font-bold transition">Capacitar una empresa</a>
             </div>
-            <div class="mt-9 grid sm:grid-cols-3 gap-3 max-w-2xl">
-              <div class="rounded-2xl border border-white/10 bg-white/5 p-4"><i class="fa-solid fa-route text-lutmin-light"></i><p class="mt-2 text-sm font-bold">Ruta clara</p><p class="mt-1 text-xs text-slate-400">Clases, evaluación y progreso.</p></div>
-              <div class="rounded-2xl border border-white/10 bg-white/5 p-4"><i class="fa-solid fa-shield-halved text-lutmin-light"></i><p class="mt-2 text-sm font-bold">Evidencia</p><p class="mt-1 text-xs text-slate-400">Certificados verificables.</p></div>
-              <div class="rounded-2xl border border-white/10 bg-white/5 p-4"><i class="fa-solid fa-briefcase text-lutmin-light"></i><p class="mt-2 text-sm font-bold">Continuidad</p><p class="mt-1 text-xs text-slate-400">Perfil y oportunidades.</p></div>
+
+            <div class="mt-9 flex flex-wrap gap-x-6 gap-y-3 text-sm text-slate-300">
+              <span><i class="fa-solid fa-circle-check text-lutmin-light mr-2"></i>Seguimiento de progreso</span>
+              <span><i class="fa-solid fa-circle-check text-lutmin-light mr-2"></i>Evaluaciones reales</span>
+              <span><i class="fa-solid fa-circle-check text-lutmin-light mr-2"></i>PDF + QR verificable</span>
             </div>
           </div>
 
           <div class="hidden lg:block">
-            <div class="relative">
-              <div class="absolute -inset-8 bg-lutmin-light/20 blur-3xl rounded-full"></div>
-              <div class="relative rounded-[2rem] border border-white/10 bg-white/[.08] backdrop-blur-xl p-6 shadow-2xl">
-                <p class="text-xs font-extrabold uppercase tracking-[.18em] text-blue-200">Así funciona Lutmin</p>
-                <div class="mt-5 space-y-3">
-                  <div class="flex gap-4 rounded-2xl bg-white p-4 text-slate-800"><div class="w-11 h-11 rounded-xl bg-blue-50 text-lutmin-light flex items-center justify-center font-black">1</div><div><p class="font-extrabold text-lutmin-dark">Aprendé</p><p class="text-xs text-slate-500 mt-1">Contenido ordenado, materiales y seguimiento.</p></div></div>
-                  <div class="flex gap-4 rounded-2xl bg-white p-4 text-slate-800"><div class="w-11 h-11 rounded-xl bg-blue-50 text-lutmin-light flex items-center justify-center font-black">2</div><div><p class="font-extrabold text-lutmin-dark">Demostrá</p><p class="text-xs text-slate-500 mt-1">Evaluaciones y trazabilidad del avance.</p></div></div>
-                  <div class="flex gap-4 rounded-2xl bg-white p-4 text-slate-800"><div class="w-11 h-11 rounded-xl bg-blue-50 text-lutmin-light flex items-center justify-center font-black">3</div><div><p class="font-extrabold text-lutmin-dark">Certificá</p><p class="text-xs text-slate-500 mt-1">PDF, código único y validación pública por QR.</p></div></div>
-                  <div class="flex gap-4 rounded-2xl bg-white p-4 text-slate-800"><div class="w-11 h-11 rounded-xl bg-blue-50 text-lutmin-light flex items-center justify-center font-black">4</div><div><p class="font-extrabold text-lutmin-dark">Conectá</p><p class="text-xs text-slate-500 mt-1">Perfil profesional, empresas y oportunidades.</p></div></div>
+            <div class="relative max-w-[560px] ml-auto">
+              <div class="absolute -inset-10 bg-blue-500/10 blur-3xl rounded-full"></div>
+              <div class="relative rounded-[2.2rem] bg-white p-5 xl:p-6 shadow-[0_35px_90px_rgba(0,0,0,.28)] text-slate-800 border border-white/80">
+                <div class="flex items-center justify-between gap-4 px-2 pb-5">
+                  <div>
+                    <p class="text-[10px] uppercase tracking-[.18em] font-black text-slate-400">Ecosistema Lutmin</p>
+                    <h3 class="mt-1 text-xl font-black text-lutmin-dark">Una misma ruta, distintas necesidades.</h3>
+                  </div>
+                  <div class="w-12 h-12 rounded-2xl bg-lutmin-dark text-white flex items-center justify-center"><i class="fa-solid fa-route"></i></div>
                 </div>
-                <div class="mt-5 grid grid-cols-2 gap-3">
-                  <button onclick="openStudentAccess()" data-public-event="hero_student_access" class="py-3 rounded-xl bg-white text-lutmin-dark text-sm font-extrabold">Acceso Alumno</button>
-                  <button onclick="openCompanyPortalAccess()" data-public-event="hero_company_access" class="py-3 rounded-xl bg-lutmin-light text-white text-sm font-extrabold">Acceso Empresa</button>
+
+                <div class="rounded-[1.65rem] bg-lutmin-dark text-white p-6">
+                  <div class="flex items-start justify-between gap-4">
+                    <div><p class="text-[10px] uppercase tracking-widest text-blue-200 font-bold">Para personas</p><h4 class="mt-2 text-xl font-black">Formación con evidencia.</h4></div>
+                    <span class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-lutmin-light"><i class="fa-solid fa-user-graduate"></i></span>
+                  </div>
+                  <div class="mt-6 grid grid-cols-3 gap-2">
+                    <div class="rounded-xl bg-white/[.08] p-3"><p class="text-[10px] text-slate-400">01</p><p class="mt-1 text-xs font-bold">Aprendé</p></div>
+                    <div class="rounded-xl bg-white/[.08] p-3"><p class="text-[10px] text-slate-400">02</p><p class="mt-1 text-xs font-bold">Evaluá</p></div>
+                    <div class="rounded-xl bg-white/[.08] p-3"><p class="text-[10px] text-slate-400">03</p><p class="mt-1 text-xs font-bold">Certificá</p></div>
+                  </div>
+                  <div class="mt-5 h-2 rounded-full bg-white/10 overflow-hidden"><div class="h-full w-full bg-gradient-to-r from-lutmin-light to-cyan-300 rounded-full"></div></div>
+                </div>
+
+                <div class="mt-4 grid grid-cols-2 gap-4">
+                  <div class="rounded-2xl bg-slate-50 border border-slate-100 p-5"><div class="w-10 h-10 rounded-xl bg-blue-100 text-lutmin-light flex items-center justify-center"><i class="fa-solid fa-qrcode"></i></div><p class="mt-3 font-extrabold text-lutmin-dark">Certificado verificable</p><p class="mt-1 text-xs text-slate-500 leading-relaxed">Código único, PDF y QR público.</p></div>
+                  <div class="rounded-2xl bg-slate-50 border border-slate-100 p-5"><div class="w-10 h-10 rounded-xl bg-blue-100 text-lutmin-light flex items-center justify-center"><i class="fa-solid fa-building"></i></div><p class="mt-3 font-extrabold text-lutmin-dark">Portal Empresa</p><p class="mt-1 text-xs text-slate-500 leading-relaxed">Avance, agenda, asistencia y reportes.</p></div>
+                </div>
+
+                <div class="mt-4 flex items-center justify-between gap-4 rounded-2xl border border-slate-100 p-4">
+                  <div><p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Después de certificar</p><p class="mt-1 text-sm font-extrabold text-lutmin-dark">Construí tu perfil en Lutmin Conecta.</p></div>
+                  <i class="fa-solid fa-arrow-right text-lutmin-light"></i>
                 </div>
               </div>
             </div>
@@ -217,50 +243,57 @@
       </div>
     </section>
 
+    <section id="publicProofBand" class="relative z-20 -mt-1 bg-white border-b border-slate-100">
+      <div class="max-w-[1380px] mx-auto px-5 sm:px-7 lg:px-10 py-6">
+        <div id="publicProofStats" class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          <div class="rounded-2xl bg-slate-50 border border-slate-100 p-4 sm:p-5"><p class="text-[10px] uppercase tracking-widest font-bold text-slate-400">Capacitaciones</p><p id="publicStatCourses" class="mt-1 text-2xl font-black text-lutmin-dark">—</p><p class="text-xs text-slate-500">publicadas</p></div>
+          <div class="rounded-2xl bg-slate-50 border border-slate-100 p-4 sm:p-5"><p class="text-[10px] uppercase tracking-widest font-bold text-slate-400">Certificados</p><p id="publicStatCertificates" class="mt-1 text-2xl font-black text-lutmin-dark">—</p><p class="text-xs text-slate-500">emitidos y válidos</p></div>
+          <div class="rounded-2xl bg-slate-50 border border-slate-100 p-4 sm:p-5"><p class="text-[10px] uppercase tracking-widest font-bold text-slate-400">Empresas</p><p id="publicStatCompanies" class="mt-1 text-2xl font-black text-lutmin-dark">—</p><p class="text-xs text-slate-500">activas en la plataforma</p></div>
+          <div class="rounded-2xl bg-slate-50 border border-slate-100 p-4 sm:p-5"><p class="text-[10px] uppercase tracking-widest font-bold text-slate-400">Próximas ediciones</p><p id="publicStatOfferings" class="mt-1 text-2xl font-black text-lutmin-light">—</p><p class="text-xs text-slate-500">con inscripción abierta</p></div>
+        </div>
+      </div>
+    </section>
+
     <!-- =========================================================
-         PROPUESTA DE VALOR · V2.0
+         PROPUESTA · V2.1
     ========================================================== -->
-    <section id="como-funciona" class="py-16 sm:py-20 bg-white">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid lg:grid-cols-[.85fr_1.15fr] gap-10 items-end">
-          <div>
-            <span class="text-lutmin-light text-xs font-extrabold uppercase tracking-[.18em]">Un ecosistema conectado</span>
-            <h2 class="mt-3 text-3xl sm:text-5xl font-black text-lutmin-dark">Menos herramientas sueltas. Más continuidad.</h2>
-          </div>
-          <p class="text-slate-600 text-lg leading-relaxed">Lutmin une formación, seguimiento, certificación, desarrollo profesional y gestión corporativa. La información acompaña a la persona y a la empresa durante todo el proceso.</p>
+    <section class="py-18 sm:py-20 bg-white">
+      <div class="max-w-[1380px] mx-auto px-5 sm:px-7 lg:px-10 py-2">
+        <div class="max-w-3xl">
+          <span class="text-lutmin-light text-xs font-extrabold uppercase tracking-[.18em]">Un ecosistema, cuatro puertas</span>
+          <h2 class="mt-3 text-3xl sm:text-[42px] font-black tracking-[-.025em] text-lutmin-dark">Entrá por lo que necesitás. Todo queda conectado.</h2>
+          <p class="mt-4 text-slate-600 text-lg leading-relaxed">Lutmin une formación, certificación, empleabilidad y gestión corporativa sin mezclar los recorridos de cada usuario.</p>
         </div>
 
-        <div class="mt-10 grid lg:grid-cols-3 gap-5">
-          <article class="p-7 rounded-3xl bg-lutmin-dark text-white">
-            <div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center text-lutmin-light"><i class="fa-solid fa-user-graduate"></i></div>
-            <p class="mt-5 text-xs uppercase tracking-widest text-blue-200 font-bold">Para personas</p>
-            <h3 class="mt-2 font-extrabold text-2xl">Aprender y demostrar</h3>
-            <p class="mt-3 text-sm text-slate-300 leading-relaxed">Cursos, materiales, evaluaciones, certificados verificables y un perfil profesional que puede acompañar tu crecimiento.</p>
+        <div class="mt-10 grid md:grid-cols-2 xl:grid-cols-4 gap-5">
+          <article class="p-7 rounded-3xl bg-lutmin-dark text-white shadow-[0_18px_55px_rgba(0,11,60,.12)]">
+            <div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center text-lutmin-light"><i class="fa-solid fa-graduation-cap"></i></div>
+            <p class="mt-5 text-[10px] uppercase tracking-widest text-blue-200 font-bold">Formación</p>
+            <h3 class="mt-2 font-extrabold text-xl">Aprendé y certificá</h3>
+            <p class="mt-3 text-sm text-slate-300 leading-relaxed">Cursos, clases, materiales, evaluaciones y progreso guardado.</p>
             <a href="#formacion" class="mt-5 inline-flex items-center gap-2 text-sm font-extrabold text-lutmin-light">Ver formación <i class="fa-solid fa-arrow-right text-xs"></i></a>
           </article>
           <article class="p-7 rounded-3xl bg-slate-50 border border-slate-100">
-            <div class="w-12 h-12 rounded-2xl bg-blue-100 flex items-center justify-center text-lutmin-light"><i class="fa-solid fa-building-circle-check"></i></div>
-            <p class="mt-5 text-xs uppercase tracking-widest text-slate-400 font-bold">Para empresas</p>
-            <h3 class="mt-2 font-extrabold text-2xl text-lutmin-dark">Capacitar y gestionar</h3>
-            <p class="mt-3 text-sm text-slate-600 leading-relaxed">Planes, colaboradores, agenda, asistencia, progreso, certificados, reportes y talento desde un Portal Empresa propio.</p>
-            <a href="#empresas" class="mt-5 inline-flex items-center gap-2 text-sm font-extrabold text-lutmin-light">Conocer Empresas <i class="fa-solid fa-arrow-right text-xs"></i></a>
+            <div class="w-12 h-12 rounded-2xl bg-blue-100 flex items-center justify-center text-lutmin-light"><i class="fa-solid fa-link"></i></div>
+            <p class="mt-5 text-[10px] uppercase tracking-widest text-slate-400 font-bold">Conecta</p>
+            <h3 class="mt-2 font-extrabold text-xl text-lutmin-dark">Mostrá lo que sabés</h3>
+            <p class="mt-3 text-sm text-slate-600 leading-relaxed">Perfil profesional, competencias, certificados y oportunidades.</p>
+            <a href="#conecta" class="mt-5 inline-flex items-center gap-2 text-sm font-extrabold text-lutmin-light">Conocer Conecta <i class="fa-solid fa-arrow-right text-xs"></i></a>
+          </article>
+          <article class="p-7 rounded-3xl bg-slate-50 border border-slate-100">
+            <div class="w-12 h-12 rounded-2xl bg-blue-100 flex items-center justify-center text-lutmin-light"><i class="fa-solid fa-building"></i></div>
+            <p class="mt-5 text-[10px] uppercase tracking-widest text-slate-400 font-bold">Empresas</p>
+            <h3 class="mt-2 font-extrabold text-xl text-lutmin-dark">Capacitá y gestioná</h3>
+            <p class="mt-3 text-sm text-slate-600 leading-relaxed">Colaboradores, planes, agenda, asistencia, avance y reportes.</p>
+            <a href="#empresas" class="mt-5 inline-flex items-center gap-2 text-sm font-extrabold text-lutmin-light">Ver Empresas <i class="fa-solid fa-arrow-right text-xs"></i></a>
           </article>
           <article class="p-7 rounded-3xl bg-slate-50 border border-slate-100">
             <div class="w-12 h-12 rounded-2xl bg-blue-100 flex items-center justify-center text-lutmin-light"><i class="fa-solid fa-diagram-project"></i></div>
-            <p class="mt-5 text-xs uppercase tracking-widest text-slate-400 font-bold">Para organizaciones</p>
-            <h3 class="mt-2 font-extrabold text-2xl text-lutmin-dark">Ordenar y mejorar</h3>
-            <p class="mt-3 text-sm text-slate-600 leading-relaxed">Consultoría en personas, estructura, procesos, selección, clima y desarrollo organizacional con foco en problemas concretos.</p>
+            <p class="mt-5 text-[10px] uppercase tracking-widest text-slate-400 font-bold">Consultora</p>
+            <h3 class="mt-2 font-extrabold text-xl text-lutmin-dark">Ordená y mejorá</h3>
+            <p class="mt-3 text-sm text-slate-600 leading-relaxed">Personas, procesos, estructura, selección y desarrollo organizacional.</p>
             <a href="#consultora" class="mt-5 inline-flex items-center gap-2 text-sm font-extrabold text-lutmin-light">Ver consultoría <i class="fa-solid fa-arrow-right text-xs"></i></a>
           </article>
-        </div>
-
-        <div class="mt-6 rounded-3xl border border-slate-200 p-5 sm:p-7">
-          <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <div class="flex gap-3"><span class="w-9 h-9 rounded-full bg-blue-50 text-lutmin-light flex items-center justify-center font-black shrink-0">1</span><div><p class="font-bold text-sm text-lutmin-dark">Elegís</p><p class="text-xs text-slate-500 mt-1">Curso o solución.</p></div></div>
-            <div class="flex gap-3"><span class="w-9 h-9 rounded-full bg-blue-50 text-lutmin-light flex items-center justify-center font-black shrink-0">2</span><div><p class="font-bold text-sm text-lutmin-dark">Avanzás</p><p class="text-xs text-slate-500 mt-1">Con seguimiento real.</p></div></div>
-            <div class="flex gap-3"><span class="w-9 h-9 rounded-full bg-blue-50 text-lutmin-light flex items-center justify-center font-black shrink-0">3</span><div><p class="font-bold text-sm text-lutmin-dark">Validás</p><p class="text-xs text-slate-500 mt-1">Aprendizaje y resultados.</p></div></div>
-            <div class="flex gap-3"><span class="w-9 h-9 rounded-full bg-blue-50 text-lutmin-light flex items-center justify-center font-black shrink-0">4</span><div><p class="font-bold text-sm text-lutmin-dark">Continuás</p><p class="text-xs text-slate-500 mt-1">Con nuevas rutas y oportunidades.</p></div></div>
-          </div>
         </div>
       </div>
     </section>
@@ -2365,7 +2398,10 @@
           <div><label class="text-xs font-bold text-slate-600">Horas</label><input id="editCourseHours" type="number" min="0" required class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200"></div>
           <div><label class="text-xs font-bold text-slate-600">Nivel</label><select id="editCourseLevel" class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200"><option>Inicial</option><option>Intermedio</option><option>Avanzado</option></select></div>
           <div><label class="text-xs font-bold text-slate-600">Categoría</label><select id="editCourseCategory" class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200"><option value="tecnico">Técnico</option><option value="gestion">Gestión</option><option value="iso">ISO</option></select></div>
-          <label class="flex items-center gap-2 text-sm font-semibold text-slate-600 self-end pb-3"><input id="editCoursePublished" type="checkbox" class="w-4 h-4"> Publicado</label>
+          <div class="flex flex-col gap-3 self-end pb-2">
+            <label class="flex items-center gap-2 text-sm font-semibold text-slate-600"><input id="editCoursePublished" type="checkbox" class="w-4 h-4"> Publicado</label>
+            <label class="flex items-center gap-2 text-sm font-semibold text-slate-600"><input id="editCourseFeatured" type="checkbox" class="w-4 h-4"> Destacar en la web</label>
+          </div>
           <div class="sm:col-span-2"><label class="text-xs font-bold text-slate-600">Descripción</label><textarea id="editCourseDescription" rows="4" class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200"></textarea></div>
         </div>
         <button id="editCourseSaveBtn" type="submit" class="mt-6 w-full py-3.5 rounded-xl bg-violet-600 hover:bg-violet-700 text-white font-extrabold">Guardar cambios</button>
@@ -2755,6 +2791,19 @@
       catch (_) { return `${currency} ${Math.round(amount).toLocaleString('es-AR')}`; }
     }
 
+    async function loadPublicSiteStatsV21() {
+      if (!supabaseClient) return;
+      try {
+        const { data, error } = await supabaseClient.rpc('get_public_site_stats');
+        if (error || !data) return;
+        const set = (id, value) => { const el = document.getElementById(id); if (el) el.textContent = String(value ?? 0); };
+        set('publicStatCourses', data.published_courses);
+        set('publicStatCertificates', data.valid_certificates);
+        set('publicStatCompanies', data.active_companies);
+        set('publicStatOfferings', data.open_offerings);
+      } catch (_) {}
+    }
+
     async function loadPublicCatalog() {
       if (!supabaseClient) return;
       const { data, error } = await supabaseClient.rpc('get_public_course_catalog');
@@ -2780,7 +2829,7 @@
           ? `<div class="mt-4 p-3 rounded-2xl bg-blue-50 border border-blue-100"><p class="text-[10px] font-extrabold text-blue-600 uppercase">Próxima edición</p><p class="mt-1 text-xs font-bold text-lutmin-dark">${formatPublicDate(next.start_date)} · ${escapeHtml(String(next.modality || '').replace(/^./, x => x.toUpperCase()))}</p><p class="mt-1 text-xs text-slate-600">${formatPublicMoney(next.price, next.currency)}${next.available_seats === null ? '' : ` · ${next.available_seats} cupos disponibles`}</p></div>`
           : '<div class="mt-4 p-3 rounded-2xl bg-slate-50 text-xs text-slate-500"><strong>Próxima fecha:</strong> a confirmar. Podés dejarnos tus datos.</div>';
         return `<article data-category="${escapeHtml(course.category || 'tecnico')}" class="course-card bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-soft transition group">
-          <div class="h-52 overflow-hidden relative"><img src="${publicCourseImage(course.category)}" alt="${escapeHtml(course.title)}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500"><span class="absolute top-4 left-4 bg-white/95 px-3 py-1 rounded-full text-xs font-extrabold text-lutmin-dark">${categoryLabel(course.category)}</span></div>
+          <div class="h-52 overflow-hidden relative"><img src="${publicCourseImage(course.category)}" alt="${escapeHtml(course.title)}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500"><span class="absolute top-4 left-4 bg-white/95 px-3 py-1 rounded-full text-xs font-extrabold text-lutmin-dark">${categoryLabel(course.category)}</span>${course.featured?'<span class="absolute top-4 right-4 bg-lutmin-dark/95 text-white px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wide"><i class="fa-solid fa-star text-amber-300 mr-1"></i>Destacado</span>':''}</div>
           <div class="p-6"><div class="flex items-center gap-4 text-xs text-slate-500 font-semibold"><span><i class="fa-regular fa-clock mr-1"></i>${Number(course.duration_hours || 0)} h</span><span><i class="fa-solid fa-signal mr-1"></i>${escapeHtml(course.level || 'Inicial')}</span></div><h3 class="mt-3 text-xl font-extrabold text-lutmin-dark">${escapeHtml(course.title)}</h3><p class="mt-2 text-sm text-slate-600 leading-relaxed">${escapeHtml(course.description || '')}</p>${commercial}<div class="mt-5 flex items-center justify-between gap-3"><button onclick="openPublicCourse('${course.id}')" class="text-lutmin-light font-extrabold text-sm">Ver curso →</button><span class="text-xs bg-blue-50 text-blue-700 px-3 py-1 rounded-full font-bold">Certificado</span></div></div>
         </article>`;
       }).join('');
@@ -4237,7 +4286,7 @@
 
       const [profilesRes, coursesRes, lessonsRes, enrollmentsRes, progressRes, assessmentsRes, questionsRes, attemptsRes, certificatesRes, notesRes, offeringsRes, leadsRes, paymentsRes, accessRolesRes] = await Promise.all([
         supabaseClient.from('profiles').select('id,full_name,email,role,active,must_change_password,created_at,last_seen_at').order('full_name'),
-        supabaseClient.from('courses').select('id,slug,title,description,duration_hours,level,category,published,created_at,updated_at').order('created_at', { ascending: false }),
+        supabaseClient.from('courses').select('id,slug,title,description,duration_hours,level,category,published,public_featured,created_at,updated_at').order('created_at', { ascending: false }),
         supabaseClient.from('lessons').select('id,course_id,title,description,content,duration_minutes,sort_order,video_url,material_url,material_path,updated_at').order('sort_order'),
         supabaseClient.from('enrollments').select('id,user_id,course_id,offering_id,status,enrolled_at,price_amount,payment_currency,payment_status,payment_due_date,access_granted_at').order('enrolled_at', { ascending: false }),
         supabaseClient.from('lesson_progress').select('user_id,lesson_id,completed,completed_at').eq('completed', true),
@@ -4868,6 +4917,7 @@
       document.getElementById('editCourseLevel').value = course.level || 'Inicial';
       document.getElementById('editCourseCategory').value = course.category || 'tecnico';
       document.getElementById('editCoursePublished').checked = !!course.published;
+      document.getElementById('editCourseFeatured').checked = !!course.public_featured;
       document.getElementById('editCourseDescription').value = course.description || '';
       openModal('adminCourseEditModal');
     }
@@ -4883,7 +4933,8 @@
         duration_hours: Number(document.getElementById('editCourseHours').value || 0),
         level: document.getElementById('editCourseLevel').value,
         category: document.getElementById('editCourseCategory').value,
-        published: document.getElementById('editCoursePublished').checked
+        published: document.getElementById('editCoursePublished').checked,
+        public_featured: document.getElementById('editCourseFeatured').checked
       };
       const { error } = await supabaseClient.from('courses').update(payload).eq('id', editingAdminCourseId);
       btn.disabled = false; btn.textContent = 'Guardar cambios';
@@ -4892,6 +4943,7 @@
       showToast('Curso actualizado.');
       await loadAdminData();
       await loadCampusData();
+      await loadPublicSiteStatsV21();
       await loadPublicCatalog();
     });
 
@@ -6344,7 +6396,7 @@
     // =========================================================
     window.addEventListener('load', async () => {
       if (!supabaseClient) return;
-      await loadPublicCatalog();
+      await Promise.all([loadPublicCatalog(), loadPublicSiteStatsV21()]);
       const params = new URLSearchParams(window.location.search);
       const certCode = params.get('cert');
       if (certCode) {
@@ -6356,7 +6408,7 @@
     // =========================================================
     // NAV ACTIVA
     // =========================================================
-    const sections = ['inicio','formacion','empresas','conecta','consultora','certificados-publicos'];
+    const sections = ['inicio','formacion','conecta','empresas','consultora','certificados-publicos'];
     const navLinks = [...document.querySelectorAll('.nav-link')];
 
     const observer = new IntersectionObserver(entries => {
