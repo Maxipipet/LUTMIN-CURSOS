@@ -5392,6 +5392,7 @@
       setTimeout(() => URL.revokeObjectURL(url), 500);
     }
 
+    // V3.8.1: todas las clases quedan visibles/editables en la tarjeta del curso.
     function renderAdminCourses() {
       const container = document.getElementById('adminCoursesList');
       if (!adminCourses.length) {
@@ -5403,7 +5404,7 @@
         const lessons = adminLessons.filter(l => l.course_id === course.id).sort((a,b) => a.sort_order - b.sort_order);
         const enrollCount = adminEnrollments.filter(e => e.course_id === course.id).length;
         const lessonPreview = lessons.length
-          ? lessons.slice(0, 5).map(l => `<button onclick="openAdminLessonEditor('${l.id}')" class="text-xs px-2.5 py-1 rounded-full bg-slate-100 hover:bg-blue-50 hover:text-blue-700 text-slate-600">${l.sort_order}. ${escapeHtml(l.title)}${l.material_path ? ' · 📎' : ''}</button>`).join('')
+          ? lessons.map(l => `<button onclick="openAdminLessonEditor('${l.id}')" class="text-xs px-2.5 py-1 rounded-full bg-slate-100 hover:bg-blue-50 hover:text-blue-700 text-slate-600">${l.sort_order}. ${escapeHtml(l.title)}${l.material_path ? ' · 📎' : ''}</button>`).join('')
           : '<span class="text-xs text-slate-400">Sin clases cargadas.</span>';
         return `<div class="p-5 sm:p-6">
           <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
@@ -5414,7 +5415,7 @@
               </div>
               <p class="mt-1 text-xs text-slate-500">${course.duration_hours} h · ${escapeHtml(course.level)} · ${lessons.length} clases · ${enrollCount} inscripciones</p>
               ${(() => { const a = adminAssessments.find(x => x.course_id === course.id); const qCount = a ? adminAssessmentQuestions.filter(q => q.assessment_id === a.id).length : 0; return a ? `<p class="mt-2 text-xs font-bold ${a.published ? 'text-violet-600' : 'text-slate-400'}">Evaluación: ${qCount} preguntas · aprobación ${a.passing_score}% · ${a.published ? 'publicada' : 'oculta'}</p>` : '<p class="mt-2 text-xs text-slate-400">Sin evaluación.</p>'; })()}
-              <div class="mt-3 flex flex-wrap gap-2">${lessonPreview}${lessons.length > 5 ? `<span class="text-xs text-slate-400">+${lessons.length - 5} más</span>` : ''}</div>
+              <div class="mt-3 flex flex-wrap gap-2">${lessonPreview}</div>
             </div>
             <div class="flex flex-wrap gap-2 shrink-0">
               <button onclick="openAdminCourseEditor('${course.id}')" class="px-3 py-2 rounded-lg bg-violet-50 text-violet-700 text-xs font-bold">Editar curso</button>
