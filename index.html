@@ -3051,6 +3051,10 @@
     let currentLutminUser = null;
     let currentAccessMode = sessionStorage.getItem('lutmin-access-mode') || null;
     let currentAccessContext = { student:false, admin:false, companies:[] };
+    // V3.8: evita que el evento USER_UPDATED vuelva a abrir el cambio de contraseña
+    // mientras estamos terminando el primer acceso.
+    let passwordUpdateInFlight = false;
+    let suppressPasswordGateUntil = 0;
     let supportTickets = [];
     let supportMessages = [];
     let adminAccessRoles = [];
@@ -3418,7 +3422,11 @@
       else if(effectiveRole==='admin'){goToCampusTab('admin');setTimeout(()=>loadAdminData(),0);}
       else {goToCampusTab('dashboard');setTimeout(()=>loadCampusData(),0);setTimeout(()=>loadStudentAgenda(),120);}
       setTimeout(()=>loadNotificationCenter(),180);
-      if(currentLutminUser.mustChangePassword&&effectiveRole!=='admin') setTimeout(()=>openPasswordModal('first'),50);
+      if(currentLutminUser.mustChangePassword && effectiveRole!=='admin' && Date.now() > suppressPasswordGateUntil) {
+        setTimeout(()=>{
+          if(currentLutminUser?.mustChangePassword && Date.now() > suppressPasswordGateUntil && !passwordUpdateInFlight) openPasswordModal('first');
+        },50);
+      }
       return true;
     }
 
@@ -3470,7 +3478,12 @@
 
     if (supabaseClient) {
       supabaseClient.auth.onAuthStateChange((event, session) => {
-        if (session?.user) loadCurrentLutminUser(session.user, currentAccessMode);
+        // updateUser({password}) dispara USER_UPDATED. Antes eso volvía a leer
+        // must_change_password=true unos milisegundos antes de que la RPC lo apagara,
+        // generando el loop infinito del modal.
+        if (session?.user && !(passwordUpdateInFlight && event === 'USER_UPDATED')) {
+          loadCurrentLutminUser(session.user, currentAccessMode);
+        }
         if (!session) currentLutminUser = null;
         if (event === 'PASSWORD_RECOVERY') {
           setTimeout(() => openPasswordModal('recovery'), 100);
@@ -3540,19 +3553,40 @@
       if (p1 !== p2) { status.textContent = 'Las contraseñas no coinciden.'; return; }
       const btn = document.getElementById('passwordSubmitBtn');
       btn.disabled = true; btn.textContent = 'Guardando...';
-      const { error } = await supabaseClient.auth.updateUser({ password: p1 });
-      if (error) {
-        console.error(error); status.textContent = error.message || 'No se pudo cambiar la contraseña.';
-        btn.disabled = false; btn.textContent = 'Guardar contraseña'; return;
+      passwordUpdateInFlight = true;
+      suppressPasswordGateUntil = Date.now() + 8000;
+      try {
+        const { error: passwordError } = await supabaseClient.auth.updateUser({ password: p1 });
+        if (passwordError) throw passwordError;
+
+        // No ocultamos errores: la marca de primer acceso debe quedar realmente apagada
+        // antes de permitir continuar.
+        const { error: finishError } = await supabaseClient.rpc('finish_first_password_change');
+        if (finishError) throw new Error('La contraseña se cambió, pero no pude finalizar el primer acceso. Volvé a tocar Guardar contraseña.');
+
+        const { data: verifiedProfile, error: verifyError } = await supabaseClient
+          .from('profiles')
+          .select('must_change_password')
+          .eq('id', currentLutminUser?.id)
+          .maybeSingle();
+        if (verifyError || verifiedProfile?.must_change_password === true) {
+          throw new Error('La contraseña se cambió, pero la cuenta todavía figura como provisoria. Volvé a tocar Guardar contraseña.');
+        }
+
+        if (currentLutminUser) currentLutminUser.mustChangePassword = false;
+        passwordModalMode = 'change';
+        closeModal('passwordModal');
+        status.textContent = '';
+        showToast('Contraseña personal guardada. Ya podés usar Lutmin normalmente.');
+        const url = new URL(window.location.href);
+        if (url.searchParams.has('reset')) { url.searchParams.delete('reset'); history.replaceState({}, '', url.toString()); }
+      } catch (error) {
+        console.error(error);
+        status.textContent = error?.message || 'No se pudo cambiar la contraseña.';
+      } finally {
+        btn.disabled = false; btn.textContent = 'Guardar contraseña';
+        setTimeout(() => { passwordUpdateInFlight = false; }, 1200);
       }
-      try { await supabaseClient.rpc('finish_first_password_change'); } catch (_) {}
-      if (currentLutminUser) currentLutminUser.mustChangePassword = false;
-      passwordModalMode = 'change';
-      closeModal('passwordModal');
-      btn.disabled = false; btn.textContent = 'Guardar contraseña';
-      showToast('Contraseña actualizada correctamente.');
-      const url = new URL(window.location.href);
-      if (url.searchParams.has('reset')) { url.searchParams.delete('reset'); history.replaceState({}, '', url.toString()); }
     });
 
     async function requestPasswordReset() {
@@ -8643,7 +8677,7 @@ setTimeout(()=>{if(currentLutminUser?.role==='admin')initV36AdminUi();},0);
 
 <script>
 // =========================================================
-// LUTMIN V3.7 — UX, PRIVACIDAD Y RENDIMIENTO
+// LUTMIN V3.8 — UX, PRIVACIDAD Y RENDIMIENTO
 // Mesa de ayuda privada · Entrevistas protagonistas · actividad
 // Carga progresiva y medición de módulos
 // =========================================================
