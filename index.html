@@ -243,17 +243,6 @@
       </div>
     </section>
 
-    <section id="publicProofBand" class="relative z-20 -mt-1 bg-white border-b border-slate-100">
-      <div class="max-w-[1380px] mx-auto px-5 sm:px-7 lg:px-10 py-6">
-        <div id="publicProofStats" class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-          <div class="rounded-2xl bg-slate-50 border border-slate-100 p-4 sm:p-5"><p class="text-[10px] uppercase tracking-widest font-bold text-slate-400">Capacitaciones</p><p id="publicStatCourses" class="mt-1 text-2xl font-black text-lutmin-dark">—</p><p class="text-xs text-slate-500">publicadas</p></div>
-          <div class="rounded-2xl bg-slate-50 border border-slate-100 p-4 sm:p-5"><p class="text-[10px] uppercase tracking-widest font-bold text-slate-400">Certificados</p><p id="publicStatCertificates" class="mt-1 text-2xl font-black text-lutmin-dark">—</p><p class="text-xs text-slate-500">emitidos y válidos</p></div>
-          <div class="rounded-2xl bg-slate-50 border border-slate-100 p-4 sm:p-5"><p class="text-[10px] uppercase tracking-widest font-bold text-slate-400">Empresas</p><p id="publicStatCompanies" class="mt-1 text-2xl font-black text-lutmin-dark">—</p><p class="text-xs text-slate-500">activas en la plataforma</p></div>
-          <div class="rounded-2xl bg-slate-50 border border-slate-100 p-4 sm:p-5"><p class="text-[10px] uppercase tracking-widest font-bold text-slate-400">Próximas ediciones</p><p id="publicStatOfferings" class="mt-1 text-2xl font-black text-lutmin-light">—</p><p class="text-xs text-slate-500">con inscripción abierta</p></div>
-        </div>
-      </div>
-    </section>
-
     <!-- =========================================================
          PROPUESTA · V2.1
     ========================================================== -->
@@ -1497,7 +1486,7 @@
               </div>
             </div>
 
-            <div class="mt-6 grid grid-cols-2 xl:grid-cols-6 gap-4">
+            <div class="mt-6 grid grid-cols-2 xl:grid-cols-8 gap-4">
               <div class="bg-white p-5 rounded-2xl border border-slate-100">
                 <p class="text-xs text-slate-400 font-bold">ALUMNOS REGISTRADOS</p>
                 <p id="adminStudentsStat" class="mt-2 text-3xl font-black text-lutmin-dark">0</p>
@@ -1521,6 +1510,14 @@
               <div class="bg-white p-5 rounded-2xl border border-slate-100 col-span-2 xl:col-span-1">
                 <p class="text-xs text-slate-400 font-bold">PAGOS PENDIENTES</p>
                 <p id="adminPaymentsPendingStat" class="mt-2 text-3xl font-black text-amber-600">0</p>
+              </div>
+              <div class="bg-white p-5 rounded-2xl border border-slate-100">
+                <p class="text-xs text-slate-400 font-bold">EMPRESAS ACTIVAS</p>
+                <p id="adminActiveCompaniesStat" class="mt-2 text-3xl font-black text-lutmin-dark">0</p>
+              </div>
+              <div class="bg-white p-5 rounded-2xl border border-slate-100">
+                <p class="text-xs text-slate-400 font-bold">EDICIONES ABIERTAS</p>
+                <p id="adminOpenOfferingsStat" class="mt-2 text-3xl font-black text-lutmin-light">0</p>
               </div>
             </div>
 
@@ -5257,6 +5254,10 @@
       document.getElementById('adminCertificatesStat').textContent = String(adminCertificates.length);
       document.getElementById('adminLeadsStat').textContent = String(adminCourseLeads.filter(l => l.status !== 'discarded').length);
       document.getElementById('adminPaymentsPendingStat').textContent = String(adminEnrollments.filter(e => ['pending','partial'].includes(e.payment_status)).length);
+      const activeCompaniesStat = document.getElementById('adminActiveCompaniesStat');
+      if (activeCompaniesStat) activeCompaniesStat.textContent = String(adminCompanies.filter(c => c.active !== false).length);
+      const openOfferingsStat = document.getElementById('adminOpenOfferingsStat');
+      if (openOfferingsStat) openOfferingsStat.textContent = String(adminOfferings.filter(o => o.published !== false && (!o.registration_status || ['open','active','published'].includes(String(o.registration_status).toLowerCase()))).length);
 
       const studentOptions = students.length
         ? students.map(p => `<option value="${p.id}">${escapeHtml(p.full_name || p.email || 'Alumno')} · ${escapeHtml(p.email || 'sin email')}</option>`).join('')
@@ -5513,7 +5514,6 @@
       showToast('Curso actualizado.');
       await loadAdminData();
       await loadCampusData();
-      await loadPublicSiteStatsV21();
       await loadPublicCatalog();
     });
 
@@ -7257,7 +7257,7 @@
     // =========================================================
     window.addEventListener('load', async () => {
       if (!supabaseClient) return;
-      await Promise.all([loadPublicCatalog(), loadPublicSiteStatsV21()]);
+      await loadPublicCatalog();
       const params = new URLSearchParams(window.location.search);
       const certCode = params.get('cert');
       if (certCode) {
