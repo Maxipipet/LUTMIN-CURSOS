@@ -1061,7 +1061,7 @@
           ====================================================== -->
           <section class="campus-panel hidden" data-campus-panel="talent">
             <div class="flex flex-col xl:flex-row xl:items-end xl:justify-between gap-4">
-              <div><p class="text-[10px] sm:text-xs text-lutmin-light font-bold uppercase tracking-widest">Lutmin Conecta</p><h2 class="mt-1 sm:mt-2 text-2xl sm:text-3xl font-black text-lutmin-dark">Mi perfil profesional</h2><p class="mt-2 text-sm text-slate-500">Completá tu perfil, decidí si querés aparecer en el banco de talento y postulate a oportunidades.</p></div>
+              <div><p class="text-[10px] sm:text-xs text-lutmin-light font-bold uppercase tracking-widest">Lutmin Conecta</p><h2 id="campusProfileHeading" class="mt-1 sm:mt-2 text-2xl sm:text-3xl font-black text-lutmin-dark">Mi perfil profesional</h2><p class="mt-2 text-sm text-slate-500">Completá tu perfil, decidí si querés aparecer en el banco de talento y postulate a oportunidades.</p></div>
               <div class="flex flex-wrap gap-2"><button onclick="copyMyTalentProfileLink()" class="px-4 py-2.5 rounded-xl bg-white border border-slate-200 text-sm font-bold"><i class="fa-solid fa-link mr-2"></i>Copiar perfil</button><button onclick="downloadTalentCvPdf()" class="px-4 py-2.5 rounded-xl bg-lutmin-dark text-white text-sm font-bold"><i class="fa-solid fa-file-pdf mr-2"></i>Descargar CV PDF</button></div>
             </div>
 
@@ -1188,7 +1188,7 @@
               </div>
               <div class="mt-6 sm:mt-7 flex flex-col sm:flex-row gap-3">
                 <button onclick="openPasswordModal('change')" class="w-full sm:w-auto px-5 py-3 rounded-xl bg-lutmin-dark text-white font-bold text-sm sm:text-base"><i class="fa-solid fa-key mr-2"></i>Cambiar contraseña</button>
-                <button onclick="openMyPublicProfileV40()" class="w-full sm:w-auto px-5 py-3 rounded-xl bg-blue-50 text-blue-700 font-bold text-sm sm:text-base hover:bg-blue-100"><i class="fa-solid fa-id-card mr-2"></i>Configurar perfil público</button>
+                <button id="campusPublicProfileBtn" data-student-profile-action="true" onclick="openMyPublicProfileV40()" class="w-full sm:w-auto px-5 py-3 rounded-xl bg-blue-50 text-blue-700 font-bold text-sm sm:text-base hover:bg-blue-100"><i class="fa-solid fa-id-card mr-2"></i>Configurar perfil público</button>
               </div>
             </div>
           </section>
@@ -1465,7 +1465,7 @@
               <div class="border-t border-slate-100 p-5 sm:p-6 bg-slate-50/50">
                 <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
                   <div>
-                    <p class="text-[10px] uppercase tracking-widest font-extrabold text-emerald-600">V3.5 · ESTABILIDAD Y QA</p>
+                    <p class="text-[10px] uppercase tracking-widest font-extrabold text-emerald-600">CALIDAD DEL SISTEMA</p>
                     <h4 class="mt-1 font-extrabold text-lutmin-dark">Centro de calidad del sistema</h4>
                     <p class="mt-1 text-xs text-slate-500">Revisa seguridad, módulos instalados e inconsistencias de datos sin borrar información.</p>
                   </div>
@@ -1516,6 +1516,8 @@
                 </div>
               </div>
             </div>
+
+            <div id="adminCommandCenterV160" data-admin-module-v19="overview" class="mt-6"></div>
 
             <div class="mt-6 grid grid-cols-2 xl:grid-cols-8 gap-4">
               <div class="bg-white p-5 rounded-2xl border border-slate-100">
@@ -1794,7 +1796,7 @@
                 <div id="adminPublicTalentRequestsList" class="mt-4 grid lg:grid-cols-2 gap-3"><div class="lg:col-span-2 text-sm text-slate-500">Cargando solicitudes públicas...</div></div>
               </div>
               <div class="p-5 sm:p-6 border-b border-slate-100 bg-violet-50/40">
-                <div class="flex items-center justify-between gap-3"><div><h4 class="font-extrabold text-lutmin-dark">Solicitudes de perfiles profesionales</h4><p class="mt-1 text-xs text-slate-500">Los alumnos completan sus datos y vos decidís cuándo habilitar su perfil en Lutmin Conecta.</p></div><button onclick="loadAdminConectaData()" class="px-3 py-2 rounded-xl bg-white border border-violet-100 text-violet-700 text-xs font-bold">Actualizar</button></div>
+                <div class="flex items-center justify-between gap-3"><div><h4 class="font-extrabold text-lutmin-dark">Excepciones de perfiles profesionales</h4><p class="mt-1 text-xs text-slate-500">Los perfiles normales se habilitan automáticamente. Acá sólo aparecen casos que requieren criterio humano.</p></div><button onclick="loadAdminConectaData()" class="px-3 py-2 rounded-xl bg-white border border-violet-100 text-violet-700 text-xs font-bold">Actualizar</button></div>
                 <div id="adminTalentProfileRequestsList" class="mt-4 grid lg:grid-cols-2 gap-3"><div class="lg:col-span-2 text-sm text-slate-500">Cargando solicitudes...</div></div>
               </div>
               <div class="p-5 sm:p-6 grid xl:grid-cols-[.8fr_1.2fr] gap-5">
@@ -3465,7 +3467,7 @@
       if(mode==='instructor'&&!currentAccessContext.instructor){showToast('Este correo no tiene acceso Docente habilitado.');return false;}
       if(mode==='student'&&!currentAccessContext.student&&!currentAccessContext.admin){if(currentAccessContext.instructor)mode='instructor';else{showToast('Este correo no tiene acceso Alumno habilitado.');return false;}}
       if(!mode){ mode=currentAccessContext.admin?'admin':currentAccessContext.student?'student':currentAccessContext.companies.length?'company':currentAccessContext.instructor?'instructor':null; }
-      if(mode==='student'&&currentAccessContext.admin) mode='admin';
+      if(mode==='student'&&currentAccessContext.admin&&!currentAccessContext.student) mode='admin';
       if(mode==='admin'&&!currentAccessContext.admin) mode=currentAccessContext.student?'student':currentAccessContext.companies.length?'company':currentAccessContext.instructor?'instructor':null;
       if(!mode){showToast('La cuenta existe pero no tiene accesos activos.');return false;}
       currentAccessMode=mode; sessionStorage.setItem('lutmin-access-mode',mode);
@@ -4211,6 +4213,7 @@
       if (tab === 'talent' && currentLutminUser?.role !== 'student') tab = currentLutminUser?.role === 'company_admin' ? 'company' : currentLutminUser?.role==='instructor'?'instructor':'dashboard';
       if (currentLutminUser?.role === 'company_admin' && !['company','company-conecta','profile','notifications','support'].includes(tab)) tab = 'company';
       if (currentLutminUser?.role === 'instructor' && !['instructor','profile','notifications','support'].includes(tab)) tab = 'instructor';
+      if (currentLutminUser?.role === 'admin' && !['admin','profile','notifications','support'].includes(tab)) tab = 'admin';
       document.querySelectorAll('.campus-tab').forEach(btn => {
         if (btn.dataset.campusTab === tab) {
           btn.classList.add('bg-white/10', 'font-bold');
@@ -9114,7 +9117,7 @@ function initAdminComplianceV40(){
   const admin=document.querySelector('[data-campus-panel="admin"]');if(!admin||document.getElementById('adminComplianceV40'))return;
   const anchor=document.getElementById('adminStudentsStat')?.closest('.grid')||admin;
   const box=document.createElement('div');box.id='adminComplianceV40';box.setAttribute('data-admin-module-v19','overview');box.className='mt-6 bg-white rounded-3xl border border-slate-100 overflow-hidden';
-  box.innerHTML=`<div class="p-5 sm:p-6 border-b border-slate-100 flex flex-col xl:flex-row xl:items-end xl:justify-between gap-4"><div><p class="text-[10px] uppercase tracking-widest font-extrabold text-cyan-700">V4.0 · Control global</p><h3 class="mt-1 text-lg font-black text-lutmin-dark">Vigencias y cumplimiento</h3><p class="mt-1 text-xs text-slate-500">Una vista global de certificados y validaciones que vencieron o están por vencer.</p></div><div class="flex flex-wrap gap-2"><button onclick="exportAdminComplianceV40()" class="px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-xs font-bold"><i class="fa-solid fa-file-csv mr-2"></i>Exportar</button><button onclick="loadAdminComplianceV40()" class="px-3 py-2.5 rounded-xl bg-lutmin-dark text-white text-xs font-bold">Actualizar</button></div></div><div class="p-5 sm:p-6"><div id="adminComplianceStatsV40"></div><div class="mt-4 grid lg:grid-cols-[1fr_180px] gap-2"><input id="adminComplianceQueryV40" oninput="renderAdminComplianceV40()" class="px-3 py-2.5 rounded-xl border border-slate-200 text-sm" placeholder="Buscar persona, empresa o acreditación"><select id="adminComplianceStateV40" onchange="renderAdminComplianceV40()" class="px-3 py-2.5 rounded-xl border border-slate-200 text-sm"><option value="alert">Solo alertas</option><option value="">Todos</option><option value="expired">Vencidos</option><option value="expiring">Vencen pronto</option><option value="valid">Vigentes</option><option value="revoked">Revocados</option></select></div><div id="adminComplianceRowsV40" class="mt-4 divide-y divide-slate-100 border border-slate-100 rounded-2xl overflow-hidden"></div></div>`;
+  box.innerHTML=`<div class="p-5 sm:p-6 border-b border-slate-100 flex flex-col xl:flex-row xl:items-end xl:justify-between gap-4"><div><p class="text-[10px] uppercase tracking-widest font-extrabold text-cyan-700">Control global</p><h3 class="mt-1 text-lg font-black text-lutmin-dark">Vigencias y cumplimiento</h3><p class="mt-1 text-xs text-slate-500">Una vista global de certificados y validaciones que vencieron o están por vencer.</p></div><div class="flex flex-wrap gap-2"><button onclick="exportAdminComplianceV40()" class="px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-xs font-bold"><i class="fa-solid fa-file-csv mr-2"></i>Exportar</button><button onclick="loadAdminComplianceV40()" class="px-3 py-2.5 rounded-xl bg-lutmin-dark text-white text-xs font-bold">Actualizar</button></div></div><div class="p-5 sm:p-6"><div id="adminComplianceStatsV40"></div><div class="mt-4 grid lg:grid-cols-[1fr_180px] gap-2"><input id="adminComplianceQueryV40" oninput="renderAdminComplianceV40()" class="px-3 py-2.5 rounded-xl border border-slate-200 text-sm" placeholder="Buscar persona, empresa o acreditación"><select id="adminComplianceStateV40" onchange="renderAdminComplianceV40()" class="px-3 py-2.5 rounded-xl border border-slate-200 text-sm"><option value="alert">Solo alertas</option><option value="">Todos</option><option value="expired">Vencidos</option><option value="expiring">Vencen pronto</option><option value="valid">Vigentes</option><option value="revoked">Revocados</option></select></div><div id="adminComplianceRowsV40" class="mt-4 divide-y divide-slate-100 border border-slate-100 rounded-2xl overflow-hidden"></div></div>`;
   anchor.insertAdjacentElement('afterend',box);
 }
 function filteredAdminComplianceV40(){
@@ -10321,7 +10324,7 @@ function ensureStudentEngineV150(){
   if(!document.getElementById('talentEvidenceCareerV150')){
     const target=document.getElementById('talentEvidenceV140')||document.getElementById('talentApprovalCard');
     const box=document.createElement('div');box.id='talentEvidenceCareerV150';box.className='mt-5 rounded-[2rem] bg-white border border-slate-100 overflow-hidden';
-    box.innerHTML=`<div class="p-5 sm:p-6 border-b border-slate-100"><div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4"><div><p class="text-[10px] uppercase tracking-widest font-black text-cyan-700">V15 · Evidence & Career Engine</p><h3 class="mt-1 text-2xl font-black text-lutmin-dark">Tu perfil vivo, explicado.</h3><p class="mt-2 text-xs text-slate-500">No sólo qué sabés: de dónde surge cada evidencia y qué te falta para el próximo objetivo.</p></div><button onclick="loadV150StudentData()" class="px-4 py-2.5 rounded-xl bg-lutmin-dark text-white text-xs font-bold"><i class="fa-solid fa-rotate mr-2"></i>Actualizar motor</button></div></div><div id="talentEvidenceCareerBodyV150" class="p-5 sm:p-6"><p class="text-sm text-slate-500">Cargando...</p></div>`;
+    box.innerHTML=`<div class="p-5 sm:p-6 border-b border-slate-100"><div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4"><div><p class="text-[10px] uppercase tracking-widest font-black text-cyan-700">Evidence & Career Engine</p><h3 class="mt-1 text-2xl font-black text-lutmin-dark">Tu perfil vivo, explicado.</h3><p class="mt-2 text-xs text-slate-500">No sólo qué sabés: de dónde surge cada evidencia y qué te falta para el próximo objetivo.</p></div><button onclick="loadV150StudentData()" class="px-4 py-2.5 rounded-xl bg-lutmin-dark text-white text-xs font-bold"><i class="fa-solid fa-rotate mr-2"></i>Actualizar motor</button></div></div><div id="talentEvidenceCareerBodyV150" class="p-5 sm:p-6"><p class="text-sm text-slate-500">Cargando...</p></div>`;
     target?.insertAdjacentElement('afterend',box);
   }
   if(!document.getElementById('talentDocumentAgentV150')){
@@ -10371,13 +10374,123 @@ async function saveProfessionalDocumentV150(){
 }
 
 function initV150(){
-  ensurePublicFeaturedLeaderV150();if(currentLutminUser?.role==='student'){ensureStudentEngineV150();setTimeout(()=>loadV150StudentData(),900);}const slug=new URL(location.href).searchParams.get('talento');if(slug==='maximiliano-pipet')document.title='Maximiliano Pipet | Lutmin Conecta';else if(!slug)document.title='Lutmin | Plataforma V15.0';
+  ensurePublicFeaturedLeaderV150();if(currentLutminUser?.role==='student'){ensureStudentEngineV150();setTimeout(()=>loadV150StudentData(),900);}const slug=new URL(location.href).searchParams.get('talento');if(slug==='maximiliano-pipet')document.title='Maximiliano Pipet | Lutmin Conecta';else if(!slug)document.title='Lutmin | Plataforma V16.0';
 }
 
 if(typeof loadTalentCenter==='function'){
   const _loadTalentCenterV150=loadTalentCenter;loadTalentCenter=async function(){const r=await _loadTalentCenterV150.apply(this,arguments);if(currentLutminUser?.role==='student'){ensureStudentEngineV150();await loadV150StudentData();}return r;};
 }
 document.addEventListener('DOMContentLoaded',()=>setTimeout(initV150,4200));setTimeout(initV150,5000);
+</script>
+
+
+<style>
+  .v160-workspace-chip{display:inline-flex;align-items:center;gap:.45rem;padding:.42rem .7rem;border-radius:999px;font-size:10px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+  .v160-action-card{transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
+  .v160-action-card:hover{transform:translateY(-1px);box-shadow:0 12px 32px rgba(15,23,42,.06)}
+</style>
+<script>
+// =========================================================
+// LUTMIN V16.0 · WORKSPACES + COMMAND CENTER
+// Aísla Alumno / Empresa / Docente / Administración y evita
+// que un contexto cargue pantallas o llamadas de otro contexto.
+// =========================================================
+const workspaceConfigV160={
+  student:{label:'Campus Lutmin',eyebrow:'Espacio de aprendizaje',icon:'fa-graduation-cap',home:'dashboard',allowed:['dashboard','courses','agenda','activities','certificates','talent','profile','notifications','support']},
+  company_admin:{label:'Portal Empresa',eyebrow:'Espacio corporativo',icon:'fa-building',home:'company',allowed:['company','company-conecta','profile','notifications','support']},
+  instructor:{label:'Portal Docente',eyebrow:'Gestión académica',icon:'fa-chalkboard-user',home:'instructor',allowed:['instructor','profile','notifications','support']},
+  admin:{label:'Administración Lutmin',eyebrow:'Gestión interna',icon:'fa-shield-halved',home:'admin',allowed:['admin','profile','notifications','support']}
+};
+function workspaceV160(){return workspaceConfigV160[currentLutminUser?.role]||workspaceConfigV160.student;}
+function currentCampusPanelV160(){return document.querySelector('.campus-panel:not(.hidden)')?.dataset?.campusPanel||null;}
+function enforceWorkspaceRouteV160(){
+  if(!currentLutminUser)return;
+  const cfg=workspaceV160(),active=currentCampusPanelV160();
+  if(!cfg.allowed.includes(active))goToCampusTab(cfg.home);
+}
+function applyWorkspaceChromeV160(){
+  if(!currentLutminUser)return;
+  const cfg=workspaceV160(),isStudent=currentLutminUser.role==='student';
+  const desk=document.getElementById('campusSidebarProductLabel');if(desk){desk.textContent=cfg.label;desk.classList.remove('mt-8');desk.classList.add('mt-6');}
+  const mob=document.getElementById('campusMobileProductLabel');if(mob)mob.textContent=cfg.label;
+  const heading=document.getElementById('campusProfileHeading');if(heading)heading.textContent=isStudent?'Mi perfil profesional':'Mi cuenta';
+  const publicBtn=document.getElementById('campusPublicProfileBtn');if(publicBtn)publicBtn.classList.toggle('hidden',!isStudent);
+  const profilePanel=document.querySelector('[data-campus-panel="profile"]');
+  if(profilePanel){const eyebrow=profilePanel.querySelector('p');if(eyebrow)eyebrow.textContent=isStudent?'Campus · identidad profesional':cfg.eyebrow;}
+  const notif=document.querySelector('[data-campus-panel="notifications"]');
+  if(notif){const desc=notif.querySelector('h2 + p');if(desc)desc.textContent=isStudent?'Cursos, pagos, certificados y avisos importantes en un solo lugar.':currentLutminUser.role==='admin'?'Alertas operativas, soporte, comunicaciones y eventos relevantes de la plataforma.':currentLutminUser.role==='company_admin'?'Avisos de capacitación, equipo, cumplimiento y novedades de la organización.':'Avisos de comisiones, alumnos, actividades y novedades académicas.';}
+  // Badge visible del contexto actual, también ayuda a evitar confundir perfiles.
+  const existing=document.getElementById('workspaceBadgeV160');if(existing)existing.remove();
+  const name=document.getElementById('campusSidebarName');if(name){const badge=document.createElement('div');badge.id='workspaceBadgeV160';badge.className='mt-2 v160-workspace-chip bg-white/10 text-blue-100';badge.innerHTML=`<i class="fa-solid ${cfg.icon}"></i>${cfg.label}`;name.insertAdjacentElement('afterend',badge);}
+}
+
+// Decorar y hacer explícito el acceso activo.
+const _openAccessSwitcherV160=typeof openAccessSwitcher==='function'?openAccessSwitcher:null;
+if(_openAccessSwitcherV160){openAccessSwitcher=function(){_openAccessSwitcherV160.apply(this,arguments);setTimeout(()=>{const root=document.getElementById('accessSwitcherOptions');if(!root)return;root.querySelectorAll('button').forEach(btn=>{const txt=(btn.textContent||'').toLowerCase();const active=(currentLutminUser?.role==='admin'&&txt.includes('administración'))||(currentLutminUser?.role==='student'&&txt.includes('alumno'))||(currentLutminUser?.role==='company_admin'&&txt.includes('empresa'))||(currentLutminUser?.role==='instructor'&&txt.includes('docente'));if(active){btn.classList.add('ring-2','ring-lutmin-light');btn.insertAdjacentHTML('beforeend','<span class="float-right text-[9px] bg-white px-2 py-1 rounded-full">ACTUAL</span>');}});},0);};}
+
+// El render de usuario ahora también pinta el workspace correcto.
+const _paintCurrentLutminUserV160=typeof paintCurrentLutminUser==='function'?paintCurrentLutminUser:null;
+if(_paintCurrentLutminUserV160){paintCurrentLutminUser=function(){const r=_paintCurrentLutminUserV160.apply(this,arguments);applyWorkspaceChromeV160();setTimeout(enforceWorkspaceRouteV160,0);return r;};}
+
+// Guard final ante cualquier función vieja que intente volver al dashboard Alumno.
+const _goToCampusTabV160=typeof goToCampusTab==='function'?goToCampusTab:null;
+if(_goToCampusTabV160){goToCampusTab=function(tab){if(currentLutminUser){const cfg=workspaceV160();if(!cfg.allowed.includes(tab))tab=cfg.home;}const r=_goToCampusTabV160.call(this,tab);applyWorkspaceChromeV160();return r;};}
+
+// Un admin/empresa/docente nunca debe recibir CTA de perfil profesional Alumno.
+if(typeof openMyPublicProfileV40==='function'){
+  const _openMyPublicProfileV160=openMyPublicProfileV40;
+  openMyPublicProfileV40=async function(){
+    if(currentLutminUser?.role!=='student'){
+      if(currentAccessContext?.student){showToast('El perfil profesional pertenece al Acceso Alumno. Usá “Cambiar acceso” para abrirlo.');openAccessSwitcher();}
+      else showToast('Este acceso no tiene un perfil profesional de alumno asociado.');
+      return;
+    }
+    return _openMyPublicProfileV160.apply(this,arguments);
+  };
+}
+
+// V14 automatizó la habilitación: este botón viejo pasa a ejecutar el motor,
+// no a enviar una solicitud manual.
+submitTalentProfileForReview=async function(){
+  if(!supabaseClient||currentLutminUser?.role!=='student')return;
+  if(typeof refreshMyProfileV140!=='function')return showToast('Guardá el perfil para volver a evaluar su estado.');
+  const d=await refreshMyProfileV140(true);
+  if(!d)return;
+  if(d.status==='active')showToast('Perfil listo: quedó habilitado automáticamente.');
+  else if(d.status==='review_required')showToast('Detecté una excepción puntual. Sólo ese caso requiere revisión humana.');
+  else showToast('Te muestro qué falta para habilitar el perfil automáticamente.');
+};
+
+function adminStatV160(id){const n=Number((document.getElementById(id)?.textContent||'0').replace(/[^0-9.-]/g,''));return Number.isFinite(n)?n:0;}
+function renderAdminCommandCenterV160(){
+  const root=document.getElementById('adminCommandCenterV160');if(!root||currentLutminUser?.role!=='admin')return;
+  const pay=adminStatV160('adminPaymentsPendingStat'),leads=adminStatV160('adminLeadsStat'),profileEx=adminStatV160('adminTalentRequestsStat'),openings=adminStatV160('adminOpenOfferingsStat');
+  const signals=[
+    {n:pay,label:'pagos pendientes',icon:'fa-wallet',tone:pay?'amber':'emerald',module:'finance',detail:pay?'Requieren confirmación o seguimiento.':'No hay pagos pendientes visibles.'},
+    {n:leads,label:'interesados activos',icon:'fa-bullseye',tone:leads?'violet':'emerald',module:'commercial',detail:leads?'Consultas comerciales para trabajar.':'Sin interesados pendientes.'},
+    {n:profileEx,label:'excepciones de perfil',icon:'fa-user-shield',tone:profileEx?'rose':'emerald',module:'talent',detail:profileEx?'Sólo casos que no pudo resolver el motor automático.':'Sin excepciones de perfil.'},
+    {n:openings,label:'ediciones abiertas',icon:'fa-calendar-days',tone:'blue',module:'academic',detail:'Oferta académica actualmente abierta.'}
+  ];
+  const priority=signals.filter(x=>x.n>0&&x.module!=='academic').reduce((a,b)=>a+b.n,0);
+  const cls={amber:'bg-amber-50 text-amber-700 border-amber-100',violet:'bg-violet-50 text-violet-700 border-violet-100',rose:'bg-rose-50 text-rose-700 border-rose-100',blue:'bg-blue-50 text-blue-700 border-blue-100',emerald:'bg-emerald-50 text-emerald-700 border-emerald-100'};
+  root.innerHTML=`<div class="rounded-[2rem] bg-lutmin-dark text-white overflow-hidden"><div class="p-5 sm:p-7 grid xl:grid-cols-[1.05fr_.95fr] gap-6"><div><div class="flex flex-wrap items-center gap-2"><span class="v160-workspace-chip bg-cyan-400/10 text-cyan-200"><i class="fa-solid fa-radar"></i>Centro de decisión</span><span class="v160-workspace-chip bg-white/10 text-slate-200">interno</span></div><h3 class="mt-4 text-2xl sm:text-3xl font-black">${priority?`${priority} situación${priority===1?'':'es'} para revisar`:'La operación está al día'}</h3><p class="mt-2 text-sm text-slate-300 max-w-xl">En vez de recorrer módulos, Lutmin concentra primero lo que puede requerir una acción humana. Los datos de alumno quedan aislados del workspace administrador.</p><div class="mt-5 flex flex-wrap gap-2"><button onclick="setAdminModuleV19('operations')" class="px-4 py-2.5 rounded-xl bg-white text-lutmin-dark text-xs font-extrabold">Ver prioridades</button><button onclick="setAdminModuleV19('talent')" class="px-4 py-2.5 rounded-xl bg-white/10 text-white text-xs font-bold">Talento</button><button onclick="setAdminModuleV19('system')" class="px-4 py-2.5 rounded-xl bg-white/10 text-white text-xs font-bold">Salud del sistema</button></div></div><div class="grid grid-cols-2 gap-3">${signals.map(x=>`<button onclick="setAdminModuleV19('${x.module}')" class="v160-action-card text-left rounded-2xl border p-4 ${cls[x.tone]}"><div class="flex items-center justify-between gap-2"><i class="fa-solid ${x.icon}"></i><strong class="text-2xl">${x.n}</strong></div><p class="mt-3 text-[10px] uppercase font-black tracking-wider">${x.label}</p><p class="mt-1 text-[10px] opacity-80 leading-relaxed">${x.detail}</p></button>`).join('')}</div></div></div>`;
+}
+
+// Actualiza el centro una vez que la carga administrativa termina.
+if(typeof loadAdminData==='function'){
+  const _loadAdminDataV160=loadAdminData;
+  loadAdminData=async function(){const r=await _loadAdminDataV160.apply(this,arguments);if(currentLutminUser?.role==='admin'){applyWorkspaceChromeV160();renderAdminCommandCenterV160();}return r;};
+}
+if(typeof setAdminModuleV19==='function'){
+  const _setAdminModuleV160=setAdminModuleV19;
+  setAdminModuleV19=function(module){const r=_setAdminModuleV160.apply(this,arguments);if(module==='overview')setTimeout(renderAdminCommandCenterV160,0);return r;};
+}
+
+function initV160(){
+  if(currentLutminUser){applyWorkspaceChromeV160();enforceWorkspaceRouteV160();if(currentLutminUser.role==='admin')renderAdminCommandCenterV160();}
+  if(!new URL(location.href).searchParams.get('talento'))document.title='Lutmin | Plataforma V16.0';
+}
+document.addEventListener('DOMContentLoaded',()=>setTimeout(initV160,4700));setTimeout(initV160,5600);
 </script>
 
 </body>
