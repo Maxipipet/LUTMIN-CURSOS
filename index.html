@@ -11600,36 +11600,36 @@ document.addEventListener('DOMContentLoaded',()=>setTimeout(polishV170,5600));se
 })();
 </script>
 
-<style id="lutminV211ConectaPanelsStyles">
-  /* V21.1 · Conecta funciona como Administración: selector arriba + un único contenido visible */
-  #conectaContentHostV211{margin-top:1rem}
-  .conecta-pane-v211{display:block}
-  .conecta-pane-v211.hidden{display:none!important}
-  .conecta-pane-v211>[id]{scroll-margin-top:0!important}
+<style id="lutminV212ConectaPanelStyles">
+  /* V21.2 · Conecta por paneles SIN mover nodos del DOM */
+  .v212-conecta-off{display:none!important}
+  .v212-conecta-single-grid{grid-template-columns:minmax(0,1fr)!important}
   #conectaHubV210{margin-bottom:0!important}
-  #conectaSummaryV210{margin-top:0!important}
-  #conectaContentHostV211 .conecta-anchor-v182{scroll-margin-top:0!important}
-  #conectaContentHostV211 .conecta-pane-v211>.mt-5:first-child,
-  #conectaContentHostV211 .conecta-pane-v211>.mt-6:first-child{margin-top:0!important}
-  .conecta-pane-enter-v211{animation:conectaPaneInV211 .16s ease-out}
-  @keyframes conectaPaneInV211{from{opacity:.35;transform:translateY(3px)}to{opacity:1;transform:none}}
+  #conectaSummaryV210{margin-top:1rem!important}
+  .v212-conecta-visible{animation:v212PaneIn .14s ease-out}
+  @keyframes v212PaneIn{from{opacity:.35;transform:translateY(2px)}to{opacity:1;transform:none}}
 </style>
-<script id="lutminV211ConectaPanelsScript">
+<script id="lutminV212ConectaPanelScript">
 (()=>{
   // =========================================================
-  // LUTMIN V21.1 · CONECTA POR PANELES
-  // Igual que Administración: el selector queda visible arriba
-  // y solamente se muestra el módulo seleccionado debajo.
+  // LUTMIN V21.2 · CONECTA ESTABLE POR PANELES
+  // No reubica nodos. Solo controla visibilidad del contenido
+  // existente, igual que Administración.
   // =========================================================
   const KEYS=['summary','profile','jobs','applications','interviews','organizations','saved','agent','career','timeline','passport'];
-  const state={active:'summary',mounted:false,busy:false};
+  const S={active:'summary',busy:false,observer:null};
   const legacyOpenSection=window.openConectaSectionV182;
   const legacyOpenV200=window.openConectaV200;
 
-  function talentPanelV211(){return document.querySelector('section[data-campus-panel="talent"]');}
-  function paneV211(key){return document.querySelector(`[data-conecta-pane-v211="${key}"]`);}
+  function panel(){return document.querySelector('section[data-campus-panel="talent"]');}
+  function directChild(el){
+    const p=panel(); if(!el||!p)return null;
+    let n=el; while(n&&n.parentElement!==p)n=n.parentElement;
+    return n&&n.parentElement===p?n:null;
+  }
+  function uniq(arr){return [...new Set(arr.filter(Boolean))];}
 
-  function ensureDependenciesV211(){
+  function ensureModules(){
     try{if(typeof ensureV140StudentUI==='function')ensureV140StudentUI();}catch(_){ }
     try{if(typeof ensureTalentAgentV100==='function')ensureTalentAgentV100();}catch(_){ }
     try{if(typeof ensurePersonalAutopilotV110==='function')ensurePersonalAutopilotV110();}catch(_){ }
@@ -11638,139 +11638,109 @@ document.addEventListener('DOMContentLoaded',()=>setTimeout(polishV170,5600));se
     try{if(typeof ensureTimelineUi==='function')ensureTimelineUi();}catch(_){ }
   }
 
-  function ensureHostV211(){
-    const panel=talentPanelV211();if(!panel)return null;
-    try{if(typeof ensureConectaHubV210==='function')ensureConectaHubV210();}catch(_){ }
-    let host=document.getElementById('conectaContentHostV211');
-    if(!host){
-      host=document.createElement('div');host.id='conectaContentHostV211';
-      const hub=document.getElementById('conectaHubV210');
-      if(hub)hub.insertAdjacentElement('afterend',host);else panel.insertAdjacentElement('afterbegin',host);
-      KEYS.forEach(key=>{const p=document.createElement('div');p.dataset.conectaPaneV211=key;p.className='conecta-pane-v211 hidden';host.appendChild(p);});
-    }
-    return host;
+  function roots(){
+    const jobs=document.getElementById('conectaJobsV182');
+    const apps=document.getElementById('conectaApplicationsV182');
+    const jobsAppsWrap=jobs?.parentElement===apps?.parentElement?jobs?.parentElement:null;
+    return {
+      summary:uniq([document.getElementById('conectaSummaryV210')]),
+      profile:uniq([
+        document.getElementById('conectaProfileV182'),
+        directChild(document.getElementById('talentProfileStrength')),
+        directChild(document.getElementById('talentProfileMissing')),
+        directChild(document.getElementById('talentApprovalCard')),
+        directChild(document.getElementById('talentProfileForm')),
+        directChild(document.getElementById('talentCvAgentV140')),
+        directChild(document.getElementById('talentDocumentAgentV150'))
+      ]),
+      jobs:uniq([jobsAppsWrap,directChild(document.getElementById('talentOpportunityRadarV140'))]),
+      applications:uniq([jobsAppsWrap]),
+      interviews:uniq([directChild(document.getElementById('conectaInterviewsV182'))]),
+      organizations:uniq([directChild(document.getElementById('conectaOrganizationsV200'))]),
+      saved:uniq([directChild(document.getElementById('conectaSavedV182'))]),
+      agent:uniq([directChild(document.getElementById('talentAgentV100'))]),
+      career:uniq([
+        directChild(document.getElementById('talentEvidenceV140')),
+        directChild(document.getElementById('talentEvidenceCareerV150'))
+      ]),
+      timeline:uniq([directChild(document.getElementById('conectaTimelineV200'))]),
+      passport:uniq([directChild(document.getElementById('personalAutopilotV110'))])
+    };
   }
 
-  function moveV211(el,key){
-    if(!el)return;
-    const p=paneV211(key);if(p&&el.parentElement!==p)p.appendChild(el);
-  }
+  function allManaged(r){return uniq(KEYS.flatMap(k=>r[k]||[]));}
 
-  function closestDirectChildV211(el,panel){
-    if(!el||!panel)return null;let node=el;
-    while(node&&node.parentElement!==panel)node=node.parentElement;
-    return node&&node.parentElement===panel?node:null;
-  }
-
-  function cleanupEmptyLegacyWrappersV211(){
-    const panel=talentPanelV211();if(!panel)return;
-    [...panel.children].forEach(el=>{
-      if(el.id==='conectaHubV210'||el.id==='conectaContentHostV211'||el.id==='conectaMobileNavV182')return;
-      if(el.children.length===0&&!String(el.textContent||'').trim())el.remove();
-    });
-    // El viejo contenedor de Oportunidades/Postulaciones queda vacío después de separar ambos módulos.
-    const jobs=document.getElementById('conectaJobsV182'),apps=document.getElementById('conectaApplicationsV182');
-    [jobs,apps].forEach(()=>{});
-  }
-
-  function adoptContentV211(){
-    const panel=talentPanelV211();if(!panel)return;
-    ensureHostV211();ensureDependenciesV211();
-
-    // Resumen
-    moveV211(document.getElementById('conectaSummaryV210'),'summary');
-
-    // Módulos de contenido único
-    moveV211(document.getElementById('conectaJobsV182'),'jobs');
-    moveV211(document.getElementById('talentOpportunityRadarV140'),'jobs');
-    moveV211(document.getElementById('conectaApplicationsV182'),'applications');
-    moveV211(document.getElementById('conectaInterviewsV182'),'interviews');
-    moveV211(document.getElementById('conectaOrganizationsV200'),'organizations');
-    moveV211(document.getElementById('conectaSavedV182'),'saved');
-    moveV211(document.getElementById('talentAgentV100'),'agent');
-    moveV211(document.getElementById('talentEvidenceV140'),'career');
-    moveV211(document.getElementById('talentEvidenceCareerV150'),'career');
-    moveV211(document.getElementById('conectaTimelineV200'),'timeline');
-    moveV211(document.getElementById('personalAutopilotV110'),'passport');
-
-    // Perfil: encabezado, indicadores, validación, CV y formulario completo.
-    const profileElements=[
-      document.getElementById('conectaProfileV182'),
-      closestDirectChildV211(document.getElementById('talentProfileStrength'),panel),
-      closestDirectChildV211(document.getElementById('talentProfileMissing'),panel),
-      document.getElementById('talentCvAgentV140'),
-      document.getElementById('talentDocumentAgentV150'),
-      closestDirectChildV211(document.getElementById('talentApprovalCard'),panel),
-      closestDirectChildV211(document.getElementById('talentProfileForm'),panel)
-    ];
-    [...new Set(profileElements.filter(Boolean))].forEach(el=>moveV211(el,'profile'));
-
-    // Cualquier bloque heredado que haya quedado suelto y pertenezca al perfil se integra allí,
-    // salvo el nav móvil legado (oculto desde V21).
-    [...panel.children].forEach(el=>{
-      if(['conectaHubV210','conectaContentHostV211','conectaMobileNavV182'].includes(el.id))return;
-      if(el.matches?.('script,style'))return;
-      moveV211(el,'profile');
-    });
-    cleanupEmptyLegacyWrappersV211();
-    state.mounted=true;
-  }
-
-  function setActiveButtonV211(key){
+  function setActiveButton(key){
     document.querySelectorAll('[data-v210-module]').forEach(btn=>btn.classList.toggle('active',btn.dataset.v210Module===key));
-    try{localStorage.setItem('lutmin-v211-conecta-active',key);}catch(_){ }
+    try{localStorage.setItem('lutmin-v212-conecta-active',key);}catch(_){ }
   }
 
-  function showPaneV211(key){
+  function applyVisibility(key=S.active){
     if(!KEYS.includes(key))key='summary';
-    adoptContentV211();
-    KEYS.forEach(k=>{
-      const p=paneV211(k);if(!p)return;
-      const on=k===key;p.classList.toggle('hidden',!on);
-      if(on){p.classList.remove('conecta-pane-enter-v211');void p.offsetWidth;p.classList.add('conecta-pane-enter-v211');}
-    });
-    state.active=key;setActiveButtonV211(key);
+    const p=panel(); if(!p)return;
+    ensureModules();
+    const r=roots();
+    allManaged(r).forEach(el=>{el.classList.add('v212-conecta-off');el.classList.remove('v212-conecta-visible');});
+
+    // Oportunidades y postulaciones comparten una grilla heredada.
+    const jobs=document.getElementById('conectaJobsV182');
+    const apps=document.getElementById('conectaApplicationsV182');
+    const shared=jobs&&apps&&jobs.parentElement===apps.parentElement?jobs.parentElement:null;
+    if(shared){
+      shared.classList.toggle('v212-conecta-single-grid',key==='jobs'||key==='applications');
+      if(key==='jobs'){jobs.classList.remove('hidden','v212-conecta-off');apps.classList.add('v212-conecta-off');}
+      else if(key==='applications'){apps.classList.remove('hidden','v212-conecta-off');jobs.classList.add('v212-conecta-off');}
+      else{jobs.classList.remove('v212-conecta-off');apps.classList.remove('v212-conecta-off');}
+    }
+
+    (r[key]||[]).forEach(el=>{el.classList.remove('v212-conecta-off');el.classList.add('v212-conecta-visible');});
+    S.active=key;setActiveButton(key);
   }
 
-  async function runLegacyWithoutScrollV211(fn,key){
-    if(typeof fn!=='function')return;
-    const oldScroll=Element.prototype.scrollIntoView;
-    Element.prototype.scrollIntoView=function(){};
-    try{return await fn(key);}finally{Element.prototype.scrollIntoView=oldScroll;}
-  }
-
-  async function preparePaneDataV211(key){
+  async function prepare(key){
     try{
-      if((key==='organizations'||key==='timeline')&&typeof legacyOpenV200==='function')await runLegacyWithoutScrollV211(legacyOpenV200,key);
+      if(key==='organizations'){
+        if(typeof ensureOrganizationsUi==='function')ensureOrganizationsUi();
+        if(typeof loadOrganizationsV200==='function')await loadOrganizationsV200();
+      }
+      if(key==='timeline'){
+        if(typeof ensureTimelineUi==='function')ensureTimelineUi();
+        if(typeof loadCareerTimelineV200==='function')await loadCareerTimelineV200();
+      }
       if(key==='agent'){
         if(typeof ensureTalentAgentV100==='function')ensureTalentAgentV100();
         if(typeof refreshTalentAgentOptionsV100==='function')refreshTalentAgentOptionsV100();
       }
-      if(key==='career'&&typeof loadV150StudentData==='function')await loadV150StudentData();
+      if(key==='career'){
+        if(typeof ensureV140StudentUI==='function')ensureV140StudentUI();
+        if(typeof ensureStudentEngineV150==='function')ensureStudentEngineV150();
+        if(typeof loadV140ProfileData==='function')await loadV140ProfileData();
+        if(typeof loadV150StudentData==='function')await loadV150StudentData();
+      }
       if(key==='passport'){
         if(typeof ensurePersonalAutopilotV110==='function')ensurePersonalAutopilotV110();
         if(typeof loadPersonalAutopilotV110==='function')await loadPersonalAutopilotV110();
         if(typeof setPersonalAgentTabV110==='function')setPersonalAgentTabV110('passport');
       }
       if(key==='profile'&&typeof loadV140ProfileData==='function')await loadV140ProfileData();
-    }catch(e){console.warn('V21.1 Conecta panel',key,e);}
+    }catch(e){console.warn('V21.2 Conecta prepare',key,e);}
   }
 
   window.openConectaModuleV210=async function(key){
     if(currentLutminUser?.role!=='student')return;
-    if(state.busy)return;state.busy=true;
+    if(!KEYS.includes(key))key='summary';
+    if(S.busy)return; S.busy=true;
     try{
       if(typeof goToCampusTab==='function')goToCampusTab('talent');
-      adoptContentV211();
-      await preparePaneDataV211(key);
-      adoptContentV211(); // por si el módulo se creó durante la carga
-      showPaneV211(key);
+      try{if(typeof ensureConectaHubV210==='function')ensureConectaHubV210();}catch(_){ }
+      await prepare(key);
+      applyVisibility(key);
       if(key==='summary'&&typeof renderConectaSummaryV210==='function')renderConectaSummaryV210();
-      // No hacemos scroll: el contenido cambia en el mismo lugar, igual que Administración.
-    }finally{state.busy=false;}
+      // Sin scroll automático: el contenido cambia debajo del selector.
+    }finally{S.busy=false;}
   };
 
-  // Compatibilidad: llamadas viejas de Conecta pasan por el nuevo sistema de paneles.
+  // Cualquier llamada vieja de Conecta usa la navegación nueva.
   window.openConectaSectionV182=async function(key){
     if(currentLutminUser?.role==='student'&&KEYS.includes(key))return window.openConectaModuleV210(key);
     return typeof legacyOpenSection==='function'?legacyOpenSection.apply(this,arguments):undefined;
@@ -11780,27 +11750,34 @@ document.addEventListener('DOMContentLoaded',()=>setTimeout(polishV170,5600));se
     return typeof legacyOpenV200==='function'?legacyOpenV200.apply(this,arguments):undefined;
   };
 
-  function installV211(){
+  function install(){
     if(currentLutminUser?.role!=='student')return;
-    ensureHostV211();adoptContentV211();showPaneV211('summary');
+    try{if(typeof ensureConectaHubV210==='function')ensureConectaHubV210();}catch(_){ }
+    ensureModules();
+    applyVisibility('summary');
     try{if(typeof renderConectaSummaryV210==='function')renderConectaSummaryV210();}catch(_){ }
+    const p=panel();
+    if(p&&!S.observer){
+      let timer=null;
+      S.observer=new MutationObserver(()=>{clearTimeout(timer);timer=setTimeout(()=>applyVisibility(S.active),20);});
+      S.observer.observe(p,{childList:true});
+    }
   }
 
-  // Cuando datos o módulos dinámicos se vuelven a renderizar, los reubicamos sin cambiar de pestaña.
   if(typeof loadTalentCenter==='function'){
     const oldLoad=loadTalentCenter;
-    window.loadTalentCenter=async function(){const r=await oldLoad.apply(this,arguments);setTimeout(()=>{adoptContentV211();showPaneV211(state.active);},30);return r;};
+    window.loadTalentCenter=async function(){const r=await oldLoad.apply(this,arguments);setTimeout(()=>{applyVisibility(S.active);if(S.active==='summary'&&typeof renderConectaSummaryV210==='function')renderConectaSummaryV210();},30);return r;};
   }
   if(typeof renderTalentCenter==='function'){
     const oldRender=renderTalentCenter;
-    window.renderTalentCenter=function(){const r=oldRender.apply(this,arguments);setTimeout(()=>{adoptContentV211();showPaneV211(state.active);},20);return r;};
+    window.renderTalentCenter=function(){const r=oldRender.apply(this,arguments);setTimeout(()=>applyVisibility(S.active),20);return r;};
   }
   if(typeof paintCurrentLutminUser==='function'){
     const oldPaint=paintCurrentLutminUser;
-    window.paintCurrentLutminUser=function(){const r=oldPaint.apply(this,arguments);setTimeout(installV211,160);return r;};
+    window.paintCurrentLutminUser=function(){const r=oldPaint.apply(this,arguments);setTimeout(install,180);return r;};
   }
 
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(installV211,1250));else setTimeout(installV211,1250);
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(install,1300));else setTimeout(install,1300);
 })();
 </script>
 
