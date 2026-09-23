@@ -112,6 +112,73 @@
     .hide-scrollbar::-webkit-scrollbar { display: none; }
     .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
+
+<style id="lutminV182ConectaStyles">
+  /* V18.2 · navegación modular de Lutmin Conecta */
+  .conecta-subnav-v182{
+    margin:.35rem 0 .55rem 1.05rem;
+    padding:.35rem 0 .35rem .8rem;
+    border-left:1px solid rgba(148,163,184,.24);
+    display:grid;
+    gap:.22rem;
+  }
+  .conecta-subnav-v182.hidden{display:none!important}
+  .conecta-subnav-label-v182{
+    margin:.35rem .55rem .12rem;
+    color:#6477a6;
+    font-size:8.5px;
+    font-weight:900;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+  }
+  .conecta-subitem-v182{
+    position:relative;
+    width:100%;
+    min-height:31px;
+    display:flex;
+    align-items:center;
+    gap:.58rem;
+    padding:.48rem .62rem;
+    border-radius:.72rem;
+    color:#aebcda;
+    font-size:10.5px;
+    font-weight:650;
+    line-height:1.22;
+    text-align:left;
+    transition:background .16s ease,color .16s ease,transform .16s ease;
+  }
+  .conecta-subitem-v182:hover{background:rgba(255,255,255,.07);color:#fff;transform:translateX(2px)}
+  .conecta-subitem-v182.active{background:rgba(47,141,253,.16);color:#dbeafe;font-weight:850}
+  .conecta-subitem-v182 i{width:13px;text-align:center;font-size:9.5px;color:#6faefb;flex:0 0 13px}
+  .conecta-subitem-v182.active i{color:#9fd0ff}
+  .conecta-subitem-v182 span{min-width:0;white-space:normal}
+  .conecta-mobile-nav-v182{display:none}
+  .conecta-nav-focus-v182{box-shadow:0 0 0 2px rgba(47,141,253,.32),0 16px 40px rgba(15,23,42,.08)!important;transition:box-shadow .18s ease}
+  .conecta-anchor-v182{scroll-margin-top:18px}
+  @media(max-width:1023px){
+    .conecta-mobile-nav-v182{
+      display:flex;
+      gap:.45rem;
+      overflow-x:auto;
+      scrollbar-width:none;
+      margin:1rem 0 .4rem;
+      padding:.1rem 0 .35rem;
+    }
+    .conecta-mobile-nav-v182::-webkit-scrollbar{display:none}
+    .conecta-mobile-btn-v182{
+      white-space:nowrap;
+      flex:0 0 auto;
+      padding:.58rem .8rem;
+      border-radius:.8rem;
+      border:1px solid #e2e8f0;
+      background:#fff;
+      color:#475569;
+      font-size:10px;
+      font-weight:800;
+    }
+    .conecta-mobile-btn-v182.active{background:#000B3C;color:#fff;border-color:#000B3C}
+  }
+</style>
 </head>
 
 <body class="bg-white text-slate-800 antialiased overflow-x-hidden">
@@ -888,10 +955,22 @@
           <button data-student-only="true" class="campus-tab w-full text-left p-3 rounded-xl text-slate-300 hover:bg-white/10" data-campus-tab="agenda"><i class="fa-solid fa-calendar-days w-7"></i>Agenda</button>
           <button data-student-only="true" class="campus-tab w-full text-left p-3 rounded-xl text-slate-300 hover:bg-white/10" data-campus-tab="activities"><i class="fa-solid fa-list-check w-7"></i>Actividades</button>
           <button data-student-only="true" class="campus-tab w-full text-left p-3 rounded-xl text-slate-300 hover:bg-white/10" data-campus-tab="certificates"><i class="fa-solid fa-award w-7"></i>Certificados</button>
-          <button data-student-only="true" data-talent-tab="true" class="campus-tab w-full text-left p-3 rounded-xl text-slate-300 hover:bg-white/10" data-campus-tab="talent"><i class="fa-solid fa-briefcase w-7"></i>Lutmin Conecta</button>
+          <button data-student-only="true" data-talent-tab="true" id="studentConectaParentV182" class="campus-tab w-full text-left p-3 rounded-xl text-slate-300 hover:bg-white/10" data-campus-tab="talent"><i class="fa-solid fa-briefcase w-7"></i>Lutmin Conecta</button>
+          <div data-student-only="true" id="studentConectaSubnavV182" class="conecta-subnav-v182">
+            <p class="conecta-subnav-label-v182">Tu perfil</p>
+            <button type="button" class="conecta-subitem-v182 active" data-conecta-key-v182="profile" onclick="openConectaSectionV182('profile')"><i class="fa-regular fa-id-card"></i><span>Perfil profesional</span></button>
+            <button type="button" class="conecta-subitem-v182" data-conecta-key-v182="career" onclick="openConectaSectionV182('career')"><i class="fa-solid fa-route"></i><span>Carrera y evidencias</span></button>
+            <p class="conecta-subnav-label-v182">Empleo</p>
+            <button type="button" class="conecta-subitem-v182" data-conecta-key-v182="jobs" onclick="openConectaSectionV182('jobs')"><i class="fa-solid fa-magnifying-glass"></i><span>Oportunidades laborales</span></button>
+            <button type="button" class="conecta-subitem-v182" data-conecta-key-v182="applications" onclick="openConectaSectionV182('applications')"><i class="fa-regular fa-file-lines"></i><span>Mis postulaciones</span></button>
+            <button type="button" class="conecta-subitem-v182" data-conecta-key-v182="interviews" onclick="openConectaSectionV182('interviews')"><i class="fa-regular fa-calendar-check"></i><span>Entrevistas</span></button>
+            <button type="button" class="conecta-subitem-v182" data-conecta-key-v182="saved" onclick="openConectaSectionV182('saved')"><i class="fa-regular fa-bookmark"></i><span>Guardadas</span></button>
+            <p class="conecta-subnav-label-v182">Herramientas</p>
+            <button type="button" class="conecta-subitem-v182" data-conecta-key-v182="agent" onclick="openConectaSectionV182('agent')"><i class="fa-solid fa-wand-magic-sparkles"></i><span>Agente de empleabilidad</span></button>
+          </div>
           <button class="campus-tab w-full text-left p-3 rounded-xl text-slate-300 hover:bg-white/10 flex items-center" data-campus-tab="notifications"><i class="fa-solid fa-bell w-7"></i><span class="flex-1">Novedades</span><span id="notificationBadgeDesktop" class="hidden min-w-5 h-5 px-1 rounded-full bg-red-500 text-white text-[10px] font-black flex items-center justify-center">0</span></button>
           <button class="campus-tab w-full text-left p-3 rounded-xl text-slate-300 hover:bg-white/10" data-campus-tab="support"><i class="fa-solid fa-headset w-7"></i>Ayuda</button>
-          <button class="campus-tab w-full text-left p-3 rounded-xl text-slate-300 hover:bg-white/10" data-campus-tab="profile"><i class="fa-solid fa-user w-7"></i>Mi perfil</button>
+          <button class="campus-tab w-full text-left p-3 rounded-xl text-slate-300 hover:bg-white/10" data-campus-tab="profile"><i class="fa-solid fa-user w-7"></i>Mi cuenta</button>
           <button id="companyConectaDesktopTab" class="campus-tab hidden w-full text-left p-3 rounded-xl text-slate-300 hover:bg-white/10" data-campus-tab="company-conecta"><i class="fa-solid fa-briefcase w-7"></i>Lutmin Conecta</button>
           <button id="companyDesktopTab" class="campus-tab hidden w-full text-left p-3 rounded-xl text-slate-300 hover:bg-white/10" data-campus-tab="company"><i class="fa-solid fa-building w-7"></i>Mi empresa</button>
           <button id="instructorDesktopTab" class="campus-tab hidden w-full text-left p-3 rounded-xl text-slate-300 hover:bg-white/10" data-campus-tab="instructor"><i class="fa-solid fa-chalkboard-user w-7"></i>Portal Docente</button>
@@ -925,7 +1004,7 @@
                 <button data-student-only="true" data-talent-tab="true" class="campus-tab whitespace-nowrap px-4 py-2 rounded-xl text-slate-300 text-xs" data-campus-tab="talent">Conecta</button>
                 <button class="campus-tab whitespace-nowrap px-4 py-2 rounded-xl text-slate-300 text-xs flex items-center gap-2" data-campus-tab="notifications">Novedades <span id="notificationBadgeMobile" class="hidden min-w-5 h-5 px-1 rounded-full bg-red-500 text-white text-[10px] font-black items-center justify-center">0</span></button>
                 <button class="campus-tab whitespace-nowrap px-4 py-2 rounded-xl text-slate-300 text-xs" data-campus-tab="support">Ayuda</button>
-                <button class="campus-tab whitespace-nowrap px-4 py-2 rounded-xl text-slate-300 text-xs" data-campus-tab="profile">Perfil</button>
+                <button class="campus-tab whitespace-nowrap px-4 py-2 rounded-xl text-slate-300 text-xs" data-campus-tab="profile">Mi cuenta</button>
                 <button id="companyConectaMobileTab" class="campus-tab hidden whitespace-nowrap px-4 py-2 rounded-xl text-slate-300 text-xs" data-campus-tab="company-conecta">Conecta</button>
                 <button id="companyMobileTab" class="campus-tab hidden whitespace-nowrap px-4 py-2 rounded-xl text-slate-300 text-xs" data-campus-tab="company">Mi empresa</button>
                 <button id="instructorMobileTab" class="campus-tab hidden whitespace-nowrap px-4 py-2 rounded-xl text-slate-300 text-xs" data-campus-tab="instructor">Docente</button>
@@ -1060,9 +1139,18 @@
                LUTMIN CONECTA - V1.2
           ====================================================== -->
           <section class="campus-panel hidden" data-campus-panel="talent">
-            <div class="flex flex-col xl:flex-row xl:items-end xl:justify-between gap-4">
+            <div id="conectaProfileV182" class="conecta-anchor-v182 flex flex-col xl:flex-row xl:items-end xl:justify-between gap-4">
               <div><p class="text-[10px] sm:text-xs text-lutmin-light font-bold uppercase tracking-widest">Lutmin Conecta</p><h2 id="campusProfileHeading" class="mt-1 sm:mt-2 text-2xl sm:text-3xl font-black text-lutmin-dark">Mi perfil profesional</h2><p class="mt-2 text-sm text-slate-500">Completá tu perfil, decidí si querés aparecer en el banco de talento y postulate a oportunidades.</p></div>
               <div class="flex flex-wrap gap-2"><button onclick="copyMyTalentProfileLink()" class="px-4 py-2.5 rounded-xl bg-white border border-slate-200 text-sm font-bold"><i class="fa-solid fa-link mr-2"></i>Copiar perfil</button><button onclick="downloadTalentCvPdf()" class="px-4 py-2.5 rounded-xl bg-lutmin-dark text-white text-sm font-bold"><i class="fa-solid fa-file-pdf mr-2"></i>Descargar CV PDF</button></div>
+            </div>
+            <div id="conectaMobileNavV182" class="conecta-mobile-nav-v182">
+              <button type="button" class="conecta-mobile-btn-v182 active" data-conecta-mobile-key-v182="profile" onclick="openConectaSectionV182('profile')">Perfil</button>
+              <button type="button" class="conecta-mobile-btn-v182" data-conecta-mobile-key-v182="jobs" onclick="openConectaSectionV182('jobs')">Oportunidades</button>
+              <button type="button" class="conecta-mobile-btn-v182" data-conecta-mobile-key-v182="applications" onclick="openConectaSectionV182('applications')">Postulaciones</button>
+              <button type="button" class="conecta-mobile-btn-v182" data-conecta-mobile-key-v182="interviews" onclick="openConectaSectionV182('interviews')">Entrevistas</button>
+              <button type="button" class="conecta-mobile-btn-v182" data-conecta-mobile-key-v182="agent" onclick="openConectaSectionV182('agent')">Agente</button>
+              <button type="button" class="conecta-mobile-btn-v182" data-conecta-mobile-key-v182="career" onclick="openConectaSectionV182('career')">Carrera</button>
+              <button type="button" class="conecta-mobile-btn-v182" data-conecta-mobile-key-v182="saved" onclick="openConectaSectionV182('saved')">Guardadas</button>
             </div>
 
             <div class="mt-6 grid sm:grid-cols-4 gap-3">
@@ -1121,11 +1209,11 @@
             </div>
 
             <div class="mt-6 grid xl:grid-cols-[1.25fr_.75fr] gap-5">
-              <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden"><div class="p-5 sm:p-6 border-b border-slate-100"><h3 class="font-extrabold text-lutmin-dark">Oportunidades laborales</h3><p class="mt-1 text-xs text-slate-500">Postulate con tu perfil y tus certificados Lutmin.</p></div><div id="talentJobsList" class="divide-y divide-slate-100"></div></div>
-              <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden"><div class="p-5 sm:p-6 border-b border-slate-100"><h3 class="font-extrabold text-lutmin-dark">Mis postulaciones</h3><p class="mt-1 text-xs text-slate-500">Seguimiento de tus procesos.</p></div><div id="talentApplicationsList" class="divide-y divide-slate-100"></div></div>
+              <div id="conectaJobsV182" class="conecta-anchor-v182 bg-white rounded-3xl border border-slate-100 overflow-hidden"><div class="p-5 sm:p-6 border-b border-slate-100"><h3 class="font-extrabold text-lutmin-dark">Oportunidades laborales</h3><p class="mt-1 text-xs text-slate-500">Postulate con tu perfil y tus certificados Lutmin.</p></div><div id="talentJobsList" class="divide-y divide-slate-100"></div></div>
+              <div id="conectaApplicationsV182" class="conecta-anchor-v182 bg-white rounded-3xl border border-slate-100 overflow-hidden"><div class="p-5 sm:p-6 border-b border-slate-100"><h3 class="font-extrabold text-lutmin-dark">Mis postulaciones</h3><p class="mt-1 text-xs text-slate-500">Seguimiento de tus procesos.</p></div><div id="talentApplicationsList" class="divide-y divide-slate-100"></div></div>
             </div>
-            <div class="mt-5 bg-white rounded-3xl border border-violet-100 overflow-hidden"><div class="p-5 sm:p-6 border-b border-violet-100 bg-violet-50"><h3 class="font-extrabold text-lutmin-dark"><i class="fa-solid fa-calendar-check text-violet-600 mr-2"></i>Próximas entrevistas</h3><p class="mt-1 text-xs text-slate-500">Fechas y datos de entrevistas coordinadas desde Lutmin Conecta.</p></div><div id="talentInterviewsList" class="divide-y divide-slate-100"></div></div>
-            <div class="mt-5 bg-white rounded-3xl border border-slate-100 overflow-hidden"><div class="p-5 sm:p-6 border-b border-slate-100"><h3 class="font-extrabold text-lutmin-dark">Búsquedas guardadas</h3><p class="mt-1 text-xs text-slate-500">Guardá oportunidades para revisarlas después, sin postularte todavía.</p></div><div id="talentSavedJobsList" class="grid md:grid-cols-2 gap-3 p-5"></div></div>
+            <div id="conectaInterviewsV182" class="conecta-anchor-v182 mt-5 bg-white rounded-3xl border border-violet-100 overflow-hidden"><div class="p-5 sm:p-6 border-b border-violet-100 bg-violet-50"><h3 class="font-extrabold text-lutmin-dark"><i class="fa-solid fa-calendar-check text-violet-600 mr-2"></i>Próximas entrevistas</h3><p class="mt-1 text-xs text-slate-500">Fechas y datos de entrevistas coordinadas desde Lutmin Conecta.</p></div><div id="talentInterviewsList" class="divide-y divide-slate-100"></div></div>
+            <div id="conectaSavedV182" class="conecta-anchor-v182 mt-5 bg-white rounded-3xl border border-slate-100 overflow-hidden"><div class="p-5 sm:p-6 border-b border-slate-100"><h3 class="font-extrabold text-lutmin-dark">Búsquedas guardadas</h3><p class="mt-1 text-xs text-slate-500">Guardá oportunidades para revisarlas después, sin postularte todavía.</p></div><div id="talentSavedJobsList" class="grid md:grid-cols-2 gap-3 p-5"></div></div>
           </section>
 
           <!-- =====================================================
@@ -4153,27 +4241,7 @@
       const w = window.open('', '_blank', 'width=1100,height=800');
       if (!w) { showToast('El navegador bloqueó la ventana de impresión.'); return; }
       const scoreMeta = kind !== 'participation' ? ` · Calificación: <strong>${score}%</strong>` : '';
-      const html = `<!doctype html><html><head><meta charset="utf-8"><title>Certificado ${escapeHtml(code)}</title><style>@page{size:A4 landscape;margin:12mm}body{font-family:Arial,sans-serif;margin:0;color:#000B3C}.sheet{border:4px solid #000B3C;min-height:175mm;padding:15mm 18mm;box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;text-align:center}.logo{height:55px;object-fit:contain;margin:auto}.eyebrow{margin-top:20px;letter-spacing:.16em;font-weight:700;font-size:12px;color:#2F8DFD}.name{font-size:36px;font-weight:800;margin:18px 0 8px}.course{font-size:28px;font-weight:800;margin:10px}.meta{font-size:14px;color:#475569;margin-top:15px;line-height:1.8}.code{margin-top:18px;font-size:11px;color:#64748b}.verify{font-size:8px;word-break:break-all;color:#94a3b8;margin-top:6px}.legend{margin:16px auto 0;max-width:850px;font-size:10px;line-height:1.45;color:#64748b}.signatures{display:grid;grid-template-columns:1fr 1fr;gap:70px;max-width:620px;margin:20px auto 0}.sign{border-top:1px solid #94a3b8;padding-top:6px;font-size:10px;color:#475569}</style>
-<!-- LUTMIN V18.1 · NAVEGACIÓN MODULAR SEGURA -->
-<style id="lutminV181NavStyles">
-  .v180-subnav{margin:.2rem 0 .45rem 1.05rem;padding:.25rem 0 .25rem .7rem;border-left:1px solid rgba(148,163,184,.22);display:flex;flex-direction:column;gap:.15rem}
-  .v180-subnav.hidden{display:none}
-  .v180-subnav-btn{width:100%;display:flex;align-items:center;gap:.55rem;text-align:left;padding:.48rem .65rem;border-radius:.7rem;font-size:11px;line-height:1.15;color:#94a3b8;transition:.16s ease}
-  .v180-subnav-btn:hover{background:rgba(255,255,255,.07);color:#fff}
-  .v180-subnav-btn.active{background:rgba(47,141,253,.16);color:#bfdbfe;font-weight:800}
-  .v180-subnav-btn i{width:14px;text-align:center;font-size:10px}
-  .v180-parent-chevron{margin-left:auto;font-size:9px;opacity:.65;transition:transform .18s ease}
-  .v180-parent-open .v180-parent-chevron{transform:rotate(180deg)}
-  .v180-mobile-subnav{display:none}
-  @media(max-width:1023px){
-    .v180-mobile-subnav{display:flex;gap:.45rem;overflow-x:auto;scrollbar-width:none;margin:.9rem 0 1rem;padding-bottom:.2rem;position:sticky;top:0;z-index:12;background:rgba(248,250,252,.96);backdrop-filter:blur(8px)}
-    .v180-mobile-subnav::-webkit-scrollbar{display:none}
-    .v180-mobile-subnav button{white-space:nowrap;padding:.58rem .75rem;border-radius:.75rem;background:white;border:1px solid #e2e8f0;color:#475569;font-size:10px;font-weight:800}
-    .v180-mobile-subnav button.active{background:#000B3C;color:white;border-color:#000B3C}
-  }
-  .v180-scroll-target{scroll-margin-top:18px}
-</style>
-</head><body><div class="sheet"><img class="logo" src="${logo}"><div class="eyebrow">${escapeHtml(heading)}</div><p>${escapeHtml(issuer)} deja constancia de que</p><div class="name">${escapeHtml(fullName)}</div><p>${escapeHtml(phrase)}</p><div class="course">${escapeHtml(course)}</div><div class="meta">Carga horaria: <strong>${hours} h</strong>${scoreMeta} · Emitido: <strong>${issued}</strong><br>${escapeHtml(trainingMeta)}${trainingMeta?' · ':''}${escapeHtml(expiryText)}</div>${qrImg ? `<img src="${qrImg}" style="width:95px;height:95px;margin:18px auto 0">` : ''}<div class="code">Código verificable: <strong>${escapeHtml(code)}</strong></div><div class="verify">${escapeHtml(verify)}</div><div class="legend">${escapeHtml(legend)}</div><div class="signatures"><div class="sign">${escapeHtml(c.instructor_name || 'Instructor / capacitador')}<br><span>${c.instructor_name?'Instructor / capacitador':''}</span></div><div class="sign">${escapeHtml(c.responsible_name || 'Responsable de emisión')}<br><span>${escapeHtml(c.responsible_role || 'Responsable Lutmin')}</span></div></div>${issuerLegal?`<div style="margin-top:14px;font-size:9px;color:#64748b">${escapeHtml(issuerLegal)}</div>`:''}</div><script>window.onload=()=>setTimeout(()=>window.print(),500)<\/script></body></html>`;
+      const html = `<!doctype html><html><head><meta charset="utf-8"><title>Certificado ${escapeHtml(code)}</title><style>@page{size:A4 landscape;margin:12mm}body{font-family:Arial,sans-serif;margin:0;color:#000B3C}.sheet{border:4px solid #000B3C;min-height:175mm;padding:15mm 18mm;box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;text-align:center}.logo{height:55px;object-fit:contain;margin:auto}.eyebrow{margin-top:20px;letter-spacing:.16em;font-weight:700;font-size:12px;color:#2F8DFD}.name{font-size:36px;font-weight:800;margin:18px 0 8px}.course{font-size:28px;font-weight:800;margin:10px}.meta{font-size:14px;color:#475569;margin-top:15px;line-height:1.8}.code{margin-top:18px;font-size:11px;color:#64748b}.verify{font-size:8px;word-break:break-all;color:#94a3b8;margin-top:6px}.legend{margin:16px auto 0;max-width:850px;font-size:10px;line-height:1.45;color:#64748b}.signatures{display:grid;grid-template-columns:1fr 1fr;gap:70px;max-width:620px;margin:20px auto 0}.sign{border-top:1px solid #94a3b8;padding-top:6px;font-size:10px;color:#475569}</style></head><body><div class="sheet"><img class="logo" src="${logo}"><div class="eyebrow">${escapeHtml(heading)}</div><p>${escapeHtml(issuer)} deja constancia de que</p><div class="name">${escapeHtml(fullName)}</div><p>${escapeHtml(phrase)}</p><div class="course">${escapeHtml(course)}</div><div class="meta">Carga horaria: <strong>${hours} h</strong>${scoreMeta} · Emitido: <strong>${issued}</strong><br>${escapeHtml(trainingMeta)}${trainingMeta?' · ':''}${escapeHtml(expiryText)}</div>${qrImg ? `<img src="${qrImg}" style="width:95px;height:95px;margin:18px auto 0">` : ''}<div class="code">Código verificable: <strong>${escapeHtml(code)}</strong></div><div class="verify">${escapeHtml(verify)}</div><div class="legend">${escapeHtml(legend)}</div><div class="signatures"><div class="sign">${escapeHtml(c.instructor_name || 'Instructor / capacitador')}<br><span>${c.instructor_name?'Instructor / capacitador':''}</span></div><div class="sign">${escapeHtml(c.responsible_name || 'Responsable de emisión')}<br><span>${escapeHtml(c.responsible_role || 'Responsable Lutmin')}</span></div></div>${issuerLegal?`<div style="margin-top:14px;font-size:9px;color:#64748b">${escapeHtml(issuerLegal)}</div>`:''}</div><script>window.onload=()=>setTimeout(()=>window.print(),500)<\/script></body></html>`;
       w.document.write(html);
       w.document.close();
     }
@@ -10394,7 +10462,7 @@ async function saveProfessionalDocumentV150(){
 }
 
 function initV150(){
-  ensurePublicFeaturedLeaderV150();if(currentLutminUser?.role==='student'){ensureStudentEngineV150();setTimeout(()=>loadV150StudentData(),900);}const slug=new URL(location.href).searchParams.get('talento');if(slug==='maximiliano-pipet')document.title='Maximiliano Pipet | Lutmin Conecta';else if(!slug)document.title='Lutmin | Plataforma V18.1';
+  ensurePublicFeaturedLeaderV150();if(currentLutminUser?.role==='student'){ensureStudentEngineV150();setTimeout(()=>loadV150StudentData(),900);}const slug=new URL(location.href).searchParams.get('talento');if(slug==='maximiliano-pipet')document.title='Maximiliano Pipet | Lutmin Conecta';else if(!slug)document.title='Lutmin | Plataforma V16.0';
 }
 
 if(typeof loadTalentCenter==='function'){
@@ -10508,7 +10576,7 @@ if(typeof setAdminModuleV19==='function'){
 
 function initV160(){
   if(currentLutminUser){applyWorkspaceChromeV160();enforceWorkspaceRouteV160();if(currentLutminUser.role==='admin')renderAdminCommandCenterV160();}
-  if(!new URL(location.href).searchParams.get('talento'))document.title='Lutmin | Plataforma V18.1';
+  if(!new URL(location.href).searchParams.get('talento'))document.title='Lutmin | Plataforma V16.0';
 }
 document.addEventListener('DOMContentLoaded',()=>setTimeout(initV160,4700));setTimeout(initV160,5600);
 </script>
@@ -10699,7 +10767,7 @@ function polishV170(){
   });
   if(currentLutminUser?.role==='student'){loadProfileMaintenanceV170().then(renderTalentApprovalState);}
   if(currentLutminUser?.role==='admin'&&typeof renderAdminCommandCenterV160==='function')renderAdminCommandCenterV160();
-  if(!new URL(location.href).searchParams.get('talento'))document.title='Lutmin | Plataforma V17.0';
+  if(!new URL(location.href).searchParams.get('talento'))document.title='Lutmin | Plataforma';
 }
 
 // Cargar junto con el centro de talento.
@@ -10711,148 +10779,87 @@ if(typeof loadTalentCenter==='function'){
 document.addEventListener('DOMContentLoaded',()=>setTimeout(polishV170,5600));setTimeout(polishV170,6500);
 </script>
 
-<!-- LUTMIN V18.1 · SUBMENÚS CONTEXTUALES -->
-<script id="lutminV181NavScript">
-
+<script id="lutminV182ConectaScript">
 (function(){
-  const STUDENT_ITEMS=[
-    {key:'profile',label:'Perfil profesional',icon:'fa-id-card',target:'talentSectionProfileV180'},
-    {key:'opportunities',label:'Oportunidades laborales',icon:'fa-magnifying-glass',target:'talentSectionJobsV180'},
-    {key:'applications',label:'Mis postulaciones',icon:'fa-file-circle-check',target:'talentSectionApplicationsV180'},
-    {key:'interviews',label:'Entrevistas',icon:'fa-calendar-check',target:'talentSectionInterviewsV180'},
-    {key:'agent',label:'Agente de empleabilidad',icon:'fa-wand-magic-sparkles',target:'talentAgentV100'},
-    {key:'career',label:'Carrera y evidencias',icon:'fa-route',target:'talentEvidenceCareerV150'},
-    {key:'saved',label:'Guardadas',icon:'fa-bookmark',target:'talentSectionSavedV180'}
-  ];
-  const COMPANY_ITEMS=[
-    {key:'overview',label:'Panel',icon:'fa-chart-pie'},
-    {key:'publish',label:'Nueva búsqueda',icon:'fa-plus'},
-    {key:'jobs',label:'Mis publicaciones',icon:'fa-rectangle-list'},
-    {key:'applications',label:'Postulaciones',icon:'fa-user-check'},
-    {key:'pipeline',label:'Pipeline',icon:'fa-table-columns'},
-    {key:'interviews',label:'Entrevistas',icon:'fa-calendar-check'},
-    {key:'talent',label:'Banco de talento',icon:'fa-users-viewfinder'},
-    {key:'favorites',label:'Favoritos',icon:'fa-star'}
-  ];
-  let activeStudent='profile';
-  let activeCompany='overview';
+  const targetMapV182={
+    profile:'conectaProfileV182',
+    jobs:'conectaJobsV182',
+    applications:'conectaApplicationsV182',
+    interviews:'conectaInterviewsV182',
+    agent:'talentAgentV100',
+    career:'talentEvidenceCareerV150',
+    saved:'conectaSavedV182'
+  };
+  let activeConectaV182='profile';
+  let navBusyV182=false;
 
-  function esc(s){return String(s||'').replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c]||c));}
-  function btnHtml(scope,item){const action=scope==='student'?"openStudentConectaSectionV180('"+item.key+"')":"openCompanyConectaSectionV180('"+item.key+"')";return '<button type="button" class="v180-subnav-btn" data-v180-scope="'+scope+'" data-v180-key="'+item.key+'" onclick="'+action+'"><i class="fa-solid '+item.icon+'"></i><span>'+esc(item.label)+'</span></button>';}
-
-  function addChevron(parent){
-    if(!parent||parent.querySelector('.v180-parent-chevron'))return;
-    parent.classList.add('flex','items-center');
-    parent.insertAdjacentHTML('beforeend','<i class="fa-solid fa-chevron-down v180-parent-chevron"></i>');
+  function setConectaActiveV182(key){
+    activeConectaV182=key;
+    document.querySelectorAll('[data-conecta-key-v182]').forEach(btn=>btn.classList.toggle('active',btn.dataset.conectaKeyV182===key));
+    document.querySelectorAll('[data-conecta-mobile-key-v182]').forEach(btn=>btn.classList.toggle('active',btn.dataset.conectaMobileKeyV182===key));
   }
 
-  function ensureDesktopSubmenus(){
-    const studentParent=document.querySelector('button[data-campus-tab="talent"][data-student-only="true"]');
-    if(studentParent&&!document.getElementById('studentConectaSubnavV180')){
-      addChevron(studentParent);
-      const box=document.createElement('div');box.id='studentConectaSubnavV180';box.className='v180-subnav hidden';box.innerHTML=STUDENT_ITEMS.map(i=>btnHtml('student',i)).join('');
-      studentParent.insertAdjacentElement('afterend',box);
+  function focusConectaTargetV182(el){
+    if(!el)return;
+    const root=document.querySelector('#campusModal .overflow-y-auto.modal-scroll.flex-1') || document.querySelector('#campusModal .modal-scroll.flex-1');
+    if(root){
+      const top=root.scrollTop + el.getBoundingClientRect().top - root.getBoundingClientRect().top - 18;
+      root.scrollTo({top:Math.max(0,top),behavior:'smooth'});
+    }else{
+      el.scrollIntoView({behavior:'smooth',block:'start'});
     }
-    const companyParent=document.getElementById('companyConectaDesktopTab');
-    if(companyParent&&!document.getElementById('companyConectaSubnavV180')){
-      addChevron(companyParent);
-      const box=document.createElement('div');box.id='companyConectaSubnavV180';box.className='v180-subnav hidden';box.innerHTML=COMPANY_ITEMS.map(i=>btnHtml('company',i)).join('');
-      companyParent.insertAdjacentElement('afterend',box);
+    el.classList.add('conecta-nav-focus-v182');
+    setTimeout(()=>el.classList.remove('conecta-nav-focus-v182'),900);
+  }
+
+  async function prepareConectaDynamicV182(key){
+    if(key==='agent' && typeof ensureTalentAgentV100==='function'){
+      ensureTalentAgentV100();
+      if(typeof refreshTalentAgentOptionsV100==='function')refreshTalentAgentOptionsV100();
+    }
+    if(key==='career' && typeof ensureStudentEngineV150==='function'){
+      ensureStudentEngineV150();
+      if(typeof loadV150StudentData==='function'){
+        try{await loadV150StudentData();}catch(_){ }
+      }
     }
   }
 
-  function markSection(el,id){if(el&&!el.id){el.id=id;} if(el)el.classList.add('v180-scroll-target');}
-  function ensureStudentAnchors(){
-    const panel=document.querySelector('section[data-campus-panel="talent"]');if(!panel)return;
-    if(!document.getElementById('talentSectionProfileV180')){
-      const marker=document.createElement('div');marker.id='talentSectionProfileV180';marker.className='v180-scroll-target';panel.insertAdjacentElement('afterbegin',marker);
+  window.openConectaSectionV182=async function(key){
+    if(navBusyV182)return;
+    if(currentLutminUser?.role!=='student')return;
+    navBusyV182=true;
+    try{
+      if(typeof goToCampusTab==='function')goToCampusTab('talent');
+      if(typeof loadTalentCenter==='function'){
+        try{await loadTalentCenter();}catch(_){ }
+      }
+      await prepareConectaDynamicV182(key);
+      setConectaActiveV182(key);
+      let el=document.getElementById(targetMapV182[key]||targetMapV182.profile);
+      if(!el){
+        await new Promise(r=>setTimeout(r,120));
+        await prepareConectaDynamicV182(key);
+        el=document.getElementById(targetMapV182[key]||targetMapV182.profile);
+      }
+      if(el)focusConectaTargetV182(el);
+    }finally{
+      navBusyV182=false;
     }
-    markSection(document.getElementById('talentJobsList')?.closest('.bg-white'),'talentSectionJobsV180');
-    markSection(document.getElementById('talentApplicationsList')?.closest('.bg-white'),'talentSectionApplicationsV180');
-    markSection(document.getElementById('talentInterviewsList')?.closest('.bg-white'),'talentSectionInterviewsV180');
-    markSection(document.getElementById('talentSavedJobsList')?.closest('.bg-white'),'talentSectionSavedV180');
-    document.getElementById('talentAgentV100')?.classList.add('v180-scroll-target');
-    document.getElementById('talentEvidenceCareerV150')?.classList.add('v180-scroll-target');
-    ensureMobileStudentSubnav();
-  }
-
-  function ensureMobileStudentSubnav(){
-    const panel=document.querySelector('section[data-campus-panel="talent"]');if(!panel||document.getElementById('studentConectaMobileSubnavV180'))return;
-    const firstHeader=panel.querySelector(':scope > div:not(#talentSectionProfileV180)');if(!firstHeader)return;
-    const bar=document.createElement('div');bar.id='studentConectaMobileSubnavV180';bar.className='v180-mobile-subnav';
-    bar.innerHTML=STUDENT_ITEMS.map(i=>`<button type="button" data-v180-mobile-student="${i.key}" onclick="openStudentConectaSectionV180('${i.key}')">${esc(i.label)}</button>`).join('');
-    firstHeader.insertAdjacentElement('afterend',bar);
-  }
-
-  function ensureMobileCompanySubnav(){
-    const panel=document.querySelector('section[data-campus-panel="company-conecta"]');if(!panel||document.getElementById('companyConectaMobileSubnavV180'))return;
-    const header=panel.querySelector(':scope > div');if(!header)return;
-    const bar=document.createElement('div');bar.id='companyConectaMobileSubnavV180';bar.className='v180-mobile-subnav';
-    bar.innerHTML=COMPANY_ITEMS.map(i=>'<button type="button" data-v180-mobile-company="'+i.key+'" onclick="openCompanyConectaSectionV180(\''+i.key+'\')">'+esc(i.label)+'</button>').join('');
-    header.insertAdjacentElement('afterend',bar);
-  }
-
-  function setActive(scope,key){
-    if(scope==='student')activeStudent=key;else activeCompany=key;
-    document.querySelectorAll(`[data-v180-scope="${scope}"]`).forEach(b=>b.classList.toggle('active',b.dataset.v180Key===key));
-    if(scope==='student')document.querySelectorAll('[data-v180-mobile-student]').forEach(b=>b.classList.toggle('active',b.dataset.v180MobileStudent===key));
-    if(scope==='company')document.querySelectorAll('[data-v180-mobile-company]').forEach(b=>b.classList.toggle('active',b.dataset.v180MobileCompany===key));
-  }
-
-  window.openStudentConectaSectionV180=async function(key){
-    if(typeof goToCampusTab==='function')goToCampusTab('talent');
-    if(typeof loadTalentCenter==='function')await loadTalentCenter();
-    ensureStudentAnchors();
-    const item=STUDENT_ITEMS.find(x=>x.key===key)||STUDENT_ITEMS[0];
-    let target=document.getElementById(item.target);
-    if(!target){setTimeout(()=>openStudentConectaSectionV180(key),180);return;}
-    setActive('student',item.key);target.scrollIntoView({behavior:'smooth',block:'start'});
   };
 
-  window.openCompanyConectaSectionV180=async function(key){
-    if(typeof goToCampusTab==='function')goToCampusTab('company-conecta');
-    if(typeof loadCompanyConectaData==='function')await loadCompanyConectaData();
-    if(typeof setCompanyConectaView==='function')setCompanyConectaView(key);
-    setActive('company',key);
-    document.querySelector('section[data-campus-panel="company-conecta"]')?.scrollIntoView({behavior:'smooth',block:'start'});
-  };
-
-  function updateVisibility(tab){
-    ensureDesktopSubmenus();
-    const student=document.getElementById('studentConectaSubnavV180');
-    const company=document.getElementById('companyConectaSubnavV180');
-    if(student)student.classList.toggle('hidden',tab!=='talent'||currentLutminUser?.role!=='student');
-    if(company)company.classList.toggle('hidden',tab!=='company-conecta'||currentLutminUser?.role!=='company_admin');
-    document.querySelector('button[data-campus-tab="talent"][data-student-only="true"]')?.classList.toggle('v180-parent-open',tab==='talent');
-    document.getElementById('companyConectaDesktopTab')?.classList.toggle('v180-parent-open',tab==='company-conecta');
-    if(tab==='talent'){ensureStudentAnchors();setActive('student',activeStudent);}
-    if(tab==='company-conecta'){ensureMobileCompanySubnav();setActive('company',activeCompany);}
+  function installConectaV182(){
+    const parent=document.getElementById('studentConectaParentV182');
+    if(parent&&!parent.dataset.v182Bound){
+      parent.dataset.v182Bound='1';
+      parent.addEventListener('click',()=>setTimeout(()=>setConectaActiveV182('profile'),0));
+    }
+    setConectaActiveV182(activeConectaV182);
   }
 
-  function attachScrollSpy(){
-    const scrollRoot=document.querySelector('#campusModal .modal-scroll.flex-1');if(!scrollRoot||scrollRoot.dataset.v180Spy)return;scrollRoot.dataset.v180Spy='1';
-    scrollRoot.addEventListener('scroll',()=>{
-      if(currentLutminUser?.role!=='student'||document.querySelector('section[data-campus-panel="talent"]')?.classList.contains('hidden'))return;
-      const candidates=STUDENT_ITEMS.map(i=>({i,el:document.getElementById(i.target)})).filter(x=>x.el);
-      const rootTop=scrollRoot.getBoundingClientRect().top;let best=null,bestDist=Infinity;
-      for(const x of candidates){const d=Math.abs(x.el.getBoundingClientRect().top-rootTop-24);if(d<bestDist){bestDist=d;best=x.i;}}
-      if(best&&best.key!==activeStudent)setActive('student',best.key);
-    },{passive:true});
-  }
-
-  function install(){
-    ensureDesktopSubmenus();ensureStudentAnchors();attachScrollSpy();
-    // Nombres claros: "Mi cuenta" no compite con "Perfil profesional" de Conecta.
-    document.querySelectorAll('button[data-campus-tab="profile"]').forEach(btn=>{if((btn.textContent||'').trim()==='Mi perfil'||(btn.textContent||'').trim()==='Perfil'){const i=btn.querySelector('i');btn.innerHTML='';if(i)btn.appendChild(i);btn.appendChild(document.createTextNode('Mi cuenta'));}});
-    const oldGo=window.goToCampusTab;if(typeof oldGo==='function'&&!oldGo.__v180){const wrapped=function(tab){const r=oldGo.apply(this,arguments);setTimeout(()=>updateVisibility(tab),0);return r;};wrapped.__v180=true;window.goToCampusTab=wrapped;}
-    const oldCompany=window.setCompanyConectaView;if(typeof oldCompany==='function'&&!oldCompany.__v180){const wrapped=function(view){const r=oldCompany.apply(this,arguments);activeCompany=view||'overview';setActive('company',activeCompany);return r;};wrapped.__v180=true;window.setCompanyConectaView=wrapped;}
-    const oldTalent=window.loadTalentCenter;if(typeof oldTalent==='function'&&!oldTalent.__v180){const wrapped=async function(){const r=await oldTalent.apply(this,arguments);setTimeout(()=>{ensureStudentAnchors();setActive('student',activeStudent);},30);return r;};wrapped.__v180=true;window.loadTalentCenter=wrapped;}
-    updateVisibility(currentLutminUser?.role==='company_admin'?'company':currentLutminUser?.role==='admin'?'admin':'dashboard');
-  }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(install,80));else setTimeout(install,80);
-  setTimeout(install,900);
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',installConectaV182);
+  else installConectaV182();
 })();
-
 </script>
 </body>
 </html>
