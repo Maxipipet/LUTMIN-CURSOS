@@ -201,6 +201,7 @@
     .conecta-mobile-btn-v182.active{background:#000B3C;border-color:#000B3C;color:#fff}
   }
 </style>
+  <link rel="stylesheet" href="assets/css/v24-core.css">
 </head>
 
 <body class="bg-white text-slate-800 antialiased overflow-x-hidden">
@@ -2189,7 +2190,9 @@
                   <div class="sm:col-span-2 xl:col-span-4 flex flex-wrap gap-4 rounded-2xl bg-slate-50 border border-slate-100 p-4">
                     <label class="flex items-center gap-2 text-xs font-bold text-slate-600"><input id="adminLessonPublishedV39" type="checkbox" checked class="w-4 h-4"> Visible para alumnos</label>
                     <label class="flex items-center gap-2 text-xs font-bold text-slate-600"><input id="adminLessonRequiredV39" type="checkbox" checked class="w-4 h-4"> Clase obligatoria</label>
-                    <span class="text-[10px] text-slate-400">Una clase opcional puede verse, pero no bloquea la evaluación final.</span>
+                    <label class="flex items-center gap-2 text-xs font-bold text-slate-600"><input id="adminLessonVideoRequiredV24" type="checkbox" class="w-4 h-4"> Exigir ver el video antes de avanzar</label>
+                    <label class="flex items-center gap-2 text-xs font-bold text-slate-600">Completar desde <input id="adminLessonVideoMinV24" type="number" min="80" max="100" value="98" class="w-16 px-2 py-1 rounded-lg border border-slate-200 bg-white">%</label>
+                    <span class="text-[10px] text-slate-400">Si está activo, el alumno puede retroceder pero no adelantar. Compatible con YouTube No listado y MP4/WEBM.</span>
                   </div>
                 </div>
                 <div class="mt-4 rounded-2xl bg-blue-50 border border-blue-100 p-4 text-xs text-slate-600 leading-relaxed">
@@ -2845,7 +2848,9 @@
           <div class="sm:col-span-2 lg:col-span-4 flex flex-wrap gap-4 rounded-2xl bg-slate-50 border border-slate-100 p-4">
             <label class="flex items-center gap-2 text-xs font-bold text-slate-600"><input id="editLessonPublishedV39" type="checkbox" class="w-4 h-4"> Visible para alumnos</label>
             <label class="flex items-center gap-2 text-xs font-bold text-slate-600"><input id="editLessonRequiredV39" type="checkbox" class="w-4 h-4"> Clase obligatoria</label>
-            <span class="text-[10px] text-slate-400">Las clases ocultas no aparecen en el Campus; las opcionales no bloquean la aprobación.</span>
+            <label class="flex items-center gap-2 text-xs font-bold text-slate-600"><input id="editLessonVideoRequiredV24" type="checkbox" class="w-4 h-4"> Exigir visualización del video</label>
+            <label class="flex items-center gap-2 text-xs font-bold text-slate-600">Completar desde <input id="editLessonVideoMinV24" type="number" min="80" max="100" value="98" class="w-16 px-2 py-1 rounded-lg border border-slate-200 bg-white">%</label>
+            <span class="text-[10px] text-slate-400">Compatible con YouTube No listado y MP4/WEBM. Se permite retroceder, no adelantar.</span>
           </div>
           <div class="sm:col-span-2 lg:col-span-4 rounded-2xl bg-slate-50 border border-slate-100 p-4">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3"><div><p class="text-xs font-bold text-slate-600">Material privado</p><p id="editLessonMaterialStatus" class="mt-1 text-xs text-slate-400">Sin archivo cargado.</p></div><button id="removeLessonMaterialBtn" type="button" onclick="removeAdminLessonMaterial()" class="hidden px-3 py-2 rounded-xl bg-red-50 text-red-600 text-xs font-bold">Quitar archivo</button></div>
@@ -3831,7 +3836,7 @@
       if (courseIds.length) {
         const { data, error } = await supabaseClient
           .from('lessons')
-          .select('id,course_id,title,description,content,duration_minutes,sort_order,video_url,video_path,material_url,material_path,published,required')
+          .select('id,course_id,title,description,content,duration_minutes,sort_order,video_url,video_path,material_url,material_path,published,required,video_completion_required,video_min_watch_percent')
           .in('course_id', courseIds)
           .order('sort_order', { ascending: true });
         if (error) console.error('Error cargando clases:', error);
@@ -4996,7 +5001,7 @@
       const [profilesRes, coursesRes, lessonsRes, enrollmentsRes, progressRes, assessmentsRes, questionsRes, attemptsRes, certificatesRes, notesRes, offeringsRes, leadsRes, paymentsRes, accessRolesRes] = await Promise.all([
         supabaseClient.from('profiles').select('id,full_name,email,role,active,must_change_password,created_at,last_seen_at').order('full_name'),
         supabaseClient.from('courses').select('id,slug,title,description,duration_hours,level,category,published,public_featured,certificate_kind,certificate_validity_months,course_version,instructor_name,training_modality,training_location,created_at,updated_at').order('created_at', { ascending: false }),
-        supabaseClient.from('lessons').select('id,course_id,title,description,content,duration_minutes,sort_order,video_url,video_path,material_url,material_path,published,required,updated_at').order('sort_order'),
+        supabaseClient.from('lessons').select('id,course_id,title,description,content,duration_minutes,sort_order,video_url,video_path,material_url,material_path,published,required,video_completion_required,video_min_watch_percent,updated_at').order('sort_order'),
         supabaseClient.from('enrollments').select('id,user_id,course_id,offering_id,status,enrolled_at,price_amount,payment_currency,payment_status,payment_due_date,access_granted_at').order('enrolled_at', { ascending: false }),
         supabaseClient.from('lesson_progress').select('user_id,lesson_id,completed,completed_at').eq('completed', true),
         supabaseClient.from('assessments').select('id,course_id,title,description,passing_score,published,max_attempts,random_question_count,time_limit_minutes,show_answer_review,created_at').order('created_at', { ascending: false }),
@@ -5706,6 +5711,8 @@
       document.getElementById('editLessonContent').value = String(lesson.content || '').replace(/\\n/g, '\n');
       document.getElementById('editLessonPublishedV39').checked = lesson.published !== false;
       document.getElementById('editLessonRequiredV39').checked = lesson.required !== false;
+      document.getElementById('editLessonVideoRequiredV24').checked = lesson.video_completion_required === true;
+      document.getElementById('editLessonVideoMinV24').value = String(lesson.video_min_watch_percent || 98);
       const status = document.getElementById('editLessonMaterialStatus');
       const removeBtn = document.getElementById('removeLessonMaterialBtn');
       if (lesson.material_path) {
@@ -5749,9 +5756,24 @@
         material_url: document.getElementById('editLessonMaterialUrl').value.trim() || null,
         published: document.getElementById('editLessonPublishedV39')?.checked !== false,
         required: document.getElementById('editLessonRequiredV39')?.checked !== false,
+        video_completion_required: document.getElementById('editLessonVideoRequiredV24')?.checked === true,
+        video_min_watch_percent: Math.max(80, Math.min(100, Number(document.getElementById('editLessonVideoMinV24')?.value || 98))),
         ...(newPath ? { material_path: newPath } : {}),
         ...(newVideoPath ? { video_path: newVideoPath } : {})
       };
+      const effectiveVideoPath = newVideoPath || lesson.video_path || null;
+      if (payload.video_completion_required && !payload.video_url && !effectiveVideoPath) {
+        if (newPath) await supabaseClient.storage.from('course-materials').remove([newPath]);
+        if (newVideoPath) await supabaseClient.storage.from('course-materials').remove([newVideoPath]);
+        btn.disabled = false; btn.textContent = 'Guardar clase';
+        showToast('Para exigir visualización cargá un video YouTube No listado o MP4/WEBM.');
+        return;
+      }
+      if (payload.video_completion_required && payload.video_url && !/youtu(?:\.be|be\.com)|\.(mp4|webm)(?:\?|$)/i.test(payload.video_url) && !effectiveVideoPath) {
+        btn.disabled = false; btn.textContent = 'Guardar clase';
+        showToast('El bloqueo de avance funciona con YouTube No listado o MP4/WEBM.');
+        return;
+      }
       const { error } = await supabaseClient.from('lessons').update(payload).eq('id', lesson.id);
       if (error) {
         if (newPath) await supabaseClient.storage.from('course-materials').remove([newPath]);
@@ -6467,8 +6489,20 @@
         material_url: document.getElementById('adminLessonMaterial').value.trim() || null,
         material_path: uploadedPath,
         published: document.getElementById('adminLessonPublishedV39')?.checked !== false,
-        required: document.getElementById('adminLessonRequiredV39')?.checked !== false
+        required: document.getElementById('adminLessonRequiredV39')?.checked !== false,
+        video_completion_required: document.getElementById('adminLessonVideoRequiredV24')?.checked === true,
+        video_min_watch_percent: Math.max(80, Math.min(100, Number(document.getElementById('adminLessonVideoMinV24')?.value || 98)))
       };
+      if (payload.video_completion_required && !payload.video_url && !payload.video_path) {
+        if (uploadedPath) await supabaseClient.storage.from('course-materials').remove([uploadedPath]);
+        if (uploadedVideoPath) await supabaseClient.storage.from('course-materials').remove([uploadedVideoPath]);
+        showToast('Para exigir visualización cargá un video YouTube No listado o MP4/WEBM.');
+        return;
+      }
+      if (payload.video_completion_required && payload.video_url && !/youtu(?:\.be|be\.com)|\.(mp4|webm)(?:\?|$)/i.test(payload.video_url) && !payload.video_path) {
+        showToast('El bloqueo de avance funciona con YouTube No listado o MP4/WEBM.');
+        return;
+      }
       const { error } = await supabaseClient.from('lessons').insert(payload);
       if (error) {
         console.error(error);
@@ -12251,5 +12285,9 @@ document.addEventListener('DOMContentLoaded',()=>setTimeout(polishV170,5600),{on
 })();
 </script>
 
+
+  <!-- LUTMIN V24 · primer corte modular: runtime y control de video fuera del monolito -->
+  <script src="assets/js/v24-core.js"></script>
+  <script src="assets/js/v24-video-gate.js"></script>
 </body>
 </html>
