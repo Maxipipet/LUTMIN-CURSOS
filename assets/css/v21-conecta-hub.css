@@ -1,0 +1,41 @@
+/* V21.0 · Lutmin Conecta con navegación superior modular */
+  #studentConectaSubnavV183,
+  #studentConectaChevronV183,
+  #conectaMobileNavV182{display:none!important}
+  #studentConectaParentV183{padding-right:.75rem!important}
+  #studentConectaParentV183 .conecta-parent-label-v183{flex:1}
+
+  .conecta-hub-v210{margin-bottom:1.25rem}
+  .conecta-hub-card-v210{background:#fff;border:1px solid #e7eef8;border-radius:1.35rem;padding:1rem}
+  .conecta-hub-grid-v210{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.42rem}
+  .conecta-hub-btn-v210{min-height:42px;border-radius:.78rem;background:#f5f8fc;color:#51607a;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:.45rem;padding:.62rem .7rem;text-align:center;transition:.16s ease;border:1px solid transparent}
+  .conecta-hub-btn-v210:hover{background:#edf4ff;color:#0b3b85;transform:translateY(-1px)}
+  .conecta-hub-btn-v210.active{background:#000b3c;color:#fff;box-shadow:0 8px 22px rgba(0,11,60,.12)}
+  .conecta-hub-btn-v210 .badge-v210{min-width:18px;height:18px;border-radius:999px;background:rgba(47,141,253,.12);color:#2f8dfd;font-size:9px;font-weight:900;display:inline-flex;align-items:center;justify-content:center;padding:0 5px}
+  .conecta-hub-btn-v210.active .badge-v210{background:rgba(255,255,255,.16);color:#fff}
+  .conecta-hub-search-v210{width:100%;border:1px solid #dfe7f1;background:#fff;border-radius:.8rem;padding:.65rem .8rem .65rem 2.15rem;font-size:11px;outline:none}
+  .conecta-hub-search-wrap-v210{position:relative;flex:1;min-width:220px}
+  .conecta-hub-search-wrap-v210>i{position:absolute;left:.8rem;top:50%;transform:translateY(-50%);font-size:10px;color:#94a3b8}
+  .conecta-hub-toolbar-v210{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-top:.8rem;padding-top:.8rem;border-top:1px solid #eef2f7}
+  .conecta-hub-action-v210{padding:.65rem .8rem;border-radius:.75rem;font-size:10px;font-weight:800;display:inline-flex;align-items:center;gap:.4rem;border:1px solid #dfe7f1;background:#fff;color:#334155}
+  .conecta-hub-action-v210.primary{background:#2f8dfd;border-color:#2f8dfd;color:#fff}
+  .conecta-hub-section-v210{scroll-margin-top:18px}
+  .conecta-hub-focus-v210{outline:2px solid rgba(47,141,253,.22);outline-offset:5px;transition:outline-color .6s ease}
+
+  .conecta-summary-v210{margin-top:1rem;border-radius:1.6rem;background:linear-gradient(135deg,#000b3c,#10245d);color:white;padding:1rem}
+  .conecta-summary-grid-v210{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.65rem}
+  .conecta-summary-stat-v210{border-radius:1rem;background:rgba(255,255,255,.08);padding:.8rem}
+  .conecta-summary-stat-v210 p:first-child{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:#bcd5ff;font-weight:800}
+  .conecta-summary-stat-v210 strong{display:block;margin-top:.25rem;font-size:1.45rem;line-height:1;font-weight:900}
+  .conecta-next-v210{margin-top:.8rem;border-radius:1rem;background:#fff;color:#0f172a;padding:.85rem}
+  .conecta-next-v210 .eyebrow{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:#2f8dfd;font-weight:900}
+  .conecta-next-v210 h4{margin-top:.25rem;font-size:13px;font-weight:900;color:#000b3c}
+  .conecta-next-v210 p{margin-top:.2rem;font-size:10px;color:#64748b;line-height:1.5}
+
+  @media (min-width:640px){
+    .conecta-hub-grid-v210{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .conecta-summary-grid-v210{grid-template-columns:repeat(4,minmax(0,1fr))}
+  }
+  @media (min-width:1100px){
+    .conecta-hub-grid-v210{grid-template-columns:repeat(5,minmax(0,1fr))}
+  }
