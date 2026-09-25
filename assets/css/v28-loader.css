@@ -1,0 +1,13 @@
+/* LUTMIN V28.0 · carga, actualización y recuperación */
+#lutminV28BootBar{position:fixed;left:0;right:0;top:0;height:3px;z-index:2147483000;pointer-events:none;opacity:0;transition:opacity .18s ease;background:transparent}
+#lutminV28BootBar.is-visible{opacity:1}
+#lutminV28BootBar span{display:block;height:100%;width:32%;transform:translateX(-120%);background:linear-gradient(90deg,#2F8DFD,#56B8FF);border-radius:999px;animation:lutminV28Load 1.05s ease-in-out infinite}
+#lutminV28BootBar[data-state="ready"] span{width:100%;transform:none;animation:none;transition:width .15s ease}
+#lutminV28BootBar[data-state="error"] span{width:100%;transform:none;animation:none;background:#ef4444}
+@keyframes lutminV28Load{0%{transform:translateX(-120%)}55%{transform:translateX(160%)}100%{transform:translateX(340%)}}
+#lutminV28UpdateBanner{position:fixed;left:50%;bottom:18px;transform:translate(-50%,18px);z-index:2147482990;width:min(92vw,560px);opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease}
+#lutminV28UpdateBanner.is-visible{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+#lutminV28UpdateBanner .v28-update-inner{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:18px;background:#000B3C;color:white;box-shadow:0 18px 50px rgba(0,11,60,.24);border:1px solid rgba(255,255,255,.12)}
+#lutminV28UpdateBanner .v28-update-copy{min-width:0;flex:1;font-size:12px;line-height:1.35}
+#lutminV28UpdateBanner button{flex:none;border:0;border-radius:12px;background:#2F8DFD;color:white;padding:9px 12px;font-size:11px;font-weight:800;cursor:pointer}
+@media (prefers-reduced-motion:reduce){#lutminV28BootBar span{animation:none;transform:none;width:70%}#lutminV28UpdateBanner{transition:none}}

@@ -366,8 +366,8 @@
     }
 
     function openAuthModal(context = 'student') {
-      // V27: mientras la persona completa el login, precargamos el runtime autenticado.
-      window.LutminV27Modules?.warm?.('auth-modal');
+      // V28: mientras la persona completa el login, descargamos el runtime sin ejecutarlo.
+      window.LutminV28Modules?.warm?.('auth-modal');
       authLoginContext = context === 'company' ? 'company' : 'student';
       document.getElementById('authStatus').textContent = '';
       document.getElementById('authForm').reset();
@@ -437,10 +437,10 @@
       if(!mode){showToast('La cuenta existe pero no tiene accesos activos.');return false;}
       currentAccessMode=mode; sessionStorage.setItem('lutmin-access-mode',mode);
       const effectiveRole=mode==='company'?'company_admin':mode==='admin'?'admin':mode==='instructor'?'instructor':'student';
-      // V27: los módulos que extienden loadAdminData/loadTalentCenter/etc. deben instalarse
+      // V28: los módulos que extienden loadAdminData/loadTalentCenter/etc. deben instalarse
       // antes de abrir el workspace. Si un asset falla, evitamos entrar a un Campus incompleto.
-      if(window.LutminV27Modules?.ensureAuthenticated){
-        const modulesReady=await window.LutminV27Modules.ensureAuthenticated({role:effectiveRole});
+      if(window.LutminV28Modules?.ensureAuthenticated){
+        const modulesReady=await window.LutminV28Modules.ensureAuthenticated({role:effectiveRole});
         if(modulesReady===false){showToast('No pude cargar todos los módulos de Lutmin. Actualizá la página y volvé a intentar.');return false;}
       }
       currentLutminUser={id:user.id,email:profile?.email||user.email,fullName,role:effectiveRole,baseRole:profile?.role||'student',active:profile?.active!==false,mustChangePassword:Boolean(profile?.must_change_password)};
