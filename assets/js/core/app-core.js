@@ -1862,7 +1862,7 @@
     }
 
     async function loadAdminData() {
-      if(await window.LutminV31Views?.ensureForTab?.('admin')===false)return;
+      if(await (window.LutminV32Views||window.LutminV31Views)?.ensureForTab?.('admin')===false)return;
       if (!supabaseClient || currentLutminUser?.role !== 'admin') return;
 
       const [profilesRes, coursesRes, lessonsRes, enrollmentsRes, progressRes, assessmentsRes, questionsRes, attemptsRes, certificatesRes, notesRes, offeringsRes, leadsRes, paymentsRes, accessRolesRes] = await Promise.all([
@@ -2274,18 +2274,20 @@
       const csv='\ufeff'+rows.map(r=>r.map(v=>`"${String(v??'').replace(/"/g,'""')}"`).join(';')).join('\n');const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`Lutmin_Asistencia_${new Date().toISOString().slice(0,10)}.csv`;a.click();URL.revokeObjectURL(a.href);
     }
 
+    // V32: render tolerante a módulos de Administración montados bajo demanda.
+    // Sólo intenta pintar controles que existen en el fragmento activo.
     function renderAdminPanel() {
       const students = adminProfiles.filter(p => adminIsStudent(p));
-      document.getElementById('adminStudentsStat').textContent = String(students.length);
-      document.getElementById('adminCoursesStat').textContent = String(adminCourses.length);
-      document.getElementById('adminEnrollmentsStat').textContent = String(adminEnrollments.length);
-      document.getElementById('adminCertificatesStat').textContent = String(adminCertificates.length);
-      document.getElementById('adminLeadsStat').textContent = String(adminCourseLeads.filter(l => l.status !== 'discarded').length);
-      document.getElementById('adminPaymentsPendingStat').textContent = String(adminEnrollments.filter(e => ['pending','partial'].includes(e.payment_status)).length);
-      const activeCompaniesStat = document.getElementById('adminActiveCompaniesStat');
-      if (activeCompaniesStat) activeCompaniesStat.textContent = String(adminCompanies.filter(c => c.active !== false).length);
-      const openOfferingsStat = document.getElementById('adminOpenOfferingsStat');
-      if (openOfferingsStat) openOfferingsStat.textContent = String(adminOfferings.filter(o => o.published !== false && (!o.registration_status || ['open','active','published'].includes(String(o.registration_status).toLowerCase()))).length);
+      const setText=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=String(value);};
+      const setHtml=(id,value)=>{const el=document.getElementById(id);if(el)el.innerHTML=value;};
+      setText('adminStudentsStat', students.length);
+      setText('adminCoursesStat', adminCourses.length);
+      setText('adminEnrollmentsStat', adminEnrollments.length);
+      setText('adminCertificatesStat', adminCertificates.length);
+      setText('adminLeadsStat', adminCourseLeads.filter(l => l.status !== 'discarded').length);
+      setText('adminPaymentsPendingStat', adminEnrollments.filter(e => ['pending','partial'].includes(e.payment_status)).length);
+      setText('adminActiveCompaniesStat', adminCompanies.filter(c => c.active !== false).length);
+      setText('adminOpenOfferingsStat', adminOfferings.filter(o => o.published !== false && (!o.registration_status || ['open','active','published'].includes(String(o.registration_status).toLowerCase()))).length);
 
       const studentOptions = students.length
         ? students.map(p => `<option value="${p.id}">${escapeHtml(p.full_name || p.email || 'Alumno')} · ${escapeHtml(p.email || 'sin email')}</option>`).join('')
@@ -2294,11 +2296,11 @@
         ? adminCourses.map(c => `<option value="${c.id}">${escapeHtml(c.title)}${c.published ? '' : ' (oculto)'}</option>`).join('')
         : '<option value="">No hay cursos</option>';
 
-      document.getElementById('adminStudentSelect').innerHTML = studentOptions;
-      document.getElementById('adminCourseSelect').innerHTML = courseOptions;
-      document.getElementById('adminLessonCourse').innerHTML = courseOptions;
-      document.getElementById('adminAssessmentCourse').innerHTML = courseOptions;
-      document.getElementById('adminOfferingCourse').innerHTML = courseOptions;
+      setHtml('adminStudentSelect', studentOptions);
+      setHtml('adminCourseSelect', courseOptions);
+      setHtml('adminLessonCourse', courseOptions);
+      setHtml('adminAssessmentCourse', courseOptions);
+      setHtml('adminOfferingCourse', courseOptions);
 
       const assessmentOptions = adminAssessments.length
         ? adminAssessments.map(a => {
@@ -2307,15 +2309,17 @@
             return `<option value="${a.id}">${escapeHtml(course?.title || a.title)} · ${count} preguntas</option>`;
           }).join('')
         : '<option value="">No hay evaluaciones creadas</option>';
-      document.getElementById('adminQuestionAssessment').innerHTML = assessmentOptions;
+      setHtml('adminQuestionAssessment', assessmentOptions);
 
-      populateAdminAcademicFilters();
-      applyAdminStudentFilters();
-      renderAdminCourses();
-      renderAdminCertificates();
-      renderAdminCommercial();
-      renderAdminPayments();
-      renderAdminFinancialDashboard();
+      if(document.getElementById('adminStudentsList')){
+        populateAdminAcademicFilters();
+        applyAdminStudentFilters();
+      }
+      if(document.getElementById('adminCoursesList')) renderAdminCourses();
+      if(document.getElementById('adminCertificatesList')) renderAdminCertificates();
+      if(document.getElementById('adminOfferingsList')||document.getElementById('adminLeadsList')) renderAdminCommercial();
+      if(document.getElementById('adminPaymentsList')) renderAdminPayments();
+      if(document.getElementById('financeCourseRows')||document.getElementById('financeDebtRows')) renderAdminFinancialDashboard();
     }
 
     function adminDateTime(value) {

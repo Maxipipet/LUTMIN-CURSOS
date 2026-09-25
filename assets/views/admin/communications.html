@@ -1,0 +1,15 @@
+<div class="mt-6 grid xl:grid-cols-2 gap-5" data-admin-module-v19="communications">
+<form class="bg-white rounded-3xl border border-slate-100 p-5 sm:p-6" id="adminAnnouncementForm">
+<div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-blue-50 text-lutmin-light flex items-center justify-center"><i class="fa-solid fa-bullhorn"></i></div><div><h3 class="font-extrabold text-lutmin-dark">Publicar comunicado</h3><p class="text-xs text-slate-500">Aparece dentro de Novedades según el tipo de usuario elegido.</p></div></div>
+<div class="mt-5 space-y-3">
+<input class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" id="adminAnnouncementTitle" maxlength="160" placeholder="Título del comunicado" required=""/>
+<textarea class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" id="adminAnnouncementBody" maxlength="3000" placeholder="Mensaje" required="" rows="4"></textarea>
+<div class="grid sm:grid-cols-2 gap-3"><select class="px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" id="adminAnnouncementAudience"><option value="all">Todos</option><option value="student">Solo alumnos</option><option value="company_admin">Solo empresas</option><option value="admin">Solo administradores</option></select><input class="px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" id="adminAnnouncementExpires" title="Vencimiento opcional" type="datetime-local"/></div>
+</div>
+<button class="mt-4 w-full py-3 rounded-xl bg-lutmin-light text-white font-extrabold text-sm" type="submit">Publicar comunicado</button>
+</form>
+<div class="bg-white rounded-3xl border border-slate-100 overflow-hidden">
+<div class="p-5 sm:p-6 border-b border-slate-100"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-violet-50 text-violet-600 flex items-center justify-center"><i class="fa-solid fa-list-check"></i></div><div><h3 class="font-extrabold text-lutmin-dark">Comunicados recientes</h3><p class="text-xs text-slate-500">Podés desactivar un aviso sin borrarlo.</p></div></div></div>
+<div class="divide-y divide-slate-100 max-h-[380px] overflow-y-auto" id="adminAnnouncementsList"></div>
+</div>
+</div>

@@ -1,0 +1,322 @@
+<div class="mt-6 grid xl:grid-cols-2 gap-5" data-admin-module-v19="academic">
+<!-- CREAR ALUMNO -->
+<form class="bg-white rounded-3xl border border-slate-100 p-5 sm:p-6" id="adminStudentForm">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-green-50 text-green-600 flex items-center justify-center"><i class="fa-solid fa-user-plus"></i></div>
+<div>
+<h3 class="font-extrabold text-lutmin-dark">Crear alumno</h3>
+<p class="text-xs text-slate-500">Crea su acceso real al Campus. La contraseña inicial será provisoria.</p>
+</div>
+</div>
+<div class="mt-5 space-y-4">
+<div>
+<label class="text-xs font-bold text-slate-600" for="adminStudentName">Nombre completo</label>
+<input autocomplete="off" class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-lutmin-light" id="adminStudentName" placeholder="Ej: Juan Pérez" required=""/>
+</div>
+<div>
+<label class="text-xs font-bold text-slate-600" for="adminStudentEmail">Correo electrónico</label>
+<input autocomplete="off" class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-lutmin-light" id="adminStudentEmail" placeholder="juan@correo.com" required="" type="email"/>
+</div>
+<div>
+<div class="flex items-center justify-between gap-3">
+<label class="text-xs font-bold text-slate-600" for="adminStudentPassword">Contraseña provisoria</label>
+<button class="text-[11px] font-bold text-lutmin-light" onclick="generateStudentPassword()" type="button">Generar</button>
+</div>
+<input autocomplete="off" class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-lutmin-light" id="adminStudentPassword" minlength="8" placeholder="Mínimo 8 caracteres" required="" type="text"/>
+<p class="mt-2 text-[11px] text-slate-400">Esta contraseña se la vas a entregar al alumno para su primer ingreso.</p>
+</div>
+</div>
+<button class="mt-5 w-full py-3 rounded-xl bg-green-600 hover:bg-green-700 text-white font-extrabold text-sm disabled:opacity-60" id="adminCreateStudentBtn" type="submit">Crear alumno</button>
+<div class="hidden mt-4 rounded-2xl bg-green-50 border border-green-100 p-4 text-sm text-green-800" id="adminCreateStudentStatus"></div>
+</form>
+<!-- ASIGNAR CURSO -->
+<form class="bg-white rounded-3xl border border-slate-100 p-5 sm:p-6" id="adminAssignForm">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-blue-50 text-lutmin-light flex items-center justify-center"><i class="fa-solid fa-user-plus"></i></div>
+<div>
+<h3 class="font-extrabold text-lutmin-dark">Asignar curso</h3>
+<p class="text-xs text-slate-500">Elegí un alumno y un curso.</p>
+</div>
+</div>
+<div class="mt-5 grid sm:grid-cols-2 gap-4">
+<div>
+<label class="text-xs font-bold text-slate-600">Alumno</label>
+<select class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" id="adminStudentSelect" required=""></select>
+</div>
+<div>
+<label class="text-xs font-bold text-slate-600">Curso</label>
+<select class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" id="adminCourseSelect" required=""></select>
+</div>
+</div>
+<button class="mt-4 w-full py-3 rounded-xl bg-lutmin-light text-white font-extrabold text-sm" type="submit">Asignar curso</button>
+</form>
+<!-- NUEVO CURSO -->
+<form class="bg-white rounded-3xl border border-slate-100 p-5 sm:p-6" id="adminCourseForm">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-blue-50 text-lutmin-light flex items-center justify-center"><i class="fa-solid fa-book-open"></i></div>
+<div>
+<h3 class="font-extrabold text-lutmin-dark">Crear curso</h3>
+<p class="text-xs text-slate-500">El curso queda disponible para cargar clases.</p>
+</div>
+</div>
+<div class="mt-5 grid sm:grid-cols-2 gap-4">
+<div class="sm:col-span-2">
+<label class="text-xs font-bold text-slate-600">Nombre del curso</label>
+<input class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" id="adminCourseTitle" placeholder="Ej: Refrigeración Split" required=""/>
+</div>
+<div>
+<label class="text-xs font-bold text-slate-600">Horas</label>
+<input class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" id="adminCourseHours" min="0" required="" type="number" value="10"/>
+</div>
+<div>
+<label class="text-xs font-bold text-slate-600">Nivel</label>
+<select class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" id="adminCourseLevel">
+<option>Inicial</option><option>Intermedio</option><option>Avanzado</option>
+</select>
+</div>
+<div>
+<label class="text-xs font-bold text-slate-600">Categoría</label>
+<select class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" id="adminCourseCategory">
+<option value="tecnico">Técnico</option><option value="gestion">Gestión</option><option value="iso">ISO</option>
+</select>
+</div>
+<label class="flex items-center gap-2 text-sm font-semibold text-slate-600 self-end pb-3">
+<input checked="" class="w-4 h-4" id="adminCoursePublished" type="checkbox"/> Publicar inmediatamente
+                  </label>
+<div class="sm:col-span-2">
+<label class="text-xs font-bold text-slate-600">Descripción</label>
+<textarea class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" id="adminCourseDescription" placeholder="Qué va a aprender el alumno" rows="3"></textarea>
+</div>
+</div>
+<button class="mt-4 w-full py-3 rounded-xl bg-lutmin-dark text-white font-extrabold text-sm" type="submit">Crear curso</button>
+</form>
+<!-- NUEVA CLASE -->
+<form class="bg-white rounded-3xl border border-slate-100 p-5 sm:p-6 xl:col-span-2" id="adminLessonForm">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-blue-50 text-lutmin-light flex items-center justify-center"><i class="fa-solid fa-play"></i></div>
+<div>
+<h3 class="font-extrabold text-lutmin-dark">Agregar clase</h3>
+<p class="text-xs text-slate-500">Cargá una clase dentro de un curso existente.</p>
+</div>
+</div>
+<div class="mt-5 grid sm:grid-cols-2 xl:grid-cols-4 gap-4">
+<div>
+<label class="text-xs font-bold text-slate-600">Curso</label>
+<select class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" id="adminLessonCourse" required=""></select>
+</div>
+<div>
+<label class="text-xs font-bold text-slate-600">Nº de clase</label>
+<input class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" id="adminLessonOrder" min="1" placeholder="1" required="" type="number"/>
+</div>
+<div>
+<label class="text-xs font-bold text-slate-600">Duración (min)</label>
+<input class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" id="adminLessonDuration" min="0" required="" type="number" value="30"/>
+</div>
+<div>
+<label class="text-xs font-bold text-slate-600">Video por enlace</label>
+<input class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" id="adminLessonVideo" placeholder="YouTube no listado, Google Drive o MP4" type="url"/>
+<p class="mt-1 text-[10px] text-slate-400">Recomendado: YouTube No listado o un archivo compartido desde Drive. No requiere API.</p>
+</div>
+<div>
+<label class="text-xs font-bold text-slate-600">Video privado (opcional)</label>
+<input accept="video/mp4,video/webm,.mp4,.webm" class="mt-2 block w-full text-xs text-slate-500 file:mr-3 file:rounded-lg file:border-0 file:bg-blue-50 file:px-3 file:py-2 file:font-bold file:text-blue-700" id="adminLessonVideoFile" type="file"/>
+<p class="mt-1 text-[10px] text-amber-600">Solo para casos puntuales: consume el almacenamiento incluido de Supabase. Máximo 80 MB.</p>
+</div>
+<div>
+<label class="text-xs font-bold text-slate-600">Material por enlace</label>
+<input class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" id="adminLessonMaterial" placeholder="Google Drive, PDF, Docs, Slides..." type="url"/>
+<p class="mt-1 text-[10px] text-slate-400">Lutmin guarda el enlace, no una copia del archivo.</p>
+</div>
+<div>
+<label class="text-xs font-bold text-slate-600">Subir material privado</label>
+<input accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.png,.jpg,.jpeg,.webp,.txt,.zip" class="mt-2 block w-full text-xs text-slate-500 file:mr-3 file:rounded-lg file:border-0 file:bg-blue-50 file:px-3 file:py-2 file:font-bold file:text-blue-700" id="adminLessonFile" type="file"/>
+<p class="mt-1 text-[10px] text-slate-400">Máximo 20 MB. Solo alumnos inscriptos podrán abrirlo.</p>
+</div>
+<div class="sm:col-span-2 xl:col-span-2">
+<label class="text-xs font-bold text-slate-600">Título de la clase</label>
+<input class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" id="adminLessonTitle" placeholder="Ej: Herramientas y medición" required=""/>
+</div>
+<div class="sm:col-span-2 xl:col-span-2">
+<label class="text-xs font-bold text-slate-600">Descripción corta</label>
+<input class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" id="adminLessonDescription" placeholder="Resumen de la clase"/>
+</div>
+<div class="sm:col-span-2 xl:col-span-4">
+<label class="text-xs font-bold text-slate-600">Contenido de la clase</label>
+<textarea class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" id="adminLessonContent" placeholder="Escribí acá el contenido, instrucciones, puntos importantes, etc." rows="6"></textarea>
+</div>
+<div class="sm:col-span-2 xl:col-span-4 flex flex-wrap gap-4 rounded-2xl bg-slate-50 border border-slate-100 p-4">
+<label class="flex items-center gap-2 text-xs font-bold text-slate-600"><input checked="" class="w-4 h-4" id="adminLessonPublishedV39" type="checkbox"/> Visible para alumnos</label>
+<label class="flex items-center gap-2 text-xs font-bold text-slate-600"><input checked="" class="w-4 h-4" id="adminLessonRequiredV39" type="checkbox"/> Clase obligatoria</label>
+<label class="flex items-center gap-2 text-xs font-bold text-slate-600"><input class="w-4 h-4" id="adminLessonVideoRequiredV24" type="checkbox"/> Exigir ver el video antes de avanzar</label>
+<label class="flex items-center gap-2 text-xs font-bold text-slate-600">Completar desde <input class="w-16 px-2 py-1 rounded-lg border border-slate-200 bg-white" id="adminLessonVideoMinV24" max="100" min="80" type="number" value="98"/>%</label>
+<span class="text-[10px] text-slate-400">Si está activo, el alumno puede retroceder pero no adelantar. Compatible con YouTube No listado y MP4/WEBM.</span>
+</div>
+</div>
+<div class="mt-4 rounded-2xl bg-blue-50 border border-blue-100 p-4 text-xs text-slate-600 leading-relaxed">
+<strong class="text-lutmin-dark">Recomendación de costo cero:</strong> videos en <strong>YouTube No listado</strong> y documentos/videos grandes en <strong>Google Drive</strong>. YouTube “Privado” normalmente no puede reproducirse dentro de una web externa. El video privado de Supabase queda disponible para casos puntuales y consume tu cuota de almacenamiento.
+                </div>
+<button class="mt-4 px-5 py-3 rounded-xl bg-lutmin-light text-white font-extrabold text-sm" type="submit">Agregar clase</button>
+</form>
+<!-- NUEVA EVALUACIÓN -->
+<form class="bg-white rounded-3xl border border-slate-100 p-5 sm:p-6" id="adminAssessmentForm">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-violet-50 text-violet-600 flex items-center justify-center"><i class="fa-solid fa-clipboard-question"></i></div>
+<div>
+<h3 class="font-extrabold text-lutmin-dark">Crear evaluación</h3>
+<p class="text-xs text-slate-500">Una evaluación final por curso.</p>
+</div>
+</div>
+<div class="mt-5 space-y-4">
+<div>
+<label class="text-xs font-bold text-slate-600">Curso</label>
+<select class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" id="adminAssessmentCourse" required=""></select>
+</div>
+<div>
+<label class="text-xs font-bold text-slate-600">Título</label>
+<input class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" id="adminAssessmentTitle" placeholder="Ej: Evaluación final" required=""/>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="text-xs font-bold text-slate-600">Aprobación (%)</label>
+<input class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" id="adminAssessmentPassing" max="100" min="0" required="" type="number" value="70"/>
+</div>
+<label class="flex items-center gap-2 text-sm font-semibold text-slate-600 mt-7">
+<input checked="" class="w-4 h-4" id="adminAssessmentPublished" type="checkbox"/> Publicar
+                    </label>
+</div>
+<div>
+<label class="text-xs font-bold text-slate-600">Descripción</label>
+<textarea class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" id="adminAssessmentDescription" placeholder="Qué se evalúa" rows="3"></textarea>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<div><label class="text-xs font-bold text-slate-600">Intentos máximos</label><input class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" id="adminAssessmentMaxAttemptsV39" max="50" min="1" type="number" value="3"/></div>
+<div><label class="text-xs font-bold text-slate-600">Preguntas por intento</label><input class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" id="adminAssessmentRandomCountV39" min="1" placeholder="Todas" type="number"/><p class="mt-1 text-[10px] text-slate-400">Si cargás 20 y ponés 10, cada intento recibe 10 al azar.</p></div>
+<div><label class="text-xs font-bold text-slate-600">Tiempo límite (min)</label><input class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" id="adminAssessmentTimeLimitV39" max="600" min="1" placeholder="Sin límite" type="number"/></div>
+<label class="flex items-center gap-2 text-xs font-bold text-slate-600 mt-7"><input class="w-4 h-4" id="adminAssessmentReviewV39" type="checkbox"/> Mostrar corrección al terminar</label>
+</div>
+</div>
+<button class="mt-4 w-full py-3 rounded-xl bg-violet-600 hover:bg-violet-700 text-white font-extrabold text-sm" type="submit">Guardar evaluación</button>
+</form>
+<!-- NUEVA PREGUNTA -->
+<form class="bg-white rounded-3xl border border-slate-100 p-5 sm:p-6" id="adminQuestionForm">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center"><i class="fa-solid fa-list-check"></i></div>
+<div>
+<h3 class="font-extrabold text-lutmin-dark">Agregar pregunta</h3>
+<p class="text-xs text-slate-500">La respuesta correcta queda protegida en Supabase.</p>
+</div>
+</div>
+<div class="mt-5 space-y-4">
+<div class="grid grid-cols-[1fr_100px] gap-3">
+<div>
+<label class="text-xs font-bold text-slate-600">Evaluación</label>
+<select class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" id="adminQuestionAssessment" required=""></select>
+</div>
+<div>
+<label class="text-xs font-bold text-slate-600">Nº</label>
+<input class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" id="adminQuestionOrder" min="1" required="" type="number" value="1"/>
+</div>
+</div>
+<div>
+<label class="text-xs font-bold text-slate-600">Pregunta</label>
+<textarea class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" id="adminQuestionText" placeholder="Escribí la pregunta" required="" rows="2"></textarea>
+</div>
+<div class="grid sm:grid-cols-2 gap-3">
+<input class="px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" id="adminQuestionA" placeholder="Opción A" required=""/>
+<input class="px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" id="adminQuestionB" placeholder="Opción B" required=""/>
+<input class="px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" id="adminQuestionC" placeholder="Opción C" required=""/>
+<input class="px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" id="adminQuestionD" placeholder="Opción D" required=""/>
+</div>
+<div>
+<label class="text-xs font-bold text-slate-600">Explicación de la respuesta (opcional)</label>
+<textarea class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" id="adminQuestionExplanationV39" placeholder="Se puede mostrar después de entregar si habilitás la corrección." rows="2"></textarea>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<div>
+<label class="text-xs font-bold text-slate-600">Respuesta correcta</label>
+<select class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" id="adminQuestionCorrect">
+<option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option>
+</select>
+</div>
+<div>
+<label class="text-xs font-bold text-slate-600">Puntos</label>
+<input class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" id="adminQuestionPoints" min="1" required="" type="number" value="1"/>
+</div>
+</div>
+</div>
+<button class="mt-4 w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-extrabold text-sm" type="submit">Agregar pregunta</button>
+</form>
+</div>
+<div class="mt-6 bg-white rounded-3xl border border-slate-100 overflow-hidden" data-admin-module-v19="academic">
+<div class="p-5 sm:p-6 border-b border-slate-100 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+<div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-700 flex items-center justify-center"><i class="fa-solid fa-calendar-check"></i></div><div><h3 class="font-extrabold text-lutmin-dark">Comisiones, agenda y asistencia</h3><p class="mt-1 text-xs text-slate-500">Organizá grupos presenciales/online, programá encuentros y registrá asistencia.</p></div></div>
+<button class="px-4 py-2.5 rounded-xl bg-slate-100 text-sm font-bold" onclick="exportAttendanceCsv()"><i class="fa-solid fa-file-csv mr-2"></i>Exportar asistencia</button>
+</div>
+<div class="p-5 sm:p-6 grid xl:grid-cols-3 gap-5 border-b border-slate-100">
+<form class="rounded-2xl bg-slate-50 p-5" id="adminTrainingGroupForm">
+<p class="text-xs font-extrabold text-lutmin-dark uppercase">Nueva comisión</p>
+<select class="mt-4 w-full px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" id="adminTrainingCourse" required=""></select>
+<select class="mt-3 w-full px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" id="adminTrainingCompany"><option value="">Sin empresa / abierta</option></select>
+<input class="mt-3 w-full px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" id="adminTrainingName" placeholder="Ej: Electricidad · Octubre · Grupo A" required=""/>
+<div class="mt-3 grid grid-cols-2 gap-3"><select class="px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" id="adminTrainingModality"><option value="online">Online</option><option value="presencial">Presencial</option><option value="hibrida">Híbrida</option><option value="asincronica">Asincrónica</option></select><input class="px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" id="adminTrainingInstructor" placeholder="Capacitador"/></div>
+<div class="mt-3 grid grid-cols-2 gap-3"><input class="px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" id="adminTrainingStart" type="date"/><input class="px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" id="adminTrainingEnd" type="date"/></div>
+<input class="mt-3 w-full px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" id="adminTrainingLocation" placeholder="Lugar (opcional)"/>
+<input class="mt-3 w-full px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" id="adminTrainingMeetingUrl" placeholder="Link Meet/Zoom (opcional)" type="url"/>
+<button class="mt-4 w-full py-3 rounded-xl bg-indigo-700 text-white font-extrabold text-sm" type="submit">Crear comisión</button>
+<p class="mt-2 text-[10px] text-slate-400">Si elegís una empresa, incorpora automáticamente a sus colaboradores activos.</p>
+</form>
+<form class="rounded-2xl bg-slate-50 p-5" id="adminTrainingMemberForm">
+<p class="text-xs font-extrabold text-lutmin-dark uppercase">Agregar alumno a comisión</p>
+<select class="mt-4 w-full px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" id="adminTrainingMemberGroup" required=""></select>
+<select class="mt-3 w-full px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" id="adminTrainingMemberStudent" required=""></select>
+<button class="mt-4 w-full py-3 rounded-xl bg-blue-600 text-white font-extrabold text-sm" type="submit">Agregar alumno</button>
+<div class="mt-6 rounded-2xl border border-blue-100 bg-blue-50 p-4"><p class="text-xs font-bold text-blue-800">¿Para qué sirve?</p><p class="mt-1 text-[11px] leading-relaxed text-blue-700">La comisión organiza fechas y asistencia. El curso sigue guardando clases, progreso, evaluación y certificado.</p></div>
+</form>
+<form class="rounded-2xl bg-slate-50 p-5" id="adminTrainingSessionForm">
+<p class="text-xs font-extrabold text-lutmin-dark uppercase">Programar encuentro</p>
+<select class="mt-4 w-full px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" id="adminTrainingSessionGroup" required=""></select>
+<input class="mt-3 w-full px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" id="adminTrainingSessionTitle" placeholder="Ej: Taller práctico 1" required=""/>
+<input class="mt-3 w-full px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" id="adminTrainingSessionDate" required="" type="date"/>
+<div class="mt-3 grid grid-cols-2 gap-3"><input class="px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" id="adminTrainingSessionStart" type="time"/><input class="px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" id="adminTrainingSessionEnd" type="time"/></div>
+<input class="mt-3 w-full px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" id="adminTrainingSessionLocation" placeholder="Lugar (hereda comisión si queda vacío)"/>
+<input class="mt-3 w-full px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" id="adminTrainingSessionUrl" placeholder="Link de videollamada" type="url"/>
+<button class="mt-4 w-full py-3 rounded-xl bg-green-600 text-white font-extrabold text-sm" type="submit">Agregar a la agenda</button>
+</form>
+</div>
+<div class="divide-y divide-slate-100" id="adminTrainingList"><div class="p-6 text-sm text-slate-500">Todavía no hay comisiones.</div></div>
+</div>
+<div class="mt-6 bg-white rounded-3xl border border-slate-100 overflow-hidden" data-admin-module-v19="academic">
+<div class="p-5 sm:p-6 border-b border-slate-100">
+<h3 class="font-extrabold text-lutmin-dark">Cursos y clases</h3>
+<p class="mt-1 text-xs text-slate-500">Podés publicar u ocultar un curso sin borrarlo.</p>
+</div>
+<div class="divide-y divide-slate-100" id="adminCoursesList"></div>
+</div>
+<div class="mt-6 bg-white rounded-3xl border border-slate-100 overflow-hidden" data-admin-module-v19="academic" id="adminCertificateComplianceV32">
+<div class="p-5 sm:p-6 border-b border-slate-100 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+<div><h3 class="font-extrabold text-lutmin-dark">Certificación privada · configuración y control</h3><p class="mt-1 text-xs text-slate-500">Define cómo se identifica Lutmin como emisor privado y controla vencimientos y datos faltantes.</p></div>
+<button class="px-3 py-2 rounded-xl bg-slate-100 text-xs font-bold" onclick="loadCertificateComplianceV32()"><i class="fa-solid fa-rotate mr-2"></i>Revisar</button>
+</div>
+<div class="p-5 sm:p-6 grid xl:grid-cols-[1fr_.9fr] gap-5">
+<form class="rounded-2xl bg-slate-50 border border-slate-100 p-4 space-y-3" id="certificateIssuerFormV32">
+<h4 class="font-extrabold text-lutmin-dark">Datos del emisor</h4>
+<div class="grid sm:grid-cols-2 gap-3"><input class="px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" id="certIssuerDisplayV32" placeholder="Nombre visible: Lutmin Consultora" required=""/><input class="px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" id="certIssuerLegalV32" placeholder="Nombre / razón legal del emisor"/></div>
+<div class="grid sm:grid-cols-2 gap-3"><input class="px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" id="certIssuerTaxIdV32" placeholder="CUIT"/><input class="px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" id="certResponsibleNameV32" placeholder="Responsable firmante"/></div>
+<input class="w-full px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" id="certResponsibleRoleV32" placeholder="Cargo del responsable"/>
+<textarea class="w-full px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" id="certPrivateLegendV32" rows="3"></textarea>
+<p class="text-[10px] text-slate-500">No uses expresiones como “título oficial”, “validez nacional”, “habilitación profesional” o “avalado por el Ministerio” salvo que exista un reconocimiento formal específico.</p>
+<button class="w-full py-3 rounded-xl bg-lutmin-dark text-white text-sm font-extrabold">Guardar configuración</button>
+</form>
+<div>
+<div class="rounded-2xl border border-slate-100 p-4" id="certificateComplianceStatusV32"><p class="text-sm text-slate-500">Cargando control...</p></div>
+<div class="mt-4 rounded-2xl border border-slate-100 overflow-hidden"><div class="p-4 bg-slate-50"><p class="text-xs font-extrabold text-lutmin-dark">Vencimientos próximos</p></div><div class="divide-y divide-slate-100" id="certificateExpiringListV32"><div class="p-4 text-xs text-slate-500">Sin datos.</div></div></div>
+</div>
+</div>
+</div>
+<div class="mt-6 bg-white rounded-3xl border border-slate-100 overflow-hidden" data-admin-module-v19="academic">
+<div class="p-5 sm:p-6 border-b border-slate-100">
+<h3 class="font-extrabold text-lutmin-dark">Certificados emitidos</h3>
+<p class="mt-1 text-xs text-slate-500">Se emiten como constancias privadas de participación o aprobación según la configuración del curso. Desde acá podés revisar, revocar o restaurar uno.</p>
+</div>
+<div class="divide-y divide-slate-100" id="adminCertificatesList"></div>
+</div>

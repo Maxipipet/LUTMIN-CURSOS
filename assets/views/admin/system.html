@@ -1,0 +1,81 @@
+<div class="mt-6 bg-white rounded-3xl border border-slate-100 overflow-hidden" data-admin-module-v19="system" id="adminSystemGuideV19">
+<div class="p-5 sm:p-6 border-b border-slate-100 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+<div><p class="text-[10px] uppercase tracking-widest font-extrabold text-lutmin-light">SISTEMA</p><h3 class="mt-1 font-extrabold text-lutmin-dark text-lg">Mapa y diagnóstico de Administración</h3><p class="mt-1 text-xs text-slate-500">La Administración ahora está separada por módulos. El diagnóstico indica exactamente qué parte de Supabase está instalada, sin mensajes genéricos de versiones viejas.</p></div>
+<button class="px-4 py-2.5 rounded-xl bg-lutmin-dark text-white text-xs font-extrabold" onclick="runAdminDiagnosticsV19()"><i class="fa-solid fa-stethoscope mr-2"></i>Revisar instalación</button>
+</div>
+<div class="p-5 sm:p-6 grid lg:grid-cols-[1fr_.9fr] gap-5">
+<div class="grid sm:grid-cols-2 gap-3 text-xs">
+<div class="p-4 rounded-2xl bg-slate-50"><strong>Resumen</strong><p class="mt-1 text-slate-500">KPIs, inteligencia y prioridades.</p></div>
+<div class="p-4 rounded-2xl bg-slate-50"><strong>Operación</strong><p class="mt-1 text-slate-500">Tareas, señales y salud del sistema.</p></div>
+<div class="p-4 rounded-2xl bg-slate-50"><strong>Academia</strong><p class="mt-1 text-slate-500">Cursos, clases, evaluaciones, agenda y certificados.</p></div>
+<div class="p-4 rounded-2xl bg-slate-50"><strong>Personas</strong><p class="mt-1 text-slate-500">Alumnos, importaciones y seguimiento.</p></div>
+<div class="p-4 rounded-2xl bg-slate-50"><strong>Empresas</strong><p class="mt-1 text-slate-500">Clientes corporativos y planes.</p></div>
+<div class="p-4 rounded-2xl bg-slate-50"><strong>Comercial / Finanzas</strong><p class="mt-1 text-slate-500">Interesados, ediciones, matrículas y pagos.</p></div>
+</div>
+<div class="rounded-2xl border border-slate-100 p-4" id="adminDiagnosticsV19"><p class="text-sm text-slate-500">Tocá “Revisar instalación” para ver el estado real.</p></div>
+</div>
+<div class="border-t border-slate-100 p-5 sm:p-6 bg-slate-50/50">
+<div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
+<div>
+<p class="text-[10px] uppercase tracking-widest font-extrabold text-emerald-600">CALIDAD DEL SISTEMA</p>
+<h4 class="mt-1 font-extrabold text-lutmin-dark">Centro de calidad del sistema</h4>
+<p class="mt-1 text-xs text-slate-500">Revisa seguridad, módulos instalados e inconsistencias de datos sin borrar información.</p>
+</div>
+<div class="flex flex-wrap gap-2">
+<button class="px-4 py-2.5 rounded-xl bg-lutmin-dark text-white text-xs font-extrabold" onclick="runAdminQualityV35()"><i class="fa-solid fa-shield-heart mr-2"></i>Ejecutar control</button>
+<button class="px-4 py-2.5 rounded-xl bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-100" onclick="runSafeMaintenanceV35()"><i class="fa-solid fa-screwdriver-wrench mr-2"></i>Mantenimiento seguro</button>
+<button class="px-4 py-2.5 rounded-xl bg-white text-slate-700 text-xs font-bold border border-slate-200" onclick="downloadAdminDiagnosticsV35()"><i class="fa-solid fa-download mr-2"></i>Descargar diagnóstico</button>
+</div>
+</div>
+<div class="mt-5 grid grid-cols-2 lg:grid-cols-4 gap-3">
+<div class="rounded-2xl bg-white border border-slate-100 p-4">
+<p class="text-[10px] uppercase font-bold text-slate-400">Estado general</p>
+<p class="mt-1 text-lg font-black text-slate-500" id="v35OverallStat">SIN REVISAR</p>
+</div>
+<div class="rounded-2xl bg-white border border-slate-100 p-4">
+<p class="text-[10px] uppercase font-bold text-red-400">Críticos</p>
+<p class="mt-1 text-2xl font-black text-red-600" id="v35CriticalStat">—</p>
+</div>
+<div class="rounded-2xl bg-white border border-slate-100 p-4">
+<p class="text-[10px] uppercase font-bold text-amber-500">Advertencias</p>
+<p class="mt-1 text-2xl font-black text-amber-600" id="v35WarningStat">—</p>
+</div>
+<div class="rounded-2xl bg-white border border-slate-100 p-4">
+<p class="text-[10px] uppercase font-bold text-blue-500">Versión DB</p>
+<p class="mt-1 text-sm font-black text-blue-700" id="v35VersionStat">—</p>
+</div>
+</div>
+<div class="mt-5 grid xl:grid-cols-[1fr_1fr_.8fr] gap-4">
+<div class="rounded-2xl bg-white border border-slate-100 overflow-hidden">
+<div class="p-4 border-b border-slate-100"><h5 class="font-extrabold text-sm text-lutmin-dark">Componentes críticos</h5><p class="mt-1 text-[10px] text-slate-500">Base, Academia, Conecta, competencias, certificados y seguridad.</p></div>
+<div class="p-4 space-y-2" id="adminQualityChecksV35"><p class="text-xs text-slate-500">Ejecutá el control para comenzar.</p></div>
+</div>
+<div class="rounded-2xl bg-white border border-slate-100 overflow-hidden">
+<div class="p-4 border-b border-slate-100"><h5 class="font-extrabold text-sm text-lutmin-dark">Integridad y pendientes</h5><p class="mt-1 text-[10px] text-slate-500">Distingue inconsistencias reales de pendientes normales de operación.</p></div>
+<div class="p-4 space-y-2" id="adminQualityIntegrityV35"><p class="text-xs text-slate-500">Todavía no hay diagnóstico.</p></div>
+</div>
+<div class="rounded-2xl bg-white border border-slate-100 overflow-hidden">
+<div class="p-4 border-b border-slate-100 flex items-center justify-between gap-2"><div><h5 class="font-extrabold text-sm text-lutmin-dark">Migraciones recientes</h5><p class="mt-1 text-[10px] text-slate-500">Qué versiones reconoce la base.</p></div><button class="px-2.5 py-2 rounded-lg bg-slate-100 text-[10px] font-bold text-slate-600" onclick="copyAdminDiagnosticsV35()"><i class="fa-regular fa-copy mr-1"></i>Copiar</button></div>
+<div class="p-4 space-y-2 max-h-[330px] overflow-y-auto" id="adminQualityMigrationsV35"><p class="text-xs text-slate-500">Sin datos.</p></div>
+</div>
+</div>
+<div class="mt-4 rounded-2xl bg-emerald-50 border border-emerald-100 p-4 text-xs text-emerald-800">
+<strong><i class="fa-solid fa-lock mr-1"></i>Mantenimiento seguro:</strong>
+                  solo cierra intentos de validación teórica cuyo tiempo ya venció. No elimina cuentas, cursos, pagos, certificados, perfiles ni postulaciones.
+                </div>
+</div>
+</div>
+<div class="mt-6 bg-white rounded-3xl border border-slate-100 overflow-hidden" data-admin-module-v19="system">
+<div class="p-5 sm:p-6 border-b border-slate-100 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+<div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center"><i class="fa-solid fa-people-group"></i></div><div><h3 class="font-extrabold text-lutmin-dark">Equipo interno y roles de trabajo</h3><p class="text-xs text-slate-500 mt-1">Organizá quién trabaja en Academia, Comercial, Cobranzas, Soporte o como Superadmin.</p></div></div>
+<button class="px-4 py-2.5 rounded-xl bg-emerald-600 text-white text-xs font-bold" onclick="saveManagementSnapshotV16()"><i class="fa-solid fa-camera mr-2"></i>Guardar foto de gestión</button>
+</div>
+<div class="p-5 sm:p-6 grid xl:grid-cols-[1.25fr_.75fr] gap-5">
+<div class="space-y-3" id="opsInternalTeamV16"></div>
+<div><p class="text-xs font-extrabold uppercase text-slate-400 mb-3">Fotos ejecutivas</p><div class="space-y-2 max-h-[340px] overflow-y-auto" id="opsSnapshotsV16"></div></div>
+</div>
+</div>
+<div class="mt-6 bg-white rounded-3xl border border-slate-100 overflow-hidden" data-admin-module-v19="system">
+<div class="p-5 sm:p-6 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center"><i class="fa-solid fa-clock-rotate-left"></i></div><div><h3 class="font-extrabold text-lutmin-dark">Auditoría del sistema</h3><p class="text-xs text-slate-500">Últimos cambios relevantes: cursos, inscripciones, pagos, certificados, empresas y catálogo.</p></div></div><button class="px-3 py-2 rounded-xl bg-slate-100 text-xs font-bold" onclick="loadAdminV1Ops()">Actualizar</button></div>
+<div class="divide-y divide-slate-100 max-h-[430px] overflow-y-auto" id="adminAuditList"></div>
+</div>

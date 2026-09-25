@@ -1,0 +1,90 @@
+<div class="mt-6 bg-white rounded-3xl border border-slate-100 overflow-hidden" data-admin-module-v19="operations">
+<div class="p-5 sm:p-6 border-b border-slate-100 flex flex-col 2xl:flex-row 2xl:items-center 2xl:justify-between gap-4">
+<div class="flex items-center gap-3">
+<div class="w-11 h-11 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center"><i class="fa-solid fa-heart-pulse"></i></div>
+<div><div class="flex flex-wrap items-center gap-2"><h3 class="font-extrabold text-lutmin-dark text-lg">Salud del sistema</h3><span class="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-extrabold">CONTROL DE INTEGRIDAD</span></div><p class="text-xs text-slate-500 mt-1">Detecta inconsistencias antes de que lleguen al alumno o a una empresa y permite acciones masivas seguras.</p></div>
+</div>
+<div class="flex flex-wrap gap-2">
+<button class="px-4 py-2.5 rounded-xl bg-teal-600 text-white text-xs font-extrabold" onclick="runSystemHealthV18()"><i class="fa-solid fa-stethoscope mr-2"></i>Revisar sistema</button>
+<button class="px-4 py-2.5 rounded-xl bg-slate-100 text-lutmin-dark text-xs font-bold" onclick="loadAdminV18()"><i class="fa-solid fa-rotate mr-2"></i>Actualizar</button>
+</div>
+</div>
+<div class="p-5 sm:p-6">
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+<div class="rounded-2xl bg-slate-50 p-4"><p class="text-[10px] uppercase font-bold text-slate-500">Hallazgos abiertos</p><p class="mt-1 text-2xl font-black text-lutmin-dark" id="healthOpenV18">0</p></div>
+<div class="rounded-2xl bg-red-50 p-4"><p class="text-[10px] uppercase font-bold text-red-500">Importantes</p><p class="mt-1 text-2xl font-black text-red-700" id="healthImportantV18">0</p></div>
+<div class="rounded-2xl bg-emerald-50 p-4"><p class="text-[10px] uppercase font-bold text-emerald-600">Resueltos</p><p class="mt-1 text-2xl font-black text-emerald-700" id="healthResolvedV18">0</p></div>
+<div class="rounded-2xl bg-blue-50 p-4"><p class="text-[10px] uppercase font-bold text-blue-600">Versión esquema</p><p class="mt-1 text-lg font-black text-blue-700" id="healthVersionV18">V1.9</p></div>
+</div>
+<div class="mt-5 grid 2xl:grid-cols-[1.15fr_.85fr] gap-5">
+<div class="rounded-2xl border border-slate-100 overflow-hidden">
+<div class="p-4 bg-slate-50 flex items-center justify-between gap-3"><div><h4 class="font-extrabold text-lutmin-dark">Diagnóstico</h4><p class="text-[11px] text-slate-500 mt-1">Cursos incompletos, empresas sin responsable, matrículas inconsistentes y tareas vencidas.</p></div><select class="px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs" id="healthFilterV18" onchange="renderHealthV18()"><option value="open">Abiertos</option><option value="all">Todos</option><option value="resolved">Resueltos</option><option value="ignored">Ignorados</option></select></div>
+<div class="p-4 space-y-3 max-h-[520px] overflow-y-auto" id="healthFindingsV18"><p class="text-sm text-slate-500">Ejecutá “Revisar sistema”.</p></div>
+</div>
+<div class="space-y-4">
+<div class="rounded-2xl border border-slate-100 p-4">
+<h4 class="font-extrabold text-lutmin-dark">Asignar curso en bloque</h4><p class="mt-1 text-[11px] text-slate-500">Seleccioná varios usuarios y asignales un curso sin duplicar matrículas existentes.</p>
+<select class="mt-3 w-full px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs" id="bulkCourseV18"></select>
+<select class="mt-2 w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs" id="bulkCourseUsersV18" multiple="" size="7"></select>
+<p class="mt-1 text-[10px] text-slate-400">Ctrl + clic para elegir más de una persona.</p>
+<button class="mt-3 w-full py-2.5 rounded-xl bg-lutmin-light text-white text-xs font-extrabold" onclick="bulkAssignCourseV18()">Asignar curso</button>
+</div>
+<div class="rounded-2xl border border-slate-100 p-4">
+<h4 class="font-extrabold text-lutmin-dark">Vincular colaboradores en bloque</h4><p class="mt-1 text-[11px] text-slate-500">Agregá varias personas a una empresa sin perder un acceso Empresa que ya tengan.</p>
+<select class="mt-3 w-full px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs" id="bulkCompanyV18"></select>
+<select class="mt-2 w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs" id="bulkCompanyUsersV18" multiple="" size="7"></select>
+<button class="mt-3 w-full py-2.5 rounded-xl bg-indigo-600 text-white text-xs font-extrabold" onclick="bulkLinkCompanyV18()">Vincular a empresa</button>
+</div>
+<div class="rounded-2xl border border-slate-100 p-4">
+<div class="flex items-center justify-between gap-3"><div><h4 class="font-extrabold text-lutmin-dark">Últimas operaciones masivas</h4><p class="mt-1 text-[11px] text-slate-500">Registro para saber qué se hizo y cuántas personas afectó.</p></div></div>
+<div class="mt-3 space-y-2 max-h-[220px] overflow-y-auto" id="bulkHistoryV18"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-6 bg-white rounded-3xl border border-slate-100 overflow-hidden" data-admin-module-v19="operations">
+<div class="p-5 sm:p-6 border-b border-slate-100 flex flex-col 2xl:flex-row 2xl:items-center 2xl:justify-between gap-4">
+<div class="flex items-center gap-3">
+<div class="w-11 h-11 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center"><i class="fa-solid fa-list-check"></i></div>
+<div><h3 class="font-extrabold text-lutmin-dark text-lg">Centro Operativo</h3><p class="text-xs text-slate-500 mt-1">Bandejas de trabajo, próximas acciones y señales automáticas sobre datos reales.</p></div>
+</div>
+<div class="flex flex-wrap gap-2">
+<button class="px-4 py-2.5 rounded-xl bg-lutmin-light text-white text-xs font-extrabold" onclick="refreshOperationalSignalsV16()"><i class="fa-solid fa-wand-magic-sparkles mr-2"></i>Actualizar señales</button>
+<button class="px-4 py-2.5 rounded-xl bg-slate-100 text-lutmin-dark text-xs font-bold" onclick="downloadOperationsCsvV16()"><i class="fa-solid fa-file-csv mr-2"></i>CSV</button>
+<button class="px-4 py-2.5 rounded-xl bg-lutmin-dark text-white text-xs font-bold" onclick="downloadExecutiveOpsPdfV16()"><i class="fa-solid fa-file-pdf mr-2"></i>Reporte PDF</button>
+</div>
+</div>
+<div class="p-5 sm:p-6">
+<div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
+<button class="text-left rounded-2xl bg-slate-50 border border-slate-100 p-4" onclick="setOpsLaneV16('all')"><p class="text-[10px] font-bold text-slate-400 uppercase">Todas</p><p class="mt-1 text-2xl font-black text-lutmin-dark" id="opsCountAll">0</p></button>
+<button class="text-left rounded-2xl bg-blue-50 p-4" onclick="setOpsLaneV16('academia')"><p class="text-[10px] font-bold text-blue-500 uppercase">Academia</p><p class="mt-1 text-2xl font-black text-blue-700" id="opsCountAcademia">0</p></button>
+<button class="text-left rounded-2xl bg-violet-50 p-4" onclick="setOpsLaneV16('comercial')"><p class="text-[10px] font-bold text-violet-500 uppercase">Comercial</p><p class="mt-1 text-2xl font-black text-violet-700" id="opsCountComercial">0</p></button>
+<button class="text-left rounded-2xl bg-amber-50 p-4" onclick="setOpsLaneV16('cobranzas')"><p class="text-[10px] font-bold text-amber-500 uppercase">Cobranzas</p><p class="mt-1 text-2xl font-black text-amber-700" id="opsCountCobranzas">0</p></button>
+<button class="text-left rounded-2xl bg-rose-50 p-4" onclick="setOpsLaneV16('soporte')"><p class="text-[10px] font-bold text-rose-500 uppercase">Soporte</p><p class="mt-1 text-2xl font-black text-rose-700" id="opsCountSoporte">0</p></button>
+<button class="text-left rounded-2xl bg-cyan-50 p-4" onclick="setOpsLaneV16('general')"><p class="text-[10px] font-bold text-cyan-600 uppercase">General</p><p class="mt-1 text-2xl font-black text-cyan-700" id="opsCountGeneral">0</p></button>
+</div>
+<div class="mt-5 grid xl:grid-cols-[1.35fr_.65fr] gap-5">
+<div>
+<div class="flex flex-col sm:flex-row gap-2 mb-3">
+<select class="px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-bold" id="opsStatusFilterV16" onchange="renderOperationalCenterV16()"><option value="active">Abiertas + en gestión</option><option value="open">Abiertas</option><option value="in_progress">En gestión</option><option value="resolved">Resueltas</option><option value="dismissed">Descartadas</option><option value="all">Todas</option></select>
+<input class="flex-1 px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm" id="opsSearchV16" oninput="renderOperationalCenterV16()" placeholder="Buscar tarea..."/>
+</div>
+<div class="space-y-3 max-h-[620px] overflow-y-auto pr-1" id="opsTasksListV16"><p class="text-sm text-slate-500">Cargando tareas...</p></div>
+</div>
+<div class="space-y-4">
+<form class="rounded-2xl bg-slate-50 p-4 border border-slate-100" id="opsNewTaskFormV16">
+<p class="text-xs font-extrabold text-lutmin-dark uppercase">Nueva tarea manual</p>
+<div class="mt-3 space-y-2">
+<input class="w-full px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-sm" id="opsNewTitleV16" placeholder="Qué hay que hacer" required=""/>
+<textarea class="w-full px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-sm" id="opsNewDescriptionV16" placeholder="Detalle" rows="3"></textarea>
+<div class="grid grid-cols-2 gap-2"><select class="px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-xs" id="opsNewLaneV16"><option value="general">General</option><option value="academia">Academia</option><option value="comercial">Comercial</option><option value="cobranzas">Cobranzas</option><option value="soporte">Soporte</option></select><select class="px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-xs" id="opsNewSeverityV16"><option value="baja">Baja</option><option selected="" value="normal">Normal</option><option value="alta">Alta</option><option value="critica">Crítica</option></select></div>
+<input class="w-full px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-xs" id="opsNewDueV16" type="datetime-local"/>
+</div>
+<button class="mt-3 w-full py-2.5 rounded-xl bg-lutmin-dark text-white text-xs font-extrabold">Crear tarea</button>
+</form>
+<div class="rounded-2xl border border-slate-100 overflow-hidden"><div class="p-4 bg-slate-50"><p class="text-xs font-extrabold text-lutmin-dark uppercase">Automatizaciones</p><p class="text-[11px] text-slate-500 mt-1">Activá o pausá señales sin tocar código.</p></div><div class="divide-y divide-slate-100" id="opsAutomationsV16"></div></div>
+</div>
+</div>
+</div>
+</div>

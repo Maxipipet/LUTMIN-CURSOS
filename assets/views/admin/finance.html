@@ -1,0 +1,65 @@
+<div class="mt-6 bg-white rounded-3xl border border-slate-100 overflow-hidden" data-admin-module-v19="finance">
+<div class="p-5 sm:p-6 border-b border-slate-100">
+<div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center"><i class="fa-solid fa-chart-column"></i></div>
+<div>
+<h3 class="font-extrabold text-lutmin-dark">Panel financiero y comercial</h3>
+<p class="text-xs text-slate-500">Cobranzas, ventas, deuda, vencimientos y conversión del período elegido.</p>
+</div>
+</div>
+<div class="flex flex-wrap gap-2">
+<button class="px-3 py-2 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold" onclick="setAdminFinancialPreset('month')">Mes actual</button>
+<button class="px-3 py-2 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold" onclick="setAdminFinancialPreset('30')">Últimos 30 días</button>
+<button class="px-3 py-2 rounded-xl bg-green-50 text-green-700 text-xs font-bold" onclick="exportAdminFinancialCsv()"><i class="fa-solid fa-file-csv mr-2"></i>Exportar movimientos</button>
+<button class="px-3 py-2 rounded-xl bg-amber-50 text-amber-700 text-xs font-bold" onclick="exportAdminDebtCsv()"><i class="fa-solid fa-file-csv mr-2"></i>Exportar deuda</button>
+</div>
+</div>
+<div class="mt-5 grid sm:grid-cols-[1fr_1fr_auto] gap-3 max-w-2xl">
+<div><label class="text-[10px] font-bold text-slate-400 uppercase">Desde</label><input class="mt-1 w-full px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm" id="adminFinancialFrom" onchange="renderAdminFinancialDashboard()" type="date"/></div>
+<div><label class="text-[10px] font-bold text-slate-400 uppercase">Hasta</label><input class="mt-1 w-full px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm" id="adminFinancialTo" onchange="renderAdminFinancialDashboard()" type="date"/></div>
+<button class="self-end px-4 py-2.5 rounded-xl bg-lutmin-dark text-white text-sm font-bold" onclick="renderAdminFinancialDashboard()">Aplicar</button>
+</div>
+</div>
+<div class="p-5 sm:p-6">
+<div class="grid grid-cols-2 xl:grid-cols-6 gap-3">
+<div class="rounded-2xl bg-green-50 p-4"><p class="text-[10px] font-bold text-green-600 uppercase">Cobrado</p><p class="mt-1 text-xl sm:text-2xl font-black text-green-700" id="financeCollected">$ 0</p><p class="mt-1 text-[10px] text-green-600" id="financePaymentsCount">0 pagos</p></div>
+<div class="rounded-2xl bg-blue-50 p-4"><p class="text-[10px] font-bold text-blue-600 uppercase">Matrículas generadas</p><p class="mt-1 text-xl sm:text-2xl font-black text-blue-700" id="financeSales">$ 0</p><p class="mt-1 text-[10px] text-blue-600" id="financeEnrollmentsCount">0 matrículas</p></div>
+<div class="rounded-2xl bg-amber-50 p-4"><p class="text-[10px] font-bold text-amber-600 uppercase">Saldo pendiente</p><p class="mt-1 text-xl sm:text-2xl font-black text-amber-700" id="financeOutstanding">$ 0</p><p class="mt-1 text-[10px] text-amber-600">Deuda actual</p></div>
+<div class="rounded-2xl bg-red-50 p-4"><p class="text-[10px] font-bold text-red-600 uppercase">Vencido</p><p class="mt-1 text-xl sm:text-2xl font-black text-red-700" id="financeOverdue">$ 0</p><p class="mt-1 text-[10px] text-red-600" id="financeOverdueCount">0 matrículas</p></div>
+<div class="rounded-2xl bg-violet-50 p-4"><p class="text-[10px] font-bold text-violet-600 uppercase">Bonificado</p><p class="mt-1 text-xl sm:text-2xl font-black text-violet-700" id="financeWaived">$ 0</p><p class="mt-1 text-[10px] text-violet-600">Valor del período</p></div>
+<div class="rounded-2xl bg-cyan-50 p-4"><p class="text-[10px] font-bold text-cyan-600 uppercase">Conversión</p><p class="mt-1 text-xl sm:text-2xl font-black text-cyan-700" id="financeConversion">0%</p><p class="mt-1 text-[10px] text-cyan-600" id="financeLeadCount">0 interesados</p></div>
+</div>
+<div class="mt-5 grid xl:grid-cols-[1.05fr_.95fr] gap-5">
+<div class="rounded-2xl border border-slate-100 overflow-hidden">
+<div class="px-5 py-4 bg-slate-50 border-b border-slate-100"><h4 class="font-extrabold text-sm text-lutmin-dark">Ingresos por curso</h4><p class="text-[11px] text-slate-500 mt-1">Ventas generadas y cobranzas dentro del período.</p></div>
+<div class="divide-y divide-slate-100" id="financeCourseRows"></div>
+</div>
+<div class="rounded-2xl border border-slate-100 overflow-hidden">
+<div class="px-5 py-4 bg-slate-50 border-b border-slate-100"><h4 class="font-extrabold text-sm text-lutmin-dark">Embudo comercial</h4><p class="text-[11px] text-slate-500 mt-1">De consulta web a matrícula.</p></div>
+<div class="p-5" id="financeFunnel"></div>
+</div>
+</div>
+<div class="mt-5 rounded-2xl border border-slate-100 overflow-hidden">
+<div class="px-5 py-4 bg-slate-50 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"><div><h4 class="font-extrabold text-sm text-lutmin-dark">Deuda y vencimientos</h4><p class="text-[11px] text-slate-500 mt-1">Las matrículas vencidas aparecen primero. Podés definir o cambiar su fecha de vencimiento.</p></div><span class="text-xs font-bold text-amber-700" id="financeDebtSummary"></span></div>
+<div class="divide-y divide-slate-100" id="financeDebtRows"></div>
+</div>
+</div>
+</div>
+<div class="mt-6 bg-white rounded-3xl border border-slate-100 overflow-hidden" data-admin-module-v19="finance">
+<div class="p-5 sm:p-6 border-b border-slate-100">
+<div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center"><i class="fa-solid fa-wallet"></i></div>
+<div><h3 class="font-extrabold text-lutmin-dark">Matrículas y pagos</h3><p class="text-xs text-slate-500">Registrá transferencias, pagos parciales, comprobantes y habilitá el curso cuando se complete el importe.</p></div>
+</div>
+<div class="grid sm:grid-cols-2 gap-2 w-full xl:w-auto">
+<select class="px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-bold" id="adminPaymentStatusFilter" onchange="renderAdminPayments()">
+<option value="all">Todos</option><option value="pending">Pendientes</option><option value="partial">Parciales</option><option value="paid">Pagados</option><option value="waived">Bonificados</option>
+</select>
+<input class="px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs" id="adminPaymentSearch" oninput="renderAdminPayments()" placeholder="Buscar alumno o curso"/>
+</div>
+</div>
+</div>
+<div class="divide-y divide-slate-100" id="adminPaymentsList"></div>
+</div>
