@@ -1,8 +1,0 @@
-/* LUTMIN V27.0 · feedback mínimo de carga de módulos autenticados */
-#lutminV27BootBar{position:fixed;left:0;right:0;top:0;height:3px;z-index:2147483000;pointer-events:none;opacity:0;transition:opacity .18s ease;background:transparent}
-#lutminV27BootBar.is-visible{opacity:1}
-#lutminV27BootBar span{display:block;height:100%;width:32%;transform:translateX(-120%);background:linear-gradient(90deg,#2F8DFD,#56B8FF);border-radius:999px;animation:lutminV27Load 1.05s ease-in-out infinite}
-#lutminV27BootBar[data-state="ready"] span{width:100%;transform:none;animation:none;transition:width .15s ease}
-#lutminV27BootBar[data-state="error"] span{width:100%;transform:none;animation:none;background:#ef4444}
-@keyframes lutminV27Load{0%{transform:translateX(-120%)}55%{transform:translateX(160%)}100%{transform:translateX(340%)}}
-@media (prefers-reduced-motion:reduce){#lutminV27BootBar span{animation:none;transform:none;width:70%}}

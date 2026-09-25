@@ -1,9 +1,0 @@
-
-/* LUTMIN V24 · Core estable + video gate */
-.v24-video-gate-status{margin-top:.75rem;border:1px solid #dbeafe;background:#eff6ff;border-radius:1rem;padding:.85rem 1rem;font-size:.75rem;color:#475569}
-.v24-video-gate-status[data-state="locked"]{border-color:#fde68a;background:#fffbeb;color:#92400e}
-.v24-video-gate-status[data-state="complete"]{border-color:#bbf7d0;background:#f0fdf4;color:#166534}
-.v24-video-gate-progress{height:.4rem;border-radius:999px;background:#e2e8f0;overflow:hidden;margin-top:.55rem}
-.v24-video-gate-progress>span{display:block;height:100%;background:#2F8DFD;border-radius:999px;transition:width .25s ease}
-.v24-core-pill{display:inline-flex;align-items:center;gap:.35rem;border-radius:999px;padding:.3rem .6rem;font-size:.65rem;font-weight:800}
-@media(max-width:640px){.v24-video-gate-status{padding:.75rem}.v24-video-gate-progress{height:.35rem}}
