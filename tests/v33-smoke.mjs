@@ -74,14 +74,14 @@ metrics.routed_assets=pathRefs.size;
 
 // 5) Asegurar arquitectura nueva y no reintroducir loaders viejos en el index.
 const index=read('index.html');
-assert(index.includes('module-loader-v33.js?v=33.0'),'index no usa module-loader-v33');
-assert(index.includes('admin-data-runtime-v33.js?v=33.0'),'index no usa admin-data-runtime-v33');
-assert(index.includes('admin-module-loader-v33.js?v=33.0'),'index no usa admin-module-loader-v33');
+assert(index.includes('module-loader-v33.js?v=33.1'),'index no usa module-loader-v33');
+assert(index.includes('admin-data-runtime-v33.js?v=33.1'),'index no usa admin-data-runtime-v33');
+assert(index.includes('admin-module-loader-v33.js?v=33.1'),'index no usa admin-module-loader-v33');
 assert(!index.includes('module-loader-v32.js'),'index todavía referencia module-loader-v32');
 assert(!index.includes('admin-module-loader-v32.js'),'index todavía referencia admin-module-loader-v32');
 const sw=read('sw.js');
-assert(sw.includes("const VERSION='33.0'"),'Service Worker no está versionado 33.0');
-assert(sw.includes("lutmin-runtime-v33-0"),'Cache runtime no corresponde a V33');
+assert(sw.includes("const VERSION='33.1'"),'Service Worker no está versionado 33.1');
+assert(sw.includes("lutmin-runtime-v33-1"),'Cache runtime no corresponde a V33');
 
 // 6) Reglas de navegación: Admin y Conecta no generan submenús laterales internos.
 const workspace=read('assets/js/v19-workspaces.js');
@@ -145,6 +145,17 @@ assert(dataRuntime.includes('invalidate(module)'),'Falta invalidación por módu
   assert(dedupeQ===1,`Deduplicación concurrente falló: ${dedupeQ} consultas para dos pedidos`);
 }
 
+
+// 9B) Puente runtime V33.1: módulos lazy pueden acceder al cliente/usuario sin duplicar estado.
+const appCore=read('assets/js/core/app-core.js');
+assert(appCore.includes("exposeLutminRuntimeGlobal('supabaseClient', () => supabaseClient)"),'Falta puente window.supabaseClient para módulos lazy');
+assert(appCore.includes("exposeLutminRuntimeGlobal('currentLutminUser', () => currentLutminUser)"),'Falta puente window.currentLutminUser para módulos lazy');
+const videoGate=read('assets/js/v24-1-video-gate.js');
+assert(videoGate.includes("window.supabaseClient || (typeof supabaseClient!=='undefined'?supabaseClient:null)"),'Video gate no tiene fallback al cliente léxico');
+const controlCenter=read('assets/js/v25-control-center.js');
+assert(controlCenter.includes("window.supabaseClient || (typeof supabaseClient!=='undefined'?supabaseClient:null)"),'Control Center no tiene fallback al cliente léxico');
+metrics.runtime_bridge='ok';
+
 // 10) Asset conocido heredado: se reporta, no se inventa.
 if(index.includes('LOGO.png')&&!fs.existsSync(path.join(root,'LOGO.png')))warnings.push('LOGO.png sigue referenciado pero no estaba incluido en V31/V32; no se generó un logo ficticio.');
 
@@ -163,12 +174,12 @@ const port=server.address().port;
 let httpOk=0;
 try{
   for(const t of httpTargets){
-    const r=await fetch(`http://127.0.0.1:${port}${t}?v=33.0`);
+    const r=await fetch(`http://127.0.0.1:${port}${t}?v=33.1`);
     if(r.ok){await r.arrayBuffer();httpOk++;}else errors.push(`HTTP ${r.status}: ${t}`);
   }
 }finally{await new Promise(resolve=>server.close(resolve));}
 metrics.http_targets_ok=httpOk;
 assert(httpOk===httpTargets.length,`Smoke HTTP incompleto: ${httpOk}/${httpTargets.length}`);
 
-console.log(JSON.stringify({ok:errors.length===0,version:'33.0',metrics,warnings,errors},null,2));
+console.log(JSON.stringify({ok:errors.length===0,version:'33.1',metrics,warnings,errors},null,2));
 process.exit(errors.length?1:0);

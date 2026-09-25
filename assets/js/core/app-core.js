@@ -62,6 +62,21 @@
       : null;
 
     let currentLutminUser = null;
+
+    // V33.1 · puente explícito para runtimes cargados bajo demanda.
+    // Los scripts clásicos comparten bindings léxicos globales, pero esos bindings
+    // no aparecen como propiedades de window. V24.1/V25 consultan window.*;
+    // exponemos getters vivos sin duplicar estado ni crear otro cliente Supabase.
+    function exposeLutminRuntimeGlobal(name, getter) {
+      try {
+        const current = Object.getOwnPropertyDescriptor(window, name);
+        if (!current || current.configurable) {
+          Object.defineProperty(window, name, { configurable:true, enumerable:false, get:getter });
+        }
+      } catch (_) {}
+    }
+    exposeLutminRuntimeGlobal('supabaseClient', () => supabaseClient);
+    exposeLutminRuntimeGlobal('currentLutminUser', () => currentLutminUser);
     let currentAccessMode = sessionStorage.getItem('lutmin-access-mode') || null;
     let currentAccessContext = { student:false, admin:false, companies:[], instructor:false, instructor_groups:[] };
     // V3.8: evita que el evento USER_UPDATED vuelva a abrir el cambio de contraseña

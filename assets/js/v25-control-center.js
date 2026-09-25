@@ -2,11 +2,12 @@
   'use strict';
   const V250={installed:false,overview:null,security:null,loadingOverview:false,loadingSecurity:false};
   const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
-  const isAdmin=()=>window.currentLutminUser?.role==='admin';
+  const isAdmin=()=>window.currentLutminUser?.role==='admin' || (typeof currentLutminUser!=='undefined'&&currentLutminUser?.role==='admin');
   const core=()=>window.LutminCoreV24||null;
   async function rpc(name,args={}){
-    if(!window.supabaseClient) throw new Error('Supabase no está disponible.');
-    const run=async()=>{const {data,error}=await window.supabaseClient.rpc(name,args);if(error)throw error;return data;};
+    const client=window.supabaseClient || (typeof supabaseClient!=='undefined'?supabaseClient:null);
+    if(!client) throw new Error('Supabase no está disponible.');
+    const run=async()=>{const {data,error}=await client.rpc(name,args);if(error)throw error;return data;};
     return core()?.singleFlight ? core().singleFlight(`v250:${name}`,run) : run();
   }
   function adminSection(){return document.querySelector('section[data-campus-panel="admin"]');}

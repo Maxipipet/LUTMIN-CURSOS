@@ -1,12 +1,12 @@
 // =============================================================
-// LUTMIN V33.0 · WORKSPACE-AWARE MODULE LOADER
+// LUTMIN V33.1 · WORKSPACE-AWARE MODULE LOADER
 // Carga sólo el runtime necesario para cada acceso y deja Conecta
 // pesado bajo demanda. Mantiene costo API $0 y fallback completo.
 // =============================================================
 (function(){
   'use strict';
 
-  const VERSION='33.0';
+  const VERSION='33.1';
   const state={status:'idle',promise:null,loaded:new Set(),bundles:new Set(),startedAt:0,finishedAt:0,error:null,retries:0,warmed:false,lastReason:null,lastRole:null};
   const cssFiles=[
     'assets/css/v18-conecta.css',

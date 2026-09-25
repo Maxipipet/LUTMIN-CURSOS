@@ -43,8 +43,9 @@
     else{btn.disabled=false;btn.innerHTML='Marcar clase como completada';}
   }
   async function rpc(name,args){
-    if(!window.supabaseClient)throw new Error('Supabase no disponible');
-    const {data,error}=await supabaseClient.rpc(name,args); if(error)throw error; return data;
+    const client=window.supabaseClient || (typeof supabaseClient!=='undefined'?supabaseClient:null);
+    if(!client)throw new Error('Supabase no disponible');
+    const {data,error}=await client.rpc(name,args); if(error)throw error; return data;
   }
   async function loadServerState(lesson,duration=0){
     state.lessonId=lesson.id;state.lesson=lesson;state.required=lesson.video_completion_required===true;state.minPercent=Number(lesson.video_min_watch_percent||98);
