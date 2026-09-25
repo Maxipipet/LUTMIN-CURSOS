@@ -1,7 +1,0 @@
-/* V21.2 · Conecta por paneles SIN mover nodos del DOM */
-  .v212-conecta-off{display:none!important}
-  .v212-conecta-single-grid{grid-template-columns:minmax(0,1fr)!important}
-  #conectaHubV210{margin-bottom:0!important}
-  #conectaSummaryV210{margin-top:1rem!important}
-  .v212-conecta-visible{animation:v212PaneIn .14s ease-out}
-  @keyframes v212PaneIn{from{opacity:.35;transform:translateY(2px)}to{opacity:1;transform:none}}
