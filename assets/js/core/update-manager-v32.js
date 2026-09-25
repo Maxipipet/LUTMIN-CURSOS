@@ -1,9 +1,9 @@
 // =============================================================
-// LUTMIN V32.0 · UPDATE MANAGER + SALUD DE DESPLIEGUE
+// LUTMIN V33.0 · UPDATE MANAGER + SALUD DE DESPLIEGUE
 // =============================================================
 (function(){
   'use strict';
-  const VERSION='32.0';
+  const VERSION='33.0';
   const S={registration:null,waiting:null,lastCheck:0,controllerReload:false,online:navigator.onLine,assetRetries:0,lastModuleDuration:null};
 
   function banner(){let el=document.getElementById('lutminV30UpdateBanner');if(el)return el;el=document.createElement('div');el.id='lutminV30UpdateBanner';el.setAttribute('role','status');el.innerHTML='<div class="v30-update-inner"><div class="v30-update-copy"><strong>Nueva versión disponible</strong><br><span>Actualizá para usar la última versión de Lutmin.</span></div><button type="button" data-v30-apply>Actualizar ahora</button></div>';document.body.appendChild(el);el.querySelector('[data-v30-apply]')?.addEventListener('click',applyUpdate);return el;}

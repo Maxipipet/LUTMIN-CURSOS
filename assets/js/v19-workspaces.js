@@ -16,6 +16,7 @@
   function groupHtmlV190(scope,label,items){
     return `<p class="workspace-tree-label-v190">${escV190(label)}</p>${items.map(x=>itemHtmlV190(scope,...x)).join('')}`;
   }
+  const topNavScopesV330=new Set(['admin','companyConecta']);
   const treesV190={
     company:{parent:'companyDesktopTab',id:'companyTreeV190',groups:[
       ['Gestión del equipo',[
@@ -59,6 +60,13 @@
 
   function ensureTreeV190(scope){
     const cfg=treesV190[scope],parent=document.getElementById(cfg.parent);if(!parent)return null;
+    if(topNavScopesV330.has(scope)){
+      document.getElementById(cfg.id)?.remove();
+      parent.classList.remove('workspace-parent-v190');
+      parent.querySelector('.workspace-chevron-v190')?.remove();
+      parent.removeAttribute('aria-controls');parent.removeAttribute('aria-expanded');
+      return null;
+    }
     let tree=document.getElementById(cfg.id);
     if(!tree){
       tree=document.createElement('div');tree.id=cfg.id;tree.className='workspace-tree-v190 is-collapsed';tree.dataset.v190Scope=scope;
@@ -144,14 +152,12 @@
   function hideTreesForRoleV190(){
     const role=currentLutminUser?.role;
     Object.entries(treesV190).forEach(([scope,cfg])=>{
-      const tree=document.getElementById(cfg.id),parent=document.getElementById(cfg.parent);if(!tree||!parent)return;
+      const tree=document.getElementById(cfg.id),parent=document.getElementById(cfg.parent);if(!parent)return;
       const visible=(role==='company_admin'&&['company','companyConecta'].includes(scope))||(role==='instructor'&&scope==='instructor')||(role==='admin'&&scope==='admin');
-      // V20.1: aislar también el botón padre, no sólo el árbol.
-      // V19 aplicaba display:flex!important al padre y podía anular la clase hidden.
+      // V33: Admin y Conecta mantienen módulos arriba. El lateral sólo selecciona workspace.
       parent.classList.toggle('hidden',!visible);
       parent.setAttribute('aria-hidden',visible?'false':'true');
-      tree.classList.toggle('hidden',!visible);
-      tree.setAttribute('aria-hidden',visible?'false':'true');
+      if(tree){tree.classList.toggle('hidden',!visible);tree.setAttribute('aria-hidden',visible?'false':'true');}
       if(!visible)setTreeOpenV190(scope,false);
     });
     // abrir el árbol del workspace activo, conservando el estado del usuario cuando sea posible
@@ -164,7 +170,8 @@
   }
   function markRedundantInlineNavsV190(){
     document.getElementById('instructorTabsV50')?.classList.add('v190-inline-nav-hide');
-    const any=document.querySelector('.company-conecta-nav');if(any)any.parentElement?.classList.add('v190-company-conecta-inline');
+    // V33: Conecta conserva su navegación modular superior; no se reemplaza por árbol lateral.
+    document.querySelector('.company-conecta-nav')?.parentElement?.classList.remove('v190-company-conecta-inline');
     const p=document.querySelector('[data-campus-panel="instructor"] > div:first-child p');if(p)p.textContent='Portal Docente';
   }
   function restoreActiveV190(){
@@ -188,13 +195,11 @@
     if(tab==='instructor')setTreeOpenV190('instructor',true);
     if(tab==='admin')setTreeOpenV190('admin',true);
   },0);return r;};}
-  // Sincronizar submenús cuando otra parte del sistema cambie el módulo interno.
-  const oldSetAdminV190=typeof setAdminModuleV19==='function'?setAdminModuleV19:null;
-  if(oldSetAdminV190){setAdminModuleV19=function(module,opts){const r=oldSetAdminV190.apply(this,arguments);setActiveV190('admin',module);return r;};}
+  // V33: Administración usa navegación superior y un único loader modular.
+  // No envolvemos setAdminModuleV19: evita montajes/cargas duplicadas.
   const oldInstructorTabV190=typeof setInstructorTabV50==='function'?setInstructorTabV50:null;
   if(oldInstructorTabV190){setInstructorTabV50=function(tab){const r=oldInstructorTabV190.apply(this,arguments);setActiveV190('instructor',tab);return r;};}
-  const oldCompanyViewV190=typeof setCompanyConectaView==='function'?setCompanyConectaView:null;
-  if(oldCompanyViewV190){setCompanyConectaView=function(view){const r=oldCompanyViewV190.apply(this,arguments);setActiveV190('companyConecta',view);return r;};}
+  // V33: Conecta conserva sus módulos superiores; tampoco necesita wrapper lateral.
 
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(installV190,0));else setTimeout(installV190,0);
 })();
