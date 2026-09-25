@@ -38,7 +38,7 @@
     if(key==='career' && typeof ensureStudentEngineV150==='function'){
       ensureStudentEngineV150();
       if(typeof loadV150StudentData==='function'){
-        try{await loadV150StudentData();}catch(_){ }
+        try{if(window.LutminV29Data?.load)await window.LutminV29Data.load('talent:career',()=>loadV150StudentData(),{ttl:20000});else await loadV150StudentData();}catch(_){ }
       }
     }
   }
@@ -50,7 +50,7 @@
     try{
       if(typeof goToCampusTab==='function')goToCampusTab('talent');
       if(typeof loadTalentCenter==='function'){
-        try{await loadTalentCenter();}catch(_){ }
+        try{if(window.LutminV29Data?.load)await window.LutminV29Data.load('talent',()=>loadTalentCenter(),{ttl:18000});else await loadTalentCenter();}catch(_){ }
       }
       await prepareConectaDynamicV182(key);
       setConectaActiveV182(key);

@@ -102,12 +102,12 @@
   window.openConectaV200=async function(key){
     if(currentLutminUser?.role!=='student')return;ensureOrganizationsUi();ensureTimelineUi();
     if(typeof goToCampusTab==='function')goToCampusTab('talent');
-    if(typeof loadTalentCenter==='function')try{await loadTalentCenter()}catch(_){ }
+    if(typeof loadTalentCenter==='function')try{if(window.LutminV29Data?.load)await window.LutminV29Data.load('talent',()=>loadTalentCenter(),{ttl:18000});else await loadTalentCenter()}catch(_){ }
     document.querySelectorAll('[data-conecta-key-v182],[data-conecta-mobile-key-v182]').forEach(x=>x.classList.remove('active'));
     document.querySelectorAll('[data-conecta-v200],[data-conecta-mobile-v200]').forEach(x=>x.classList.toggle('active',x.dataset.conectaV200===key||x.dataset.conectaMobileV200===key));
     const parent=document.getElementById('studentConectaParentV183'),sub=document.getElementById('studentConectaSubnavV183');if(parent&&sub){parent.setAttribute('aria-expanded','true');sub.classList.remove('is-collapsed');}
-    if(key==='organizations'){await loadOrganizationsV200();document.getElementById('conectaOrganizationsV200')?.scrollIntoView({behavior:'smooth',block:'start'});}
-    if(key==='timeline'){await loadCareerTimelineV200();document.getElementById('conectaTimelineV200')?.scrollIntoView({behavior:'smooth',block:'start'});}
+    if(key==='organizations'){if(window.LutminV29Data?.load)await window.LutminV29Data.load('talent:organizations',()=>loadOrganizationsV200(),{ttl:30000});else await loadOrganizationsV200();document.getElementById('conectaOrganizationsV200')?.scrollIntoView({behavior:'smooth',block:'start'});}
+    if(key==='timeline'){if(window.LutminV29Data?.load)await window.LutminV29Data.load('talent:timeline',()=>loadCareerTimelineV200(),{ttl:30000});else await loadCareerTimelineV200();document.getElementById('conectaTimelineV200')?.scrollIntoView({behavior:'smooth',block:'start'});}
   };
 
   // Si se navega a un submódulo anterior, quitamos el estado activo V20.
@@ -144,7 +144,7 @@
   window.updateCompanyInterestV200=async function(userId,status){const args={p_user_id:userId,p_status:status};const cid=activeCompanyId();if(cid)args.p_company_id=cid;const {error}=await supabaseClient.rpc('company_update_interest_v200',args);if(error)return showToast(error.message||'No pude actualizar el interés.');showToast(status==='contacted'?'Marcado como contactado.':'Interés cerrado.');await loadCompanyInterestsV200();};
 
   if(typeof setCompanyConectaView==='function'){
-    const old=setCompanyConectaView;window.setCompanyConectaView=function(view){ensureCompanyInterestUi();const r=old.apply(this,arguments);if(view==='interest')loadCompanyInterestsV200();return r;};
+    const old=setCompanyConectaView;window.setCompanyConectaView=function(view){ensureCompanyInterestUi();const r=old.apply(this,arguments);if(view==='interest'){if(window.LutminV29Data?.load)window.LutminV29Data.load('company:interests',()=>loadCompanyInterestsV200(),{ttl:20000});else loadCompanyInterestsV200();}return r;};
   }
 
   // ---------------------------------------------------------
@@ -163,7 +163,7 @@
       const team=tree.querySelector('[data-v190-key="team"]');team?.insertAdjacentHTML('afterend','<button type="button" class="workspace-tree-item-v190" data-v190-scope="company" data-v200-company-onboarding="1" onclick="openCompanyOnboardingV200(event)"><i class="fa-solid fa-user-plus"></i><span>Onboarding</span></button>');
     }
   }
-  window.openCompanyOnboardingV200=async function(event){event?.stopPropagation?.();if(typeof goToCampusTab==='function')goToCampusTab('company');ensureCompanyOnboardingUi();document.querySelectorAll('[data-v190-scope="company"]').forEach(b=>b.classList.toggle('active',!!b.dataset.v200CompanyOnboarding));const parent=document.getElementById('companyDesktopTab'),tree=document.getElementById('companyTreeV190');if(parent&&tree){parent.setAttribute('aria-expanded','true');tree.classList.remove('is-collapsed');}await loadCompanyOnboardingV200();document.getElementById('companyOnboardingV200')?.scrollIntoView({behavior:'smooth',block:'start'});};
+  window.openCompanyOnboardingV200=async function(event){event?.stopPropagation?.();if(typeof goToCampusTab==='function')goToCampusTab('company');ensureCompanyOnboardingUi();document.querySelectorAll('[data-v190-scope="company"]').forEach(b=>b.classList.toggle('active',!!b.dataset.v200CompanyOnboarding));const parent=document.getElementById('companyDesktopTab'),tree=document.getElementById('companyTreeV190');if(parent&&tree){parent.setAttribute('aria-expanded','true');tree.classList.remove('is-collapsed');}if(window.LutminV29Data?.load)await window.LutminV29Data.load('company:onboarding',()=>loadCompanyOnboardingV200(),{ttl:20000});else await loadCompanyOnboardingV200();document.getElementById('companyOnboardingV200')?.scrollIntoView({behavior:'smooth',block:'start'});};
 
   window.loadCompanyOnboardingV200=async function(){
     if(!supabaseClient||currentLutminUser?.role!=='company_admin')return;ensureCompanyOnboardingUi();const cid=activeCompanyId();const args={};if(cid)args.p_company_id=cid;
@@ -201,18 +201,18 @@
   // ---------------------------------------------------------
   function installV200(){
     ensureOrganizationsUi();ensureTimelineUi();ensureCompanyInterestUi();ensureCompanyOnboardingUi();ensureStudentOnboardingPanel();
-    if(currentLutminUser?.role==='student'){loadMyOnboardingV200();}
-    if(currentLutminUser?.role==='company_admin'){loadCompanyInterestsV200();loadCompanyOnboardingV200();}
+    if(currentLutminUser?.role==='student'){if(window.LutminV29Data?.load)window.LutminV29Data.load('student:onboarding',()=>loadMyOnboardingV200(),{ttl:30000});else loadMyOnboardingV200();}
+    if(currentLutminUser?.role==='company_admin'){if(window.LutminV29Data?.load){window.LutminV29Data.load('company:interests',()=>loadCompanyInterestsV200(),{ttl:20000});window.LutminV29Data.load('company:onboarding',()=>loadCompanyOnboardingV200(),{ttl:20000});}else{loadCompanyInterestsV200();loadCompanyOnboardingV200();}}
   }
 
   if(typeof loadTalentCenter==='function'){
     const old=loadTalentCenter;window.loadTalentCenter=async function(){const r=await old.apply(this,arguments);ensureOrganizationsUi();ensureTimelineUi();return r;};
   }
   if(typeof loadCompanyPortalData==='function'){
-    const old=loadCompanyPortalData;window.loadCompanyPortalData=async function(){const r=await old.apply(this,arguments);ensureCompanyOnboardingUi();setTimeout(()=>loadCompanyOnboardingV200(),80);return r;};
+    const old=loadCompanyPortalData;window.loadCompanyPortalData=async function(){const r=await old.apply(this,arguments);ensureCompanyOnboardingUi();setTimeout(()=>{if(window.LutminV29Data?.load)window.LutminV29Data.load('company:onboarding',()=>loadCompanyOnboardingV200(),{ttl:20000});else loadCompanyOnboardingV200();},80);return r;};
   }
   if(typeof loadCompanyConectaData==='function'){
-    const old=loadCompanyConectaData;window.loadCompanyConectaData=async function(){const r=await old.apply(this,arguments);ensureCompanyInterestUi();setTimeout(()=>loadCompanyInterestsV200(),80);return r;};
+    const old=loadCompanyConectaData;window.loadCompanyConectaData=async function(){const r=await old.apply(this,arguments);ensureCompanyInterestUi();setTimeout(()=>{if(window.LutminV29Data?.load)window.LutminV29Data.load('company:interests',()=>loadCompanyInterestsV200(),{ttl:20000});else loadCompanyInterestsV200();},80);return r;};
   }
   if(typeof paintCurrentLutminUser==='function'){
     const old=paintCurrentLutminUser;window.paintCurrentLutminUser=function(){const r=old.apply(this,arguments);setTimeout(installV200,120);return r;};

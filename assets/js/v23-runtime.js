@@ -108,7 +108,7 @@
     const r=role();
     const items=[];
     const add=(id,label,icon,group,run)=>items.push({id,label,icon,group,run,search:normalizeText(`${label} ${group}`)});
-    const tab=(id,label,icon)=>add(`tab:${id}`,label,icon,'Campus',()=>goToCampusTab(id));
+    const tab=(id,label,icon)=>add(`tab:${id}`,label,icon,'Campus',()=>window.LutminV29Data?.openTab?.(id)||goToCampusTab(id));
 
     if(r==='student'){
       tab('dashboard','Inicio','fa-house');
@@ -116,7 +116,7 @@
       tab('agenda','Agenda','fa-calendar-days');
       if(document.querySelector('[data-campus-tab="activities"]'))tab('activities','Actividades','fa-list-check');
       tab('certificates','Certificados','fa-award');
-      add('conecta:summary','Lutmin Conecta · Resumen','fa-briefcase','Conecta',()=>openConectaModuleV210('summary'));
+      add('conecta:summary','Lutmin Conecta · Resumen','fa-briefcase','Conecta',()=>window.LutminV29Data?.openConecta?.('summary'));
       [
         ['profile','Perfil profesional','fa-id-card'],
         ['jobs','Oportunidades laborales','fa-magnifying-glass'],
@@ -128,7 +128,7 @@
         ['career','Carrera y evidencias','fa-route'],
         ['timeline','Mi trayectoria','fa-timeline'],
         ['passport','Pasaporte profesional','fa-address-card']
-      ].forEach(x=>add(`conecta:${x[0]}`,x[1],x[2],'Conecta',()=>openConectaModuleV210(x[0])));
+      ].forEach(x=>add(`conecta:${x[0]}`,x[1],x[2],'Conecta',()=>window.LutminV29Data?.openConecta?.(x[0])));
       tab('notifications','Novedades','fa-bell');tab('support','Ayuda','fa-headset');tab('profile','Mi cuenta','fa-user');
     }else if(r==='company_admin'){
       tab('company','Mi empresa','fa-building');
@@ -143,7 +143,7 @@
         ['talent','Banco de talento','fa-users-viewfinder'],
         ['favorites','Favoritos','fa-star'],
         ['interest','Talento interesado','fa-handshake-angle']
-      ].forEach(x=>add(`companyConecta:${x[0]}`,x[1],x[2],'Empresa',()=>{goToCampusTab('company-conecta');setCompanyConectaView?.(x[0])}));
+      ].forEach(x=>add(`companyConecta:${x[0]}`,x[1],x[2],'Empresa',()=>window.LutminV29Data?.openCompanyConecta?.(x[0])));
       tab('notifications','Novedades','fa-bell');tab('support','Ayuda','fa-headset');tab('profile','Mi cuenta','fa-user');
     }else if(r==='instructor'){
       tab('instructor','Portal Docente','fa-chalkboard-user');
@@ -248,7 +248,8 @@
     if(!route||route.role!==role())return;
     STATE.restoring=true;
     try{
-      goToCampusTab?.(route.panel);
+      await window.LutminV29Modules?.ensureFeatureForTab?.(route.panel,role());
+      if(window.LutminV29Data?.openTab)await window.LutminV29Data.openTab(route.panel);else goToCampusTab?.(route.panel);
       await new Promise(r=>setTimeout(r,30));
       if(route.panel==='admin'&&route.module)setAdminModuleV19?.(route.module);
       else if(route.panel==='talent'&&route.module)await openConectaModuleV210?.(route.module);
