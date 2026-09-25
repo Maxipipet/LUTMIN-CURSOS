@@ -1,0 +1,63 @@
+/* =========================================================
+     LUTMIN V23.0 · UX RUNTIME + RESILIENCIA
+     Sin APIs externas. Sin SQL nuevo.
+  ========================================================== */
+  #lutminTopProgressV230{
+    position:absolute;left:0;right:0;top:0;height:3px;z-index:70;
+    pointer-events:none;overflow:hidden;background:transparent
+  }
+  #lutminTopProgressV230>span{
+    display:block;height:100%;width:0;background:linear-gradient(90deg,#2F8DFD,#56B8FF);
+    transition:width .18s ease,opacity .22s ease;opacity:0
+  }
+  #lutminTopProgressV230.is-loading>span{width:72%;opacity:1;animation:lutminProgressV230 1.15s ease-in-out infinite}
+  #lutminTopProgressV230.is-done>span{width:100%;opacity:1}
+  @keyframes lutminProgressV230{0%{transform:translateX(-35%)}50%{transform:translateX(18%)}100%{transform:translateX(52%)}}
+
+  #lutminNetworkBannerV230{
+    display:none;position:sticky;top:0;z-index:65;margin:0 0 .75rem;
+    border:1px solid #fde68a;background:#fffbeb;color:#92400e;border-radius:14px;
+    padding:.65rem .8rem;font-size:11px;font-weight:700
+  }
+  #lutminNetworkBannerV230.is-offline{display:flex;align-items:center;gap:.55rem}
+
+  #lutminCommandPaletteV230{
+    position:fixed;inset:0;z-index:140;background:rgba(2,6,23,.62);
+    backdrop-filter:blur(8px);display:none;align-items:flex-start;justify-content:center;padding:8vh 14px 20px
+  }
+  #lutminCommandPaletteV230.open{display:flex}
+  #lutminCommandPaletteV230 .palette-shell{
+    width:min(680px,100%);background:#fff;border-radius:24px;border:1px solid #e2e8f0;
+    box-shadow:0 28px 90px rgba(2,6,23,.28);overflow:hidden
+  }
+  #lutminCommandPaletteV230 .palette-head{padding:14px;border-bottom:1px solid #eef2f7}
+  #lutminCommandPaletteV230 input{
+    width:100%;border:0;outline:0;background:#f8fafc;border-radius:14px;padding:13px 14px;
+    font-size:14px;color:#0f172a
+  }
+  #lutminCommandPaletteV230 .palette-list{max-height:min(62vh,520px);overflow:auto;padding:8px}
+  #lutminCommandPaletteV230 .palette-group{padding:7px 9px 4px;color:#94a3b8;font-size:9px;font-weight:900;letter-spacing:.12em;text-transform:uppercase}
+  #lutminCommandPaletteV230 .palette-item{
+    width:100%;display:flex;align-items:center;gap:11px;padding:11px 12px;border-radius:13px;text-align:left;
+    color:#334155;font-size:12px;font-weight:750;transition:background .12s ease,color .12s ease
+  }
+  #lutminCommandPaletteV230 .palette-item:hover,#lutminCommandPaletteV230 .palette-item.active{background:#eff6ff;color:#000B3C}
+  #lutminCommandPaletteV230 .palette-item i{width:18px;text-align:center;color:#2F8DFD}
+  #lutminCommandPaletteV230 .palette-empty{padding:28px;text-align:center;color:#94a3b8;font-size:12px}
+
+  .v230-soft-switch{transition:opacity .12s ease}
+  .v230-soft-switch.is-switching{opacity:.76}
+
+  #adminRuntimeV230 .metric-row{display:grid;grid-template-columns:minmax(120px,1fr) 70px 70px 70px;gap:8px;align-items:center}
+  #adminRuntimeV230 .metric-row+ .metric-row{border-top:1px solid #f1f5f9}
+  #adminRuntimeV230 .metric-row>div{padding:8px 6px;font-size:10px}
+  #adminRuntimeV230 .metric-row .name{font-weight:800;color:#334155;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #adminRuntimeV230 .metric-row .num{text-align:right;color:#64748b;font-variant-numeric:tabular-nums}
+  #adminRuntimeV230 .metric-head>div{font-size:9px!important;text-transform:uppercase;letter-spacing:.08em;font-weight:900!important;color:#94a3b8!important}
+
+  @media(max-width:640px){
+    #lutminCommandPaletteV230{padding-top:4vh}
+    #lutminCommandPaletteV230 .palette-shell{border-radius:20px}
+    #adminRuntimeV230 .metric-row{grid-template-columns:minmax(100px,1fr) 58px 58px}
+    #adminRuntimeV230 .metric-row>div:nth-child(4){display:none}
+  }
