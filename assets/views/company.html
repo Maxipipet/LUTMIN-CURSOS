@@ -1,0 +1,65 @@
+
+            <div class="flex flex-col xl:flex-row xl:items-end xl:justify-between gap-4">
+              <div class="flex items-center gap-4 min-w-0">
+                <div id="companyPortalLogoWrap" class="w-16 h-16 rounded-2xl bg-white border border-slate-100 shadow-sm flex items-center justify-center overflow-hidden shrink-0">
+                  <img id="companyPortalLogo" class="hidden w-full h-full object-contain p-2" alt="Logo empresa">
+                  <span id="companyPortalInitials" class="text-xl font-black text-lutmin-dark">EM</span>
+                </div>
+                <div class="min-w-0">
+                  <p class="text-[10px] sm:text-xs text-lutmin-light font-bold uppercase tracking-widest">Portal Empresa</p>
+                  <h2 id="companyPortalName" class="mt-1 text-2xl sm:text-3xl font-black text-lutmin-dark truncate">Mi empresa</h2>
+                  <p id="companyPortalMeta" class="mt-1 text-sm text-slate-500">Seguimiento de colaboradores y capacitaciones.</p>
+                </div>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <button onclick="downloadCompanyExecutivePdf()" class="px-4 py-2.5 rounded-xl bg-violet-50 text-violet-700 border border-violet-100 text-sm font-bold"><i class="fa-solid fa-file-pdf mr-2"></i>Reporte ejecutivo PDF</button>
+                <button onclick="exportCompanyPortalCsv()" class="px-4 py-2.5 rounded-xl bg-white border border-slate-200 text-sm font-bold text-lutmin-dark"><i class="fa-solid fa-file-csv mr-2"></i>Exportar CSV</button>
+                <button onclick="loadCompanyPortalData()" class="px-4 py-2.5 rounded-xl bg-lutmin-dark text-white text-sm font-bold"><i class="fa-solid fa-rotate mr-2"></i>Actualizar</button>
+              </div>
+            </div>
+
+            <div class="mt-6 grid grid-cols-2 xl:grid-cols-4 gap-4">
+              <div class="bg-white p-5 rounded-2xl border border-slate-100"><p class="text-xs text-slate-400 font-bold">COLABORADORES</p><p id="companyStatMembers" class="mt-2 text-3xl font-black text-lutmin-dark">0</p></div>
+              <div class="bg-white p-5 rounded-2xl border border-slate-100"><p class="text-xs text-slate-400 font-bold">CURSOS ACTIVOS</p><p id="companyStatActive" class="mt-2 text-3xl font-black text-lutmin-light">0</p></div>
+              <div class="bg-white p-5 rounded-2xl border border-slate-100"><p class="text-xs text-slate-400 font-bold">FORMACIONES COMPLETAS</p><p id="companyStatCompleted" class="mt-2 text-3xl font-black text-green-600">0</p></div>
+              <div class="bg-white p-5 rounded-2xl border border-slate-100"><p class="text-xs text-slate-400 font-bold">CERTIFICADOS</p><p id="companyStatCertificates" class="mt-2 text-3xl font-black text-violet-600">0</p></div>
+            </div>
+
+            <div class="mt-4 grid grid-cols-2 xl:grid-cols-4 gap-4">
+              <div class="bg-white p-5 rounded-2xl border border-slate-100"><p class="text-xs text-slate-400 font-bold">AVANCE PROMEDIO</p><p id="companyStatAvgProgress" class="mt-2 text-3xl font-black text-blue-600">0%</p></div>
+              <div class="bg-white p-5 rounded-2xl border border-slate-100"><p class="text-xs text-slate-400 font-bold">ASISTENCIA</p><p id="companyStatAttendance" class="mt-2 text-3xl font-black text-emerald-600">—</p></div>
+              <div class="bg-white p-5 rounded-2xl border border-slate-100"><p class="text-xs text-slate-400 font-bold">PRÓXIMOS ENCUENTROS</p><p id="companyStatUpcoming" class="mt-2 text-3xl font-black text-indigo-600">0</p></div>
+              <div class="bg-white p-5 rounded-2xl border border-slate-100"><p class="text-xs text-slate-400 font-bold">REQUIEREN ATENCIÓN</p><p id="companyStatAlerts" class="mt-2 text-3xl font-black text-amber-600">0</p></div>
+            </div>
+
+            <div class="mt-6 grid xl:grid-cols-[.9fr_1.1fr] gap-5">
+              <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden">
+                <div class="p-5 sm:p-6 border-b border-slate-100"><h3 class="font-extrabold text-lutmin-dark">Atención recomendada</h3><p class="mt-1 text-xs text-slate-500">El sistema destaca colaboradores con bajo avance o poca actividad.</p></div>
+                <div id="companyExecutiveAlerts" class="p-5 sm:p-6 space-y-3"><div class="text-sm text-slate-500">Sin alertas.</div></div>
+              </div>
+              <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden">
+                <div class="p-5 sm:p-6 border-b border-slate-100"><h3 class="font-extrabold text-lutmin-dark">Planes de capacitación</h3><p class="mt-1 text-xs text-slate-500">Objetivos corporativos, cursos requeridos y cumplimiento del equipo.</p></div>
+                <div id="companyTrainingPlans" class="p-5 sm:p-6 space-y-4"><div class="text-sm text-slate-500">Todavía no hay planes creados.</div></div>
+              </div>
+            </div>
+
+            <div class="mt-6 bg-white rounded-3xl border border-slate-100 overflow-hidden">
+              <div class="p-5 sm:p-6 border-b border-slate-100">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                  <div><h3 class="font-extrabold text-lutmin-dark">Seguimiento de colaboradores</h3><p class="mt-1 text-xs text-slate-500">La empresa ve avance, último acceso y certificados de las personas vinculadas a su organización.</p></div>
+                  <input id="companyPortalSearch" oninput="renderCompanyPortal()" class="px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Buscar colaborador">
+                </div>
+              </div>
+              <div id="companyPortalMembers" class="divide-y divide-slate-100"></div>
+            </div>
+
+            <div class="mt-6 bg-white rounded-3xl border border-slate-100 overflow-hidden">
+              <div class="p-5 sm:p-6 border-b border-slate-100"><h3 class="font-extrabold text-lutmin-dark">Agenda corporativa</h3><p class="mt-1 text-xs text-slate-500">Comisiones, próximos encuentros y asistencia del equipo.</p></div>
+              <div id="companyPortalAgenda" class="p-5 sm:p-6 grid lg:grid-cols-2 gap-4"><div class="text-sm text-slate-500">Todavía no hay comisiones programadas.</div></div>
+            </div>
+            <div class="mt-6 rounded-3xl bg-gradient-to-r from-violet-50 to-blue-50 border border-violet-100 p-6 sm:p-7 flex flex-col md:flex-row md:items-center md:justify-between gap-5">
+              <div><p class="text-[10px] uppercase tracking-widest text-violet-600 font-extrabold">Lutmin Conecta</p><h3 class="mt-2 text-xl font-black text-lutmin-dark">Empleo y talento ahora tiene su propio espacio</h3><p class="mt-2 text-sm text-slate-600">Publicaciones, postulaciones, perfiles completos, CV y banco de talento sin mezclarlo con la capacitación de tu empresa.</p></div>
+              <button onclick="goToCampusTab('company-conecta');loadCompanyConectaData()" class="shrink-0 px-5 py-3 rounded-xl bg-violet-600 text-white font-bold text-sm"><i class="fa-solid fa-briefcase mr-2"></i>Abrir Lutmin Conecta</button>
+            </div>
+
+          

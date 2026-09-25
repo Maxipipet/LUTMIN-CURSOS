@@ -1,20 +1,23 @@
-// LUTMIN V30.0 · cache versionada + runtime por demanda y lifecycle.
-const CACHE='lutmin-runtime-v30-0';
-const CORE='lutmin-core-v30-0';
-const VERSION='30.0';
-const VERSION_TOKEN='v=30.0';
+// LUTMIN V31.0 · cache versionada + vistas HTML por demanda.
+const CACHE='lutmin-runtime-v31-0';
+const CORE='lutmin-core-v31-0';
+const VERSION='31.0';
+const VERSION_TOKEN='v=31.0';
 const CORE_ASSETS=[
-  './assets/css/v30-loader.css?v=30.0',
-  './assets/css/v30-runtime.css?v=30.0',
-  './assets/js/core/module-loader-v30.js?v=30.0',
-  './assets/js/core/data-runtime-v30.js?v=30.0',
-  './assets/js/core/app-core.js?v=30.0',
-  './assets/js/core/ui-runtime-v30.js?v=30.0',
-  './assets/js/core/update-manager-v30.js?v=30.0'
+  './assets/css/v30-loader.css?v=31.0',
+  './assets/css/v30-runtime.css?v=31.0',
+  './assets/css/v31-views.css?v=31.0',
+  './assets/js/core/module-loader-v31.js?v=31.0',
+  './assets/js/core/data-runtime-v30.js?v=31.0',
+  './assets/js/core/view-loader-v31.js?v=31.0',
+  './assets/js/core/app-core.js?v=31.0',
+  './assets/js/core/lazy-core-bindings-v31.js?v=31.0',
+  './assets/js/core/ui-runtime-v30.js?v=31.0',
+  './assets/js/core/update-manager-v31.js?v=31.0'
 ];
 self.addEventListener('install',event=>event.waitUntil((async()=>{const cache=await caches.open(CORE);await Promise.allSettled(CORE_ASSETS.map(url=>cache.add(url)));})()));
 self.addEventListener('activate',event=>event.waitUntil((async()=>{const keys=await caches.keys();await Promise.all(keys.filter(k=>k.startsWith('lutmin-')&&![CACHE,CORE].includes(k)).map(k=>caches.delete(k)));await self.clients.claim();})()));
 async function cacheFirst(req){const runtime=await caches.open(CACHE);const core=await caches.open(CORE);const hit=(await core.match(req))||(await runtime.match(req));if(hit)return hit;const res=await fetch(req);if(res&&res.ok)runtime.put(req,res.clone()).catch(()=>{});return res;}
 async function networkFirst(req){const runtime=await caches.open(CACHE);try{const res=await fetch(req,{cache:'no-cache'});if(res&&res.ok)runtime.put(req,res.clone()).catch(()=>{});return res;}catch(err){const hit=await runtime.match(req,{ignoreSearch:true});if(hit)return hit;throw err;}}
-self.addEventListener('fetch',event=>{const req=event.request;if(req.method!=='GET')return;const url=new URL(req.url);if(url.origin!==self.location.origin)return;if(req.mode==='navigate'){event.respondWith(networkFirst(req));return;}const versioned=url.search.includes(VERSION_TOKEN);if(versioned&&['script','style'].includes(req.destination)){event.respondWith(cacheFirst(req));return;}if(['image','font'].includes(req.destination))event.respondWith(cacheFirst(req));});
+self.addEventListener('fetch',event=>{const req=event.request;if(req.method!=='GET')return;const url=new URL(req.url);if(url.origin!==self.location.origin)return;if(req.mode==='navigate'){event.respondWith(networkFirst(req));return;}const versioned=url.search.includes(VERSION_TOKEN);if(versioned&&['script','style'].includes(req.destination)){event.respondWith(cacheFirst(req));return;}if(versioned&&url.pathname.includes('/assets/views/')){event.respondWith(cacheFirst(req));return;}if(['image','font'].includes(req.destination))event.respondWith(cacheFirst(req));});
 self.addEventListener('message',event=>{const type=event.data?.type;if(type==='SKIP_WAITING')self.skipWaiting();if(type==='CLEAR_CACHES')event.waitUntil((async()=>{const keys=await caches.keys();await Promise.all(keys.filter(k=>k.startsWith('lutmin-')).map(k=>caches.delete(k)));})());if(type==='GET_VERSION')event.source?.postMessage?.({type:'LUTMIN_VERSION',version:VERSION});});

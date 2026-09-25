@@ -437,8 +437,10 @@
       if(!mode){showToast('La cuenta existe pero no tiene accesos activos.');return false;}
       currentAccessMode=mode; sessionStorage.setItem('lutmin-access-mode',mode);
       const effectiveRole=mode==='company'?'company_admin':mode==='admin'?'admin':mode==='instructor'?'instructor':'student';
-      // V29: carga únicamente el runtime que corresponde a los accesos disponibles.
-      // Administración mantiene compatibilidad total; Conecta pesado se carga al entrar.
+      // V31: primero monta el HTML del workspace. Después carga su runtime.
+      const viewReadyV31=await window.LutminV31Views?.ensureForRole?.(effectiveRole);
+      if(viewReadyV31===false){showToast('No pude preparar la interfaz de este acceso. Actualizá la página y volvé a intentar.');return false;}
+      // V29/V30: carga únicamente el runtime que corresponde a los accesos disponibles.
       if(window.LutminV29Modules?.ensureAuthenticated){
         const modulesReady=await window.LutminV29Modules.ensureAuthenticated({role:effectiveRole,capabilities:currentAccessContext});
         if(modulesReady===false){showToast('No pude cargar los módulos necesarios de Lutmin. Actualizá la página y volvé a intentar.');return false;}
@@ -538,6 +540,8 @@
         if (tab === 'activities' && currentLutminUser?.role !== 'student') return;
         if (currentLutminUser?.role === 'company_admin' && !['company','company-conecta','profile','notifications','support'].includes(tab)) return;
         if (currentLutminUser?.role === 'instructor' && !['instructor','profile','notifications','support'].includes(tab)) return;
+        const viewReady=await window.LutminV31Views?.ensureForTab?.(tab);
+        if(viewReady===false){showToast('No pude preparar esta vista. Actualizá la página y volvé a intentar.');return;}
         const featureReady=await window.LutminV29Modules?.ensureFeatureForTab?.(tab,currentLutminUser?.role);
         if(featureReady===false){showToast('No pude preparar este módulo. Actualizá la página y volvé a intentar.');return;}
         goToCampusTab(tab);
@@ -1665,6 +1669,7 @@
     let companyPortalCertificates = [];
 
     async function loadCompanyPortalData() {
+      if(await window.LutminV31Views?.ensureForTab?.('company')===false)return;
       if (!supabaseClient || currentLutminUser?.role !== 'company_admin') return;
       const { data, error } = await supabaseClient.rpc('get_company_portal');
       if (error) {
@@ -1857,6 +1862,7 @@
     }
 
     async function loadAdminData() {
+      if(await window.LutminV31Views?.ensureForTab?.('admin')===false)return;
       if (!supabaseClient || currentLutminUser?.role !== 'admin') return;
 
       const [profilesRes, coursesRes, lessonsRes, enrollmentsRes, progressRes, assessmentsRes, questionsRes, attemptsRes, certificatesRes, notesRes, offeringsRes, leadsRes, paymentsRes, accessRolesRes] = await Promise.all([
@@ -3936,6 +3942,8 @@
     }
 
     async function loadTalentCenter(){
+      if(await window.LutminV31Views?.ensureForTab?.('talent')===false)return;
+      if(await window.LutminV29Modules?.ensureFeatureForTab?.('talent',currentLutminUser?.role)===false)return;
       if(!supabaseClient||currentLutminUser?.role!=='student')return;
       await supabaseClient.from('talent_profiles').upsert({user_id:currentLutminUser.id},{onConflict:'user_id',ignoreDuplicates:true});
       const [profileRes,skillsRes,expRes,appsRes,certRes,jobsRes,savedJobsRes,statsRes,detailsRes,requestRes]=await Promise.all([
@@ -4001,6 +4009,8 @@
     let companyConectaSummary=null;
 
     async function loadCompanyConectaData(){
+      if(await window.LutminV31Views?.ensureForTab?.('company-conecta')===false)return;
+      if(await window.LutminV29Modules?.ensureFeatureForTab?.('company-conecta',currentLutminUser?.role)===false)return;
       if(!supabaseClient||currentLutminUser?.role!=='company_admin')return;
       const [pipelineRes,summaryRes]=await Promise.all([
         supabaseClient.rpc('company_job_pipeline'),

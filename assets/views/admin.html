@@ -1,0 +1,1008 @@
+
+            <div class="flex flex-col xl:flex-row xl:items-end xl:justify-between gap-4">
+              <div>
+                <p class="text-[10px] sm:text-xs text-lutmin-light font-bold uppercase tracking-widest">Administración modular</p>
+                <h2 class="mt-1 sm:mt-2 text-2xl sm:text-3xl font-black text-lutmin-dark">Administración Lutmin</h2>
+                <p class="mt-2 text-sm text-slate-500">Gestión integral con tablero ejecutivo, alertas académicas, metas, operación, formación, empresas, cobranzas, talento y trazabilidad.</p>
+              </div>
+              <button onclick="loadAdminData()" class="px-4 py-2.5 rounded-xl bg-white border border-slate-200 text-sm font-bold text-lutmin-dark hover:border-lutmin-light">
+                <i class="fa-solid fa-rotate mr-2"></i>Actualizar datos
+              </button>
+            </div>
+
+            <!-- =====================================================
+                 ADMINISTRACIÓN MODULAR SISTEMA · SIN BARRA STICKY
+            ====================================================== -->
+            <div id="adminWorkspaceV19" class="mt-6 bg-slate-50 rounded-3xl border border-slate-200 p-3 sm:p-4">
+              <div class="flex flex-col gap-4">
+                <div class="flex items-center justify-between gap-3">
+                  <div><p class="text-[10px] uppercase tracking-widest font-black text-lutmin-light">Módulos de administración</p><p class="text-xs text-slate-500 mt-1">Todos los módulos de Administración quedan visibles acá arriba para cambiar de área sin perder contexto.</p></div>
+                  <button onclick="toggleAdminQuickActionsV19()" class="px-3.5 py-2.5 rounded-xl bg-lutmin-light text-white text-xs font-extrabold shrink-0"><i class="fa-solid fa-plus mr-1"></i>Acción</button>
+                </div>
+
+                <div class="sm:hidden">
+                  <label class="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Módulo</label>
+                  <select id="adminModuleSelectV20" onchange="setAdminModuleV19(this.value)" class="mt-2 w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-sm font-bold text-lutmin-dark">
+                    <option value="overview">Resumen</option><option value="operations">Operación</option><option value="academic">Academia</option><option value="people">Personas</option><option value="companies">Empresas</option><option value="commercial">Comercial</option><option value="finance">Finanzas</option><option value="talent">Talento</option><option value="communications">Comunicación</option><option value="system">Sistema</option>
+                  </select>
+                </div>
+
+                <div id="adminModuleNavV19" class="hidden sm:grid sm:grid-cols-3 lg:grid-cols-5 gap-2">
+                  <button data-admin-v19-btn="overview" onclick="setAdminModuleV19('overview')" class="admin-v19-nav px-3 py-2.5 rounded-xl text-xs font-extrabold bg-lutmin-dark text-white"><i class="fa-solid fa-house mr-2"></i>Resumen <span id="adminBadgeOverviewV19" class="ml-1 opacity-70"></span></button>
+                  <button data-admin-v19-btn="operations" onclick="setAdminModuleV19('operations')" class="admin-v19-nav px-3 py-2.5 rounded-xl text-xs font-bold bg-white text-slate-600"><i class="fa-solid fa-list-check mr-2"></i>Operación <span id="adminBadgeOperationsV19" class="ml-1"></span></button>
+                  <button data-admin-v19-btn="academic" onclick="setAdminModuleV19('academic')" class="admin-v19-nav px-3 py-2.5 rounded-xl text-xs font-bold bg-white text-slate-600"><i class="fa-solid fa-graduation-cap mr-2"></i>Academia <span id="adminBadgeAcademicV19" class="ml-1"></span></button>
+                  <button data-admin-v19-btn="people" onclick="setAdminModuleV19('people')" class="admin-v19-nav px-3 py-2.5 rounded-xl text-xs font-bold bg-white text-slate-600"><i class="fa-solid fa-users mr-2"></i>Personas <span id="adminBadgePeopleV19" class="ml-1"></span></button>
+                  <button data-admin-v19-btn="companies" onclick="setAdminModuleV19('companies')" class="admin-v19-nav px-3 py-2.5 rounded-xl text-xs font-bold bg-white text-slate-600"><i class="fa-solid fa-building mr-2"></i>Empresas <span id="adminBadgeCompaniesV19" class="ml-1"></span></button>
+                  <button data-admin-v19-btn="commercial" onclick="setAdminModuleV19('commercial')" class="admin-v19-nav px-3 py-2.5 rounded-xl text-xs font-bold bg-white text-slate-600"><i class="fa-solid fa-bullseye mr-2"></i>Comercial <span id="adminBadgeCommercialV19" class="ml-1"></span></button>
+                  <button data-admin-v19-btn="finance" onclick="setAdminModuleV19('finance')" class="admin-v19-nav px-3 py-2.5 rounded-xl text-xs font-bold bg-white text-slate-600"><i class="fa-solid fa-wallet mr-2"></i>Finanzas <span id="adminBadgeFinanceV19" class="ml-1"></span></button>
+                  <button data-admin-v19-btn="talent" onclick="setAdminModuleV19('talent')" class="admin-v19-nav px-3 py-2.5 rounded-xl text-xs font-bold bg-white text-slate-600"><i class="fa-solid fa-briefcase mr-2"></i>Talento</button>
+                  <button data-admin-v19-btn="communications" onclick="setAdminModuleV19('communications')" class="admin-v19-nav px-3 py-2.5 rounded-xl text-xs font-bold bg-white text-slate-600"><i class="fa-solid fa-bullhorn mr-2"></i>Comunicación</button>
+                  <button data-admin-v19-btn="system" onclick="setAdminModuleV19('system')" class="admin-v19-nav px-3 py-2.5 rounded-xl text-xs font-bold bg-white text-slate-600"><i class="fa-solid fa-gear mr-2"></i>Sistema</button>
+                </div>
+
+                <div class="grid lg:grid-cols-[1fr_auto] gap-3 border-t border-slate-200 pt-3">
+                  <div class="relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-3.5 text-slate-400 text-xs"></i>
+                    <input id="adminGlobalSearchV19" oninput="adminGlobalSearchV19()" onfocus="adminGlobalSearchV19()" class="w-full pl-9 pr-16 py-3 rounded-xl bg-white border border-slate-200 text-xs focus:outline-none focus:border-lutmin-light" placeholder="Buscar alumno, empresa, curso o función...">
+                    <span class="absolute right-3 top-3 px-2 py-1 rounded-md bg-slate-50 border border-slate-200 text-[9px] text-slate-400">Ctrl K</span>
+                    <div id="adminSearchResultsV19" class="hidden absolute top-full mt-2 left-0 right-0 z-50 max-h-[360px] overflow-y-auto bg-white rounded-2xl border border-slate-200 shadow-2xl p-2"></div>
+                  </div>
+                  <div class="flex gap-2">
+                    <button onclick="goToCampusTab('support')" class="px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-600 text-[11px] font-bold"><i class="fa-solid fa-headset mr-1"></i>Ayuda</button>
+                    <button onclick="runAdminDiagnosticsV19()" class="px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-600 text-[11px] font-bold"><i class="fa-solid fa-stethoscope mr-1"></i>Diagnóstico</button>
+                  </div>
+                </div>
+
+                <div class="border-t border-slate-200 pt-3"><p id="adminModuleTitleV19" class="text-sm font-black text-lutmin-dark">Resumen</p><p id="adminModuleDescriptionV19" class="text-[11px] text-slate-500 mt-0.5">Indicadores y prioridades del sistema.</p></div>
+
+                <div id="adminQuickActionsV19" class="hidden grid sm:grid-cols-2 xl:grid-cols-6 gap-2 border-t border-slate-200 pt-3">
+                  <button onclick="adminQuickActionV19('student')" class="p-3 rounded-xl bg-blue-50 text-blue-700 text-left text-[11px] font-extrabold"><i class="fa-solid fa-user-plus mr-1"></i>Nuevo alumno</button>
+                  <button onclick="adminQuickActionV19('company')" class="p-3 rounded-xl bg-cyan-50 text-cyan-700 text-left text-[11px] font-extrabold"><i class="fa-solid fa-building-circle-check mr-1"></i>Nueva empresa</button>
+                  <button onclick="adminQuickActionV19('course')" class="p-3 rounded-xl bg-violet-50 text-violet-700 text-left text-[11px] font-extrabold"><i class="fa-solid fa-book-open mr-1"></i>Nuevo curso</button>
+                  <button onclick="adminQuickActionV19('task')" class="p-3 rounded-xl bg-amber-50 text-amber-700 text-left text-[11px] font-extrabold"><i class="fa-solid fa-list-check mr-1"></i>Nueva tarea</button>
+                  <button onclick="adminQuickActionV19('announcement')" class="p-3 rounded-xl bg-emerald-50 text-emerald-700 text-left text-[11px] font-extrabold"><i class="fa-solid fa-bullhorn mr-1"></i>Comunicado</button>
+                  <button onclick="adminQuickActionV19('support')" class="p-3 rounded-xl bg-rose-50 text-rose-700 text-left text-[11px] font-extrabold"><i class="fa-solid fa-headset mr-1"></i>Ver ayuda</button>
+                </div>
+              </div>
+            </div>
+
+            <div id="adminSystemGuideV19" data-admin-module-v19="system" class="hidden mt-6 bg-white rounded-3xl border border-slate-100 overflow-hidden">
+              <div class="p-5 sm:p-6 border-b border-slate-100 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+                <div><p class="text-[10px] uppercase tracking-widest font-extrabold text-lutmin-light">SISTEMA</p><h3 class="mt-1 font-extrabold text-lutmin-dark text-lg">Mapa y diagnóstico de Administración</h3><p class="mt-1 text-xs text-slate-500">La Administración ahora está separada por módulos. El diagnóstico indica exactamente qué parte de Supabase está instalada, sin mensajes genéricos de versiones viejas.</p></div>
+                <button onclick="runAdminDiagnosticsV19()" class="px-4 py-2.5 rounded-xl bg-lutmin-dark text-white text-xs font-extrabold"><i class="fa-solid fa-stethoscope mr-2"></i>Revisar instalación</button>
+              </div>
+              <div class="p-5 sm:p-6 grid lg:grid-cols-[1fr_.9fr] gap-5">
+                <div class="grid sm:grid-cols-2 gap-3 text-xs">
+                  <div class="p-4 rounded-2xl bg-slate-50"><strong>Resumen</strong><p class="mt-1 text-slate-500">KPIs, inteligencia y prioridades.</p></div>
+                  <div class="p-4 rounded-2xl bg-slate-50"><strong>Operación</strong><p class="mt-1 text-slate-500">Tareas, señales y salud del sistema.</p></div>
+                  <div class="p-4 rounded-2xl bg-slate-50"><strong>Academia</strong><p class="mt-1 text-slate-500">Cursos, clases, evaluaciones, agenda y certificados.</p></div>
+                  <div class="p-4 rounded-2xl bg-slate-50"><strong>Personas</strong><p class="mt-1 text-slate-500">Alumnos, importaciones y seguimiento.</p></div>
+                  <div class="p-4 rounded-2xl bg-slate-50"><strong>Empresas</strong><p class="mt-1 text-slate-500">Clientes corporativos y planes.</p></div>
+                  <div class="p-4 rounded-2xl bg-slate-50"><strong>Comercial / Finanzas</strong><p class="mt-1 text-slate-500">Interesados, ediciones, matrículas y pagos.</p></div>
+                </div>
+                <div id="adminDiagnosticsV19" class="rounded-2xl border border-slate-100 p-4"><p class="text-sm text-slate-500">Tocá “Revisar instalación” para ver el estado real.</p></div>
+              </div>
+              <div class="border-t border-slate-100 p-5 sm:p-6 bg-slate-50/50">
+                <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
+                  <div>
+                    <p class="text-[10px] uppercase tracking-widest font-extrabold text-emerald-600">CALIDAD DEL SISTEMA</p>
+                    <h4 class="mt-1 font-extrabold text-lutmin-dark">Centro de calidad del sistema</h4>
+                    <p class="mt-1 text-xs text-slate-500">Revisa seguridad, módulos instalados e inconsistencias de datos sin borrar información.</p>
+                  </div>
+                  <div class="flex flex-wrap gap-2">
+                    <button onclick="runAdminQualityV35()" class="px-4 py-2.5 rounded-xl bg-lutmin-dark text-white text-xs font-extrabold"><i class="fa-solid fa-shield-heart mr-2"></i>Ejecutar control</button>
+                    <button onclick="runSafeMaintenanceV35()" class="px-4 py-2.5 rounded-xl bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-100"><i class="fa-solid fa-screwdriver-wrench mr-2"></i>Mantenimiento seguro</button>
+                    <button onclick="downloadAdminDiagnosticsV35()" class="px-4 py-2.5 rounded-xl bg-white text-slate-700 text-xs font-bold border border-slate-200"><i class="fa-solid fa-download mr-2"></i>Descargar diagnóstico</button>
+                  </div>
+                </div>
+
+                <div class="mt-5 grid grid-cols-2 lg:grid-cols-4 gap-3">
+                  <div class="rounded-2xl bg-white border border-slate-100 p-4">
+                    <p class="text-[10px] uppercase font-bold text-slate-400">Estado general</p>
+                    <p id="v35OverallStat" class="mt-1 text-lg font-black text-slate-500">SIN REVISAR</p>
+                  </div>
+                  <div class="rounded-2xl bg-white border border-slate-100 p-4">
+                    <p class="text-[10px] uppercase font-bold text-red-400">Críticos</p>
+                    <p id="v35CriticalStat" class="mt-1 text-2xl font-black text-red-600">—</p>
+                  </div>
+                  <div class="rounded-2xl bg-white border border-slate-100 p-4">
+                    <p class="text-[10px] uppercase font-bold text-amber-500">Advertencias</p>
+                    <p id="v35WarningStat" class="mt-1 text-2xl font-black text-amber-600">—</p>
+                  </div>
+                  <div class="rounded-2xl bg-white border border-slate-100 p-4">
+                    <p class="text-[10px] uppercase font-bold text-blue-500">Versión DB</p>
+                    <p id="v35VersionStat" class="mt-1 text-sm font-black text-blue-700">—</p>
+                  </div>
+                </div>
+
+                <div class="mt-5 grid xl:grid-cols-[1fr_1fr_.8fr] gap-4">
+                  <div class="rounded-2xl bg-white border border-slate-100 overflow-hidden">
+                    <div class="p-4 border-b border-slate-100"><h5 class="font-extrabold text-sm text-lutmin-dark">Componentes críticos</h5><p class="mt-1 text-[10px] text-slate-500">Base, Academia, Conecta, competencias, certificados y seguridad.</p></div>
+                    <div id="adminQualityChecksV35" class="p-4 space-y-2"><p class="text-xs text-slate-500">Ejecutá el control para comenzar.</p></div>
+                  </div>
+                  <div class="rounded-2xl bg-white border border-slate-100 overflow-hidden">
+                    <div class="p-4 border-b border-slate-100"><h5 class="font-extrabold text-sm text-lutmin-dark">Integridad y pendientes</h5><p class="mt-1 text-[10px] text-slate-500">Distingue inconsistencias reales de pendientes normales de operación.</p></div>
+                    <div id="adminQualityIntegrityV35" class="p-4 space-y-2"><p class="text-xs text-slate-500">Todavía no hay diagnóstico.</p></div>
+                  </div>
+                  <div class="rounded-2xl bg-white border border-slate-100 overflow-hidden">
+                    <div class="p-4 border-b border-slate-100 flex items-center justify-between gap-2"><div><h5 class="font-extrabold text-sm text-lutmin-dark">Migraciones recientes</h5><p class="mt-1 text-[10px] text-slate-500">Qué versiones reconoce la base.</p></div><button onclick="copyAdminDiagnosticsV35()" class="px-2.5 py-2 rounded-lg bg-slate-100 text-[10px] font-bold text-slate-600"><i class="fa-regular fa-copy mr-1"></i>Copiar</button></div>
+                    <div id="adminQualityMigrationsV35" class="p-4 space-y-2 max-h-[330px] overflow-y-auto"><p class="text-xs text-slate-500">Sin datos.</p></div>
+                  </div>
+                </div>
+
+                <div class="mt-4 rounded-2xl bg-emerald-50 border border-emerald-100 p-4 text-xs text-emerald-800">
+                  <strong><i class="fa-solid fa-lock mr-1"></i>Mantenimiento seguro:</strong>
+                  solo cierra intentos de validación teórica cuyo tiempo ya venció. No elimina cuentas, cursos, pagos, certificados, perfiles ni postulaciones.
+                </div>
+              </div>
+            </div>
+
+            <div id="adminCommandCenterV160" data-admin-module-v19="overview" class="mt-6"></div>
+
+            <div class="mt-6 grid grid-cols-2 xl:grid-cols-8 gap-4">
+              <div class="bg-white p-5 rounded-2xl border border-slate-100">
+                <p class="text-xs text-slate-400 font-bold">ALUMNOS REGISTRADOS</p>
+                <p id="adminStudentsStat" class="mt-2 text-3xl font-black text-lutmin-dark">0</p>
+              </div>
+              <div class="bg-white p-5 rounded-2xl border border-slate-100">
+                <p class="text-xs text-slate-400 font-bold">CURSOS</p>
+                <p id="adminCoursesStat" class="mt-2 text-3xl font-black text-lutmin-dark">0</p>
+              </div>
+              <div class="bg-white p-5 rounded-2xl border border-slate-100">
+                <p class="text-xs text-slate-400 font-bold">INSCRIPCIONES</p>
+                <p id="adminEnrollmentsStat" class="mt-2 text-3xl font-black text-lutmin-light">0</p>
+              </div>
+              <div class="bg-white p-5 rounded-2xl border border-slate-100">
+                <p class="text-xs text-slate-400 font-bold">CERTIFICADOS</p>
+                <p id="adminCertificatesStat" class="mt-2 text-3xl font-black text-green-600">0</p>
+              </div>
+              <div class="bg-white p-5 rounded-2xl border border-slate-100 col-span-2 xl:col-span-1">
+                <p class="text-xs text-slate-400 font-bold">INTERESADOS WEB</p>
+                <p id="adminLeadsStat" class="mt-2 text-3xl font-black text-violet-600">0</p>
+              </div>
+              <div class="bg-white p-5 rounded-2xl border border-slate-100 col-span-2 xl:col-span-1">
+                <p class="text-xs text-slate-400 font-bold">PAGOS PENDIENTES</p>
+                <p id="adminPaymentsPendingStat" class="mt-2 text-3xl font-black text-amber-600">0</p>
+              </div>
+              <div class="bg-white p-5 rounded-2xl border border-slate-100">
+                <p class="text-xs text-slate-400 font-bold">EMPRESAS ACTIVAS</p>
+                <p id="adminActiveCompaniesStat" class="mt-2 text-3xl font-black text-lutmin-dark">0</p>
+              </div>
+              <div class="bg-white p-5 rounded-2xl border border-slate-100">
+                <p class="text-xs text-slate-400 font-bold">EDICIONES ABIERTAS</p>
+                <p id="adminOpenOfferingsStat" class="mt-2 text-3xl font-black text-lutmin-light">0</p>
+              </div>
+            </div>
+
+
+            <!-- =====================================================
+                 INTELIGENCIA DE GESTIÓN V1.7
+            ====================================================== -->
+            <div class="mt-6 bg-white rounded-3xl border border-slate-100 overflow-hidden">
+              <div class="p-5 sm:p-6 border-b border-slate-100 flex flex-col 2xl:flex-row 2xl:items-center 2xl:justify-between gap-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-11 h-11 rounded-xl bg-fuchsia-50 text-fuchsia-600 flex items-center justify-center"><i class="fa-solid fa-chart-line"></i></div>
+                  <div><h3 class="font-extrabold text-lutmin-dark text-lg">Inteligencia de gestión</h3><p class="text-xs text-slate-500 mt-1">Embudo comercial, resultados académicos, riesgo, salud corporativa y metas del mes.</p></div>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                  <button onclick="loadExecutiveV17()" class="px-4 py-2.5 rounded-xl bg-fuchsia-600 text-white text-xs font-extrabold"><i class="fa-solid fa-rotate mr-2"></i>Actualizar</button>
+                  <button onclick="saveExecutiveSnapshotV17()" class="px-4 py-2.5 rounded-xl bg-emerald-600 text-white text-xs font-bold"><i class="fa-solid fa-camera mr-2"></i>Guardar foto</button>
+                  <button onclick="downloadExecutiveV17Csv()" class="px-4 py-2.5 rounded-xl bg-slate-100 text-lutmin-dark text-xs font-bold"><i class="fa-solid fa-file-csv mr-2"></i>CSV</button>
+                  <button onclick="downloadExecutiveV17Pdf()" class="px-4 py-2.5 rounded-xl bg-lutmin-dark text-white text-xs font-bold"><i class="fa-solid fa-file-pdf mr-2"></i>PDF</button>
+                </div>
+              </div>
+              <div class="p-5 sm:p-6">
+                <div class="grid grid-cols-2 lg:grid-cols-4 2xl:grid-cols-7 gap-3">
+                  <div class="rounded-2xl bg-emerald-50 p-4"><p class="text-[10px] uppercase font-bold text-emerald-600">Cobrado mes</p><p id="execRevenueV17" class="mt-1 text-xl font-black text-emerald-700">$0</p><div id="execRevenueGoalV17" class="mt-2 text-[10px] text-emerald-700"></div></div>
+                  <div class="rounded-2xl bg-violet-50 p-4"><p class="text-[10px] uppercase font-bold text-violet-600">Leads mes</p><p id="execLeadsV17" class="mt-1 text-2xl font-black text-violet-700">0</p><div id="execLeadsGoalV17" class="mt-2 text-[10px] text-violet-700"></div></div>
+                  <div class="rounded-2xl bg-blue-50 p-4"><p class="text-[10px] uppercase font-bold text-blue-600">Conversión</p><p id="execConversionV17" class="mt-1 text-2xl font-black text-blue-700">0%</p><div id="execConversionGoalV17" class="mt-2 text-[10px] text-blue-700"></div></div>
+                  <div class="rounded-2xl bg-cyan-50 p-4"><p class="text-[10px] uppercase font-bold text-cyan-600">Finalización</p><p id="execCompletionV17" class="mt-1 text-2xl font-black text-cyan-700">0%</p><div id="execCompletionGoalV17" class="mt-2 text-[10px] text-cyan-700"></div></div>
+                  <div class="rounded-2xl bg-green-50 p-4"><p class="text-[10px] uppercase font-bold text-green-600">Certificados mes</p><p id="execCertificatesV17" class="mt-1 text-2xl font-black text-green-700">0</p><div id="execCertificatesGoalV17" class="mt-2 text-[10px] text-green-700"></div></div>
+                  <div class="rounded-2xl bg-amber-50 p-4"><p class="text-[10px] uppercase font-bold text-amber-600">Deuda vencida</p><p id="execDebtV17" class="mt-1 text-xl font-black text-amber-700">$0</p><div id="execDebtGoalV17" class="mt-2 text-[10px] text-amber-700"></div></div>
+                  <div class="rounded-2xl bg-indigo-50 p-4"><p class="text-[10px] uppercase font-bold text-indigo-600">Empresas activas</p><p id="execCompaniesV17" class="mt-1 text-2xl font-black text-indigo-700">0</p><div id="execCompaniesGoalV17" class="mt-2 text-[10px] text-indigo-700"></div></div>
+                </div>
+
+                <div class="mt-5 grid 2xl:grid-cols-[1fr_1fr_.8fr] gap-5">
+                  <div class="rounded-2xl border border-slate-100 p-4">
+                    <div class="flex items-center justify-between gap-3"><div><h4 class="font-extrabold text-lutmin-dark">Embudo comercial</h4><p class="text-[11px] text-slate-500 mt-1">Desde interesado web hasta alumno inscripto.</p></div><span id="execFunnelRateV17" class="text-xs px-3 py-1.5 rounded-full bg-violet-50 text-violet-700 font-bold">0%</span></div>
+                    <div id="execFunnelV17" class="mt-4 space-y-3"></div>
+                  </div>
+                  <div class="rounded-2xl border border-slate-100 p-4">
+                    <div class="flex items-center justify-between gap-3"><div><h4 class="font-extrabold text-lutmin-dark">Alumnos que requieren atención</h4><p class="text-[11px] text-slate-500 mt-1">Reglas simples: inactividad, bajo avance y deuda.</p></div><span id="execRiskCountV17" class="text-xs px-3 py-1.5 rounded-full bg-red-50 text-red-700 font-bold">0</span></div>
+                    <div id="execRiskStudentsV17" class="mt-4 space-y-2 max-h-[320px] overflow-y-auto"></div>
+                  </div>
+                  <div class="rounded-2xl border border-slate-100 p-4">
+                    <h4 class="font-extrabold text-lutmin-dark">Metas del mes</h4><p class="text-[11px] text-slate-500 mt-1">Definí objetivos y compará resultado real vs meta.</p>
+                    <form id="execGoalFormV17" class="mt-4 space-y-2">
+                      <select id="execGoalMetricV17" class="w-full px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs">
+                        <option value="revenue">Cobrado mensual (ARS)</option><option value="new_leads">Nuevos interesados</option><option value="lead_conversion">Conversión (%)</option><option value="completion_rate">Finalización (%)</option><option value="certificates">Certificados</option><option value="active_companies">Empresas activas</option><option value="overdue_debt">Máximo deuda vencida (ARS)</option>
+                      </select>
+                      <input id="execGoalValueV17" type="number" min="0" step="0.01" required class="w-full px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs" placeholder="Valor objetivo">
+                      <input id="execGoalNotesV17" maxlength="300" class="w-full px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs" placeholder="Nota opcional">
+                      <button class="w-full py-2.5 rounded-xl bg-lutmin-dark text-white text-xs font-extrabold">Guardar meta</button>
+                    </form>
+                    <button onclick="openRiskSettingsV17()" class="mt-3 w-full py-2.5 rounded-xl bg-slate-100 text-lutmin-dark text-xs font-bold"><i class="fa-solid fa-sliders mr-2"></i>Configurar riesgo</button>
+                  </div>
+                </div>
+
+                <div class="mt-5 grid xl:grid-cols-2 gap-5">
+                  <div class="rounded-2xl border border-slate-100 overflow-hidden"><div class="p-4 bg-slate-50"><h4 class="font-extrabold text-lutmin-dark">Salud de empresas</h4><p class="text-[11px] text-slate-500 mt-1">Colaboradores, avance promedio y certificados.</p></div><div id="execCompaniesHealthV17" class="divide-y divide-slate-100 max-h-[360px] overflow-y-auto"></div></div>
+                  <div class="rounded-2xl border border-slate-100 overflow-hidden"><div class="p-4 bg-slate-50"><h4 class="font-extrabold text-lutmin-dark">Calidad de datos</h4><p class="text-[11px] text-slate-500 mt-1">Detecta configuraciones incompletas antes de que generen problemas.</p></div><div id="execDataQualityV17" class="p-4 space-y-2"></div></div>
+                </div>
+              </div>
+            </div>
+
+            <div id="riskSettingsModalV17" class="hidden fixed inset-0 z-[150] bg-slate-950/70 backdrop-blur-sm p-4 flex items-center justify-center">
+              <div class="w-full max-w-lg bg-white rounded-3xl shadow-2xl p-6 relative">
+                <button onclick="closeRiskSettingsV17()" class="absolute right-4 top-4 w-9 h-9 rounded-full bg-slate-100"><i class="fa-solid fa-xmark"></i></button>
+                <p class="text-[10px] uppercase tracking-widest font-extrabold text-lutmin-light">V1.7</p><h3 class="mt-1 text-xl font-black text-lutmin-dark">Reglas de riesgo académico</h3>
+                <form id="riskSettingsFormV17" class="mt-5 space-y-3">
+                  <label class="block text-xs font-bold text-slate-600">Días sin ingresar<input id="riskInactiveDaysV17" type="number" min="1" max="365" class="mt-2 w-full px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200"></label>
+                  <label class="block text-xs font-bold text-slate-600">Avance considerado bajo (%)<input id="riskLowProgressV17" type="number" min="0" max="100" class="mt-2 w-full px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200"></label>
+                  <label class="block text-xs font-bold text-slate-600">Aplicar bajo avance después de X días<input id="riskAfterDaysV17" type="number" min="1" max="365" class="mt-2 w-full px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200"></label>
+                  <label class="block text-xs font-bold text-slate-600">Empresa requiere atención debajo de (%)<input id="riskCompanyPercentV17" type="number" min="0" max="100" class="mt-2 w-full px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200"></label>
+                  <button class="w-full py-3 rounded-xl bg-lutmin-light text-white font-extrabold text-sm">Guardar configuración</button>
+                </form>
+              </div>
+            </div>
+
+
+            <!-- =====================================================
+                 SALUD DEL SISTEMA + OPERACIONES MASIVAS V1.8
+            ====================================================== -->
+            <div class="mt-6 bg-white rounded-3xl border border-slate-100 overflow-hidden">
+              <div class="p-5 sm:p-6 border-b border-slate-100 flex flex-col 2xl:flex-row 2xl:items-center 2xl:justify-between gap-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-11 h-11 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center"><i class="fa-solid fa-heart-pulse"></i></div>
+                  <div><div class="flex flex-wrap items-center gap-2"><h3 class="font-extrabold text-lutmin-dark text-lg">Salud del sistema</h3><span class="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-extrabold">CONTROL DE INTEGRIDAD</span></div><p class="text-xs text-slate-500 mt-1">Detecta inconsistencias antes de que lleguen al alumno o a una empresa y permite acciones masivas seguras.</p></div>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                  <button onclick="runSystemHealthV18()" class="px-4 py-2.5 rounded-xl bg-teal-600 text-white text-xs font-extrabold"><i class="fa-solid fa-stethoscope mr-2"></i>Revisar sistema</button>
+                  <button onclick="loadAdminV18()" class="px-4 py-2.5 rounded-xl bg-slate-100 text-lutmin-dark text-xs font-bold"><i class="fa-solid fa-rotate mr-2"></i>Actualizar</button>
+                </div>
+              </div>
+              <div class="p-5 sm:p-6">
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                  <div class="rounded-2xl bg-slate-50 p-4"><p class="text-[10px] uppercase font-bold text-slate-500">Hallazgos abiertos</p><p id="healthOpenV18" class="mt-1 text-2xl font-black text-lutmin-dark">0</p></div>
+                  <div class="rounded-2xl bg-red-50 p-4"><p class="text-[10px] uppercase font-bold text-red-500">Importantes</p><p id="healthImportantV18" class="mt-1 text-2xl font-black text-red-700">0</p></div>
+                  <div class="rounded-2xl bg-emerald-50 p-4"><p class="text-[10px] uppercase font-bold text-emerald-600">Resueltos</p><p id="healthResolvedV18" class="mt-1 text-2xl font-black text-emerald-700">0</p></div>
+                  <div class="rounded-2xl bg-blue-50 p-4"><p class="text-[10px] uppercase font-bold text-blue-600">Versión esquema</p><p id="healthVersionV18" class="mt-1 text-lg font-black text-blue-700">V1.9</p></div>
+                </div>
+
+                <div class="mt-5 grid 2xl:grid-cols-[1.15fr_.85fr] gap-5">
+                  <div class="rounded-2xl border border-slate-100 overflow-hidden">
+                    <div class="p-4 bg-slate-50 flex items-center justify-between gap-3"><div><h4 class="font-extrabold text-lutmin-dark">Diagnóstico</h4><p class="text-[11px] text-slate-500 mt-1">Cursos incompletos, empresas sin responsable, matrículas inconsistentes y tareas vencidas.</p></div><select id="healthFilterV18" onchange="renderHealthV18()" class="px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs"><option value="open">Abiertos</option><option value="all">Todos</option><option value="resolved">Resueltos</option><option value="ignored">Ignorados</option></select></div>
+                    <div id="healthFindingsV18" class="p-4 space-y-3 max-h-[520px] overflow-y-auto"><p class="text-sm text-slate-500">Ejecutá “Revisar sistema”.</p></div>
+                  </div>
+
+                  <div class="space-y-4">
+                    <div class="rounded-2xl border border-slate-100 p-4">
+                      <h4 class="font-extrabold text-lutmin-dark">Asignar curso en bloque</h4><p class="mt-1 text-[11px] text-slate-500">Seleccioná varios usuarios y asignales un curso sin duplicar matrículas existentes.</p>
+                      <select id="bulkCourseV18" class="mt-3 w-full px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs"></select>
+                      <select id="bulkCourseUsersV18" multiple size="7" class="mt-2 w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs"></select>
+                      <p class="mt-1 text-[10px] text-slate-400">Ctrl + clic para elegir más de una persona.</p>
+                      <button onclick="bulkAssignCourseV18()" class="mt-3 w-full py-2.5 rounded-xl bg-lutmin-light text-white text-xs font-extrabold">Asignar curso</button>
+                    </div>
+                    <div class="rounded-2xl border border-slate-100 p-4">
+                      <h4 class="font-extrabold text-lutmin-dark">Vincular colaboradores en bloque</h4><p class="mt-1 text-[11px] text-slate-500">Agregá varias personas a una empresa sin perder un acceso Empresa que ya tengan.</p>
+                      <select id="bulkCompanyV18" class="mt-3 w-full px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs"></select>
+                      <select id="bulkCompanyUsersV18" multiple size="7" class="mt-2 w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs"></select>
+                      <button onclick="bulkLinkCompanyV18()" class="mt-3 w-full py-2.5 rounded-xl bg-indigo-600 text-white text-xs font-extrabold">Vincular a empresa</button>
+                    </div>
+                    <div class="rounded-2xl border border-slate-100 p-4">
+                      <div class="flex items-center justify-between gap-3"><div><h4 class="font-extrabold text-lutmin-dark">Últimas operaciones masivas</h4><p class="mt-1 text-[11px] text-slate-500">Registro para saber qué se hizo y cuántas personas afectó.</p></div></div>
+                      <div id="bulkHistoryV18" class="mt-3 space-y-2 max-h-[220px] overflow-y-auto"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- =====================================================
+                 CENTRO DE CONTROL OPERATIVO - V1.0
+            ====================================================== -->
+            <div class="mt-6 bg-lutmin-dark text-white rounded-3xl overflow-hidden">
+              <div class="p-5 sm:p-6 border-b border-white/10 flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
+                <div class="flex items-center gap-3"><div class="w-11 h-11 rounded-xl bg-white/10 text-lutmin-light flex items-center justify-center"><i class="fa-solid fa-tower-observation"></i></div><div><h3 class="font-extrabold text-lg">Centro de control</h3><p class="text-xs text-slate-300 mt-1">Qué requiere atención ahora mismo, sin revisar módulo por módulo.</p></div></div>
+                <button onclick="exportAdminBackupJson()" class="px-4 py-2.5 rounded-xl bg-white text-lutmin-dark text-sm font-extrabold"><i class="fa-solid fa-box-archive mr-2"></i>Exportar respaldo JSON</button>
+              </div>
+              <div class="p-5 sm:p-6">
+                <div class="grid grid-cols-2 xl:grid-cols-6 gap-3">
+                  <div class="rounded-2xl bg-white/10 p-4"><p class="text-[10px] uppercase font-bold text-blue-200">Interesados nuevos</p><p id="controlNewLeads" class="mt-1 text-2xl font-black">0</p></div>
+                  <div class="rounded-2xl bg-white/10 p-4"><p class="text-[10px] uppercase font-bold text-red-200">Pagos vencidos</p><p id="controlOverdue" class="mt-1 text-2xl font-black">0</p></div>
+                  <div class="rounded-2xl bg-white/10 p-4"><p class="text-[10px] uppercase font-bold text-amber-200">Inactivos +7 días</p><p id="controlInactive" class="mt-1 text-2xl font-black">0</p></div>
+                  <div class="rounded-2xl bg-white/10 p-4"><p class="text-[10px] uppercase font-bold text-violet-200">Cursos sin clases</p><p id="controlNoLessons" class="mt-1 text-2xl font-black">0</p></div>
+                  <div class="rounded-2xl bg-white/10 p-4"><p class="text-[10px] uppercase font-bold text-cyan-200">Alumnos sin cursos</p><p id="controlNoCourses" class="mt-1 text-2xl font-black">0</p></div>
+                  <div class="rounded-2xl bg-white/10 p-4"><p class="text-[10px] uppercase font-bold text-rose-200">Cert. revocados</p><p id="controlRevoked" class="mt-1 text-2xl font-black">0</p></div>
+                </div>
+                <div id="controlAlertsList" class="mt-5 grid md:grid-cols-2 xl:grid-cols-3 gap-3"></div>
+              </div>
+            </div>
+
+            <!-- =====================================================
+                 CENTRO OPERATIVO V1.6
+            ====================================================== -->
+            <div class="mt-6 bg-white rounded-3xl border border-slate-100 overflow-hidden">
+              <div class="p-5 sm:p-6 border-b border-slate-100 flex flex-col 2xl:flex-row 2xl:items-center 2xl:justify-between gap-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-11 h-11 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center"><i class="fa-solid fa-list-check"></i></div>
+                  <div><h3 class="font-extrabold text-lutmin-dark text-lg">Centro Operativo</h3><p class="text-xs text-slate-500 mt-1">Bandejas de trabajo, próximas acciones y señales automáticas sobre datos reales.</p></div>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                  <button onclick="refreshOperationalSignalsV16()" class="px-4 py-2.5 rounded-xl bg-lutmin-light text-white text-xs font-extrabold"><i class="fa-solid fa-wand-magic-sparkles mr-2"></i>Actualizar señales</button>
+                  <button onclick="downloadOperationsCsvV16()" class="px-4 py-2.5 rounded-xl bg-slate-100 text-lutmin-dark text-xs font-bold"><i class="fa-solid fa-file-csv mr-2"></i>CSV</button>
+                  <button onclick="downloadExecutiveOpsPdfV16()" class="px-4 py-2.5 rounded-xl bg-lutmin-dark text-white text-xs font-bold"><i class="fa-solid fa-file-pdf mr-2"></i>Reporte PDF</button>
+                </div>
+              </div>
+              <div class="p-5 sm:p-6">
+                <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
+                  <button onclick="setOpsLaneV16('all')" class="text-left rounded-2xl bg-slate-50 border border-slate-100 p-4"><p class="text-[10px] font-bold text-slate-400 uppercase">Todas</p><p id="opsCountAll" class="mt-1 text-2xl font-black text-lutmin-dark">0</p></button>
+                  <button onclick="setOpsLaneV16('academia')" class="text-left rounded-2xl bg-blue-50 p-4"><p class="text-[10px] font-bold text-blue-500 uppercase">Academia</p><p id="opsCountAcademia" class="mt-1 text-2xl font-black text-blue-700">0</p></button>
+                  <button onclick="setOpsLaneV16('comercial')" class="text-left rounded-2xl bg-violet-50 p-4"><p class="text-[10px] font-bold text-violet-500 uppercase">Comercial</p><p id="opsCountComercial" class="mt-1 text-2xl font-black text-violet-700">0</p></button>
+                  <button onclick="setOpsLaneV16('cobranzas')" class="text-left rounded-2xl bg-amber-50 p-4"><p class="text-[10px] font-bold text-amber-500 uppercase">Cobranzas</p><p id="opsCountCobranzas" class="mt-1 text-2xl font-black text-amber-700">0</p></button>
+                  <button onclick="setOpsLaneV16('soporte')" class="text-left rounded-2xl bg-rose-50 p-4"><p class="text-[10px] font-bold text-rose-500 uppercase">Soporte</p><p id="opsCountSoporte" class="mt-1 text-2xl font-black text-rose-700">0</p></button>
+                  <button onclick="setOpsLaneV16('general')" class="text-left rounded-2xl bg-cyan-50 p-4"><p class="text-[10px] font-bold text-cyan-600 uppercase">General</p><p id="opsCountGeneral" class="mt-1 text-2xl font-black text-cyan-700">0</p></button>
+                </div>
+
+                <div class="mt-5 grid xl:grid-cols-[1.35fr_.65fr] gap-5">
+                  <div>
+                    <div class="flex flex-col sm:flex-row gap-2 mb-3">
+                      <select id="opsStatusFilterV16" onchange="renderOperationalCenterV16()" class="px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-bold"><option value="active">Abiertas + en gestión</option><option value="open">Abiertas</option><option value="in_progress">En gestión</option><option value="resolved">Resueltas</option><option value="dismissed">Descartadas</option><option value="all">Todas</option></select>
+                      <input id="opsSearchV16" oninput="renderOperationalCenterV16()" class="flex-1 px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Buscar tarea...">
+                    </div>
+                    <div id="opsTasksListV16" class="space-y-3 max-h-[620px] overflow-y-auto pr-1"><p class="text-sm text-slate-500">Cargando tareas...</p></div>
+                  </div>
+                  <div class="space-y-4">
+                    <form id="opsNewTaskFormV16" class="rounded-2xl bg-slate-50 p-4 border border-slate-100">
+                      <p class="text-xs font-extrabold text-lutmin-dark uppercase">Nueva tarea manual</p>
+                      <div class="mt-3 space-y-2">
+                        <input id="opsNewTitleV16" required class="w-full px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-sm" placeholder="Qué hay que hacer">
+                        <textarea id="opsNewDescriptionV16" rows="3" class="w-full px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-sm" placeholder="Detalle"></textarea>
+                        <div class="grid grid-cols-2 gap-2"><select id="opsNewLaneV16" class="px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-xs"><option value="general">General</option><option value="academia">Academia</option><option value="comercial">Comercial</option><option value="cobranzas">Cobranzas</option><option value="soporte">Soporte</option></select><select id="opsNewSeverityV16" class="px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-xs"><option value="baja">Baja</option><option value="normal" selected>Normal</option><option value="alta">Alta</option><option value="critica">Crítica</option></select></div>
+                        <input id="opsNewDueV16" type="datetime-local" class="w-full px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-xs">
+                      </div>
+                      <button class="mt-3 w-full py-2.5 rounded-xl bg-lutmin-dark text-white text-xs font-extrabold">Crear tarea</button>
+                    </form>
+                    <div class="rounded-2xl border border-slate-100 overflow-hidden"><div class="p-4 bg-slate-50"><p class="text-xs font-extrabold text-lutmin-dark uppercase">Automatizaciones</p><p class="text-[11px] text-slate-500 mt-1">Activá o pausá señales sin tocar código.</p></div><div id="opsAutomationsV16" class="divide-y divide-slate-100"></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- EQUIPO Y ROLES V1.6 -->
+            <div class="mt-6 bg-white rounded-3xl border border-slate-100 overflow-hidden">
+              <div class="p-5 sm:p-6 border-b border-slate-100 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+                <div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center"><i class="fa-solid fa-people-group"></i></div><div><h3 class="font-extrabold text-lutmin-dark">Equipo interno y roles de trabajo</h3><p class="text-xs text-slate-500 mt-1">Organizá quién trabaja en Academia, Comercial, Cobranzas, Soporte o como Superadmin.</p></div></div>
+                <button onclick="saveManagementSnapshotV16()" class="px-4 py-2.5 rounded-xl bg-emerald-600 text-white text-xs font-bold"><i class="fa-solid fa-camera mr-2"></i>Guardar foto de gestión</button>
+              </div>
+              <div class="p-5 sm:p-6 grid xl:grid-cols-[1.25fr_.75fr] gap-5">
+                <div id="opsInternalTeamV16" class="space-y-3"></div>
+                <div><p class="text-xs font-extrabold uppercase text-slate-400 mb-3">Fotos ejecutivas</p><div id="opsSnapshotsV16" class="space-y-2 max-h-[340px] overflow-y-auto"></div></div>
+              </div>
+            </div>
+
+            <div class="mt-6 grid xl:grid-cols-2 gap-5">
+              <form id="adminAnnouncementForm" class="bg-white rounded-3xl border border-slate-100 p-5 sm:p-6">
+                <div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-blue-50 text-lutmin-light flex items-center justify-center"><i class="fa-solid fa-bullhorn"></i></div><div><h3 class="font-extrabold text-lutmin-dark">Publicar comunicado</h3><p class="text-xs text-slate-500">Aparece dentro de Novedades según el tipo de usuario elegido.</p></div></div>
+                <div class="mt-5 space-y-3">
+                  <input id="adminAnnouncementTitle" required maxlength="160" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Título del comunicado">
+                  <textarea id="adminAnnouncementBody" required rows="4" maxlength="3000" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Mensaje"></textarea>
+                  <div class="grid sm:grid-cols-2 gap-3"><select id="adminAnnouncementAudience" class="px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"><option value="all">Todos</option><option value="student">Solo alumnos</option><option value="company_admin">Solo empresas</option><option value="admin">Solo administradores</option></select><input id="adminAnnouncementExpires" type="datetime-local" class="px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" title="Vencimiento opcional"></div>
+                </div>
+                <button type="submit" class="mt-4 w-full py-3 rounded-xl bg-lutmin-light text-white font-extrabold text-sm">Publicar comunicado</button>
+              </form>
+              <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden">
+                <div class="p-5 sm:p-6 border-b border-slate-100"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-violet-50 text-violet-600 flex items-center justify-center"><i class="fa-solid fa-list-check"></i></div><div><h3 class="font-extrabold text-lutmin-dark">Comunicados recientes</h3><p class="text-xs text-slate-500">Podés desactivar un aviso sin borrarlo.</p></div></div></div>
+                <div id="adminAnnouncementsList" class="divide-y divide-slate-100 max-h-[380px] overflow-y-auto"></div>
+              </div>
+            </div>
+
+            <div class="mt-6 bg-white rounded-3xl border border-slate-100 overflow-hidden">
+              <div class="p-5 sm:p-6 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center"><i class="fa-solid fa-clock-rotate-left"></i></div><div><h3 class="font-extrabold text-lutmin-dark">Auditoría del sistema</h3><p class="text-xs text-slate-500">Últimos cambios relevantes: cursos, inscripciones, pagos, certificados, empresas y catálogo.</p></div></div><button onclick="loadAdminV1Ops()" class="px-3 py-2 rounded-xl bg-slate-100 text-xs font-bold">Actualizar</button></div>
+              <div id="adminAuditList" class="divide-y divide-slate-100 max-h-[430px] overflow-y-auto"></div>
+            </div>
+
+
+            <!-- =====================================================
+                 LUTMIN CONECTA - GESTIÓN DE TALENTO V1.2
+            ====================================================== -->
+            <div class="mt-6 bg-white rounded-3xl border border-slate-100 overflow-hidden">
+              <div class="p-5 sm:p-6 border-b border-slate-100"><div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-violet-50 text-violet-600 flex items-center justify-center"><i class="fa-solid fa-briefcase"></i></div><div><h3 class="font-extrabold text-lutmin-dark">Lutmin Conecta · Empleo y talento</h3><p class="text-xs text-slate-500">Publicá búsquedas, revisá pedidos de empresas y gestioná postulaciones.</p></div></div><div class="flex gap-2"><span class="px-3 py-2 rounded-xl bg-violet-50 text-violet-700 text-xs font-bold"><span id="adminTalentProfilesStat">0</span> perfiles visibles</span><span id="adminTalentRequestsBadgeV170" class="px-3 py-2 rounded-xl bg-emerald-50 text-emerald-700 text-xs font-bold"><i class="fa-solid fa-wand-magic-sparkles mr-1"></i> perfiles autogestionados</span><span class="px-3 py-2 rounded-xl bg-blue-50 text-blue-700 text-xs font-bold"><span id="adminJobsStat">0</span> búsquedas abiertas</span><span class="px-3 py-2 rounded-xl bg-amber-50 text-amber-700 text-xs font-bold"><span id="adminApplicationsStat">0</span> postulaciones activas</span></div></div></div>
+              <div class="p-5 sm:p-6 border-b border-slate-100 bg-blue-50/50">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                  <div><h4 class="font-extrabold text-lutmin-dark"><i class="fa-solid fa-user-plus text-lutmin-light mr-2"></i>Solicitudes públicas de creación de cuenta</h4><p class="mt-1 text-xs text-slate-500">Personas que todavía no tienen cuenta completaron su perfil desde la web. Revisá los datos y decidí si crearles el acceso.</p></div>
+                  <div class="flex items-center gap-2"><span class="px-3 py-2 rounded-xl bg-white border border-blue-100 text-blue-700 text-xs font-bold"><span id="adminPublicTalentRequestsStat">0</span> pendientes</span><button onclick="loadAdminPublicTalentRequestsV31()" class="px-3 py-2 rounded-xl bg-white border border-blue-100 text-blue-700 text-xs font-bold">Actualizar</button></div>
+                </div>
+                <div id="adminPublicTalentRequestsList" class="mt-4 grid lg:grid-cols-2 gap-3"><div class="lg:col-span-2 text-sm text-slate-500">Cargando solicitudes públicas...</div></div>
+              </div>
+              <div class="p-5 sm:p-6 border-b border-slate-100 bg-violet-50/40">
+                <div class="flex items-center justify-between gap-3"><div><h4 class="font-extrabold text-lutmin-dark">Autopilot de perfiles</h4><p class="mt-1 text-xs text-slate-500">Los perfiles se ordenan y habilitan automáticamente. Administración no necesita revisar duplicados ni inconsistencias menores.</p></div><button onclick="loadAdminConectaData()" class="px-3 py-2 rounded-xl bg-white border border-violet-100 text-violet-700 text-xs font-bold">Actualizar</button></div>
+                <div id="adminTalentProfileRequestsList" class="mt-4 grid lg:grid-cols-2 gap-3"><div class="lg:col-span-2 text-sm text-slate-500">Cargando solicitudes...</div></div>
+              </div>
+              <div class="p-5 sm:p-6 grid xl:grid-cols-[.8fr_1.2fr] gap-5">
+                <form id="adminJobForm" class="rounded-2xl bg-slate-50 p-5"><h4 class="font-extrabold text-lutmin-dark">Nueva búsqueda laboral</h4><div class="mt-4 space-y-3"><select id="adminJobCompany" class="w-full px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-sm"><option value="">Lutmin / Empresa confidencial</option></select><input id="adminJobTitle" required maxlength="180" class="w-full px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-sm" placeholder="Puesto"><textarea id="adminJobDescription" required rows="4" class="w-full px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-sm" placeholder="Descripción"></textarea><textarea id="adminJobRequirements" rows="3" class="w-full px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-sm" placeholder="Requisitos"></textarea><div class="grid grid-cols-2 gap-2"><input id="adminJobLocation" class="px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-sm" placeholder="Ubicación"><select id="adminJobModality" class="px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-sm"><option value="presencial">Presencial</option><option value="hibrido">Híbrido</option><option value="remoto">Remoto</option></select></div><div class="grid grid-cols-2 gap-2"><select id="adminJobType" class="px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-sm"><option value="full_time">Jornada completa</option><option value="part_time">Media jornada</option><option value="temporary">Temporal</option><option value="contract">Contrato</option><option value="internship">Pasantía</option></select><input id="adminJobCloses" type="date" class="px-3 py-2.5 rounded-xl bg-white border border-slate-200 text-sm"></div><label class="flex items-center gap-2 text-xs font-bold"><input id="adminJobPublish" type="checkbox" checked> Publicar inmediatamente</label></div><button class="mt-4 w-full py-3 rounded-xl bg-lutmin-dark text-white font-bold">Crear búsqueda</button></form>
+                <div><h4 class="font-extrabold text-lutmin-dark">Búsquedas</h4><div id="adminJobsList" class="mt-3 space-y-3 max-h-[520px] overflow-y-auto"><div class="text-sm text-slate-500">Cargando...</div></div></div>
+              </div>
+              <div class="border-t border-slate-100"><div class="p-5 sm:p-6"><div class="flex items-center justify-between gap-3"><div><h4 class="font-extrabold text-lutmin-dark">Postulaciones</h4><p class="mt-1 text-xs text-slate-500">Cambiar el estado genera una novedad automática para el alumno.</p></div><button onclick="loadAdminConectaData()" class="px-3 py-2 rounded-xl bg-slate-100 text-xs font-bold">Actualizar</button></div></div><div id="adminApplicationsList" class="divide-y divide-slate-100"></div></div>
+            </div>
+
+            <!-- =====================================================
+                 PANEL FINANCIERO Y COMERCIAL - ETAPA 12
+            ====================================================== -->
+            <div class="mt-6 bg-white rounded-3xl border border-slate-100 overflow-hidden">
+              <div class="p-5 sm:p-6 border-b border-slate-100">
+                <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
+                  <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center"><i class="fa-solid fa-chart-column"></i></div>
+                    <div>
+                      <h3 class="font-extrabold text-lutmin-dark">Panel financiero y comercial</h3>
+                      <p class="text-xs text-slate-500">Cobranzas, ventas, deuda, vencimientos y conversión del período elegido.</p>
+                    </div>
+                  </div>
+                  <div class="flex flex-wrap gap-2">
+                    <button onclick="setAdminFinancialPreset('month')" class="px-3 py-2 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold">Mes actual</button>
+                    <button onclick="setAdminFinancialPreset('30')" class="px-3 py-2 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold">Últimos 30 días</button>
+                    <button onclick="exportAdminFinancialCsv()" class="px-3 py-2 rounded-xl bg-green-50 text-green-700 text-xs font-bold"><i class="fa-solid fa-file-csv mr-2"></i>Exportar movimientos</button>
+                    <button onclick="exportAdminDebtCsv()" class="px-3 py-2 rounded-xl bg-amber-50 text-amber-700 text-xs font-bold"><i class="fa-solid fa-file-csv mr-2"></i>Exportar deuda</button>
+                  </div>
+                </div>
+                <div class="mt-5 grid sm:grid-cols-[1fr_1fr_auto] gap-3 max-w-2xl">
+                  <div><label class="text-[10px] font-bold text-slate-400 uppercase">Desde</label><input id="adminFinancialFrom" type="date" onchange="renderAdminFinancialDashboard()" class="mt-1 w-full px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm"></div>
+                  <div><label class="text-[10px] font-bold text-slate-400 uppercase">Hasta</label><input id="adminFinancialTo" type="date" onchange="renderAdminFinancialDashboard()" class="mt-1 w-full px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm"></div>
+                  <button onclick="renderAdminFinancialDashboard()" class="self-end px-4 py-2.5 rounded-xl bg-lutmin-dark text-white text-sm font-bold">Aplicar</button>
+                </div>
+              </div>
+
+              <div class="p-5 sm:p-6">
+                <div class="grid grid-cols-2 xl:grid-cols-6 gap-3">
+                  <div class="rounded-2xl bg-green-50 p-4"><p class="text-[10px] font-bold text-green-600 uppercase">Cobrado</p><p id="financeCollected" class="mt-1 text-xl sm:text-2xl font-black text-green-700">$ 0</p><p id="financePaymentsCount" class="mt-1 text-[10px] text-green-600">0 pagos</p></div>
+                  <div class="rounded-2xl bg-blue-50 p-4"><p class="text-[10px] font-bold text-blue-600 uppercase">Matrículas generadas</p><p id="financeSales" class="mt-1 text-xl sm:text-2xl font-black text-blue-700">$ 0</p><p id="financeEnrollmentsCount" class="mt-1 text-[10px] text-blue-600">0 matrículas</p></div>
+                  <div class="rounded-2xl bg-amber-50 p-4"><p class="text-[10px] font-bold text-amber-600 uppercase">Saldo pendiente</p><p id="financeOutstanding" class="mt-1 text-xl sm:text-2xl font-black text-amber-700">$ 0</p><p class="mt-1 text-[10px] text-amber-600">Deuda actual</p></div>
+                  <div class="rounded-2xl bg-red-50 p-4"><p class="text-[10px] font-bold text-red-600 uppercase">Vencido</p><p id="financeOverdue" class="mt-1 text-xl sm:text-2xl font-black text-red-700">$ 0</p><p id="financeOverdueCount" class="mt-1 text-[10px] text-red-600">0 matrículas</p></div>
+                  <div class="rounded-2xl bg-violet-50 p-4"><p class="text-[10px] font-bold text-violet-600 uppercase">Bonificado</p><p id="financeWaived" class="mt-1 text-xl sm:text-2xl font-black text-violet-700">$ 0</p><p class="mt-1 text-[10px] text-violet-600">Valor del período</p></div>
+                  <div class="rounded-2xl bg-cyan-50 p-4"><p class="text-[10px] font-bold text-cyan-600 uppercase">Conversión</p><p id="financeConversion" class="mt-1 text-xl sm:text-2xl font-black text-cyan-700">0%</p><p id="financeLeadCount" class="mt-1 text-[10px] text-cyan-600">0 interesados</p></div>
+                </div>
+
+                <div class="mt-5 grid xl:grid-cols-[1.05fr_.95fr] gap-5">
+                  <div class="rounded-2xl border border-slate-100 overflow-hidden">
+                    <div class="px-5 py-4 bg-slate-50 border-b border-slate-100"><h4 class="font-extrabold text-sm text-lutmin-dark">Ingresos por curso</h4><p class="text-[11px] text-slate-500 mt-1">Ventas generadas y cobranzas dentro del período.</p></div>
+                    <div id="financeCourseRows" class="divide-y divide-slate-100"></div>
+                  </div>
+                  <div class="rounded-2xl border border-slate-100 overflow-hidden">
+                    <div class="px-5 py-4 bg-slate-50 border-b border-slate-100"><h4 class="font-extrabold text-sm text-lutmin-dark">Embudo comercial</h4><p class="text-[11px] text-slate-500 mt-1">De consulta web a matrícula.</p></div>
+                    <div id="financeFunnel" class="p-5"></div>
+                  </div>
+                </div>
+
+                <div class="mt-5 rounded-2xl border border-slate-100 overflow-hidden">
+                  <div class="px-5 py-4 bg-slate-50 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"><div><h4 class="font-extrabold text-sm text-lutmin-dark">Deuda y vencimientos</h4><p class="text-[11px] text-slate-500 mt-1">Las matrículas vencidas aparecen primero. Podés definir o cambiar su fecha de vencimiento.</p></div><span id="financeDebtSummary" class="text-xs font-bold text-amber-700"></span></div>
+                  <div id="financeDebtRows" class="divide-y divide-slate-100"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- GESTIÓN COMERCIAL - ETAPA 10 -->
+            <div class="mt-6 grid xl:grid-cols-[.85fr_1.15fr] gap-5">
+              <form id="adminOfferingForm" class="bg-white rounded-3xl border border-slate-100 p-5 sm:p-6">
+                <div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-cyan-50 text-cyan-600 flex items-center justify-center"><i class="fa-solid fa-calendar-plus"></i></div><div><h3 class="font-extrabold text-lutmin-dark">Abrir edición de un curso</h3><p class="text-xs text-slate-500">Fecha, modalidad, precio y cupos que aparecerán en la web pública.</p></div></div>
+                <div class="mt-5 grid sm:grid-cols-2 gap-4">
+                  <div class="sm:col-span-2"><label class="text-xs font-bold text-slate-600">Curso</label><select id="adminOfferingCourse" required class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"></select></div>
+                  <div><label class="text-xs font-bold text-slate-600">Inicio</label><input id="adminOfferingStart" type="date" required class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"></div>
+                  <div><label class="text-xs font-bold text-slate-600">Fin (opcional)</label><input id="adminOfferingEnd" type="date" class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"></div>
+                  <div><label class="text-xs font-bold text-slate-600">Cierre inscripción</label><input id="adminOfferingDeadline" type="date" class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"></div>
+                  <div><label class="text-xs font-bold text-slate-600">Modalidad</label><select id="adminOfferingModality" class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"><option value="online">Online</option><option value="presencial">Presencial</option><option value="hibrida">Híbrida</option></select></div>
+                  <div><label class="text-xs font-bold text-slate-600">Precio ARS</label><input id="adminOfferingPrice" type="number" min="0" step="1" value="0" class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"></div>
+                  <div><label class="text-xs font-bold text-slate-600">Cupos</label><input id="adminOfferingCapacity" type="number" min="1" placeholder="Sin límite" class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"></div>
+                  <div class="sm:col-span-2"><label class="text-xs font-bold text-slate-600">Lugar / detalle</label><input id="adminOfferingLocation" class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Ej: Campus online / Resistencia / Aula Lutmin"></div>
+                  <label class="sm:col-span-2 flex items-center gap-2 text-sm font-semibold text-slate-600"><input id="adminOfferingPublished" type="checkbox" checked class="w-4 h-4"> Mostrar esta edición en la web</label>
+                </div>
+                <button type="submit" class="mt-5 w-full py-3 rounded-xl bg-cyan-600 hover:bg-cyan-700 text-white font-extrabold text-sm">Publicar edición</button>
+              </form>
+
+              <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden">
+                <div class="p-5 sm:p-6 border-b border-slate-100"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center"><i class="fa-solid fa-calendar-days"></i></div><div><h3 class="font-extrabold text-lutmin-dark">Ediciones programadas</h3><p class="text-xs text-slate-500">Lo que el público puede elegir al consultar un curso.</p></div></div></div>
+                <div id="adminOfferingsList" class="divide-y divide-slate-100"></div>
+              </div>
+            </div>
+
+            <div class="mt-6 bg-white rounded-3xl border border-slate-100 overflow-hidden">
+              <div class="p-5 sm:p-6 border-b border-slate-100">
+                <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4"><div><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-violet-50 text-violet-600 flex items-center justify-center"><i class="fa-solid fa-user-clock"></i></div><div><h3 class="font-extrabold text-lutmin-dark">Interesados desde la web</h3><p class="text-xs text-slate-500">Consultas del catálogo. Podés contactarlos o convertirlos en alumnos e inscribirlos.</p></div></div></div></div>
+                <div class="mt-5 grid md:grid-cols-3 gap-3"><input id="adminLeadSearch" oninput="applyAdminLeadFilters()" class="px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Buscar nombre, correo o teléfono"><select id="adminLeadCourseFilter" onchange="applyAdminLeadFilters()" class="px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"></select><select id="adminLeadStatusFilter" onchange="applyAdminLeadFilters()" class="px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"><option value="all">Todos los estados</option><option value="new">Nuevos</option><option value="contacted">Contactados</option><option value="payment_pending">Pago pendiente</option><option value="enrolled">Convertidos</option><option value="discarded">Descartados</option></select></div>
+              </div>
+              <div id="adminLeadsList" class="divide-y divide-slate-100"></div>
+            </div>
+
+            <!-- MATRÍCULAS Y PAGOS - ETAPA 11 -->
+            <div class="mt-6 bg-white rounded-3xl border border-slate-100 overflow-hidden">
+              <div class="p-5 sm:p-6 border-b border-slate-100">
+                <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
+                  <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center"><i class="fa-solid fa-wallet"></i></div>
+                    <div><h3 class="font-extrabold text-lutmin-dark">Matrículas y pagos</h3><p class="text-xs text-slate-500">Registrá transferencias, pagos parciales, comprobantes y habilitá el curso cuando se complete el importe.</p></div>
+                  </div>
+                  <div class="grid sm:grid-cols-2 gap-2 w-full xl:w-auto">
+                    <select id="adminPaymentStatusFilter" onchange="renderAdminPayments()" class="px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-bold">
+                      <option value="all">Todos</option><option value="pending">Pendientes</option><option value="partial">Parciales</option><option value="paid">Pagados</option><option value="waived">Bonificados</option>
+                    </select>
+                    <input id="adminPaymentSearch" oninput="renderAdminPayments()" class="px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs" placeholder="Buscar alumno o curso">
+                  </div>
+                </div>
+              </div>
+              <div id="adminPaymentsList" class="divide-y divide-slate-100"></div>
+            </div>
+
+            <div class="mt-6 bg-white rounded-3xl border border-slate-100 p-5 sm:p-6">
+              <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                <div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-green-50 text-green-600 flex items-center justify-center"><i class="fa-solid fa-file-arrow-up"></i></div><div><h3 class="font-extrabold text-lutmin-dark">Importar alumnos por CSV</h3><p class="text-xs text-slate-500">Alta masiva de hasta 50 alumnos por lote. Columnas requeridas: nombre,email.</p></div></div>
+                <button onclick="downloadStudentImportTemplate()" class="px-4 py-2.5 rounded-xl bg-slate-100 text-lutmin-dark text-xs font-bold"><i class="fa-solid fa-download mr-2"></i>Descargar plantilla</button>
+              </div>
+              <div class="mt-5 grid lg:grid-cols-[1fr_auto] gap-3 items-end">
+                <div><label class="text-xs font-bold text-slate-600">Archivo CSV</label><input id="adminBulkStudentsFile" type="file" accept=".csv,text/csv" class="mt-2 block w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:bg-blue-50 file:text-blue-700 file:font-bold"></div>
+                <button id="adminBulkStudentsBtn" onclick="importStudentsCsv()" class="px-5 py-3 rounded-xl bg-green-600 text-white font-extrabold text-sm"><i class="fa-solid fa-users-gear mr-2"></i>Importar alumnos</button>
+              </div>
+              <div id="adminBulkImportStatus" class="hidden mt-4 rounded-2xl p-4 text-sm"></div>
+              <p class="mt-3 text-[11px] text-slate-400">Lutmin genera una contraseña provisoria distinta para cada alumno y descarga un CSV de resultado para que puedas entregarlas. Cada persona deberá cambiarla al primer ingreso.</p>
+            </div>
+
+            <div class="mt-6 grid xl:grid-cols-2 gap-5">
+              <!-- CREAR ALUMNO -->
+              <form id="adminStudentForm" class="bg-white rounded-3xl border border-slate-100 p-5 sm:p-6">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-green-50 text-green-600 flex items-center justify-center"><i class="fa-solid fa-user-plus"></i></div>
+                  <div>
+                    <h3 class="font-extrabold text-lutmin-dark">Crear alumno</h3>
+                    <p class="text-xs text-slate-500">Crea su acceso real al Campus. La contraseña inicial será provisoria.</p>
+                  </div>
+                </div>
+
+                <div class="mt-5 space-y-4">
+                  <div>
+                    <label for="adminStudentName" class="text-xs font-bold text-slate-600">Nombre completo</label>
+                    <input id="adminStudentName" required autocomplete="off" class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-lutmin-light" placeholder="Ej: Juan Pérez">
+                  </div>
+                  <div>
+                    <label for="adminStudentEmail" class="text-xs font-bold text-slate-600">Correo electrónico</label>
+                    <input id="adminStudentEmail" type="email" required autocomplete="off" class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-lutmin-light" placeholder="juan@correo.com">
+                  </div>
+                  <div>
+                    <div class="flex items-center justify-between gap-3">
+                      <label for="adminStudentPassword" class="text-xs font-bold text-slate-600">Contraseña provisoria</label>
+                      <button type="button" onclick="generateStudentPassword()" class="text-[11px] font-bold text-lutmin-light">Generar</button>
+                    </div>
+                    <input id="adminStudentPassword" type="text" required minlength="8" autocomplete="off" class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-lutmin-light" placeholder="Mínimo 8 caracteres">
+                    <p class="mt-2 text-[11px] text-slate-400">Esta contraseña se la vas a entregar al alumno para su primer ingreso.</p>
+                  </div>
+                </div>
+
+                <button id="adminCreateStudentBtn" type="submit" class="mt-5 w-full py-3 rounded-xl bg-green-600 hover:bg-green-700 text-white font-extrabold text-sm disabled:opacity-60">Crear alumno</button>
+                <div id="adminCreateStudentStatus" class="hidden mt-4 rounded-2xl bg-green-50 border border-green-100 p-4 text-sm text-green-800"></div>
+              </form>
+
+              <!-- ASIGNAR CURSO -->
+              <form id="adminAssignForm" class="bg-white rounded-3xl border border-slate-100 p-5 sm:p-6">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-blue-50 text-lutmin-light flex items-center justify-center"><i class="fa-solid fa-user-plus"></i></div>
+                  <div>
+                    <h3 class="font-extrabold text-lutmin-dark">Asignar curso</h3>
+                    <p class="text-xs text-slate-500">Elegí un alumno y un curso.</p>
+                  </div>
+                </div>
+                <div class="mt-5 grid sm:grid-cols-2 gap-4">
+                  <div>
+                    <label class="text-xs font-bold text-slate-600">Alumno</label>
+                    <select id="adminStudentSelect" required class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"></select>
+                  </div>
+                  <div>
+                    <label class="text-xs font-bold text-slate-600">Curso</label>
+                    <select id="adminCourseSelect" required class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"></select>
+                  </div>
+                </div>
+                <button type="submit" class="mt-4 w-full py-3 rounded-xl bg-lutmin-light text-white font-extrabold text-sm">Asignar curso</button>
+              </form>
+
+              <!-- NUEVO CURSO -->
+              <form id="adminCourseForm" class="bg-white rounded-3xl border border-slate-100 p-5 sm:p-6">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-blue-50 text-lutmin-light flex items-center justify-center"><i class="fa-solid fa-book-open"></i></div>
+                  <div>
+                    <h3 class="font-extrabold text-lutmin-dark">Crear curso</h3>
+                    <p class="text-xs text-slate-500">El curso queda disponible para cargar clases.</p>
+                  </div>
+                </div>
+                <div class="mt-5 grid sm:grid-cols-2 gap-4">
+                  <div class="sm:col-span-2">
+                    <label class="text-xs font-bold text-slate-600">Nombre del curso</label>
+                    <input id="adminCourseTitle" required class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Ej: Refrigeración Split">
+                  </div>
+                  <div>
+                    <label class="text-xs font-bold text-slate-600">Horas</label>
+                    <input id="adminCourseHours" type="number" min="0" value="10" required class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm">
+                  </div>
+                  <div>
+                    <label class="text-xs font-bold text-slate-600">Nivel</label>
+                    <select id="adminCourseLevel" class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm">
+                      <option>Inicial</option><option>Intermedio</option><option>Avanzado</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="text-xs font-bold text-slate-600">Categoría</label>
+                    <select id="adminCourseCategory" class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm">
+                      <option value="tecnico">Técnico</option><option value="gestion">Gestión</option><option value="iso">ISO</option>
+                    </select>
+                  </div>
+                  <label class="flex items-center gap-2 text-sm font-semibold text-slate-600 self-end pb-3">
+                    <input id="adminCoursePublished" type="checkbox" checked class="w-4 h-4"> Publicar inmediatamente
+                  </label>
+                  <div class="sm:col-span-2">
+                    <label class="text-xs font-bold text-slate-600">Descripción</label>
+                    <textarea id="adminCourseDescription" rows="3" class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Qué va a aprender el alumno"></textarea>
+                  </div>
+                </div>
+                <button type="submit" class="mt-4 w-full py-3 rounded-xl bg-lutmin-dark text-white font-extrabold text-sm">Crear curso</button>
+              </form>
+
+              <!-- NUEVA CLASE -->
+              <form id="adminLessonForm" class="bg-white rounded-3xl border border-slate-100 p-5 sm:p-6 xl:col-span-2">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-blue-50 text-lutmin-light flex items-center justify-center"><i class="fa-solid fa-play"></i></div>
+                  <div>
+                    <h3 class="font-extrabold text-lutmin-dark">Agregar clase</h3>
+                    <p class="text-xs text-slate-500">Cargá una clase dentro de un curso existente.</p>
+                  </div>
+                </div>
+                <div class="mt-5 grid sm:grid-cols-2 xl:grid-cols-4 gap-4">
+                  <div>
+                    <label class="text-xs font-bold text-slate-600">Curso</label>
+                    <select id="adminLessonCourse" required class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"></select>
+                  </div>
+                  <div>
+                    <label class="text-xs font-bold text-slate-600">Nº de clase</label>
+                    <input id="adminLessonOrder" type="number" min="1" required class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="1">
+                  </div>
+                  <div>
+                    <label class="text-xs font-bold text-slate-600">Duración (min)</label>
+                    <input id="adminLessonDuration" type="number" min="0" value="30" required class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm">
+                  </div>
+                  <div>
+                    <label class="text-xs font-bold text-slate-600">Video por enlace</label>
+                    <input id="adminLessonVideo" type="url" class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="YouTube no listado, Google Drive o MP4">
+                    <p class="mt-1 text-[10px] text-slate-400">Recomendado: YouTube No listado o un archivo compartido desde Drive. No requiere API.</p>
+                  </div>
+                  <div>
+                    <label class="text-xs font-bold text-slate-600">Video privado (opcional)</label>
+                    <input id="adminLessonVideoFile" type="file" class="mt-2 block w-full text-xs text-slate-500 file:mr-3 file:rounded-lg file:border-0 file:bg-blue-50 file:px-3 file:py-2 file:font-bold file:text-blue-700" accept="video/mp4,video/webm,.mp4,.webm">
+                    <p class="mt-1 text-[10px] text-amber-600">Solo para casos puntuales: consume el almacenamiento incluido de Supabase. Máximo 80 MB.</p>
+                  </div>
+                  <div>
+                    <label class="text-xs font-bold text-slate-600">Material por enlace</label>
+                    <input id="adminLessonMaterial" type="url" class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Google Drive, PDF, Docs, Slides...">
+                    <p class="mt-1 text-[10px] text-slate-400">Lutmin guarda el enlace, no una copia del archivo.</p>
+                  </div>
+                  <div>
+                    <label class="text-xs font-bold text-slate-600">Subir material privado</label>
+                    <input id="adminLessonFile" type="file" class="mt-2 block w-full text-xs text-slate-500 file:mr-3 file:rounded-lg file:border-0 file:bg-blue-50 file:px-3 file:py-2 file:font-bold file:text-blue-700" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.png,.jpg,.jpeg,.webp,.txt,.zip">
+                    <p class="mt-1 text-[10px] text-slate-400">Máximo 20 MB. Solo alumnos inscriptos podrán abrirlo.</p>
+                  </div>
+                  <div class="sm:col-span-2 xl:col-span-2">
+                    <label class="text-xs font-bold text-slate-600">Título de la clase</label>
+                    <input id="adminLessonTitle" required class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Ej: Herramientas y medición">
+                  </div>
+                  <div class="sm:col-span-2 xl:col-span-2">
+                    <label class="text-xs font-bold text-slate-600">Descripción corta</label>
+                    <input id="adminLessonDescription" class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Resumen de la clase">
+                  </div>
+                  <div class="sm:col-span-2 xl:col-span-4">
+                    <label class="text-xs font-bold text-slate-600">Contenido de la clase</label>
+                    <textarea id="adminLessonContent" rows="6" class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Escribí acá el contenido, instrucciones, puntos importantes, etc."></textarea>
+                  </div>
+                  <div class="sm:col-span-2 xl:col-span-4 flex flex-wrap gap-4 rounded-2xl bg-slate-50 border border-slate-100 p-4">
+                    <label class="flex items-center gap-2 text-xs font-bold text-slate-600"><input id="adminLessonPublishedV39" type="checkbox" checked class="w-4 h-4"> Visible para alumnos</label>
+                    <label class="flex items-center gap-2 text-xs font-bold text-slate-600"><input id="adminLessonRequiredV39" type="checkbox" checked class="w-4 h-4"> Clase obligatoria</label>
+                    <label class="flex items-center gap-2 text-xs font-bold text-slate-600"><input id="adminLessonVideoRequiredV24" type="checkbox" class="w-4 h-4"> Exigir ver el video antes de avanzar</label>
+                    <label class="flex items-center gap-2 text-xs font-bold text-slate-600">Completar desde <input id="adminLessonVideoMinV24" type="number" min="80" max="100" value="98" class="w-16 px-2 py-1 rounded-lg border border-slate-200 bg-white">%</label>
+                    <span class="text-[10px] text-slate-400">Si está activo, el alumno puede retroceder pero no adelantar. Compatible con YouTube No listado y MP4/WEBM.</span>
+                  </div>
+                </div>
+                <div class="mt-4 rounded-2xl bg-blue-50 border border-blue-100 p-4 text-xs text-slate-600 leading-relaxed">
+                  <strong class="text-lutmin-dark">Recomendación de costo cero:</strong> videos en <strong>YouTube No listado</strong> y documentos/videos grandes en <strong>Google Drive</strong>. YouTube “Privado” normalmente no puede reproducirse dentro de una web externa. El video privado de Supabase queda disponible para casos puntuales y consume tu cuota de almacenamiento.
+                </div>
+                <button type="submit" class="mt-4 px-5 py-3 rounded-xl bg-lutmin-light text-white font-extrabold text-sm">Agregar clase</button>
+              </form>
+
+              <!-- NUEVA EVALUACIÓN -->
+              <form id="adminAssessmentForm" class="bg-white rounded-3xl border border-slate-100 p-5 sm:p-6">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-violet-50 text-violet-600 flex items-center justify-center"><i class="fa-solid fa-clipboard-question"></i></div>
+                  <div>
+                    <h3 class="font-extrabold text-lutmin-dark">Crear evaluación</h3>
+                    <p class="text-xs text-slate-500">Una evaluación final por curso.</p>
+                  </div>
+                </div>
+                <div class="mt-5 space-y-4">
+                  <div>
+                    <label class="text-xs font-bold text-slate-600">Curso</label>
+                    <select id="adminAssessmentCourse" required class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"></select>
+                  </div>
+                  <div>
+                    <label class="text-xs font-bold text-slate-600">Título</label>
+                    <input id="adminAssessmentTitle" required class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Ej: Evaluación final">
+                  </div>
+                  <div class="grid grid-cols-2 gap-4">
+                    <div>
+                      <label class="text-xs font-bold text-slate-600">Aprobación (%)</label>
+                      <input id="adminAssessmentPassing" type="number" min="0" max="100" value="70" required class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm">
+                    </div>
+                    <label class="flex items-center gap-2 text-sm font-semibold text-slate-600 mt-7">
+                      <input id="adminAssessmentPublished" type="checkbox" checked class="w-4 h-4"> Publicar
+                    </label>
+                  </div>
+                  <div>
+                    <label class="text-xs font-bold text-slate-600">Descripción</label>
+                    <textarea id="adminAssessmentDescription" rows="3" class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Qué se evalúa"></textarea>
+                  </div>
+                  <div class="grid grid-cols-2 gap-3">
+                    <div><label class="text-xs font-bold text-slate-600">Intentos máximos</label><input id="adminAssessmentMaxAttemptsV39" type="number" min="1" max="50" value="3" class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"></div>
+                    <div><label class="text-xs font-bold text-slate-600">Preguntas por intento</label><input id="adminAssessmentRandomCountV39" type="number" min="1" placeholder="Todas" class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"><p class="mt-1 text-[10px] text-slate-400">Si cargás 20 y ponés 10, cada intento recibe 10 al azar.</p></div>
+                    <div><label class="text-xs font-bold text-slate-600">Tiempo límite (min)</label><input id="adminAssessmentTimeLimitV39" type="number" min="1" max="600" placeholder="Sin límite" class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"></div>
+                    <label class="flex items-center gap-2 text-xs font-bold text-slate-600 mt-7"><input id="adminAssessmentReviewV39" type="checkbox" class="w-4 h-4"> Mostrar corrección al terminar</label>
+                  </div>
+                </div>
+                <button type="submit" class="mt-4 w-full py-3 rounded-xl bg-violet-600 hover:bg-violet-700 text-white font-extrabold text-sm">Guardar evaluación</button>
+              </form>
+
+              <!-- NUEVA PREGUNTA -->
+              <form id="adminQuestionForm" class="bg-white rounded-3xl border border-slate-100 p-5 sm:p-6">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center"><i class="fa-solid fa-list-check"></i></div>
+                  <div>
+                    <h3 class="font-extrabold text-lutmin-dark">Agregar pregunta</h3>
+                    <p class="text-xs text-slate-500">La respuesta correcta queda protegida en Supabase.</p>
+                  </div>
+                </div>
+                <div class="mt-5 space-y-4">
+                  <div class="grid grid-cols-[1fr_100px] gap-3">
+                    <div>
+                      <label class="text-xs font-bold text-slate-600">Evaluación</label>
+                      <select id="adminQuestionAssessment" required class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"></select>
+                    </div>
+                    <div>
+                      <label class="text-xs font-bold text-slate-600">Nº</label>
+                      <input id="adminQuestionOrder" type="number" min="1" value="1" required class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm">
+                    </div>
+                  </div>
+                  <div>
+                    <label class="text-xs font-bold text-slate-600">Pregunta</label>
+                    <textarea id="adminQuestionText" rows="2" required class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Escribí la pregunta"></textarea>
+                  </div>
+                  <div class="grid sm:grid-cols-2 gap-3">
+                    <input id="adminQuestionA" required class="px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Opción A">
+                    <input id="adminQuestionB" required class="px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Opción B">
+                    <input id="adminQuestionC" required class="px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Opción C">
+                    <input id="adminQuestionD" required class="px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Opción D">
+                  </div>
+                  <div>
+                    <label class="text-xs font-bold text-slate-600">Explicación de la respuesta (opcional)</label>
+                    <textarea id="adminQuestionExplanationV39" rows="2" class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Se puede mostrar después de entregar si habilitás la corrección."></textarea>
+                  </div>
+                  <div class="grid grid-cols-2 gap-3">
+                    <div>
+                      <label class="text-xs font-bold text-slate-600">Respuesta correcta</label>
+                      <select id="adminQuestionCorrect" class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm">
+                        <option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label class="text-xs font-bold text-slate-600">Puntos</label>
+                      <input id="adminQuestionPoints" type="number" min="1" value="1" required class="mt-2 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm">
+                    </div>
+                  </div>
+                </div>
+                <button type="submit" class="mt-4 w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-extrabold text-sm">Agregar pregunta</button>
+              </form>
+            </div>
+
+
+            <!-- EMPRESAS - ETAPA 13 -->
+            <div class="mt-6 bg-white rounded-3xl border border-slate-100 overflow-hidden">
+              <div class="p-5 sm:p-6 border-b border-slate-100">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-cyan-50 text-cyan-700 flex items-center justify-center"><i class="fa-solid fa-building"></i></div>
+                  <div><h3 class="font-extrabold text-lutmin-dark">Empresas y capacitación corporativa</h3><p class="mt-1 text-xs text-slate-500">Creá y editá empresas, administrá accesos multirol y contraseñas, vinculá colaboradores y asigná cursos grupales.</p></div>
+                </div>
+              </div>
+
+              <div class="p-5 sm:p-6 grid xl:grid-cols-2 gap-5 border-b border-slate-100">
+                <form id="adminCompanyForm" class="rounded-2xl bg-slate-50 p-5">
+                  <p class="text-xs font-extrabold text-lutmin-dark uppercase">Nueva empresa</p>
+                  <div class="mt-4 grid sm:grid-cols-2 gap-3">
+                    <input id="adminCompanyName" required class="px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" placeholder="Razón social / nombre">
+                    <input id="adminCompanyCuit" class="px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" placeholder="CUIT (opcional)">
+                    <input id="adminCompanyEmail" type="email" class="px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" placeholder="Correo de contacto">
+                    <input id="adminCompanyPhone" class="px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" placeholder="Teléfono">
+                  </div>
+                  <button type="submit" class="mt-4 w-full py-3 rounded-xl bg-cyan-700 hover:bg-cyan-800 text-white font-extrabold text-sm">Crear empresa</button>
+                </form>
+
+                <form id="adminCompanyManagerForm" class="rounded-2xl bg-slate-50 p-5 scroll-mt-24">
+                  <p class="text-xs font-extrabold text-lutmin-dark uppercase">Crear responsable de empresa</p>
+                  <div class="mt-4 grid sm:grid-cols-2 gap-3">
+                    <select id="adminManagerCompany" required class="sm:col-span-2 px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm"></select>
+                    <input id="adminManagerName" required class="px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" placeholder="Nombre del responsable">
+                    <input id="adminManagerEmail" type="email" required class="px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" placeholder="Correo">
+                    <input id="adminManagerPassword" minlength="8" required class="sm:col-span-2 px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" placeholder="Contraseña provisoria (mín. 8)">
+                  </div>
+                  <button type="submit" class="mt-4 w-full py-3 rounded-xl bg-lutmin-dark text-white font-extrabold text-sm">Crear / agregar acceso Empresa</button><p class="mt-2 text-[10px] text-slate-400">Si el correo ya existe como alumno, no se duplica: se agrega Empresa a la misma cuenta y conserva su contraseña actual.</p>
+                </form>
+              </div>
+
+              <div class="p-5 sm:p-6 grid xl:grid-cols-2 gap-5 border-b border-slate-100">
+                <form id="adminCompanyMemberForm" class="rounded-2xl border border-slate-100 p-5">
+                  <p class="text-xs font-extrabold text-lutmin-dark uppercase">Vincular colaborador existente</p>
+                  <select id="adminMemberCompany" required class="mt-4 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"></select>
+                  <select id="adminMemberStudent" required class="mt-3 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"></select>
+                  <button type="submit" class="mt-4 w-full py-3 rounded-xl bg-blue-600 text-white font-extrabold text-sm">Vincular colaborador</button>
+                </form>
+
+                <form id="adminCompanyCourseForm" class="rounded-2xl border border-slate-100 p-5">
+                  <p class="text-xs font-extrabold text-lutmin-dark uppercase">Asignar curso a toda la empresa</p>
+                  <select id="adminCourseCompany" required class="mt-4 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"></select>
+                  <select id="adminCompanyCourse" required class="mt-3 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"></select>
+                  <button type="submit" class="mt-4 w-full py-3 rounded-xl bg-green-600 text-white font-extrabold text-sm">Asignar curso al grupo</button>
+                  <p class="mt-2 text-[10px] text-slate-400">La asignación corporativa se habilita sin cobro individual. No modifica matrículas que ya existan.</p>
+                </form>
+              </div>
+
+              <div id="adminCompaniesList" class="divide-y divide-slate-100"></div>
+              <div class="p-5 sm:p-6 border-t border-slate-100 bg-slate-50/50">
+                <div class="flex items-center gap-3 mb-5"><div class="w-10 h-10 rounded-xl bg-violet-50 text-violet-700 flex items-center justify-center"><i class="fa-solid fa-bullseye"></i></div><div><h4 class="font-extrabold text-lutmin-dark">Planes de capacitación corporativos</h4><p class="text-xs text-slate-500">Definí objetivos, fechas y cursos requeridos para cada empresa.</p></div></div>
+                <div class="grid xl:grid-cols-2 gap-5">
+                  <form id="adminTrainingPlanForm" class="rounded-2xl bg-white border border-slate-100 p-5">
+                    <p class="text-xs font-extrabold text-lutmin-dark uppercase">Nuevo plan</p>
+                    <select id="adminPlanCompany" required class="mt-4 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"></select>
+                    <input id="adminPlanName" required class="mt-3 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Ej: Plan técnico 2026">
+                    <textarea id="adminPlanObjective" rows="3" class="mt-3 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Objetivo del plan"></textarea>
+                    <div class="mt-3 grid grid-cols-2 gap-3"><input id="adminPlanStart" type="date" class="px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"><input id="adminPlanEnd" type="date" class="px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"></div>
+                    <select id="adminPlanStatus" class="mt-3 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"><option value="active">Activo</option><option value="draft">Borrador</option><option value="on_hold">En pausa</option><option value="completed">Completado</option></select>
+                    <button class="mt-4 w-full py-3 rounded-xl bg-violet-700 text-white font-extrabold text-sm">Crear plan</button>
+                  </form>
+                  <form id="adminTrainingPlanCourseForm" class="rounded-2xl bg-white border border-slate-100 p-5">
+                    <p class="text-xs font-extrabold text-lutmin-dark uppercase">Agregar curso a un plan</p>
+                    <select id="adminPlanSelect" required class="mt-4 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"><option value="">Primero creá un plan</option></select>
+                    <select id="adminPlanCourse" required class="mt-3 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"></select>
+                    <input id="adminPlanDueDate" type="date" class="mt-3 w-full px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm">
+                    <label class="mt-3 flex items-center gap-3 rounded-xl bg-slate-50 p-3 text-xs font-bold text-slate-700"><input id="adminPlanRequired" type="checkbox" checked> Curso obligatorio</label>
+                    <button class="mt-4 w-full py-3 rounded-xl bg-lutmin-dark text-white font-extrabold text-sm">Agregar / actualizar curso</button>
+                  </form>
+                </div>
+                <div id="adminTrainingPlansList" class="mt-5 grid lg:grid-cols-2 gap-4"></div>
+              </div>
+            </div>
+
+            <!-- =====================================================
+                 COMISIONES, AGENDA Y ASISTENCIA - V1.1
+            ====================================================== -->
+            <div class="mt-6 bg-white rounded-3xl border border-slate-100 overflow-hidden">
+              <div class="p-5 sm:p-6 border-b border-slate-100 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                <div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-700 flex items-center justify-center"><i class="fa-solid fa-calendar-check"></i></div><div><h3 class="font-extrabold text-lutmin-dark">Comisiones, agenda y asistencia</h3><p class="mt-1 text-xs text-slate-500">Organizá grupos presenciales/online, programá encuentros y registrá asistencia.</p></div></div>
+                <button onclick="exportAttendanceCsv()" class="px-4 py-2.5 rounded-xl bg-slate-100 text-sm font-bold"><i class="fa-solid fa-file-csv mr-2"></i>Exportar asistencia</button>
+              </div>
+              <div class="p-5 sm:p-6 grid xl:grid-cols-3 gap-5 border-b border-slate-100">
+                <form id="adminTrainingGroupForm" class="rounded-2xl bg-slate-50 p-5">
+                  <p class="text-xs font-extrabold text-lutmin-dark uppercase">Nueva comisión</p>
+                  <select id="adminTrainingCourse" required class="mt-4 w-full px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm"></select>
+                  <select id="adminTrainingCompany" class="mt-3 w-full px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm"><option value="">Sin empresa / abierta</option></select>
+                  <input id="adminTrainingName" required class="mt-3 w-full px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" placeholder="Ej: Electricidad · Octubre · Grupo A">
+                  <div class="mt-3 grid grid-cols-2 gap-3"><select id="adminTrainingModality" class="px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm"><option value="online">Online</option><option value="presencial">Presencial</option><option value="hibrida">Híbrida</option><option value="asincronica">Asincrónica</option></select><input id="adminTrainingInstructor" class="px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" placeholder="Capacitador"></div>
+                  <div class="mt-3 grid grid-cols-2 gap-3"><input id="adminTrainingStart" type="date" class="px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm"><input id="adminTrainingEnd" type="date" class="px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm"></div>
+                  <input id="adminTrainingLocation" class="mt-3 w-full px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" placeholder="Lugar (opcional)">
+                  <input id="adminTrainingMeetingUrl" type="url" class="mt-3 w-full px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" placeholder="Link Meet/Zoom (opcional)">
+                  <button type="submit" class="mt-4 w-full py-3 rounded-xl bg-indigo-700 text-white font-extrabold text-sm">Crear comisión</button>
+                  <p class="mt-2 text-[10px] text-slate-400">Si elegís una empresa, incorpora automáticamente a sus colaboradores activos.</p>
+                </form>
+
+                <form id="adminTrainingMemberForm" class="rounded-2xl bg-slate-50 p-5">
+                  <p class="text-xs font-extrabold text-lutmin-dark uppercase">Agregar alumno a comisión</p>
+                  <select id="adminTrainingMemberGroup" required class="mt-4 w-full px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm"></select>
+                  <select id="adminTrainingMemberStudent" required class="mt-3 w-full px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm"></select>
+                  <button type="submit" class="mt-4 w-full py-3 rounded-xl bg-blue-600 text-white font-extrabold text-sm">Agregar alumno</button>
+                  <div class="mt-6 rounded-2xl border border-blue-100 bg-blue-50 p-4"><p class="text-xs font-bold text-blue-800">¿Para qué sirve?</p><p class="mt-1 text-[11px] leading-relaxed text-blue-700">La comisión organiza fechas y asistencia. El curso sigue guardando clases, progreso, evaluación y certificado.</p></div>
+                </form>
+
+                <form id="adminTrainingSessionForm" class="rounded-2xl bg-slate-50 p-5">
+                  <p class="text-xs font-extrabold text-lutmin-dark uppercase">Programar encuentro</p>
+                  <select id="adminTrainingSessionGroup" required class="mt-4 w-full px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm"></select>
+                  <input id="adminTrainingSessionTitle" required class="mt-3 w-full px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" placeholder="Ej: Taller práctico 1">
+                  <input id="adminTrainingSessionDate" type="date" required class="mt-3 w-full px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm">
+                  <div class="mt-3 grid grid-cols-2 gap-3"><input id="adminTrainingSessionStart" type="time" class="px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm"><input id="adminTrainingSessionEnd" type="time" class="px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm"></div>
+                  <input id="adminTrainingSessionLocation" class="mt-3 w-full px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" placeholder="Lugar (hereda comisión si queda vacío)">
+                  <input id="adminTrainingSessionUrl" type="url" class="mt-3 w-full px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" placeholder="Link de videollamada">
+                  <button type="submit" class="mt-4 w-full py-3 rounded-xl bg-green-600 text-white font-extrabold text-sm">Agregar a la agenda</button>
+                </form>
+              </div>
+              <div id="adminTrainingList" class="divide-y divide-slate-100"><div class="p-6 text-sm text-slate-500">Todavía no hay comisiones.</div></div>
+            </div>
+
+            <!-- SEGUIMIENTO ACADÉMICO - ETAPA 9 -->
+            <div class="mt-6 bg-white rounded-3xl border border-slate-100 overflow-hidden">
+              <div class="p-5 sm:p-6 border-b border-slate-100">
+                <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
+                  <div>
+                    <div class="flex items-center gap-3">
+                      <div class="w-10 h-10 rounded-xl bg-violet-50 text-violet-600 flex items-center justify-center"><i class="fa-solid fa-chart-line"></i></div>
+                      <div>
+                        <h3 class="font-extrabold text-lutmin-dark">Seguimiento académico</h3>
+                        <p class="mt-1 text-xs text-slate-500">Buscá alumnos, revisá avance, evaluaciones, certificados y observaciones internas.</p>
+                      </div>
+                    </div>
+                  </div>
+                  <button onclick="exportAdminStudentsCsv()" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-lutmin-dark text-sm font-bold shrink-0"><i class="fa-solid fa-file-csv mr-2"></i>Exportar CSV</button>
+                </div>
+
+                <div class="mt-5 grid md:grid-cols-3 gap-3">
+                  <div class="relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                    <input id="adminStudentSearch" oninput="applyAdminStudentFilters()" class="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm focus:outline-none focus:border-lutmin-light" placeholder="Buscar por nombre o correo">
+                  </div>
+                  <select id="adminStudentCourseFilter" onchange="applyAdminStudentFilters()" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"></select>
+                  <select id="adminStudentStatusFilter" onchange="applyAdminStudentFilters()" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm">
+                    <option value="all">Todos los estados</option>
+                    <option value="not_started">Sin comenzar</option>
+                    <option value="in_progress">En curso</option>
+                    <option value="completed">Formación completada</option>
+                    <option value="no_courses">Sin cursos</option>
+                    <option value="inactive">Desactivados</option>
+                  </select>
+                </div>
+
+                <div class="mt-5 grid grid-cols-2 xl:grid-cols-4 gap-3">
+                  <div class="rounded-2xl bg-slate-50 p-4"><p class="text-[10px] font-bold text-slate-400 uppercase">Sin comenzar</p><p id="adminAcademicNotStarted" class="mt-1 text-2xl font-black text-lutmin-dark">0</p></div>
+                  <div class="rounded-2xl bg-blue-50 p-4"><p class="text-[10px] font-bold text-blue-500 uppercase">En curso</p><p id="adminAcademicInProgress" class="mt-1 text-2xl font-black text-blue-700">0</p></div>
+                  <div class="rounded-2xl bg-green-50 p-4"><p class="text-[10px] font-bold text-green-600 uppercase">Completaron formación</p><p id="adminAcademicCompleted" class="mt-1 text-2xl font-black text-green-700">0</p></div>
+                  <div class="rounded-2xl bg-red-50 p-4"><p class="text-[10px] font-bold text-red-500 uppercase">Desactivados</p><p id="adminAcademicInactive" class="mt-1 text-2xl font-black text-red-700">0</p></div>
+                </div>
+              </div>
+              <div id="adminStudentsList" class="divide-y divide-slate-100"></div>
+            </div>
+
+            <!-- CURSOS -->
+            <div class="mt-6 bg-white rounded-3xl border border-slate-100 overflow-hidden">
+              <div class="p-5 sm:p-6 border-b border-slate-100">
+                <h3 class="font-extrabold text-lutmin-dark">Cursos y clases</h3>
+                <p class="mt-1 text-xs text-slate-500">Podés publicar u ocultar un curso sin borrarlo.</p>
+              </div>
+              <div id="adminCoursesList" class="divide-y divide-slate-100"></div>
+            </div>
+
+            <!-- CERTIFICACIÓN PRIVADA Y CONTROL V3.2 -->
+            <div id="adminCertificateComplianceV32" class="mt-6 bg-white rounded-3xl border border-slate-100 overflow-hidden">
+              <div class="p-5 sm:p-6 border-b border-slate-100 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+                <div><h3 class="font-extrabold text-lutmin-dark">Certificación privada · configuración y control</h3><p class="mt-1 text-xs text-slate-500">Define cómo se identifica Lutmin como emisor privado y controla vencimientos y datos faltantes.</p></div>
+                <button onclick="loadCertificateComplianceV32()" class="px-3 py-2 rounded-xl bg-slate-100 text-xs font-bold"><i class="fa-solid fa-rotate mr-2"></i>Revisar</button>
+              </div>
+              <div class="p-5 sm:p-6 grid xl:grid-cols-[1fr_.9fr] gap-5">
+                <form id="certificateIssuerFormV32" class="rounded-2xl bg-slate-50 border border-slate-100 p-4 space-y-3">
+                  <h4 class="font-extrabold text-lutmin-dark">Datos del emisor</h4>
+                  <div class="grid sm:grid-cols-2 gap-3"><input id="certIssuerDisplayV32" required class="px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" placeholder="Nombre visible: Lutmin Consultora"><input id="certIssuerLegalV32" class="px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" placeholder="Nombre / razón legal del emisor"></div>
+                  <div class="grid sm:grid-cols-2 gap-3"><input id="certIssuerTaxIdV32" class="px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" placeholder="CUIT"><input id="certResponsibleNameV32" class="px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" placeholder="Responsable firmante"></div>
+                  <input id="certResponsibleRoleV32" class="w-full px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm" placeholder="Cargo del responsable">
+                  <textarea id="certPrivateLegendV32" rows="3" class="w-full px-3 py-3 rounded-xl bg-white border border-slate-200 text-sm"></textarea>
+                  <p class="text-[10px] text-slate-500">No uses expresiones como “título oficial”, “validez nacional”, “habilitación profesional” o “avalado por el Ministerio” salvo que exista un reconocimiento formal específico.</p>
+                  <button class="w-full py-3 rounded-xl bg-lutmin-dark text-white text-sm font-extrabold">Guardar configuración</button>
+                </form>
+                <div>
+                  <div id="certificateComplianceStatusV32" class="rounded-2xl border border-slate-100 p-4"><p class="text-sm text-slate-500">Cargando control...</p></div>
+                  <div class="mt-4 rounded-2xl border border-slate-100 overflow-hidden"><div class="p-4 bg-slate-50"><p class="text-xs font-extrabold text-lutmin-dark">Vencimientos próximos</p></div><div id="certificateExpiringListV32" class="divide-y divide-slate-100"><div class="p-4 text-xs text-slate-500">Sin datos.</div></div></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- CERTIFICADOS -->
+            <div class="mt-6 bg-white rounded-3xl border border-slate-100 overflow-hidden">
+              <div class="p-5 sm:p-6 border-b border-slate-100">
+                <h3 class="font-extrabold text-lutmin-dark">Certificados emitidos</h3>
+                <p class="mt-1 text-xs text-slate-500">Se emiten como constancias privadas de participación o aprobación según la configuración del curso. Desde acá podés revisar, revocar o restaurar uno.</p>
+              </div>
+              <div id="adminCertificatesList" class="divide-y divide-slate-100"></div>
+            </div>
+          

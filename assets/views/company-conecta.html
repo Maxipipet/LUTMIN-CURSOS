@@ -1,0 +1,94 @@
+
+            <div class="flex flex-col xl:flex-row xl:items-end xl:justify-between gap-4">
+              <div>
+                <p class="text-[10px] sm:text-xs text-violet-600 font-extrabold uppercase tracking-[.18em]">Lutmin Conecta · Empresa</p>
+                <h2 class="mt-1 text-2xl sm:text-3xl font-black text-lutmin-dark">Empleo y talento</h2>
+                <p class="mt-2 text-sm text-slate-500">Publicá búsquedas, revisá postulaciones y conocé el perfil completo de cada candidato desde un solo lugar.</p>
+              </div>
+              <button onclick="loadCompanyConectaData()" class="px-4 py-2.5 rounded-xl bg-lutmin-dark text-white text-sm font-bold"><i class="fa-solid fa-rotate mr-2"></i>Actualizar</button>
+            </div>
+
+            <div class="mt-6 grid grid-cols-2 xl:grid-cols-4 gap-4">
+              <div class="bg-white rounded-2xl border border-slate-100 p-5"><p class="text-xs text-slate-400 font-bold">BÚSQUEDAS</p><p id="companyConectaJobsStat" class="mt-2 text-3xl font-black text-lutmin-dark">0</p></div>
+              <div class="bg-white rounded-2xl border border-slate-100 p-5"><p class="text-xs text-slate-400 font-bold">POSTULACIONES</p><p id="companyConectaAppsStat" class="mt-2 text-3xl font-black text-violet-600">0</p></div>
+              <div class="bg-white rounded-2xl border border-slate-100 p-5"><p class="text-xs text-slate-400 font-bold">NUEVAS</p><p id="companyConectaNewStat" class="mt-2 text-3xl font-black text-blue-600">0</p></div>
+              <div class="bg-white rounded-2xl border border-slate-100 p-5"><p class="text-xs text-slate-400 font-bold">FAVORITOS</p><p id="companyConectaFavStat" class="mt-2 text-3xl font-black text-amber-500">0</p></div>
+            </div>
+
+            <div class="mt-6 bg-white rounded-3xl border border-slate-100 p-2 flex flex-wrap gap-2">
+              <button onclick="setCompanyConectaView('overview')" data-company-conecta-nav="overview" class="company-conecta-nav px-4 py-2.5 rounded-xl bg-lutmin-dark text-white text-xs font-bold"><i class="fa-solid fa-chart-pie mr-2"></i>Panel</button>
+              <button onclick="setCompanyConectaView('publish')" data-company-conecta-nav="publish" class="company-conecta-nav px-4 py-2.5 rounded-xl text-slate-600 text-xs font-bold"><i class="fa-solid fa-plus mr-2"></i>Nueva búsqueda</button>
+              <button onclick="setCompanyConectaView('jobs')" data-company-conecta-nav="jobs" class="company-conecta-nav px-4 py-2.5 rounded-xl text-slate-600 text-xs font-bold"><i class="fa-solid fa-rectangle-list mr-2"></i>Mis publicaciones</button>
+              <button onclick="setCompanyConectaView('applications')" data-company-conecta-nav="applications" class="company-conecta-nav px-4 py-2.5 rounded-xl text-slate-600 text-xs font-bold"><i class="fa-solid fa-user-check mr-2"></i>Postulaciones</button>
+              <button onclick="setCompanyConectaView('pipeline')" data-company-conecta-nav="pipeline" class="company-conecta-nav px-4 py-2.5 rounded-xl text-slate-600 text-xs font-bold"><i class="fa-solid fa-table-columns mr-2"></i>Pipeline</button>
+              <button onclick="setCompanyConectaView('interviews')" data-company-conecta-nav="interviews" class="company-conecta-nav px-4 py-2.5 rounded-xl text-slate-600 text-xs font-bold"><i class="fa-solid fa-calendar-check mr-2"></i>Entrevistas</button>
+              <button onclick="setCompanyConectaView('talent')" data-company-conecta-nav="talent" class="company-conecta-nav px-4 py-2.5 rounded-xl text-slate-600 text-xs font-bold"><i class="fa-solid fa-magnifying-glass mr-2"></i>Banco de talento</button>
+              <button onclick="setCompanyConectaView('favorites')" data-company-conecta-nav="favorites" class="company-conecta-nav px-4 py-2.5 rounded-xl text-slate-600 text-xs font-bold"><i class="fa-solid fa-star mr-2"></i>Favoritos</button>
+            </div>
+
+            <div data-company-conecta-view="overview" class="company-conecta-view mt-6">
+              <div class="grid xl:grid-cols-[1.25fr_.75fr] gap-5">
+                <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden">
+                  <div class="p-5 sm:p-6 border-b border-slate-100"><h3 class="font-extrabold text-lutmin-dark">Postulaciones recientes</h3><p class="mt-1 text-xs text-slate-500">Abrí cualquier candidato para ver experiencia, competencias, certificados y CV.</p></div>
+                  <div id="companyConectaRecentApps" class="divide-y divide-slate-100"></div>
+                </div>
+                <div class="space-y-4">
+                  <button onclick="setCompanyConectaView('publish')" class="w-full text-left bg-lutmin-dark text-white rounded-3xl p-6"><i class="fa-solid fa-plus text-lutmin-light text-xl"></i><p class="mt-4 font-extrabold">Solicitar nueva búsqueda</p><p class="mt-1 text-xs text-slate-300">Cargá el puesto y Lutmin lo revisa antes de publicarlo.</p></button>
+                  <button onclick="setCompanyConectaView('talent')" class="w-full text-left bg-white border border-slate-100 rounded-3xl p-6"><i class="fa-solid fa-users-viewfinder text-violet-600 text-xl"></i><p class="mt-4 font-extrabold text-lutmin-dark">Explorar banco de talento</p><p class="mt-1 text-xs text-slate-500">Buscá perfiles por experiencia, ubicación o competencia.</p></button>
+                </div>
+              </div>
+            </div>
+
+            <div data-company-conecta-view="publish" class="company-conecta-view hidden mt-6">
+              <form id="companyJobRequestForm" class="bg-white rounded-3xl border border-slate-100 p-5 sm:p-7 max-w-4xl">
+                <div class="flex items-center gap-3"><div class="w-11 h-11 rounded-2xl bg-violet-50 text-violet-600 flex items-center justify-center"><i class="fa-solid fa-briefcase"></i></div><div><h3 class="font-extrabold text-lutmin-dark">Solicitar una búsqueda</h3><p class="mt-1 text-xs text-slate-500">La empresa carga el pedido. Lutmin lo revisa antes de publicarlo.</p></div></div>
+                <div class="mt-5 grid md:grid-cols-2 gap-4">
+                  <div class="md:col-span-2"><label class="text-xs font-bold text-slate-600">Puesto</label><input id="companyJobTitle" required maxlength="180" class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Ej: Coordinador/a de mantenimiento"></div>
+                  <div class="md:col-span-2"><label class="text-xs font-bold text-slate-600">Descripción</label><textarea id="companyJobDescription" required rows="4" class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Responsabilidades, objetivo del puesto, contexto..."></textarea></div>
+                  <div class="md:col-span-2"><label class="text-xs font-bold text-slate-600">Requisitos</label><textarea id="companyJobRequirements" rows="3" class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Experiencia, conocimientos, disponibilidad..."></textarea></div>
+                  <div><label class="text-xs font-bold text-slate-600">Ubicación</label><input id="companyJobLocation" class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Ciudad / Provincia"></div>
+                  <div><label class="text-xs font-bold text-slate-600">Modalidad</label><select id="companyJobModality" class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"><option value="presencial">Presencial</option><option value="hibrido">Híbrido</option><option value="remoto">Remoto</option></select></div>
+                  <div><label class="text-xs font-bold text-slate-600">Tipo</label><select id="companyJobType" class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"><option value="full_time">Jornada completa</option><option value="part_time">Media jornada</option><option value="temporary">Temporal</option><option value="contract">Contrato</option><option value="internship">Pasantía</option></select></div>
+                  <div><label class="text-xs font-bold text-slate-600">Cantidad de vacantes</label><input id="companyJobVacancies" type="number" min="1" max="999" value="1" class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"></div>
+                  <div><label class="text-xs font-bold text-slate-600">Cierre estimado</label><input id="companyJobCloses" type="date" class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"></div>
+                </div>
+                <button type="submit" class="mt-5 px-6 py-3 rounded-xl bg-cyan-700 text-white font-bold">Enviar a revisión de Lutmin</button>
+              </form>
+            </div>
+
+            <div data-company-conecta-view="jobs" class="company-conecta-view hidden mt-6">
+              <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden"><div class="p-5 sm:p-6 border-b border-slate-100"><h3 class="font-extrabold text-lutmin-dark">Mis publicaciones</h3><p class="mt-1 text-xs text-slate-500">Borradores enviados, búsquedas publicadas y procesos cerrados.</p></div><div id="companyConectaJobsList" class="divide-y divide-slate-100"></div></div>
+            </div>
+
+            <div data-company-conecta-view="applications" class="company-conecta-view hidden mt-6">
+              <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden">
+                <div class="p-5 sm:p-6 border-b border-slate-100"><div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4"><div><h3 class="font-extrabold text-lutmin-dark">Postulaciones</h3><p class="mt-1 text-xs text-slate-500">Filtrá, revisá el perfil completo y mové cada candidato por el proceso.</p></div><div class="flex flex-wrap gap-2"><select id="companyApplicationJobFilter" onchange="renderCompanyConectaApplications()" class="px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs"><option value="">Todas las búsquedas</option></select><select id="companyApplicationStatusFilter" onchange="renderCompanyConectaApplications()" class="px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs"><option value="">Todos los estados</option><option value="new">Nuevas</option><option value="reviewing">En revisión</option><option value="interview">Entrevista</option><option value="hired">Seleccionados</option><option value="rejected">Finalizadas</option></select></div></div></div>
+                <div id="companyConectaApplicationsList" class="divide-y divide-slate-100"></div>
+              </div>
+            </div>
+
+            <div data-company-conecta-view="pipeline" class="company-conecta-view hidden mt-6">
+              <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden">
+                <div class="p-5 sm:p-6 border-b border-slate-100 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
+                  <div><h3 class="font-extrabold text-lutmin-dark">Pipeline de selección</h3><p class="mt-1 text-xs text-slate-500">Una vista rápida del proceso. Abrí cada candidato para ver perfil, historial, etiquetas y entrevistas.</p></div>
+                  <select id="companyPipelineJobFilter" onchange="renderCompanyPipelineBoard()" class="px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs"><option value="">Todas las búsquedas</option></select>
+                </div>
+                <div id="companyPipelineBoard" class="p-4 overflow-x-auto"></div>
+              </div>
+            </div>
+
+            <div data-company-conecta-view="interviews" class="company-conecta-view hidden mt-6">
+              <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden">
+                <div class="p-5 sm:p-6 border-b border-slate-100"><h3 class="font-extrabold text-lutmin-dark">Agenda de entrevistas</h3><p class="mt-1 text-xs text-slate-500">Entrevistas programadas con candidatos de tus búsquedas.</p></div>
+                <div id="companyInterviewsList" class="divide-y divide-slate-100"></div>
+              </div>
+            </div>
+
+            <div data-company-conecta-view="talent" class="company-conecta-view hidden mt-6">
+              <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden"><div class="p-5 sm:p-6 border-b border-slate-100"><div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4"><div><h3 class="font-extrabold text-lutmin-dark">Banco de talento</h3><p class="mt-1 text-xs text-slate-500">Personas que decidieron voluntariamente hacer visible su perfil profesional.</p></div><div class="flex flex-wrap gap-2"><input id="companyTalentQuery" class="px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Nombre, ciudad, perfil"><input id="companyTalentSkill" class="px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Competencia"><button onclick="searchCompanyTalent()" class="px-4 py-2.5 rounded-xl bg-lutmin-dark text-white text-xs font-bold">Buscar</button></div></div></div><div id="companyTalentResults" class="p-5 sm:p-6 grid md:grid-cols-2 gap-4"><div class="md:col-span-2 text-sm text-slate-500">Cargando perfiles...</div></div></div>
+            </div>
+
+            <div data-company-conecta-view="favorites" class="company-conecta-view hidden mt-6">
+              <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden"><div class="p-5 sm:p-6 border-b border-slate-100"><h3 class="font-extrabold text-lutmin-dark">Candidatos guardados</h3><p class="mt-1 text-xs text-slate-500">Tu shortlist de perfiles favoritos.</p></div><div id="companyConectaFavoritesList" class="p-5 sm:p-6 grid md:grid-cols-2 gap-4"></div></div>
+            </div>
+          
