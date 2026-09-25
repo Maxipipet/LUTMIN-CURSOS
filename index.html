@@ -11,11 +11,12 @@
   <link rel="shortcut icon" href="LOGO.png" type="image/x-icon" />
   <link rel="apple-touch-icon" href="LOGO.png" />
 
-  <!-- LUTMIN V26.0 · precarga de módulos críticos; ejecución conserva el orden histórico -->
-  <link rel="preload" href="assets/js/core/app-core.js" as="script">
-  <link rel="preload" href="assets/js/modules/platform/superplatform.js" as="script">
-  <link rel="preload" href="assets/js/modules/talent/intelligence-core.js" as="script">
-  <link rel="preload" href="assets/js/modules/teacher/portal.js" as="script">
+  <!-- LUTMIN V27.0 · app shell + módulos autenticados bajo demanda -->
+  <link rel="preload" href="assets/js/core/module-loader-v27.js?v=27.0" as="script">
+  <link rel="preload" href="assets/js/core/app-core.js?v=27.0" as="script">
+  <link rel="preconnect" href="https://kkpzycsjozrvbimpvfnl.supabase.co" crossorigin>
+  <link rel="dns-prefetch" href="//kkpzycsjozrvbimpvfnl.supabase.co">
+  <link rel="stylesheet" href="assets/css/v27-loader.css?v=27.0">
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -119,9 +120,6 @@
     .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 
-<link id="lutminV183ConectaStyles" rel="stylesheet" href="assets/css/v18-conecta.css">
-  <link rel="stylesheet" href="assets/css/v24-core.css">
-  <link rel="stylesheet" href="assets/css/v24-1-video-gate.css">
 </head>
 
 <body class="bg-white text-slate-800 antialiased overflow-x-hidden">
@@ -3070,80 +3068,8 @@
   <!-- QR / PDF para certificados + Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <script src="assets/js/core/app-core.js"></script>
-
-<script src="assets/js/modules/academy/learning-paths-quality.js"></script>
-
-<script src="assets/js/modules/talent/development.js"></script>
-
-<script src="assets/js/modules/core/qa-security.js"></script>
-<script src="assets/js/modules/academy/operations.js"></script>
-
-
-<script src="assets/js/modules/core/ux-support.js"></script>
-
-<script src="assets/js/modules/academy/competencies-pro.js"></script>
-
-<script src="assets/js/modules/academy/compliance.js"></script>
-
-
-<script src="assets/js/modules/teacher/portal.js"></script>
-
-<script src="assets/js/modules/platform/superplatform.js"></script>
-
-
-<script src="assets/js/modules/agents/autopilot.js"></script>
-
-<script src="assets/js/modules/agents/autopilot-company.js"></script>
-<script src="assets/js/modules/talent/pre-interview.js"></script>
-
-
-<script src="assets/js/modules/talent/intelligence-core.js"></script>
-<script src="assets/js/modules/talent/cv-parser.js"></script>
-
-<script src="assets/js/modules/talent/evidence-career.js"></script>
-
-
-<style>
-  .v160-workspace-chip{display:inline-flex;align-items:center;gap:.45rem;padding:.42rem .7rem;border-radius:999px;font-size:10px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
-  .v160-action-card{transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
-  .v160-action-card:hover{transform:translateY(-1px);box-shadow:0 12px 32px rgba(15,23,42,.06)}
-</style>
-<script src="assets/js/modules/core/workspaces-command.js"></script>
-
-<script src="assets/js/modules/talent/zero-friction.js"></script>
-
-<script id="lutminV182ConectaScript" src="assets/js/v18-conecta.js"></script>
-
-
-<link id="lutminV190WorkspaceNavStyles" rel="stylesheet" href="assets/css/v19-workspaces.css">
-<script id="lutminV190WorkspaceNavScript" src="assets/js/v19-workspaces.js"></script>
-
-<link id="lutminV200Styles" rel="stylesheet" href="assets/css/v20-organizations-onboarding.css">
-
-<script id="lutminV200Script" src="assets/js/v20-organizations-onboarding.js"></script>
-
-<link id="lutminV210ConectaHubStyles" rel="stylesheet" href="assets/css/v21-conecta-hub.css">
-<script id="lutminV210ConectaHubScript" src="assets/js/v21-conecta-hub.js"></script>
-
-<link id="lutminV212ConectaPanelStyles" rel="stylesheet" href="assets/css/v21-conecta-panels.css">
-<script id="lutminV212ConectaPanelScript" src="assets/js/v21-conecta-panels.js"></script>
-
-<link id="lutminV220PerformanceStyles" rel="stylesheet" href="assets/css/v22-performance.css">
-<script id="lutminV220PerformanceScript" src="assets/js/v22-performance.js"></script>
-
-
-<link id="lutminV230RuntimeStyles" rel="stylesheet" href="assets/css/v23-runtime.css">
-
-<script id="lutminV230RuntimeScript" src="assets/js/v23-runtime.js"></script>
-
-
-  <!-- LUTMIN V25.0 · control center + security diagnostics -->
-  <link rel="stylesheet" href="assets/css/v25-control-center.css">
-  <!-- LUTMIN V25.0 · core modular estable + video gate V24.1 conservado -->
-  <script src="assets/js/v24-core.js"></script>
-  <script src="assets/js/v24-1-video-gate.js"></script>
-  <script src="assets/js/v25-control-center.js"></script>
-  <script src="assets/js/v26-health.js"></script>
+  <!-- LUTMIN V27.0 · shell liviano. El resto se carga al autenticar. -->
+  <script src="assets/js/core/module-loader-v27.js?v=27.0"></script>
+  <script src="assets/js/core/app-core.js?v=27.0"></script>
 </body>
 </html>
