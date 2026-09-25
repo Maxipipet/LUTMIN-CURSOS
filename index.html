@@ -11,12 +11,12 @@
   <link rel="shortcut icon" href="LOGO.png" type="image/x-icon" />
   <link rel="apple-touch-icon" href="LOGO.png" />
 
-  <!-- LUTMIN V27.0 · app shell + módulos autenticados bajo demanda -->
-  <link rel="preload" href="assets/js/core/module-loader-v27.js?v=27.0" as="script">
-  <link rel="preload" href="assets/js/core/app-core.js?v=27.0" as="script">
+  <!-- LUTMIN V28.0 · app shell + precarga sin ejecución + recuperación de assets -->
+  <link rel="preload" href="assets/js/core/module-loader-v28.js?v=28.0" as="script">
+  <link rel="preload" href="assets/js/core/app-core.js?v=28.0" as="script">
   <link rel="preconnect" href="https://kkpzycsjozrvbimpvfnl.supabase.co" crossorigin>
   <link rel="dns-prefetch" href="//kkpzycsjozrvbimpvfnl.supabase.co">
-  <link rel="stylesheet" href="assets/css/v27-loader.css?v=27.0">
+  <link rel="stylesheet" href="assets/css/v28-loader.css?v=28.0">
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -3068,8 +3068,9 @@
   <!-- QR / PDF para certificados + Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <!-- LUTMIN V27.0 · shell liviano. El resto se carga al autenticar. -->
-  <script src="assets/js/core/module-loader-v27.js?v=27.0"></script>
-  <script src="assets/js/core/app-core.js?v=27.0"></script>
+  <!-- LUTMIN V28.0 · login liviano, runtime autenticado y actualización segura. -->
+  <script src="assets/js/core/module-loader-v28.js?v=28.0"></script>
+  <script src="assets/js/core/app-core.js?v=28.0"></script>
+  <script src="assets/js/core/update-manager-v28.js?v=28.0"></script>
 </body>
 </html>
