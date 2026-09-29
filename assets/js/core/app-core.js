@@ -2143,8 +2143,12 @@
       document.querySelectorAll('.company-conecta-view').forEach(el=>el.classList.toggle('hidden',el.dataset.companyConectaView!==companyConectaCurrentView));
       document.querySelectorAll('.company-conecta-nav').forEach(btn=>{
         const active=btn.dataset.companyConectaNav===companyConectaCurrentView;
-        btn.classList.toggle('bg-lutmin-dark',active);btn.classList.toggle('text-white',active);btn.classList.toggle('text-slate-600',!active);
+        btn.setAttribute('aria-current',active?'page':'false');
+        btn.setAttribute('aria-selected',active?'true':'false');
+        btn.dataset.lutminActive=active?'true':'false';
+        btn.tabIndex=active?0:-1;
       });
+      window.dispatchEvent(new CustomEvent('lutmin:navigation-change',{detail:{scope:'company-conecta',key:companyConectaCurrentView}}));
       if((view==='talent'||view==='favorites')&&!companyTalentData.length)searchCompanyTalent();
       if(view==='applications')renderCompanyConectaApplications();
       if(view==='pipeline')renderCompanyPipelineBoard();

@@ -1,12 +1,12 @@
 // =============================================================
-// LUTMIN V35.0 · ACTIVE-WORKSPACE MODULE LOADER
+// LUTMIN V36.0 · ACTIVE-WORKSPACE MODULE LOADER
 // Carga sólo el runtime necesario para cada acceso y deja Conecta
 // pesado bajo demanda. Mantiene costo API $0 y fallback completo.
 // =============================================================
 (function(){
   'use strict';
 
-  const VERSION='35.0';
+  const VERSION='36.0';
   const state={status:'idle',promise:null,loaded:new Set(),bundles:new Set(),startedAt:0,finishedAt:0,error:null,retries:0,warmed:false,lastReason:null,lastRole:null};
   const cssFiles=[
     'assets/css/v18-conecta.css',
@@ -54,7 +54,8 @@
     'assets/js/v24-1-video-gate.js',
     'assets/js/v25-control-center.js',
     'assets/js/v26-health.js',
-    'assets/js/modules/core/admin-demand-v33.js'
+    'assets/js/modules/core/admin-demand-v33.js',
+    'assets/js/core/update-manager-v32.js'
   ];
 
   const F={
@@ -96,7 +97,7 @@
   const companyBaseSet=new Set([F.workspaceCmd,F.workspaces,F.perf,F.runtime,F.core]);
   const studentBaseSet=new Set([F.comp,F.workspaceCmd,F.workspaces,F.perf,F.runtime,F.core,F.video]);
   const roleSets={
-    // V35: Alumno arranca con el flujo crítico. Rutas/vigencias se hidratan en idle,
+    // V36: Alumno arranca con el flujo crítico. Rutas/vigencias se hidratan en idle,
     // Actividades y soporte se descargan sólo al abrirlos.
     student:studentBaseSet,
     company_admin:companyBaseSet,
@@ -167,12 +168,12 @@
   function loadCssOnce(file){
     const key=`v30-css:${file}`;if(state.loaded.has(key))return Promise.resolve(true);
     const existing=[...document.styleSheets].some(s=>String(s.href||'').includes(file));if(existing){state.loaded.add(key);return Promise.resolve(true);}
-    return new Promise(resolve=>{const link=document.createElement('link');link.rel='stylesheet';link.href=withVersion(file);link.dataset.lutminV30='css';let settled=false;const done=()=>{if(settled)return;settled=true;state.loaded.add(key);resolve(true);};link.onload=done;link.onerror=()=>{console.warn('[Lutmin V35] CSS no disponible:',file);done();};document.head.appendChild(link);setTimeout(done,4500);});
+    return new Promise(resolve=>{const link=document.createElement('link');link.rel='stylesheet';link.href=withVersion(file);link.dataset.lutminV30='css';let settled=false;const done=()=>{if(settled)return;settled=true;state.loaded.add(key);resolve(true);};link.onload=done;link.onerror=()=>{console.warn('[Lutmin V36] CSS no disponible:',file);done();};document.head.appendChild(link);setTimeout(done,4500);});
   }
 
   function preload(files){
     state.warmed=true;
-    // V35: no prepriorizamos un bundle entero. Chrome advertía decenas de preloads
+    // V36: no prepriorizamos un bundle entero. Chrome advertía decenas de preloads
     // no utilizados y se competía con los recursos realmente visibles.
     ordered(new Set(files)).slice(0,2).forEach(file=>{if(document.head.querySelector(`link[data-lutmin-v30-preload="${file}"]`))return;const link=document.createElement('link');link.rel='preload';link.as='script';link.href=withVersion(file);link.dataset.lutminV30Preload=file;document.head.appendChild(link);});
   }
@@ -212,7 +213,7 @@
   }
 
   function setForAccess(role,capabilities){
-    // V35: las capacidades disponibles NO definen qué runtime se descarga.
+    // V36: las capacidades disponibles NO definen qué runtime se descarga.
     // Sólo el workspace activo lo hace. Así un administrador que entra como Empresa
     // no arrastra Administración/Alumno dentro del mismo DOM/runtime.
     void capabilities;
@@ -262,7 +263,14 @@
 
   async function registerServiceWorker(){
     if(!('serviceWorker' in navigator)||location.protocol==='file:')return false;
-    try{const reg=await navigator.serviceWorker.register(`./sw.js?v=${VERSION}`,{scope:'./'});window.dispatchEvent(new CustomEvent('lutmin:v30:sw-registered',{detail:{registration:reg}}));reg.update().catch(()=>{});return reg;}catch(err){console.warn('[Lutmin V35] Service Worker no disponible:',err?.message||err);return false;}
+    try{
+      const reg=await navigator.serviceWorker.register(`./sw.js?v=${VERSION}`,{scope:'./'});
+      // V36: el gestor de actualización no bloquea el arranque. Se descarga
+      // después de registrar el SW y recibe el registro ya resuelto.
+      await loadScriptOnce('assets/js/core/update-manager-v32.js');
+      window.dispatchEvent(new CustomEvent('lutmin:v30:sw-registered',{detail:{registration:reg}}));
+      reg.update().catch(()=>{});return reg;
+    }catch(err){console.warn('[Lutmin V36] Service Worker no disponible:',err?.message||err);return false;}
   }
 
   function canAdaptivePrefetch(){

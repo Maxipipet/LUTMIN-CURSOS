@@ -1,2 +1,51 @@
 /* LUTMIN V31.0 · vistas HTML bajo demanda */
 .lutmin-view-skeleton-v31{padding:1rem 0}.lutmin-view-skeleton-card-v31{display:flex;align-items:center;gap:.85rem;padding:1rem 1.1rem;border:1px solid rgb(226 232 240);border-radius:1.25rem;background:#fff;color:#0f172a}.lutmin-view-skeleton-card-v31 strong{display:block;font-size:.8rem}.lutmin-view-skeleton-card-v31 small{display:block;margin-top:.2rem;color:#94a3b8;font-size:.68rem}.lutmin-view-spinner-v31{width:1.05rem;height:1.05rem;border-radius:999px;border:2px solid #dbeafe;border-top-color:#2f8dfd;animation:lutminV31Spin .7s linear infinite}@keyframes lutminV31Spin{to{transform:rotate(360deg)}}
+
+
+/* =============================================================
+   LUTMIN V36.0 · Estado activo unificado de módulos superiores
+   Evita combinaciones bg-white/text-white heredadas y hace visible
+   la ubicación actual en Administración, Empresa y Conecta.
+   ============================================================= */
+#adminModuleNavV19 [data-admin-v19-btn],
+#companyModuleNavV341 [data-v341-company-key],
+#talentModuleNavV342 [data-talent-module-key],
+#conectaHubV210 [data-v210-module],
+[data-campus-panel="company-conecta"] [data-company-conecta-nav]{
+  border:1px solid transparent!important;
+  background:#fff!important;
+  color:#536176!important;
+  box-shadow:none!important;
+  transition:background-color .15s ease,color .15s ease,border-color .15s ease,box-shadow .15s ease,transform .15s ease!important;
+}
+#adminModuleNavV19 [data-admin-v19-btn]:hover,
+#companyModuleNavV341 [data-v341-company-key]:hover,
+#talentModuleNavV342 [data-talent-module-key]:hover,
+#conectaHubV210 [data-v210-module]:hover,
+[data-campus-panel="company-conecta"] [data-company-conecta-nav]:hover{
+  background:#f1f7ff!important;color:#174f96!important;border-color:#d7e9ff!important;
+}
+#adminModuleNavV19 [data-admin-v19-btn][aria-current="page"],
+#companyModuleNavV341 [data-v341-company-key][aria-current="page"],
+#talentModuleNavV342 [data-talent-module-key][aria-current="page"],
+#conectaHubV210 [data-v210-module][aria-current="page"],
+#conectaHubV210 [data-v210-module].active,
+[data-campus-panel="company-conecta"] [data-company-conecta-nav][aria-current="page"]{
+  background:#e6f2ff!important;
+  color:#0b4f9c!important;
+  border-color:#87bfff!important;
+  box-shadow:0 5px 15px rgba(47,141,253,.12),inset 0 0 0 1px rgba(255,255,255,.7)!important;
+  font-weight:800!important;
+}
+#adminModuleNavV19 [data-admin-v19-btn][aria-current="page"] i,
+#companyModuleNavV341 [data-v341-company-key][aria-current="page"] i,
+#talentModuleNavV342 [data-talent-module-key][aria-current="page"] i,
+#conectaHubV210 [data-v210-module][aria-current="page"] i,
+[data-campus-panel="company-conecta"] [data-company-conecta-nav][aria-current="page"] i{color:#2f8dfd!important}
+#adminModuleNavV19 [data-admin-v19-btn]:focus-visible,
+#companyModuleNavV341 [data-v341-company-key]:focus-visible,
+#talentModuleNavV342 [data-talent-module-key]:focus-visible,
+#conectaHubV210 [data-v210-module]:focus-visible,
+[data-campus-panel="company-conecta"] [data-company-conecta-nav]:focus-visible{
+  outline:3px solid rgba(47,141,253,.28)!important;outline-offset:2px!important;
+}

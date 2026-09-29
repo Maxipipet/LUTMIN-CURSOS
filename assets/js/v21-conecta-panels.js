@@ -55,8 +55,16 @@
   function allManaged(r){return uniq(KEYS.flatMap(k=>r[k]||[]));}
 
   function setActiveButton(key){
-    document.querySelectorAll('[data-v210-module]').forEach(btn=>btn.classList.toggle('active',btn.dataset.v210Module===key));
+    document.querySelectorAll('[data-v210-module]').forEach(btn=>{
+      const active=btn.dataset.v210Module===key;
+      btn.classList.toggle('active',active);
+      btn.setAttribute('aria-current',active?'page':'false');
+      btn.setAttribute('aria-selected',active?'true':'false');
+      btn.dataset.lutminActive=active?'true':'false';
+      btn.tabIndex=active?0:-1;
+    });
     try{localStorage.setItem('lutmin-v212-conecta-active',key);}catch(_){ }
+    window.dispatchEvent(new CustomEvent('lutmin:navigation-change',{detail:{scope:'talent',key}}));
   }
 
   function applyVisibility(key=S.active){

@@ -28,7 +28,7 @@ function applyWorkspaceChromeV160(){
   if(profilePanel){const eyebrow=profilePanel.querySelector('p');if(eyebrow)eyebrow.textContent=isStudent?'Campus · identidad profesional':cfg.eyebrow;}
   const notif=document.querySelector('[data-campus-panel="notifications"]');
   if(notif){const desc=notif.querySelector('h2 + p');if(desc)desc.textContent=isStudent?'Cursos, pagos, certificados y avisos importantes en un solo lugar.':currentLutminUser.role==='admin'?'Alertas operativas, soporte, comunicaciones y eventos relevantes de la plataforma.':currentLutminUser.role==='company_admin'?'Avisos de capacitación, equipo, cumplimiento y novedades de la organización.':'Avisos de comisiones, alumnos, actividades y novedades académicas.';}
-  // V35.0: no repetimos el nombre del workspace en el pie. Rol + usuario ya identifican el acceso.
+  // V36.0: no repetimos el nombre del workspace en el pie. Rol + usuario ya identifican el acceso.
   document.getElementById('workspaceBadgeV160')?.remove();
 }
 

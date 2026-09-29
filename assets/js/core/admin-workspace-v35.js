@@ -1,5 +1,5 @@
 // =============================================================
-// LUTMIN V35.0 · ADMIN WORKSPACE CORE (LAZY)
+// LUTMIN V36.0 · ADMIN WORKSPACE CORE (LAZY)
 // Lógica pesada exclusiva de Administración. No se descarga en
 // Alumno, Empresa o Docente. Las funciones permanecen globales para
 // compatibilidad con HTML histórico y módulos incrementales.
@@ -2285,6 +2285,19 @@
     };
     let activeAdminModuleV19='overview';
     let adminWorkspaceTaggedV19=false;
+    let adminPrefSaveTimerV36=null;
+    let adminPrefLastQueuedV36=null;
+
+    function scheduleAdminWorkspacePrefSaveV36(module){
+      if(!currentLutminUser?.id||!supabaseClient)return;
+      adminPrefLastQueuedV36=module;
+      clearTimeout(adminPrefSaveTimerV36);
+      adminPrefSaveTimerV36=setTimeout(()=>{
+        const next=adminPrefLastQueuedV36;adminPrefSaveTimerV36=null;
+        if(!next||!currentLutminUser?.id)return;
+        supabaseClient.from('admin_workspace_preferences').upsert({user_id:currentLutminUser.id,last_module:next,updated_at:new Date().toISOString()},{onConflict:'user_id'}).then(()=>{}).catch(()=>{});
+      },700);
+    }
 
     function tagAdminBlocksV19(){
       if(adminWorkspaceTaggedV19) return;
@@ -2339,19 +2352,20 @@
       }
       document.querySelectorAll('.admin-v19-nav').forEach(btn=>{
         const active=btn.dataset.adminV19Btn===module;
-        btn.classList.toggle('bg-lutmin-dark',active);
-        btn.classList.toggle('text-white',active);
-        btn.classList.toggle('bg-slate-100',!active);
-        btn.classList.toggle('text-slate-600',!active);
+        // V36: el estado visual vive en atributos estables. Evita acumular
+        // bg-white + bg-* / text-white + text-* y quedar ilegible con Tailwind.
+        btn.setAttribute('aria-current',active?'page':'false');
+        btn.setAttribute('aria-selected',active?'true':'false');
+        btn.dataset.lutminActive=active?'true':'false';
+        btn.tabIndex=active?0:-1;
       });
+      window.dispatchEvent(new CustomEvent('lutmin:navigation-change',{detail:{scope:'admin',key:module}}));
       const mobileSelectV20=document.getElementById('adminModuleSelectV20'); if(mobileSelectV20) mobileSelectV20.value=module;
       const meta=ADMIN_MODULES_V19[module];
       const t=document.getElementById('adminModuleTitleV19'); if(t)t.textContent=meta.title;
       const d=document.getElementById('adminModuleDescriptionV19'); if(d)d.textContent=meta.description;
       localStorage.setItem('lutmin-admin-module-v19',module);
-      if(currentLutminUser?.id && !opts.noSave){
-        supabaseClient?.from('admin_workspace_preferences').upsert({user_id:currentLutminUser.id,last_module:module,updated_at:new Date().toISOString()},{onConflict:'user_id'}).then(()=>{}).catch(()=>{});
-      }
+      if(!opts.noSave)scheduleAdminWorkspacePrefSaveV36(module);
       const scroller=document.querySelector('#campusModal .modal-scroll');
       if(scroller && !opts.noScroll) scroller.scrollTo({top:0,behavior:'smooth'});
       refreshAdminWorkspaceV19();
@@ -2359,10 +2373,14 @@
 
     async function loadAdminWorkspacePrefsV19(){
       tagAdminBlocksV19();
-      let module=localStorage.getItem('lutmin-admin-module-v19')||'overview';
+      const local=localStorage.getItem('lutmin-admin-module-v19');
+      // V36: la preferencia local abre el módulo inmediatamente y evita una
+      // lectura Supabase en cada entrada. La remota queda como fallback cross-device.
+      if(local&&ADMIN_MODULES_V19[local]){setAdminModuleV19(local,{noSave:true,noScroll:true});return;}
+      let module='overview';
       if(supabaseClient&&currentLutminUser?.id){
         const {data,error}=await supabaseClient.from('admin_workspace_preferences').select('last_module').eq('user_id',currentLutminUser.id).maybeSingle();
-        if(!error&&data?.last_module) module=data.last_module;
+        if(!error&&data?.last_module&&ADMIN_MODULES_V19[data.last_module])module=data.last_module;
       }
       setAdminModuleV19(module,{noSave:true,noScroll:true});
     }
@@ -2463,13 +2481,13 @@
 
 
 
-// V35 · API mínima para el dispatcher estable y limpieza de sesión.
+// V36 · API mínima para el dispatcher estable y limpieza de sesión.
 window.LutminV35AdminCore = {
-  version:'35.0',
+  version:'36.0',
   loadLegacy: (...args) => loadAdminDataLegacyV35(...args),
   reset: () => {
     try { executiveGoalsV17=[]; executiveRiskSettingsV17={inactive_days:7,low_progress_percent:30,low_progress_after_days:14,company_attention_percent:60}; executiveSnapshotsV17=[]; executiveCompaniesV17=[]; executiveCompanyMembersV17=[]; executiveMetricsV17=null; } catch(_) {}
     try { healthFindingsV18=[]; schemaMigrationsV18=[]; bulkOperationsV18=[]; } catch(_) {}
-    try { activeAdminModuleV19='overview'; adminWorkspaceTaggedV19=false; } catch(_) {}
+    try { activeAdminModuleV19='overview'; adminWorkspaceTaggedV19=false; clearTimeout(adminPrefSaveTimerV36); adminPrefSaveTimerV36=null; adminPrefLastQueuedV36=null; } catch(_) {}
   }
 };

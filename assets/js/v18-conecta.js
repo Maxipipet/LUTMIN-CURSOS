@@ -1,5 +1,5 @@
 // =========================================================
-// LUTMIN V35.0 · CONECTA STUDENT MODULE NAV
+// LUTMIN V36.0 · CONECTA STUDENT MODULE NAV
 // Un acceso en sidebar; módulos internos arriba; un panel activo.
 // =========================================================
 (function(){
@@ -19,8 +19,12 @@
     document.querySelectorAll('[data-talent-module-key]').forEach(btn=>{
       const on=btn.dataset.talentModuleKey===valid;
       btn.setAttribute('aria-current',on?'page':'false');
+      btn.setAttribute('aria-selected',on?'true':'false');
+      btn.dataset.lutminActive=on?'true':'false';
+      btn.tabIndex=on?0:-1;
     });
     try{sessionStorage.setItem('lutmin-talent-module-v342',valid)}catch(_){ }
+    window.dispatchEvent(new CustomEvent('lutmin:navigation-change',{detail:{scope:'talent',key:valid}}));
     return valid;
   }
   window.setTalentModuleV342=setTalentModuleV342;

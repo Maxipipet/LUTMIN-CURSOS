@@ -104,14 +104,13 @@
     document.querySelectorAll(`[data-v190-scope="${scope}"]`).forEach(b=>b.classList.toggle('active',b.dataset.v190Key===key));
     document.querySelectorAll('[data-v341-company-key]').forEach(b=>{
       const active=scope==='company'&&b.dataset.v341CompanyKey===key;
-      b.classList.toggle('bg-lutmin-dark',active);
-      b.classList.toggle('text-white',active);
-      b.classList.toggle('shadow-sm',active);
-      b.classList.toggle('text-slate-600',!active);
-      b.classList.toggle('hover:bg-slate-50',!active);
       b.setAttribute('aria-current',active?'page':'false');
+      b.setAttribute('aria-selected',active?'true':'false');
+      b.dataset.lutminActive=active?'true':'false';
+      b.tabIndex=active?0:-1;
     });
     try{localStorage.setItem(`lutmin-v190-active-${scope}`,key)}catch(_){ }
+    window.dispatchEvent(new CustomEvent('lutmin:navigation-change',{detail:{scope,key}}));
   }
   function focusV190(el){if(!el)return;el.scrollIntoView({behavior:'smooth',block:'start'});el.classList.add('workspace-focus-v190');setTimeout(()=>el.classList.remove('workspace-focus-v190'),900);}
   function showCompanyModuleV341(key='summary'){
@@ -162,7 +161,7 @@
         if(typeof loadCompanyAutopilotV110==='function')await loadCompanyAutopilotV110(false);
       }
       syncCompanyDynamicHostsV341();
-    }catch(err){console.warn('[Lutmin V35.0] Módulo Empresa no disponible:',key,err);}
+    }catch(err){console.warn('[Lutmin V36.0] Módulo Empresa no disponible:',key,err);}
     return true;
   }
   async function openCompanyV190(key){

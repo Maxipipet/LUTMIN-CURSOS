@@ -1,10 +1,10 @@
 // =============================================================
-// LUTMIN V35.0 · WORKSPACE NAV NORMALIZER
+// LUTMIN V36.0 · WORKSPACE NAV NORMALIZER
 // Un workspace activo = una navegación. Evita tabs heredados duplicados.
 // =============================================================
 (function(){
   'use strict';
-  const VERSION='35.0';
+  const VERSION='36.0';
   const state={role:null,applies:0,duplicatesHidden:0};
   const allowed={
     student:new Set(['dashboard','courses','agenda','activities','certificates','talent','notifications','support','profile']),
@@ -51,6 +51,48 @@
     if(mNav&&mCompany&&mNotice)mNav.insertBefore(mCompany,mNotice);
     if(mNav&&mConecta&&mNotice)mNav.insertBefore(mConecta,mNotice);
   }
+
+  // V36 · Estado visual y accesibilidad coherentes para todos los módulos superiores.
+  const topNavGroups=[
+    ['adminModuleNavV19','[data-admin-v19-btn]'],
+    ['companyModuleNavV341','[data-v341-company-key]'],
+    ['talentModuleNavV342','[data-talent-module-key]'],
+    [null,'#conectaHubV210 [data-v210-module]'],
+    [null,'[data-campus-panel="company-conecta"] [data-company-conecta-nav]']
+  ];
+  function enhanceTopNav(root,selector){
+    const scope=root||document;
+    const buttons=[...scope.querySelectorAll(selector)];
+    if(!buttons.length)return;
+    const host=root||buttons[0].parentElement;
+    host?.setAttribute?.('role','tablist');
+    buttons.forEach((btn,index)=>{
+      btn.setAttribute('role','tab');
+      if(!btn.hasAttribute('aria-current'))btn.setAttribute('aria-current',index===0?'page':'false');
+      const active=btn.getAttribute('aria-current')==='page'||btn.classList.contains('active');
+      btn.setAttribute('aria-selected',active?'true':'false');
+      btn.dataset.lutminActive=active?'true':'false';
+      btn.tabIndex=active?0:-1;
+      if(btn.dataset.v36KeyboardBound)return;
+      btn.dataset.v36KeyboardBound='1';
+      btn.addEventListener('keydown',ev=>{
+        if(!['ArrowRight','ArrowLeft','Home','End'].includes(ev.key))return;
+        ev.preventDefault();
+        const current=[...host.querySelectorAll(selector)].filter(x=>!x.classList.contains('hidden'));
+        const i=current.indexOf(btn);if(i<0||!current.length)return;
+        let next=i;
+        if(ev.key==='ArrowRight')next=(i+1)%current.length;
+        if(ev.key==='ArrowLeft')next=(i-1+current.length)%current.length;
+        if(ev.key==='Home')next=0;
+        if(ev.key==='End')next=current.length-1;
+        current[next]?.focus();current[next]?.click();
+      });
+    });
+  }
+  function enhanceAllTopNavs(){
+    topNavGroups.forEach(([id,selector])=>enhanceTopNav(id?document.getElementById(id):null,selector));
+  }
+
   function apply(role=state.role){
     if(!role)return false;
     state.role=role;state.applies+=1;
@@ -62,9 +104,11 @@
     const mobile=document.getElementById('adminMobileTab')?.parentElement||document.getElementById('companyMobileTab')?.parentElement;
     normalize(desktop,role,'desktop');normalize(mobile,role,'mobile');
     if(role==='company_admin')reorderCompany();
+    enhanceAllTopNavs();
     return true;
   }
   window.LutminV34Nav={version:VERSION,apply,status:()=>({...state})};
   window.addEventListener('lutmin:v30:modules-ready',()=>setTimeout(()=>apply(),0));
   window.addEventListener('lutmin:v32:view-ready',()=>setTimeout(()=>apply(),0));
+  window.addEventListener('lutmin:navigation-change',()=>setTimeout(enhanceAllTopNavs,0));
 })();
