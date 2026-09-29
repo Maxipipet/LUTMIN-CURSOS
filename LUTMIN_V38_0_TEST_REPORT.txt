@@ -1,0 +1,97 @@
+LUTMIN V38.0 — REPORTE DE PRUEBAS
+=================================
+
+Resultado global: PASS
+
+1. Parser de CV V38
+-------------------
+Prueba automática: tests/v38-cv-parser.mjs
+
+CV sintético 1:
+- 2 experiencias detectadas
+- 1 formación detectada
+- 4 competencias detectadas
+- 93 meses / 7,8 años de trayectoria sin duplicar períodos superpuestos
+- 2 roles / 2 empresas
+- calidad de lectura: 94%
+- confianza de experiencia: 98%
+
+CV sintético 2:
+- 2 experiencias detectadas
+- 1 formación detectada
+- calidad de lectura: 85%
+- confianza de experiencia: 92%
+
+Cobertura del parser:
+- PDF multipágina y multicolumna
+- DOCX/TXT
+- OCR local de PDF escaneado e imágenes mediante runtime existente
+- encabezados de sección en español/inglés
+- fechas mes/año, año-año y actualidad/presente
+- puesto / empresa con score de confianza
+- formación, cursos, competencias, idiomas y contacto
+- duración de carrera sin sumar doble períodos superpuestos
+- advertencias y nivel de confianza
+
+2. Agente V38
+-------------
+Prueba automática: tests/v38-agent.mjs
+
+Caso probado:
+- CV con Técnico de mantenimiento en Serman NEA SRL
+- CV con Ayudante electricista en Electro Norte SA
+- oportunidad Técnico de mantenimiento eléctrico
+
+Resultado:
+- usa el CV como fuente estructurada: PASS
+- normaliza empresa/puesto: PASS
+- recupera una empresa concreta desde una pregunta: PASS
+- devuelve evidencia de la experiencia: PASS
+- resume 2 experiencias y 7,8 años: PASS
+- explica brechas contra una búsqueda: PASS
+- prepara entrevista usando experiencia concreta del CV: PASS
+- afinidad documental del caso de prueba: 72%
+
+3. Smoke estructural V38
+------------------------
+Prueba automática: tests/v38-smoke.mjs
+
+- versión: 38.0
+- 43 JS/SW revisados
+- 746 IDs estáticos, sin duplicados
+- 62 assets en router verificados
+- 12 módulos superiores Administración
+- 8 módulos superiores Empresa
+- 11 módulos superiores Conecta Alumno
+- 22/22 recursos HTTP críticos OK
+
+Rendimiento preservado:
+- shell Empresa: 5 scripts / 48.448 bytes
+- runtime crítico Alumno: 7 scripts / 93.532 bytes
+- entrada Lutmin Conecta: 2 scripts / 15.386 bytes
+- Agente V38: 4 scripts / ~221 KB, sólo al abrir Agente
+- JS local estático: 7 archivos / 310.709 bytes
+- Tailwind local: 108.193 bytes
+- preloads iniciales: 2
+
+Admin data cache:
+- Finanzas primera apertura: 7 consultas
+- Comunicaciones después de Finanzas: 0 adicionales
+- volver a Finanzas: 0 adicionales
+- deduplicación de consulta concurrente: 1 consulta real
+
+Actualización PWA:
+- misma versión: no muestra banner
+- versión más nueva: muestra banner
+
+4. Compatibilidad / seguridad funcional
+----------------------------------------
+- El Agente no decide contrataciones.
+- El Agente no postula automáticamente.
+- La lectura del CV no incorpora información al perfil sin revisión/acción del usuario.
+- No se agregó API paga.
+- No requiere migración SQL.
+
+Advertencia heredada
+--------------------
+LOGO.png continúa referenciado pero no estaba dentro del deploy fuente original recibido. No se creó un sustituto artificial.

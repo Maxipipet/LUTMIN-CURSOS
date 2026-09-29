@@ -1,5 +1,5 @@
 // =========================================================
-// LUTMIN V37.0 LEGACY · CONECTA STUDENT MODULE NAV
+// LUTMIN V38.0 LEGACY · CONECTA STUDENT MODULE NAV
 // Un acceso en sidebar; módulos internos arriba; un panel activo.
 // =========================================================
 (function(){

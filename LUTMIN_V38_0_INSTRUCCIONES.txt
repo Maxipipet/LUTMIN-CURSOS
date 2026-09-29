@@ -1,0 +1,42 @@
+LUTMIN V38.0 — INSTRUCCIONES DE DEPLOY
+=======================================
+
+Objetivo principal
+------------------
+V38 mejora de fondo el Agente de Empleabilidad y la interpretación de CV sin incorporar APIs pagas.
+
+Deploy
+------
+1. Reemplazar el contenido publicado por el contenido completo de LUTMIN_V38_0_DEPLOY.zip.
+2. Conservar LOGO.png del deploy/productivo actual si ya existe. Ese asset no venía en el ZIP fuente original recibido.
+3. No se requiere SQL para V38.0.
+4. Después del deploy, abrir LUTMIN y realizar una recarga normal. El Service Worker está versionado como 38.0.
+
+Prueba funcional recomendada
+----------------------------
+1. Ingresar como Alumno.
+2. Abrir Lutmin Conecta > Agente.
+3. Presionar “Analizar CV” y cargar un PDF/DOCX/TXT/JPG/PNG real.
+4. Verificar que el Agente informe experiencias, formación, competencias y años de trayectoria detectados.
+5. Probar preguntas como:
+   - ¿Qué entendiste de mi CV?
+   - ¿Dónde trabajé y qué hice?
+   - ¿Qué formación encontraste?
+   - ¿Qué habilidades encontraste?
+   - ¿Qué no pudiste interpretar con seguridad?
+6. Seleccionar una oportunidad y probar:
+   - ¿Qué me falta para esta búsqueda?
+   - ¿Cómo preparo la entrevista para esta búsqueda?
+7. Revisar la interpretación antes de incorporar información al perfil.
+
+Principios V38
+--------------
+- El CV se interpreta localmente con reglas y librerías del navegador; no se envía a una API LLM paga.
+- No se inventan empresas, puestos, fechas, estudios ni competencias.
+- Los campos dudosos quedan señalados para confirmación.
+- Matching y entrevista son orientación documental; no deciden contrataciones.
+- El Agente puede usar el CV recién leído incluso antes de incorporarlo al perfil.
+
+SQL
+---
+No corresponde SQL nuevo para V38.0.
