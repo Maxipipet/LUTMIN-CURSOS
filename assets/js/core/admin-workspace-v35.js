@@ -1,5 +1,5 @@
 // =============================================================
-// LUTMIN V36.0 · ADMIN WORKSPACE CORE (LAZY)
+// LUTMIN V37.0 · ADMIN WORKSPACE CORE (LAZY)
 // Lógica pesada exclusiva de Administración. No se descarga en
 // Alumno, Empresa o Docente. Las funciones permanecen globales para
 // compatibilidad con HTML histórico y módulos incrementales.
@@ -2483,7 +2483,7 @@
 
 // V36 · API mínima para el dispatcher estable y limpieza de sesión.
 window.LutminV35AdminCore = {
-  version:'36.0',
+  version:'37.0',
   loadLegacy: (...args) => loadAdminDataLegacyV35(...args),
   reset: () => {
     try { executiveGoalsV17=[]; executiveRiskSettingsV17={inactive_days:7,low_progress_percent:30,low_progress_after_days:14,company_attention_percent:60}; executiveSnapshotsV17=[]; executiveCompaniesV17=[]; executiveCompanyMembersV17=[]; executiveMetricsV17=null; } catch(_) {}

@@ -86,7 +86,7 @@
   }
 
 
-/* V36.0 · Conecta usa módulos superiores, no submenú lateral */
+/* V37.0 · Conecta usa módulos superiores, no submenú lateral */
 .talent-module-btn-v342{color:#475569;transition:background .16s ease,color .16s ease,box-shadow .16s ease}
 .talent-module-btn-v342[aria-current="page"]{background:#000b3c;color:#fff;box-shadow:0 1px 2px rgba(15,23,42,.12)}
 #talentModuleNavV342{scrollbar-width:thin;scrollbar-color:#cbd5e1 transparent}

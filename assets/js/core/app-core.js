@@ -2061,7 +2061,7 @@
       if(await window.LutminV31Views?.ensureForTab?.('talent')===false)return;
       if(await window.LutminV29Modules?.ensureFeatureForTab?.('talent',currentLutminUser?.role)===false)return;
       if(!supabaseClient||currentLutminUser?.role!=='student')return;
-      await supabaseClient.from('talent_profiles').upsert({user_id:currentLutminUser.id},{onConflict:'user_id',ignoreDuplicates:true});
+      // V37: abrir Conecta es lectura. El perfil se crea/actualiza sólo cuando el usuario guarda.
       const [profileRes,skillsRes,expRes,appsRes,certRes,jobsRes,savedJobsRes,statsRes,detailsRes,requestRes]=await Promise.all([
         supabaseClient.from('talent_profiles').select('*').eq('user_id',currentLutminUser.id).maybeSingle(),
         supabaseClient.from('talent_skills').select('*').eq('user_id',currentLutminUser.id).order('level',{ascending:false}),

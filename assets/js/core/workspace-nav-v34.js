@@ -1,10 +1,10 @@
 // =============================================================
-// LUTMIN V36.0 · WORKSPACE NAV NORMALIZER
+// LUTMIN V37.0 · WORKSPACE NAV NORMALIZER
 // Un workspace activo = una navegación. Evita tabs heredados duplicados.
 // =============================================================
 (function(){
   'use strict';
-  const VERSION='36.0';
+  const VERSION='37.0';
   const state={role:null,applies:0,duplicatesHidden:0};
   const allowed={
     student:new Set(['dashboard','courses','agenda','activities','certificates','talent','notifications','support','profile']),
