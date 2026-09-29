@@ -1,0 +1,37 @@
+LUTMIN V40.0 · INSTRUCCIONES DE DEPLOY
+=======================================
+
+Objetivo principal
+------------------
+V40 convierte el CV adaptado por oportunidad en la función central del Agente de empleabilidad.
+
+Deploy
+------
+1. Reemplazar el contenido del deploy actual por el contenido de LUTMIN_V40_0_DEPLOY.zip.
+2. Mantener cualquier LOGO.png oficial ya presente en producción si existe (no venía en el ZIP original recibido).
+3. Publicar normalmente en GitHub/hosting.
+4. Si una pestaña anterior queda abierta, recargar una vez para tomar el Service Worker V40.
+
+SQL
+---
+No requiere SQL nuevo.
+
+Cambios centrales
+-----------------
+- El Agente abre destacando: "Un CV distinto para cada oportunidad".
+- Flujo principal: elegir oportunidad -> usar/cargar CV -> descargar CV adaptado.
+- Vista previa explica qué experiencia y competencias serán priorizadas.
+- El matching deja de ocupar el centro de la interfaz.
+- Entrevista, revisión de CV, perfil y chat pasan a herramientas secundarias.
+- El botón CV adaptado usa un generador propio V40 y deja de depender del scope privado de app-core.
+- app-core expone de forma segura el cargador lazy de jsPDF a módulos bajo demanda.
+- El snapshot asociado a la postulación usa la misma priorización V40 que el PDF.
+- No inventa experiencia, empresas, fechas, cargos ni formación.
+- No decide contrataciones ni postula automáticamente.
+- Sin APIs de IA pagas.
+
+Pruebas incluidas
+-----------------
+- tests/v40-smoke.mjs
+- tests/v40-cv-tailor.mjs
+- tests/v40-cv-parser.mjs

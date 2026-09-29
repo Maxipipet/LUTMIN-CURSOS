@@ -1,5 +1,5 @@
 // =========================================================
-// LUTMIN V38.0 · CONECTA STUDENT ROUTER
+// LUTMIN V40.0 · CONECTA STUDENT ROUTER
 // Un único router para módulos superiores. Evita wrappers legacy
 // que competían entre sí y deja cada runtime bajo demanda.
 // =========================================================
@@ -57,7 +57,7 @@
       try{ensureV140StudentUI?.();ensureStudentEngineV150?.();await loadV140ProfileData?.();await loadV150StudentData?.();}catch(e){console.warn('V37 career',e);}
     }
     if(key==='agent'){
-      try{ensureTalentAgentV100?.();refreshTalentAgentOptionsV100?.();ensureTalentAgentV38?.();refreshTalentAgentV38?.();}catch(e){console.warn('V37 agent',e);}
+      try{ensureTalentAgentV100?.();refreshTalentAgentOptionsV100?.();ensureTalentAgentV40?.();refreshTalentAgentV40?.();}catch(e){console.warn('V37 agent',e);}
     }
     if(key==='passport'){
       try{ensurePersonalAutopilotV110?.();await loadPersonalAutopilotV110?.();setPersonalAgentTabV110?.('passport');}catch(e){console.warn('V37 passport',e);}
@@ -80,7 +80,7 @@
       if(key==='summary')try{renderConectaSummaryV210?.();}catch(_){ }
       return true;
     }catch(e){
-      console.error('[Lutmin V38] Conecta navigation',e);
+      console.error('[Lutmin V40] Conecta navigation',e);
       showToast?.('No pude abrir este módulo. Actualizá la vista e intentá nuevamente.');
       return false;
     }

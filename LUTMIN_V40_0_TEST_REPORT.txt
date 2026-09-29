@@ -1,0 +1,70 @@
+LUTMIN V40.0 · REPORTE DE PRUEBAS
+=================================
+
+Resultado general: PASS
+
+Validación estructural
+----------------------
+- 43 archivos JS/SW con sintaxis válida.
+- 746 IDs estáticos sin duplicados.
+- 62 rutas locales verificadas.
+- 22/22 recursos HTTP críticos respondieron correctamente.
+- 12 módulos superiores de Administración.
+- 8 módulos superiores de Empresa.
+- 11 módulos superiores de Conecta Alumno.
+
+Rendimiento conservado
+----------------------
+- Conecta inicial: 2 scripts / 15.386 bytes.
+- Alumno crítico: 7 scripts / 93.532 bytes.
+- Empresa base: 5 scripts / 48.448 bytes.
+- Agente completo V40 bajo demanda: 4 scripts / 234.052 bytes.
+- Tailwind continúa compilado localmente.
+- Preloads iniciales: 2.
+
+Datos / Admin
+-------------
+- Finanzas primera carga: 7 consultas.
+- Comunicaciones después de Finanzas: 0 consultas adicionales cuando reutiliza caché.
+- Volver a Finanzas: 0 consultas adicionales.
+- Deduplicación concurrente: 1 consulta real.
+
+PWA
+---
+- Worker misma versión: no muestra banner.
+- Worker versión nueva: sí muestra banner.
+- Caches actualizadas a lutmin-runtime-v40-0 / lutmin-core-v40-0.
+
+CV adaptado V40
+---------------
+PASS prueba dedicada:
+- El diferencial "Un CV distinto para cada oportunidad" está en el hero.
+- CTA principal "Descargar CV adaptado" visible.
+- CTA "Preparar postulación con este CV" visible.
+- Usa CV cargado cuando existe.
+- Prioriza evidencia de la vacante.
+- Mantiene empresa real de la experiencia priorizada.
+- Generador PDF disponible como downloadSmartCvV100.
+- PDF generado correctamente en test:
+  CV_maximiliano-test_coordinador-a-de-mantenimiento.pdf
+- Snapshot de postulación usa el mismo modelo V40.
+
+Parser CV
+---------
+CV de prueba 1:
+- 2 experiencias.
+- 1 formación.
+- 4 competencias.
+- 93 meses / 7,8 años sin duplicar períodos.
+- Calidad de lectura 94%.
+- Confianza de experiencia 98%.
+
+CV de prueba 2:
+- 2 experiencias.
+- 1 formación.
+- Calidad de lectura 85%.
+- Confianza de experiencia 92%.
+
+Advertencia heredada
+--------------------
+LOGO.png sigue referenciado pero no venía en el deploy original recibido. No se inventó ni sustituyó el asset oficial.

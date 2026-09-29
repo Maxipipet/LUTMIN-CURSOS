@@ -33,6 +33,9 @@
     }
     const ensureQRCodeLib = () => loadExternalScriptOnce('https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js', () => Boolean(window.QRCode));
     const ensureJsPdfLib = () => loadExternalScriptOnce('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js', () => Boolean(window.jspdf?.jsPDF));
+    // V40: los runtimes lazy necesitan acceder al cargador de PDF sin depender del scope de app-core.
+    window.ensureJsPdfLib = ensureJsPdfLib;
+    window.ensureQRCodeLib = ensureQRCodeLib;
 
     const LUTMIN_PUBLIC_CACHE_TTL = 2 * 60 * 1000;
     function getSessionCache(key) {
