@@ -1,12 +1,12 @@
 // =============================================================
-// LUTMIN V34.0 · ACTIVE-WORKSPACE MODULE LOADER
+// LUTMIN V34.1 · ACTIVE-WORKSPACE MODULE LOADER
 // Carga sólo el runtime necesario para cada acceso y deja Conecta
 // pesado bajo demanda. Mantiene costo API $0 y fallback completo.
 // =============================================================
 (function(){
   'use strict';
 
-  const VERSION='34.0';
+  const VERSION='34.1';
   const state={status:'idle',promise:null,loaded:new Set(),bundles:new Set(),startedAt:0,finishedAt:0,error:null,retries:0,warmed:false,lastReason:null,lastRole:null};
   const cssFiles=[
     'assets/css/v18-conecta.css',
@@ -97,13 +97,14 @@
     admin:adminBaseSet
   };
   const companySectionSets={
-    summary:new Set([F.org]),
+    summary:new Set(),
     team:new Set(),
+    onboarding:new Set([F.org]),
     training:new Set([F.ops]),
-    agenda:new Set([F.ops]),
+    agenda:new Set(),
     compliance:new Set([F.compliance]),
-    development:new Set([F.dev,F.super]),
-    autopilot:new Set([F.dev,F.super,F.auto,F.autoCompany])
+    development:new Set([F.super]),
+    autopilot:new Set([F.super,F.auto,F.autoCompany])
   };
   const featureSets={
     talent:new Set([F.dev,F.super,F.auto,F.pre,F.intel,F.cv,F.evidence,F.zero,F.conecta,F.org,F.hub,F.panels]),

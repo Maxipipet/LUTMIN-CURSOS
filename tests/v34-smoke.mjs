@@ -29,6 +29,17 @@ const expectedAdmin=['overview','agents','operations','academic','people','compa
 assert(JSON.stringify(adminNav)===JSON.stringify(expectedAdmin),`Nav Admin inesperada: ${adminNav.join(',')}`);
 metrics.admin_top_modules=adminNav.length;
 
+
+// 2B) Empresa: módulos superiores y un solo contenido activo.
+const companyView=read('assets/views/company.html');
+const companyTop=[...companyView.matchAll(/data-v341-company-key="([^"]+)"/g)].map(m=>m[1]);
+const expectedCompany=['summary','team','onboarding','training','agenda','compliance','development','autopilot'];
+assert(JSON.stringify(companyTop)===JSON.stringify(expectedCompany),`Nav Empresa inesperada: ${companyTop.join(',')}`);
+const companyPanels=[...companyView.matchAll(/data-company-module-panel="([^"]+)"/g)].map(m=>m[1]);
+assert(JSON.stringify(companyPanels)===JSON.stringify(expectedCompany),`Paneles Empresa inesperados: ${companyPanels.join(',')}`);
+assert(companyView.includes('id="companyModuleNavV341"'),'Falta navegación superior Empresa');
+metrics.company_top_modules=companyTop.length;
+
 // 3) IDs estáticos únicos en todos los HTML que pueden convivir o montarse por workspace.
 const htmlFiles=['index.html',...walk(path.join(root,'assets','views')).filter(p=>p.endsWith('.html')).map(rel)];
 const ids=new Map();
@@ -46,15 +57,15 @@ metrics.routed_assets=refs.size;
 
 // 5) Versionado coherente: evita servir vistas V33 con app V34.
 const index=read('index.html'),sw=read('sw.js'),viewLoader=read('assets/js/core/view-loader-v32.js'),updateManager=read('assets/js/core/update-manager-v32.js'),loader=read('assets/js/core/module-loader-v33.js');
-assert(index.includes('?v=34.0'),'index no está versionado V34.0');
+assert(index.includes('?v=34.1'),'index no está versionado V34.1');
 assert(!index.includes('?v=33.1'),'index conserva assets V33.1');
-assert(sw.includes("const VERSION='34.0'"),'Service Worker no está en V34.0');
-assert(sw.includes('lutmin-runtime-v34-0')&&sw.includes('lutmin-core-v34-0'),'Caches SW no son V34.0');
-assert(viewLoader.includes("const VERSION='34.0'"),'View loader conserva versión anterior');
-assert(updateManager.includes("const VERSION='34.0'"),'Update manager conserva versión anterior');
-assert(loader.includes("const VERSION='34.0'"),'Module loader no está en V34.0');
-assert(index.includes('workspace-nav-v34.js?v=34.0'),'Falta normalizador de navegación V34');
-assert(sw.includes('workspace-nav-v34.js?v=34.0'),'SW no precachea normalizador V34');
+assert(sw.includes("const VERSION='34.1'"),'Service Worker no está en V34.1');
+assert(sw.includes('lutmin-runtime-v34-1')&&sw.includes('lutmin-core-v34-1'),'Caches SW no son V34.1');
+assert(viewLoader.includes("const VERSION='34.1'"),'View loader conserva versión anterior');
+assert(updateManager.includes("const VERSION='34.1'"),'Update manager conserva versión anterior');
+assert(loader.includes("const VERSION='34.1'"),'Module loader no está en V34.1');
+assert(index.includes('workspace-nav-v34.js?v=34.1'),'Falta normalizador de navegación V34');
+assert(sw.includes('workspace-nav-v34.js?v=34.1'),'SW no precachea normalizador V34');
 
 // 6) Workspace isolation: el runtime se decide sólo por el acceso activo.
 assert(loader.includes('company_admin:companyBaseSet'),'Empresa no usa shell base V34');
@@ -63,6 +74,9 @@ assert(!loader.includes('if(caps.student)set=union'),'Todavía mezcla runtime Al
 assert(!loader.includes('if(caps.company)set=union'),'Todavía mezcla runtime Empresa por capability');
 assert(!loader.includes("if(role==='admin'||caps.admin)"),'Un usuario admin todavía fuerza runtime Admin al entrar en otro workspace');
 assert(loader.includes('ensureCompanySection'),'Falta lazy-load por sección de Empresa');
+assert(loader.includes('onboarding:new Set([F.org])'),'Onboarding Empresa no está bajo demanda propio');
+assert(loader.includes('summary:new Set()'),'Resumen Empresa todavía descarga onboarding');
+assert(loader.includes('agenda:new Set()'),'Agenda Empresa todavía descarga runtime académico innecesario');
 
 const fmap={};for(const m of loader.matchAll(/^\s*([A-Za-z][A-Za-z0-9]*):'([^']+\.js)'/gm))fmap[m[1]]=m[2];
 const companyBaseLine=loader.match(/const companyBaseSet=new Set\(\[([^\]]+)\]\)/)?.[1]||'';
@@ -96,6 +110,14 @@ assert(companyFn&&!companyFn.includes('loadCompanyConectaData'),'Portal Empresa 
 const workspace=read('assets/js/v19-workspaces.js');
 assert(workspace.includes('ensureCompanySection?.(key)'),'V19 no solicita runtime según sección Empresa');
 assert(workspace.includes("window.LutminV29Data.load('company'"),'V19 no reutiliza cache al volver a Empresa');
+assert(workspace.includes("showCompanyModuleV341"),'Empresa no oculta los módulos no activos');
+assert(workspace.includes("companyOnboardingHostV341")&&workspace.includes("companyAutopilotHostV341"),'Falta host modular para componentes dinámicos Empresa');
+assert(!workspace.includes('companyMobileSectionsV34'),'Quedó navegación Empresa paralela de V34');
+assert(read('assets/js/v20-organizations-onboarding.js').includes("companyOnboardingHostV341"),'Onboarding no monta en su módulo Empresa');
+assert(read('assets/js/modules/academy/compliance.js').includes("companyComplianceHostV341"),'Cumplimiento no monta en su módulo Empresa');
+assert(read('assets/js/modules/academy/operations.js').includes("companyAcademyHostV341"),'Capacitación no monta en su módulo Empresa');
+assert(read('assets/js/modules/platform/superplatform.js').includes("companyDevelopmentHostV341"),'Desarrollo no monta en su módulo Empresa');
+assert(read('assets/js/modules/agents/autopilot.js').includes("companyAutopilotHostV341"),'Autopilot no monta en su módulo Empresa');
 const noAutoCompanyWrappers=[
   'assets/js/modules/academy/learning-paths-quality.js','assets/js/modules/academy/operations.js','assets/js/modules/academy/compliance.js',
   'assets/js/modules/talent/development.js','assets/js/modules/platform/superplatform.js','assets/js/modules/agents/autopilot.js','assets/js/v20-organizations-onboarding.js'
@@ -108,7 +130,7 @@ assert(nav.includes("company_admin:new Set(['company','company-conecta','notific
 assert(nav.includes("student:new Set(['dashboard','courses','agenda','activities','certificates','talent'"),'Regla de navegación Alumno incompleta');
 assert(nav.includes("canonical"),'Falta preferencia canónica para tabs duplicados heredados');
 assert(core.includes('window.LutminV34Nav?.apply?.(currentLutminUser.role)'),'paintCurrentLutminUser no normaliza navegación');
-assert(workspace.includes("new Set(['admin','companyConecta'])"),'Admin/Conecta podrían volver a crear submenús laterales');
+assert(workspace.includes("new Set(['admin','company','companyConecta'])"),'Admin/Empresa/Conecta podrían volver a crear submenús laterales');
 
 // 10) Admin V33 sigue conservando demanda/cache y no regresiona.
 const dataRuntime=read('assets/js/core/admin-data-runtime-v33.js');
@@ -135,10 +157,10 @@ assert(read('assets/js/v24-1-video-gate.js').includes("window.supabaseClient || 
 const targets=['/index.html','/sw.js','/assets/js/core/workspace-nav-v34.js','/assets/js/core/module-loader-v33.js','/assets/js/core/view-loader-v32.js','/assets/js/core/app-core.js',...walk(path.join(root,'assets','views')).filter(p=>p.endsWith('.html')).map(p=>'/'+rel(p))];
 const server=http.createServer((req,res)=>{const u=new URL(req.url,'http://127.0.0.1');const clean=decodeURIComponent(u.pathname).replace(/^\/+/, '');const file=path.resolve(root,clean||'index.html');if(!file.startsWith(root+path.sep)&&file!==path.join(root,'index.html')){res.writeHead(403);return res.end();}if(!fs.existsSync(file)||!fs.statSync(file).isFile()){res.writeHead(404);return res.end();}res.writeHead(200);fs.createReadStream(file).pipe(res);});
 await new Promise(r=>server.listen(0,'127.0.0.1',r));const port=server.address().port;let ok=0;
-try{for(const t of targets){const r=await fetch(`http://127.0.0.1:${port}${t}?v=34.0`);if(r.ok){await r.arrayBuffer();ok++;}else errors.push(`HTTP ${r.status}: ${t}`);}}finally{await new Promise(r=>server.close(r));}
+try{for(const t of targets){const r=await fetch(`http://127.0.0.1:${port}${t}?v=34.1`);if(r.ok){await r.arrayBuffer();ok++;}else errors.push(`HTTP ${r.status}: ${t}`);}}finally{await new Promise(r=>server.close(r));}
 metrics.http_targets_ok=ok;assert(ok===targets.length,`Smoke HTTP incompleto ${ok}/${targets.length}`);
 
 if(index.includes('LOGO.png')&&!fs.existsSync(path.join(root,'LOGO.png')))warnings.push('LOGO.png continúa referenciado pero no está en el deploy original recibido; no se inventó un asset.');
 
-console.log(JSON.stringify({ok:errors.length===0,version:'34.0',metrics,warnings,errors},null,2));
+console.log(JSON.stringify({ok:errors.length===0,version:'34.1',metrics,warnings,errors},null,2));
 process.exit(errors.length?1:0);

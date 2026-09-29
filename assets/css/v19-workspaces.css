@@ -32,3 +32,12 @@
   @media (min-width:640px){
     #adminModuleNavV19{display:grid!important}
   }
+
+/* V34.1 · Empresa, Conecta y Administración usan módulos superiores.
+   Defensa visual ante cualquier árbol heredado que quede montado por cache. */
+#companyTreeV190,#companyConectaTreeV190,#adminTreeV190{display:none!important}
+#companyDesktopTab .workspace-chevron-v190,
+#companyConectaDesktopTab .workspace-chevron-v190,
+#adminDesktopTab .workspace-chevron-v190{display:none!important}
+.company-module-btn-v341{color:#475569;transition:background .16s ease,color .16s ease,box-shadow .16s ease}
+.company-module-btn-v341[aria-current="page"]{background:#000b3c;color:#fff;box-shadow:0 1px 2px rgba(15,23,42,.12)}

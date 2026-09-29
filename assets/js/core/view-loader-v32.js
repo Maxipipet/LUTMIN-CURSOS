@@ -1,10 +1,10 @@
 // =============================================================
-// LUTMIN V34.0 · HTML VIEW LOADER
+// LUTMIN V34.1 · HTML VIEW LOADER
 // Separa los paneles pesados del index y monta sólo el workspace usado.
 // =============================================================
 (function(){
   'use strict';
-  const VERSION='34.0';
+  const VERSION='34.1';
   const paths={
     talent:'assets/views/talent.html',
     'company-conecta':'assets/views/company-conecta.html',

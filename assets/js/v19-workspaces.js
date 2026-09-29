@@ -16,7 +16,7 @@
   function groupHtmlV190(scope,label,items){
     return `<p class="workspace-tree-label-v190">${escV190(label)}</p>${items.map(x=>itemHtmlV190(scope,...x)).join('')}`;
   }
-  const topNavScopesV330=new Set(['admin','companyConecta']);
+  const topNavScopesV330=new Set(['admin','company','companyConecta']);
   const treesV190={
     company:{parent:'companyDesktopTab',id:'companyTreeV190',groups:[
       ['Gestión del equipo',[
@@ -102,57 +102,85 @@
   function setActiveV190(scope,key){
     stateV190.active[scope]=key;
     document.querySelectorAll(`[data-v190-scope="${scope}"]`).forEach(b=>b.classList.toggle('active',b.dataset.v190Key===key));
-    document.querySelectorAll(`[data-v34-company-mobile-key]`).forEach(b=>{
-      const active=scope==='company'&&b.dataset.v34CompanyMobileKey===key;
-      b.classList.toggle('bg-lutmin-dark',active);b.classList.toggle('text-white',active);b.classList.toggle('bg-white',!active);b.classList.toggle('text-slate-600',!active);
+    document.querySelectorAll('[data-v341-company-key]').forEach(b=>{
+      const active=scope==='company'&&b.dataset.v341CompanyKey===key;
+      b.classList.toggle('bg-lutmin-dark',active);
+      b.classList.toggle('text-white',active);
+      b.classList.toggle('shadow-sm',active);
+      b.classList.toggle('text-slate-600',!active);
+      b.classList.toggle('hover:bg-slate-50',!active);
+      b.setAttribute('aria-current',active?'page':'false');
     });
     try{localStorage.setItem(`lutmin-v190-active-${scope}`,key)}catch(_){ }
   }
   function focusV190(el){if(!el)return;el.scrollIntoView({behavior:'smooth',block:'start'});el.classList.add('workspace-focus-v190');setTimeout(()=>el.classList.remove('workspace-focus-v190'),900);}
+  function showCompanyModuleV341(key='summary'){
+    document.querySelectorAll('[data-company-module-panel]').forEach(panel=>{
+      const active=panel.dataset.companyModulePanel===key;
+      panel.classList.toggle('hidden',!active);
+      panel.setAttribute('aria-hidden',active?'false':'true');
+    });
+    setActiveV190('company',key);
+  }
+  function syncCompanyDynamicHostsV341(){
+    const pairs=[
+      ['companyOnboardingV200','companyOnboardingHostV341'],
+      ['companyAcademyPlanV36','companyAcademyHostV341'],
+      ['companyComplianceV40','companyComplianceHostV341'],
+      ['companyDevelopmentV100','companyDevelopmentHostV341'],
+      ['companyAutopilotV110','companyAutopilotHostV341']
+    ];
+    pairs.forEach(([id,hostId])=>{const el=document.getElementById(id),host=document.getElementById(hostId);if(el&&host&&el.parentElement!==host)host.appendChild(el);});
+  }
   async function ensureCompanyModulesV190(key='summary'){
     const ready=await window.LutminV30Modules?.ensureCompanySection?.(key);
     if(ready===false)return false;
     try{
-      if(key==='summary'){
+      if(key==='onboarding'){
         if(typeof ensureCompanyOnboardingUi==='function')ensureCompanyOnboardingUi();
+        syncCompanyDynamicHostsV341();
         if(typeof loadCompanyOnboardingV200==='function')await (window.LutminV29Data?.load?window.LutminV29Data.load('company:onboarding',()=>loadCompanyOnboardingV200(),{ttl:20000}):loadCompanyOnboardingV200());
       }
-      if(['training','agenda'].includes(key)){
+      if(key==='training'){
         if(typeof initV36CompanyUi==='function')initV36CompanyUi();
+        syncCompanyDynamicHostsV341();
         if(typeof loadCompanyAcademyV36==='function')await loadCompanyAcademyV36();
       }
       if(key==='compliance'){
         if(typeof initCompanyComplianceV40==='function')initCompanyComplianceV40();
+        syncCompanyDynamicHostsV341();
         if(typeof loadCompanyComplianceV40==='function')await loadCompanyComplianceV40();
       }
       if(key==='development'){
-        if(typeof initV34Ui==='function')initV34Ui();
         if(typeof ensureCompanyDevelopmentPanelV100==='function')ensureCompanyDevelopmentPanelV100();
-        await Promise.allSettled([
-          typeof loadCompanyCompetencyMgmtV34==='function'?loadCompanyCompetencyMgmtV34():Promise.resolve(),
-          typeof loadCompanyDevelopmentV100==='function'?loadCompanyDevelopmentV100():Promise.resolve()
-        ]);
+        syncCompanyDynamicHostsV341();
+        if(typeof loadCompanyDevelopmentV100==='function')await loadCompanyDevelopmentV100();
       }
       if(key==='autopilot'){
         if(typeof ensureCompanyAutopilotV110==='function')ensureCompanyAutopilotV110();
+        syncCompanyDynamicHostsV341();
         if(typeof loadCompanyAutopilotV110==='function')await loadCompanyAutopilotV110(false);
       }
-    }catch(err){console.warn('[Lutmin V34] Módulo Empresa no disponible:',key,err);}
+      syncCompanyDynamicHostsV341();
+    }catch(err){console.warn('[Lutmin V34.1] Módulo Empresa no disponible:',key,err);}
     return true;
   }
   async function openCompanyV190(key){
     if(typeof goToCampusTab==='function')goToCampusTab('company');
-    try{
-      if(typeof loadCompanyPortalData==='function'){
-        if(window.LutminV29Data?.load)await window.LutminV29Data.load('company',()=>loadCompanyPortalData(),{ttl:12000});
-        else await loadCompanyPortalData();
-      }
-    }catch(_){ }
+    showCompanyModuleV341(key);
+    // El dataset general sólo se pide donde realmente se usa.
+    if(['summary','team','onboarding','training','agenda'].includes(key)){
+      try{
+        if(typeof loadCompanyPortalData==='function'){
+          if(window.LutminV29Data?.load)await window.LutminV29Data.load('company',()=>loadCompanyPortalData(),{ttl:12000});
+          else await loadCompanyPortalData();
+        }
+      }catch(_){ }
+    }
     await ensureCompanyModulesV190(key);
-    const map={summary:'companyPortalName',team:'companyPortalMembers',training:'companyTrainingPlans',agenda:'companyPortalAgenda',compliance:'companyComplianceV40',development:'companyDevelopmentV100',autopilot:'companyAutopilotV110'};
-    setActiveV190('company',key);setTreeOpenV190('company',true);setTreeOpenV190('companyConecta',false);
+    syncCompanyDynamicHostsV341();
+    showCompanyModuleV341(key);
     window.LutminV34Nav?.apply?.('company_admin');
-    setTimeout(()=>focusV190(document.getElementById(map[key]||'companyPortalName')),100);
   }
   async function openCompanyConectaV190(key){
     if(typeof goToCampusTab==='function')goToCampusTab('company-conecta');
@@ -194,20 +222,16 @@
     });
     // abrir el árbol del workspace activo, conservando el estado del usuario cuando sea posible
     if(role==='company_admin'){
-      const panel=document.querySelector('.campus-panel:not(.hidden)')?.dataset?.campusPanel;
-      const s=panel==='company-conecta'?'companyConecta':'company';
-      setTreeOpenV190(s,true);setTreeOpenV190(s==='company'?'companyConecta':'company',false);
+      document.getElementById('companyTreeV190')?.remove();
+      document.getElementById('companyConectaTreeV190')?.remove();
     } else if(role==='instructor') setTreeOpenV190('instructor',true);
     else if(role==='admin') setTreeOpenV190('admin',true);
   }
-  function ensureCompanyMobileNavV34(){
-    const panel=document.querySelector('[data-campus-panel="company"]');
-    if(!panel||document.getElementById('companyMobileSectionsV34'))return;
-    const bar=document.createElement('div');bar.id='companyMobileSectionsV34';bar.className='lg:hidden mb-5 -mx-1 px-1 overflow-x-auto hide-scrollbar';
-    const items=[['summary','Resumen'],['team','Equipo'],['training','Capacitación'],['agenda','Agenda'],['compliance','Cumplimiento'],['development','Desarrollo'],['autopilot','Autopilot']];
-    bar.innerHTML=`<div class="flex gap-2 min-w-max">${items.map(([key,label])=>`<button type="button" data-v34-company-mobile-key="${key}" onclick="openWorkspaceSectionV190('company','${key}',event)" class="px-3.5 py-2 rounded-xl border border-slate-200 bg-white text-slate-600 text-xs font-bold">${label}</button>`).join('')}</div>`;
-    panel.insertBefore(bar,panel.firstChild);
-    setActiveV190('company',stateV190.active.company||'summary');
+  function ensureCompanyTopNavV341(){
+    const nav=document.getElementById('companyModuleNavV341');
+    if(!nav)return;
+    const active=stateV190.active.company||'summary';
+    showCompanyModuleV341(active);
   }
   function markRedundantInlineNavsV190(){
     document.getElementById('instructorTabsV50')?.classList.add('v190-inline-nav-hide');
@@ -224,15 +248,14 @@
     });
   }
   function installV190(){
-    Object.keys(treesV190).forEach(ensureTreeV190);ensureCompanyMobileNavV34();markRedundantInlineNavsV190();restoreActiveV190();hideTreesForRoleV190();window.LutminV34Nav?.apply?.(currentLutminUser?.role);stateV190.installed=true;
+    Object.keys(treesV190).forEach(ensureTreeV190);markRedundantInlineNavsV190();restoreActiveV190();ensureCompanyTopNavV341();hideTreesForRoleV190();syncCompanyDynamicHostsV341();window.LutminV34Nav?.apply?.(currentLutminUser?.role);stateV190.installed=true;
   }
   const oldPaintV190=typeof paintCurrentLutminUser==='function'?paintCurrentLutminUser:null;
   if(oldPaintV190){paintCurrentLutminUser=function(){const r=oldPaintV190.apply(this,arguments);setTimeout(()=>{installV190();hideTreesForRoleV190();},0);return r;};}
   const oldGoV190=typeof goToCampusTab==='function'?goToCampusTab:null;
   if(oldGoV190){goToCampusTab=function(tab){const r=oldGoV190.apply(this,arguments);setTimeout(()=>{
     hideTreesForRoleV190();
-    if(tab==='company')setTreeOpenV190('company',true);
-    if(tab==='company-conecta')setTreeOpenV190('companyConecta',true);
+    if(tab==='company')ensureCompanyTopNavV341();
     if(tab==='instructor')setTreeOpenV190('instructor',true);
     if(tab==='admin')setTreeOpenV190('admin',true);
   },0);return r;};}

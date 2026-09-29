@@ -1,10 +1,10 @@
 // =============================================================
-// LUTMIN V34.0 · WORKSPACE NAV NORMALIZER
+// LUTMIN V34.1 · WORKSPACE NAV NORMALIZER
 // Un workspace activo = una navegación. Evita tabs heredados duplicados.
 // =============================================================
 (function(){
   'use strict';
-  const VERSION='34.0';
+  const VERSION='34.1';
   const state={role:null,applies:0,duplicatesHidden:0};
   const allowed={
     student:new Set(['dashboard','courses','agenda','activities','certificates','talent','notifications','support','profile']),
@@ -56,6 +56,7 @@
     state.role=role;state.applies+=1;
     // Estos workspaces usan módulos superiores; ningún árbol V19 debe reaparecer.
     document.getElementById('adminTreeV190')?.remove();
+    document.getElementById('companyTreeV190')?.remove();
     document.getElementById('companyConectaTreeV190')?.remove();
     const desktop=document.getElementById('campusSidebarNavV183')||document.getElementById('campusSidebarRole')?.closest('aside')?.querySelector('nav');
     const mobile=document.getElementById('adminMobileTab')?.parentElement||document.getElementById('companyMobileTab')?.parentElement;

@@ -72,9 +72,10 @@ async function loadStudentComplianceV40(){
 // ---------------------------------------------------------
 function initCompanyComplianceV40(){
   const panel=document.querySelector('[data-campus-panel="company"]');if(!panel||document.getElementById('companyComplianceV40'))return;
+  const host=document.getElementById('companyComplianceHostV341');
   const box=document.createElement('div');box.id='companyComplianceV40';box.className='mt-6 bg-white rounded-3xl border border-cyan-100 overflow-hidden';
   box.innerHTML=`<div class="p-5 sm:p-6 border-b border-cyan-100 bg-cyan-50/40"><div class="flex flex-col xl:flex-row xl:items-end xl:justify-between gap-4"><div><p class="text-[10px] uppercase tracking-widest font-extrabold text-cyan-700">V4.0 · Cumplimiento</p><h3 class="mt-1 text-xl font-black text-lutmin-dark">Vigencias del equipo</h3><p class="mt-1 text-xs text-slate-600">Detectá certificados y validaciones vencidas o próximas a vencer antes de que se conviertan en un problema operativo.</p></div><div class="flex flex-wrap gap-2"><button onclick="exportCompanyComplianceV40()" class="px-3 py-2.5 rounded-xl bg-white border border-cyan-100 text-cyan-700 text-xs font-bold"><i class="fa-solid fa-file-csv mr-2"></i>Exportar</button><button onclick="loadCompanyComplianceV40()" class="px-3 py-2.5 rounded-xl bg-lutmin-dark text-white text-xs font-bold"><i class="fa-solid fa-rotate mr-2"></i>Actualizar</button></div></div></div><div class="p-5 sm:p-6"><div id="companyComplianceStatsV40"></div><div class="mt-4 grid md:grid-cols-[1fr_180px_180px] gap-2"><input id="companyComplianceQueryV40" oninput="renderCompanyComplianceV40()" class="px-3 py-2.5 rounded-xl border border-slate-200 text-sm" placeholder="Buscar persona o acreditación"><select id="companyComplianceStateV40" onchange="renderCompanyComplianceV40()" class="px-3 py-2.5 rounded-xl border border-slate-200 text-sm"><option value="alert">Solo alertas</option><option value="">Todos los estados</option><option value="expired">Vencidos</option><option value="expiring">Vencen pronto</option><option value="valid">Vigentes</option><option value="revoked">Revocados</option></select><select id="companyComplianceTypeV40" onchange="renderCompanyComplianceV40()" class="px-3 py-2.5 rounded-xl border border-slate-200 text-sm"><option value="">Certificados + competencias</option><option value="certificate">Certificados</option><option value="competency">Competencias</option></select></div><div id="companyComplianceRowsV40" class="mt-4 divide-y divide-slate-100 border border-slate-100 rounded-2xl overflow-hidden"></div></div>`;
-  panel.prepend(box);
+  if(host)host.appendChild(box);else panel.appendChild(box);
 }
 function filteredCompanyComplianceV40(){
   const q=String(document.getElementById('companyComplianceQueryV40')?.value||'').trim().toLowerCase(),state=document.getElementById('companyComplianceStateV40')?.value||'alert',type=document.getElementById('companyComplianceTypeV40')?.value||'';
@@ -157,7 +158,7 @@ if(typeof renderTalentCenter==='function'){
 }
 function initV40(){
   if(currentLutminUser?.role==='student'){initStudentComplianceV40();updatePublicProfileButtonV40();loadStudentComplianceV40();}
-  if(currentLutminUser?.role==='company_admin'){initCompanyComplianceV40();loadCompanyComplianceV40();}
+  // Empresa se inicializa únicamente desde su módulo superior bajo demanda.
   if(currentLutminUser?.role==='admin'){initAdminComplianceV40();loadAdminComplianceV40();}
 }
 document.addEventListener('DOMContentLoaded',()=>setTimeout(initV40,900),{once:true});

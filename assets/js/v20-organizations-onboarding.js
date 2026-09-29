@@ -154,16 +154,13 @@
     const panel=document.querySelector('section[data-campus-panel="company"]');if(!panel)return;
     if(!document.getElementById('companyOnboardingV200')){
       const agenda=document.getElementById('companyPortalAgenda')?.parentElement;
+      const host=document.getElementById('companyOnboardingHostV341');
       const box=document.createElement('div');box.id='companyOnboardingV200';box.className='mt-6 bg-white rounded-3xl border border-slate-100 overflow-hidden';
       box.innerHTML=`<div class="p-5 sm:p-6 border-b border-slate-100"><div class="flex flex-col xl:flex-row xl:items-end xl:justify-between gap-4"><div><p class="text-[10px] uppercase tracking-widest font-black text-emerald-700">Onboarding Autopilot</p><h3 class="mt-1 text-xl font-black text-lutmin-dark">Incorporaciones guiadas por el perfil de puesto</h3><p class="mt-1 text-xs text-slate-500 max-w-2xl">Lutmin convierte requisitos de puesto en pasos concretos y los cierra automáticamente cuando detecta perfil completo, cursos aprobados o competencias alcanzadas.</p></div><button onclick="loadCompanyOnboardingV200()" class="px-4 py-2.5 rounded-xl bg-lutmin-dark text-white text-xs font-bold"><i class="fa-solid fa-rotate mr-2"></i>Actualizar</button></div><div id="onboardingStatsV200" class="mt-5 grid grid-cols-3 gap-3"></div><div class="mt-4 grid md:grid-cols-[1fr_1fr_130px] gap-2"><select id="onboardingMemberV200" class="px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs"></select><select id="onboardingRoleV200" class="px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs"></select><button onclick="createOnboardingV200()" class="px-3 py-2.5 rounded-xl bg-emerald-600 text-white text-xs font-bold">Generar plan</button></div></div><div id="onboardingPlansV200" class="p-5 sm:p-6 space-y-4"><div class="text-sm text-slate-500">Cargando incorporaciones...</div></div>`;
-      if(agenda)agenda.insertAdjacentElement('beforebegin',box);else panel.appendChild(box);
-    }
-    const tree=document.getElementById('companyTreeV190');
-    if(tree&&!tree.querySelector('[data-v200-company-onboarding]')){
-      const team=tree.querySelector('[data-v190-key="team"]');team?.insertAdjacentHTML('afterend','<button type="button" class="workspace-tree-item-v190" data-v190-scope="company" data-v200-company-onboarding="1" onclick="openCompanyOnboardingV200(event)"><i class="fa-solid fa-user-plus"></i><span>Onboarding</span></button>');
+      if(host)host.appendChild(box);else if(agenda)agenda.insertAdjacentElement('beforebegin',box);else panel.appendChild(box);
     }
   }
-  window.openCompanyOnboardingV200=async function(event){event?.stopPropagation?.();if(typeof goToCampusTab==='function')goToCampusTab('company');ensureCompanyOnboardingUi();document.querySelectorAll('[data-v190-scope="company"]').forEach(b=>b.classList.toggle('active',!!b.dataset.v200CompanyOnboarding));const parent=document.getElementById('companyDesktopTab'),tree=document.getElementById('companyTreeV190');if(parent&&tree){parent.setAttribute('aria-expanded','true');tree.classList.remove('is-collapsed');}if(window.LutminV29Data?.load)await window.LutminV29Data.load('company:onboarding',()=>loadCompanyOnboardingV200(),{ttl:20000});else await loadCompanyOnboardingV200();document.getElementById('companyOnboardingV200')?.scrollIntoView({behavior:'smooth',block:'start'});};
+  window.openCompanyOnboardingV200=async function(event){event?.stopPropagation?.();if(typeof openWorkspaceSectionV190==='function')return openWorkspaceSectionV190('company','onboarding',event);if(typeof goToCampusTab==='function')goToCampusTab('company');ensureCompanyOnboardingUi();if(window.LutminV29Data?.load)await window.LutminV29Data.load('company:onboarding',()=>loadCompanyOnboardingV200(),{ttl:20000});else await loadCompanyOnboardingV200();};
 
   window.loadCompanyOnboardingV200=async function(){
     if(!supabaseClient||currentLutminUser?.role!=='company_admin')return;ensureCompanyOnboardingUi();const cid=activeCompanyId();const args={};if(cid)args.p_company_id=cid;
@@ -200,9 +197,9 @@
   // 6) Integración segura con cargas existentes
   // ---------------------------------------------------------
   function installV200(){
-    ensureOrganizationsUi();ensureTimelineUi();ensureCompanyInterestUi();ensureCompanyOnboardingUi();ensureStudentOnboardingPanel();
+    ensureOrganizationsUi();ensureTimelineUi();ensureCompanyInterestUi();ensureStudentOnboardingPanel();
     if(currentLutminUser?.role==='student'){if(window.LutminV29Data?.load)window.LutminV29Data.load('student:onboarding',()=>loadMyOnboardingV200(),{ttl:30000});else loadMyOnboardingV200();}
-    if(currentLutminUser?.role==='company_admin'){if(window.LutminV29Data?.load){window.LutminV29Data.load('company:interests',()=>loadCompanyInterestsV200(),{ttl:20000});window.LutminV29Data.load('company:onboarding',()=>loadCompanyOnboardingV200(),{ttl:20000});}else{loadCompanyInterestsV200();loadCompanyOnboardingV200();}}
+    // Empresa: intereses y onboarding quedan 100% bajo demanda según el módulo abierto.
   }
 
   if(typeof loadTalentCenter==='function'){

@@ -24,11 +24,11 @@ function v110ActionBadge(a){const p=v110Priority(a.priority);return `<span class
 function ensureCompanyAutopilotV110(){
   const panel=document.querySelector('section[data-campus-panel="company"]');
   if(!panel||document.getElementById('companyAutopilotV110'))return;
+  const host=document.getElementById('companyAutopilotHostV341');
   const wrap=document.createElement('div');
   wrap.id='companyAutopilotV110';wrap.className='mt-6 rounded-[2rem] bg-gradient-to-br from-[#000B3C] via-[#07184F] to-[#182d70] text-white p-5 sm:p-7 shadow-soft';
   wrap.innerHTML=`<div class="flex flex-col xl:flex-row xl:items-start xl:justify-between gap-5"><div><div class="inline-flex px-3 py-1.5 rounded-full bg-cyan-400/10 text-cyan-200 text-[10px] font-black uppercase tracking-widest"><i class="fa-solid fa-satellite-dish mr-2"></i>Lutmin Autopilot · agentes internos</div><h3 class="mt-3 text-2xl sm:text-3xl font-black">Que el sistema encuentre qué requiere atención.</h3><p class="mt-2 text-sm text-slate-300 max-w-4xl">Brechas, cobertura crítica, riesgo académico, demanda de capacitación, desarrollo y evidencia de postulaciones. Todo con reglas propias y datos de Lutmin.</p></div><div class="flex flex-wrap gap-2"><span class="px-3 py-1.5 rounded-full bg-emerald-400/10 text-emerald-200 text-[10px] font-black">API PAGA: $0</span><button onclick="loadCompanyAutopilotV110(true)" class="px-4 py-2.5 rounded-xl bg-white text-lutmin-dark text-xs font-extrabold"><i class="fa-solid fa-rotate mr-2"></i>Recalcular ahora</button></div></div><div id="companyAutopilotSummaryV110" class="mt-5 grid grid-cols-2 xl:grid-cols-5 gap-3"></div><div id="companyAutopilotTabsV110" class="mt-5 flex flex-wrap gap-2"></div><div id="companyAutopilotBodyV110" class="mt-4 rounded-[1.6rem] bg-white text-slate-800 p-4 sm:p-5"><p class="text-sm text-slate-500">Cargando Autopilot...</p></div>`;
-  const dev=document.getElementById('companyDevelopmentV100');
-  if(dev)dev.insertAdjacentElement('beforebegin',wrap);else{const stat=panel.querySelector('.mt-6.grid');stat?.insertAdjacentElement('afterend',wrap);}
+  if(host)host.appendChild(wrap);else panel.appendChild(wrap);
 }
 function companyAgentTabButtonV110(key,label,icon){const active=companyAgentsV110.tab===key;return `<button onclick="setCompanyAgentTabV110('${key}')" class="px-3 py-2.5 rounded-xl text-xs font-bold ${active?'bg-white text-lutmin-dark':'bg-white/10 text-slate-200'}"><i class="fa-solid ${icon} mr-1"></i>${label}</button>`;}
 async function loadCompanyAutopilotV110(recalculate=true){
@@ -123,6 +123,6 @@ function wrapV110Loaders(){if(v110Wrapped)return;v110Wrapped=true;
   if(typeof loadTalentCenter==='function'){const f=loadTalentCenter;loadTalentCenter=async function(...a){const r=await f(...a);setTimeout(()=>{ensurePersonalAutopilotV110();loadPersonalAutopilotV110();},80);return r;};}
   if(typeof setAdminModuleV19==='function'){const f=setAdminModuleV19;setAdminModuleV19=function(module,opts={}){const r=f(module,opts);if(module==='agents')setTimeout(()=>loadAdminAgentsV110(),50);return r;};}
 }
-function initV110(){document.title='Lutmin | Plataforma';ensureAdminAgentsNavV110();ensureAdminAgentsPanelV110();ensureCompanyAutopilotV110();ensurePersonalAutopilotV110();wrapV110Loaders();if(currentLutminUser?.role==='company_admin')loadCompanyAutopilotV110(false);if(currentLutminUser?.role==='student')loadPersonalAutopilotV110();if(currentLutminUser?.role==='admin'&&activeAdminModuleV19==='agents')loadAdminAgentsV110();}
+function initV110(){document.title='Lutmin | Plataforma';ensureAdminAgentsNavV110();ensureAdminAgentsPanelV110();ensurePersonalAutopilotV110();wrapV110Loaders();if(currentLutminUser?.role==='student')loadPersonalAutopilotV110();if(currentLutminUser?.role==='admin'&&activeAdminModuleV19==='agents')loadAdminAgentsV110();}
 document.addEventListener('DOMContentLoaded',()=>setTimeout(initV110,1950),{once:true});
 
