@@ -464,7 +464,7 @@
       paintCurrentLutminUser();
       try{await supabaseClient.rpc('touch_lutmin_last_seen')}catch(_){}
       const v29InitialLoad=(key,loader,ttl=12000)=>window.LutminV29Data?.load?window.LutminV29Data.load(key,loader,{ttl,force:true}):loader();
-      if(effectiveRole==='company_admin'){goToCampusTab('company');setTimeout(()=>v29InitialLoad('company',()=>loadCompanyPortalData(),12000),0);}
+      if(effectiveRole==='company_admin'){goToCampusTab('company');setTimeout(()=>{if(typeof window.openWorkspaceSectionV190==='function')window.openWorkspaceSectionV190('company','summary');else v29InitialLoad('company',()=>loadCompanyPortalData(),12000);},0);}
       else if(effectiveRole==='admin'){goToCampusTab('admin');setTimeout(()=>v29InitialLoad('admin',()=>loadAdminData(),12000),0);}
       else if(effectiveRole==='instructor'){goToCampusTab('instructor');setTimeout(()=>v29InitialLoad('instructor',()=>loadInstructorPortalV50(),15000),0);}
       else {goToCampusTab('dashboard');setTimeout(()=>v29InitialLoad('dashboard',()=>loadCampusData(),12000),0);setTimeout(()=>processPendingCheckinV50(),180);}
@@ -487,6 +487,7 @@
       document.getElementById('instructorDesktopTab')?.classList.toggle('hidden',!isInstructor); document.getElementById('instructorMobileTab')?.classList.toggle('hidden',!isInstructor);
       document.querySelectorAll('[data-student-only="true"]').forEach(el=>el.classList.toggle('hidden',isCompanyAdmin||isAdmin||isInstructor));
       document.querySelectorAll('[data-talent-tab="true"]').forEach(el=>el.classList.toggle('hidden',currentLutminUser.role!=='student'));
+      window.LutminV34Nav?.apply?.(currentLutminUser.role);
       const roleLabel=document.getElementById('campusSidebarRole'); if(roleLabel)roleLabel.textContent=isAdmin?'Administrador':isCompanyAdmin?'Empresa':isInstructor?'Docente':'Alumno';
       const profileSubtitle=document.getElementById('campusProfileSubtitle'), profileStatus=document.getElementById('campusProfileStatus'), profileCertCount=document.getElementById('campusProfileCertCount');
       if(profileSubtitle)profileSubtitle.textContent=isAdmin?'Cuenta administradora de Lutmin':isCompanyAdmin?'Responsable de empresa':isInstructor?'Perfil docente':'Perfil profesional de alumno';
@@ -1694,7 +1695,6 @@
       }
       companyPortalData = data || null;
       renderCompanyPortal();
-      setTimeout(()=>loadCompanyConectaData(),180);
     }
 
     function companyMemberCourseStatus(item) {

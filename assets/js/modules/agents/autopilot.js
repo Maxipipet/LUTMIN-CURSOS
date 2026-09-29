@@ -119,7 +119,7 @@ function renderSearchBridgeV110(root){const agent=document.getElementById('talen
 // D) HOOKS / INICIALIZACIÓN
 // -------------------------------------------------------------
 function wrapV110Loaders(){if(v110Wrapped)return;v110Wrapped=true;
-  if(typeof loadCompanyPortalData==='function'){const f=loadCompanyPortalData;loadCompanyPortalData=async function(...a){const r=await f(...a);setTimeout(()=>loadCompanyAutopilotV110(false),80);return r;};}
+  // V34: Autopilot Empresa se activa sólo al abrir su sección.
   if(typeof loadTalentCenter==='function'){const f=loadTalentCenter;loadTalentCenter=async function(...a){const r=await f(...a);setTimeout(()=>{ensurePersonalAutopilotV110();loadPersonalAutopilotV110();},80);return r;};}
   if(typeof setAdminModuleV19==='function'){const f=setAdminModuleV19;setAdminModuleV19=function(module,opts={}){const r=f(module,opts);if(module==='agents')setTimeout(()=>loadAdminAgentsV110(),50);return r;};}
 }

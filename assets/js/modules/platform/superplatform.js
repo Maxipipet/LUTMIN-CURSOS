@@ -182,8 +182,7 @@ async function submitCheckoutV100(e,offeringId){e.preventDefault();const code=do
 // -------------------------------------------------------------
 const _loadTalentCenterV100=typeof loadTalentCenter==='function'?loadTalentCenter:null;
 if(_loadTalentCenterV100)loadTalentCenter=async function(){const r=await _loadTalentCenterV100.apply(this,arguments);await loadTalentSnapshotsV100();ensureTalentAgentV100();refreshTalentAgentOptionsV100();enhanceTalentApplicationsV100();return r;};
-const _loadCompanyPortalDataV100=typeof loadCompanyPortalData==='function'?loadCompanyPortalData:null;
-if(_loadCompanyPortalDataV100)loadCompanyPortalData=async function(){const r=await _loadCompanyPortalDataV100.apply(this,arguments);ensureCompanyDevelopmentPanelV100();await loadCompanyDevelopmentV100();return r;};
+// V34: Panel de desarrollo Empresa se activa bajo demanda desde V19.
 const _loadAdminDataV100=typeof loadAdminData==='function'?loadAdminData:null;
 if(_loadAdminDataV100)loadAdminData=async function(){const r=await _loadAdminDataV100.apply(this,arguments);if(currentLutminUser?.role==='admin'){ensureAdminDevelopmentNavV100();ensureAdminDevelopmentPanelV100();ensureAdminCommercialV100();await Promise.allSettled([loadAdminDevelopmentV100(),loadCommercialV100()]);}return r;};
 

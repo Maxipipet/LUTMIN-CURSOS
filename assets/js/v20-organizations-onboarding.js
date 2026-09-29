@@ -208,9 +208,7 @@
   if(typeof loadTalentCenter==='function'){
     const old=loadTalentCenter;window.loadTalentCenter=async function(){const r=await old.apply(this,arguments);ensureOrganizationsUi();ensureTimelineUi();return r;};
   }
-  if(typeof loadCompanyPortalData==='function'){
-    const old=loadCompanyPortalData;window.loadCompanyPortalData=async function(){const r=await old.apply(this,arguments);ensureCompanyOnboardingUi();setTimeout(()=>{if(window.LutminV29Data?.load)window.LutminV29Data.load('company:onboarding',()=>loadCompanyOnboardingV200(),{ttl:20000});else loadCompanyOnboardingV200();},80);return r;};
-  }
+  // V34: onboarding Empresa se activa desde la sección Resumen; no envuelve la carga base.
   if(typeof loadCompanyConectaData==='function'){
     const old=loadCompanyConectaData;window.loadCompanyConectaData=async function(){const r=await old.apply(this,arguments);ensureCompanyInterestUi();setTimeout(()=>{if(window.LutminV29Data?.load)window.LutminV29Data.load('company:interests',()=>loadCompanyInterestsV200(),{ttl:20000});else loadCompanyInterestsV200();},80);return r;};
   }

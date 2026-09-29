@@ -152,8 +152,7 @@ const _loadAdminDataV36=window.loadAdminData;
 if(typeof _loadAdminDataV36==='function')window.loadAdminData=async function(){const r=await _loadAdminDataV36.apply(this,arguments);initV36AdminUi();setTimeout(()=>loadAdminAcademyV36(),180);return r;};
 const _loadCampusDataV36=window.loadCampusData;
 if(typeof _loadCampusDataV36==='function')window.loadCampusData=async function(){const r=await _loadCampusDataV36.apply(this,arguments);if(currentLutminUser?.role==='student')setTimeout(()=>loadMyAcademyV36(),160);return r;};
-const _loadCompanyPortalDataV36=window.loadCompanyPortalData;
-if(typeof _loadCompanyPortalDataV36==='function')window.loadCompanyPortalData=async function(){const r=await _loadCompanyPortalDataV36.apply(this,arguments);if(currentLutminUser?.role==='company_admin')setTimeout(()=>loadCompanyAcademyV36(),190);return r;};
+// V34: Academia Empresa se activa bajo demanda desde V19.
 
 // Si Administración ya estaba montada al cargar el parche.
 setTimeout(()=>{if(currentLutminUser?.role==='admin')initV36AdminUi();},0);

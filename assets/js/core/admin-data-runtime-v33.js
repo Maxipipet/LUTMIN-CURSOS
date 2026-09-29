@@ -1,11 +1,11 @@
 // =============================================================
-// LUTMIN V33.0 · ADMIN DATA RUNTIME
+// LUTMIN V34.0 · ADMIN DATA RUNTIME
 // Datos primarios de Administración por módulo/dominio.
 // Evita la carga monolítica de 14 tablas al abrir Administración.
 // =============================================================
 (function(){
   'use strict';
-  const VERSION='33.0';
+  const VERSION='34.0';
   const state={entries:new Map(),inFlight:new Map(),activeModule:'overview',loads:0,hits:0,errors:0,lastDuration:0,lastDatasets:[]};
   const DEFAULT_TTL=60000;
 

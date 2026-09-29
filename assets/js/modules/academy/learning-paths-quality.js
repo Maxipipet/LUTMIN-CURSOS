@@ -367,8 +367,7 @@ const _renderTalentCenterV33=renderTalentCenter;
 renderTalentCenter=function(){_renderTalentCenterV33();renderTalentCompetenciesV33();};
 const _loadTalentCenterV33=loadTalentCenter;
 loadTalentCenter=async function(){await _loadTalentCenterV33();setTimeout(()=>loadCompetencyDataV33(),80);};
-const _loadCompanyPortalDataV33=loadCompanyPortalData;
-loadCompanyPortalData=async function(){await _loadCompanyPortalDataV33();setTimeout(()=>loadCompanyCompetencyV33(),120);};
+// V34: Empresa carga competencias sólo al abrir la sección correspondiente.
 const _loadAdminDataV33=loadAdminData;
 loadAdminData=async function(){await _loadAdminDataV33();setTimeout(()=>loadAdminCompetencyV33(),120);if(typeof refreshAdminWorkspaceV19==='function')refreshAdminWorkspaceV19();};
 

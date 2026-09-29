@@ -174,8 +174,7 @@ renderCompanyCompetencyMatrixV33=function(){
 // Integración loaders sin reestructurar la base visual.
 const _loadTalentCenterV34=loadTalentCenter;
 loadTalentCenter=async function(){await _loadTalentCenterV34();setTimeout(()=>loadMyDevelopmentV34(),140);};
-const _loadCompanyPortalDataV34=loadCompanyPortalData;
-loadCompanyPortalData=async function(){await _loadCompanyPortalDataV34();setTimeout(()=>loadCompanyCompetencyMgmtV34(),160);};
+// V34: Desarrollo Empresa se activa bajo demanda desde V19.
 const _loadAdminDataV34=loadAdminData;
 loadAdminData=async function(){await _loadAdminDataV34();setTimeout(()=>loadAdminCompLinksV34(),160);if(typeof refreshAdminWorkspaceV19==='function')refreshAdminWorkspaceV19();};
 

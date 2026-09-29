@@ -148,8 +148,7 @@ async function openMyPublicProfileV40(){
 // Integración con los loaders existentes sin reemplazar la lógica previa.
 const _loadCampusDataV40=loadCampusData;
 loadCampusData=async function(){const r=await _loadCampusDataV40.apply(this,arguments);if(currentLutminUser?.role==='student'){await loadStudentComplianceV40();updatePublicProfileButtonV40();}return r;};
-const _loadCompanyPortalDataV40=loadCompanyPortalData;
-loadCompanyPortalData=async function(){const r=await _loadCompanyPortalDataV40.apply(this,arguments);if(currentLutminUser?.role==='company_admin')await loadCompanyComplianceV40();return r;};
+// V34: Cumplimiento Empresa se activa bajo demanda desde V19.
 const _loadAdminDataV40=loadAdminData;
 loadAdminData=async function(){const r=await _loadAdminDataV40.apply(this,arguments);if(currentLutminUser?.role==='admin')await loadAdminComplianceV40();return r;};
 if(typeof renderTalentCenter==='function'){
