@@ -1,0 +1,47 @@
+LUTMIN V39.0 · REPORTE DE PRUEBAS
+===================================
+
+RESULTADO GENERAL: PASS
+
+1. Smoke estructural
+- JavaScript / Service Worker válidos: 43
+- IDs estáticos: 746 sin duplicados
+- Rutas verificadas: 62
+- Recursos HTTP críticos: 22/22
+- Módulos Admin superiores: 12
+- Módulos Empresa superiores: 8
+- Módulos Conecta Alumno superiores: 11
+
+2. Rendimiento conservado
+- Runtime crítico Alumno: 7 scripts / 93532 bytes
+- Entrada a Conecta: 2 scripts / 15386 bytes
+- Agente bajo demanda: 4 scripts / 226769 bytes
+- Shell Empresa: 5 scripts / 48448 bytes
+- JS local estático: 7 archivos / 310709 bytes
+
+3. Datos Administración
+- Finanzas primera carga: 7 consultas
+- Comunicación después de Finanzas: 0 consultas adicionales
+- Volver a Finanzas: 0 consultas adicionales
+- Dos cargas concurrentes del mismo dataset: 1 consulta real
+
+4. Agente V39 · capacidad
+- Matching documental de prueba: 72%
+- Recuperación de empresa concreta: Serman NEA SRL
+- Checks: cv-source, company-retrieval, career-summary, job-gaps, interview-grounding
+- Parser CV 1: 2 experiencias, 1 formación, 4 competencias, 7.8 años
+- Parser CV 2: 2 experiencias, 1 formación
+
+5. Agente V39 · UX guiada
+- PASS: guided-flow, non-technical-ui, goal-selection, job-result, contextual-question
+- La interfaz no expone Motor estructural / parser / API $0.
+- Flujo probado: información -> objetivo -> resultado.
+- Objetivos probados: oportunidad, CV, entrevista y perfil.
+- Resultado de oportunidad y preguntas contextuales: PASS.
+
+6. Actualización PWA
+- Misma versión muestra banner: False
+- Versión nueva muestra banner: True
+
+ADVERTENCIAS
+- LOGO.png continúa referenciado pero no está en el deploy original recibido; no se inventó un asset.

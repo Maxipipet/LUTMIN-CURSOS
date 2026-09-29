@@ -1,0 +1,35 @@
+import fs from 'node:fs';
+import vm from 'node:vm';
+import assert from 'node:assert/strict';
+
+const cv={file:{name:'CV-Maximiliano.pdf'},quality:{score:91,warnings:[]},career:{years:6.5},experiences:[{position:'Técnico',company:'Empresa A',start:'2020-01-01',current:true,description:'Mantenimiento preventivo'}],education:[{title:'Técnico',institution:'Escuela'}],skills:[{skill:'Mantenimiento'}],text:'Técnico Empresa A mantenimiento preventivo'};
+const job={id:'j1',title:'Técnico de mantenimiento',company_name:'Empresa Test',requirements:'mantenimiento preventivo',description:'diagnóstico'};
+const store=new Map();
+const host={innerHTML:'',dataset:{},appendChild(){},scrollIntoView(){}};
+const card={appendChild(){}};
+const select={value:'j1'};
+const map=new Map([['talentAgentV100',card],['talentAgentV39',host],['agentJobSelectV100',select]]);
+const noop=()=>{};
+const document={readyState:'loading',getElementById:id=>map.get(id)||null,addEventListener:noop,createElement:()=>({id:'',appendChild:noop}),querySelector:()=>null};
+const localStorage={getItem:k=>store.get(k)||null,setItem:(k,v)=>store.set(k,String(v))};
+const windowObj={LutminCvV38:{normalize:v=>String(v||'').toLowerCase(),snapshot:()=>cv,careerSummary:()=>cv.career},buildAgentAnalysisV100:j=>({job:j,score:75,matched:['mantenimiento'],missing:['excel'],skills:[],experiences:[],certs:[],relatedCourses:[],questions:['Pregunta 1']}),addEventListener:noop};
+const context={window:windowObj,document,localStorage,console,setTimeout:()=>0,clearTimeout:noop,talentData:{profile:{approval_status:'approved'},jobs:[job],skills:[],experiences:[],certificates:[],applications:[],applicationDetails:{interviews:[]}},calculateTalentProfileStrength:()=>({score:88,missing:['LinkedIn']}),showToast:noop,goToCampusTab:noop,openCvReviewV140:noop,selectAgentJobV100:noop};
+windowObj.window=windowObj;Object.assign(windowObj,{document,localStorage});
+vm.createContext(context);
+const code=fs.readFileSync(new URL('../assets/js/modules/agents/talent-agent-v39.js',import.meta.url),'utf8');
+vm.runInContext(code,context,{filename:'talent-agent-v39.js'});
+
+windowObj.ensureTalentAgentV39();
+assert(host.innerHTML.includes('¿Qué querés hacer hoy?'),'falta pregunta principal clara');
+assert(host.innerHTML.includes('Elegí tu objetivo'),'falta flujo guiado por objetivo');
+assert(host.innerHTML.includes('Analizar una oportunidad'),'falta objetivo de oportunidad');
+assert(host.innerHTML.includes('Mejorar mi CV'),'falta objetivo CV');
+assert(host.innerHTML.includes('Preparar una entrevista'),'falta objetivo entrevista');
+assert(host.innerHTML.includes('Revisar mi perfil'),'falta objetivo perfil');
+assert(!/API \$0|Motor estructural|parser|calidad 91%/i.test(host.innerHTML),'la UI expone información técnica');
+windowObj.LutminAgentV39.setGoal('job');
+assert(host.innerHTML.includes('Análisis de oportunidad'),'no cambia al objetivo oportunidad');
+assert(host.innerHTML.includes('75%'),'no muestra resultado documental');
+assert(host.innerHTML.includes('Preparar postulación'),'falta CTA principal');
+assert(host.innerHTML.includes('Preguntale al agente'),'falta consulta contextual');
+console.log(JSON.stringify({ok:true,checks:['guided-flow','non-technical-ui','goal-selection','job-result','contextual-question']},null,2));

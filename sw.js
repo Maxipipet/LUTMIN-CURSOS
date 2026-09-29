@@ -1,21 +1,21 @@
-// LUTMIN V38.0 · cache versionada + actualización determinística.
-const CACHE='lutmin-runtime-v38-0';
-const CORE='lutmin-core-v38-0';
-const VERSION='38.0';
-const VERSION_TOKEN='v=38.0';
+// LUTMIN V39.0 · cache versionada + actualización determinística.
+const CACHE='lutmin-runtime-v39-0';
+const CORE='lutmin-core-v39-0';
+const VERSION='39.0';
+const VERSION_TOKEN='v=39.0';
 const CORE_ASSETS=[
-  './assets/css/tailwind-v36.css?v=38.0',
-  './assets/css/v30-loader.css?v=38.0',
-  './assets/css/v30-runtime.css?v=38.0',
-  './assets/css/v31-views.css?v=38.0',
-  './assets/js/core/module-loader-v33.js?v=38.0',
-  './assets/js/core/data-runtime-v30.js?v=38.0',
-  './assets/js/core/view-loader-v32.js?v=38.0',
-  './assets/js/core/workspace-nav-v34.js?v=38.0',
-  './assets/js/core/app-core.js?v=38.0',
-  './assets/js/core/lazy-core-bindings-v32.js?v=38.0',
-  './assets/js/core/ui-runtime-v30.js?v=38.0',
-  './assets/js/core/update-manager-v32.js?v=38.0'
+  './assets/css/tailwind-v36.css?v=39.0',
+  './assets/css/v30-loader.css?v=39.0',
+  './assets/css/v30-runtime.css?v=39.0',
+  './assets/css/v31-views.css?v=39.0',
+  './assets/js/core/module-loader-v33.js?v=39.0',
+  './assets/js/core/data-runtime-v30.js?v=39.0',
+  './assets/js/core/view-loader-v32.js?v=39.0',
+  './assets/js/core/workspace-nav-v34.js?v=39.0',
+  './assets/js/core/app-core.js?v=39.0',
+  './assets/js/core/lazy-core-bindings-v32.js?v=39.0',
+  './assets/js/core/ui-runtime-v30.js?v=39.0',
+  './assets/js/core/update-manager-v32.js?v=39.0'
 ];
 self.addEventListener('install',event=>event.waitUntil((async()=>{const cache=await caches.open(CORE);await Promise.allSettled(CORE_ASSETS.map(url=>cache.add(url)));})()));
 self.addEventListener('activate',event=>event.waitUntil((async()=>{const keys=await caches.keys();await Promise.all(keys.filter(k=>k.startsWith('lutmin-')&&![CACHE,CORE].includes(k)).map(k=>caches.delete(k)));await self.clients.claim();})()));

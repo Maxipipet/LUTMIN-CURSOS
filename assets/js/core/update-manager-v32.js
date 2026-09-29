@@ -1,12 +1,12 @@
 // =============================================================
-// LUTMIN V38.0 · UPDATE MANAGER DETERMINÍSTICO
+// LUTMIN V39.0 · UPDATE MANAGER DETERMINÍSTICO
 // - compara versión del worker esperando vs frontend actual
 // - no muestra banners por workers de la misma versión
 // - aplica una actualización una sola vez y evita loops
 // =============================================================
 (function(){
   'use strict';
-  const VERSION='38.0';
+  const VERSION='39.0';
   const TARGET_KEY='lutmin:update-target';
   const S={registration:null,waiting:null,waitingVersion:null,lastCheck:0,controllerReload:false,applying:false,silentActivation:false,online:navigator.onLine,assetRetries:0,lastModuleDuration:null};
 

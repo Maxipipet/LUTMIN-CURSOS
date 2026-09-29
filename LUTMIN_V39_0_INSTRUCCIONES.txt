@@ -1,0 +1,35 @@
+LUTMIN V39.0
+=============
+
+OBJETIVO PRINCIPAL
+- Rediseño completo del Agente de empleabilidad para hacerlo guiado e intuitivo.
+- Mantener el motor local de CV/evidencia de V38 sin APIs pagas.
+- No modificar base de datos ni requerir SQL.
+
+CAMBIOS PRINCIPALES
+1. Agente guiado en 3 pasos:
+   - Tu información.
+   - Tu objetivo.
+   - Resultado.
+2. Cuatro objetivos claros:
+   - Analizar una oportunidad.
+   - Mejorar mi CV.
+   - Preparar una entrevista.
+   - Revisar mi perfil.
+3. Se eliminan de la interfaz final referencias técnicas como motor estructural, parser, API $0 y métricas internas de calidad.
+4. El CV sigue analizándose localmente con experiencia, fechas, empresas, formación, competencias y dudas de lectura.
+5. La comparación con búsquedas mantiene evidencia y brechas documentales sin decidir contrataciones.
+6. El chat del agente ahora ofrece preguntas sugeridas según el objetivo elegido.
+7. El resultado usa divulgación progresiva: muestra primero lo importante y sólo después las acciones o preguntas relacionadas.
+8. Se mantiene lazy-load: el agente pesado sólo se descarga cuando se abre el módulo Agente.
+
+DEPLOY
+- Reemplazar el contenido publicado por el contenido de este ZIP.
+- La versión frontend/service worker es 39.0.
+- Si una pestaña antigua continúa abierta, realizar una recarga completa una sola vez.
+
+SQL
+- No corresponde. V39.0 no modifica la base Supabase.
+
+ADVERTENCIA HEREDADA
+- LOGO.png continúa referenciado por la aplicación, pero no estaba presente en el deploy original recibido. No se agregó un logo inventado.
