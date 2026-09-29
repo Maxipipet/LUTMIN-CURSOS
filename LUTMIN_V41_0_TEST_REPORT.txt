@@ -1,0 +1,89 @@
+LUTMIN V41.0 — REPORTE DE PRUEBAS
+=================================
+
+Resultado general: PASS
+
+CAMBIO CENTRAL
+- Motor de relevancia por evidencia V41.
+- Se eliminó la regla débil de "una palabra en común = experiencia relacionada".
+- Clasificación separada:
+  * experiencia relacionada
+  * experiencia con habilidades transferibles
+  * otra experiencia laboral
+  * competencias relevantes
+  * competencias transferibles
+  * formación/certificaciones relevantes
+
+CASO DE REGRESIÓN BASADO EN EL FALLO REPORTADO
+Vacante:
+- Coordinador/a de mantenimiento
+
+Experiencias:
+- Atención al Público y Stock · Kiosco Familia
+- Tareas de Reposición y Atención al Público · JAZ Autoservicio
+
+Evidencia adicional:
+- Mantenimiento preventivo
+- Liderazgo de equipos
+- Gestión de operaciones
+- Gestión de stock
+- Seguridad en trabajos técnicos
+- Atención al cliente
+- Adobe Photoshop
+- Certificación Electricidad Domiciliaria
+
+Resultado esperado y obtenido:
+- Experiencias relacionadas: 0
+- Las 2 experiencias quedan como Otra experiencia laboral: PASS
+- Adobe Photoshop NO se prioriza: PASS
+- Atención al cliente NO se presenta como competencia técnica de mantenimiento: PASS
+- Mantenimiento preventivo sí se prioriza: PASS
+- Electricidad Domiciliaria se reconoce como evidencia técnica adyacente: PASS
+- PDF no incluye etiqueta falsa "MÁS RELACIONADA": PASS
+- PDF cambia estructura y prioriza evidencia relevante: PASS
+
+CASO POSITIVO
+Vacante:
+- Coordinador de mantenimiento
+Experiencia:
+- Técnico de mantenimiento · Serman
+Resultado:
+- Experiencia relacionada detectada: 1
+- Vendedor queda en Otra experiencia: PASS
+
+PERFIL SIN CV CARGADO
+- Mismo caso de atención al público/stock usando sólo perfil estructurado.
+- Experiencias relacionadas: 0
+- Otra experiencia: 2
+- Certificación técnica relevante conservada: PASS
+
+PARSER CV
+- CV sintético 1: 2 experiencias, 1 formación, 4 competencias, 7.8 años: PASS
+- CV sintético 2: 2 experiencias, 1 formación: PASS
+- Calidad de lectura: 94% / 85% en los fixtures: PASS
+
+SMOKE / ARQUITECTURA
+- JavaScript + Service Worker con sintaxis válida: 43
+- IDs estáticos: 746, duplicados: 0
+- Rutas verificadas: 62
+- Recursos HTTP críticos: 22/22
+- Módulos Admin superiores: 12
+- Módulos Empresa superiores: 8
+- Módulos Conecta Alumno superiores: 11
+- Shell Empresa: 48,448 bytes / 5 scripts
+- Runtime crítico Alumno: 93,532 bytes / 7 scripts
+- Entrada Conecta: 15,386 bytes / 2 scripts
+- Agente V41 bajo demanda: 253,881 bytes / 4 scripts
+- Caché Admin: PASS
+- Deduplicación inflight: PASS
+- Router Conecta: PASS
+- Update manager misma versión / versión nueva: PASS
+
+SEGURIDAD / REGLAS
+- No inventar experiencia: preservado.
+- No convertir habilidades transferibles en experiencia técnica: preservado.
+- No decidir contrataciones: preservado.
+- Sin APIs pagas nuevas: preservado.
+
+ADVERTENCIA HEREDADA
+- LOGO.png continúa referenciado pero no estaba en el deploy original recibido.

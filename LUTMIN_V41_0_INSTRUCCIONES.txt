@@ -1,0 +1,29 @@
+LUTMIN V41.0 — DEPLOY
+=====================
+
+Objetivo principal
+- Corregir el falso "CV adaptado" de V40.
+- Separar experiencia realmente relacionada, habilidades transferibles y experiencia no relacionada.
+- Personalizar la estructura del CV por oportunidad sin inventar antecedentes.
+
+Deploy
+1. Reemplazar en GitHub los archivos del deploy por el contenido de este ZIP.
+2. Conservar LOGO.png oficial si ya existe en producción; no venía en el ZIP base recibido.
+3. Publicar normalmente.
+4. Si una pestaña anterior conserva assets viejos, hacer una sola recarga forzada (Ctrl+F5).
+
+SQL
+- NO requiere SQL nuevo.
+
+Prueba recomendada
+1. Alumno > Lutmin Conecta > Agente.
+2. Elegir una búsqueda.
+3. Verificar el bloque "Experiencia relacionada".
+4. Si no existe experiencia real en ese rubro, debe indicar que no encontró ninguna y mostrar los demás trabajos bajo "Otra experiencia laboral".
+5. Generar el CV personalizado y verificar que no aparezca ninguna experiencia no relacionada rotulada como relevante.
+
+Regla V41
+- Una coincidencia de palabras genéricas (gestión, técnicos, equipos, formación, etc.) NO convierte una experiencia en experiencia relacionada.
+- El CV puede priorizar formación/certificaciones/competencias relacionadas aunque no haya experiencia laboral directa.
+- No inventa empresas, cargos, fechas ni experiencia.
+- No decide contrataciones.

@@ -1,5 +1,5 @@
 // =========================================================
-// LUTMIN V40.0 · CONECTA STUDENT ROUTER
+// LUTMIN V41.0 · CONECTA STUDENT ROUTER
 // Un único router para módulos superiores. Evita wrappers legacy
 // que competían entre sí y deja cada runtime bajo demanda.
 // =========================================================
