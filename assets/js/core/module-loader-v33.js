@@ -1,12 +1,12 @@
 // =============================================================
-// LUTMIN V34.1 · ACTIVE-WORKSPACE MODULE LOADER
+// LUTMIN V35.0 · ACTIVE-WORKSPACE MODULE LOADER
 // Carga sólo el runtime necesario para cada acceso y deja Conecta
 // pesado bajo demanda. Mantiene costo API $0 y fallback completo.
 // =============================================================
 (function(){
   'use strict';
 
-  const VERSION='34.1';
+  const VERSION='35.0';
   const state={status:'idle',promise:null,loaded:new Set(),bundles:new Set(),startedAt:0,finishedAt:0,error:null,retries:0,warmed:false,lastReason:null,lastRole:null};
   const cssFiles=[
     'assets/css/v18-conecta.css',
@@ -23,6 +23,9 @@
 
   // Orden histórico: cualquier subconjunto se filtra sobre esta lista.
   const scriptFiles=[
+    'assets/js/core/admin-workspace-v35.js',
+    'assets/js/core/admin-data-runtime-v33.js',
+    'assets/js/core/admin-module-loader-v33.js',
     'assets/js/modules/academy/learning-paths-quality.js',
     'assets/js/modules/talent/development.js',
     'assets/js/modules/core/qa-security.js',
@@ -55,6 +58,9 @@
   ];
 
   const F={
+    adminCore:'assets/js/core/admin-workspace-v35.js',
+    adminData:'assets/js/core/admin-data-runtime-v33.js',
+    adminViews:'assets/js/core/admin-module-loader-v33.js',
     lp:'assets/js/modules/academy/learning-paths-quality.js',
     dev:'assets/js/modules/talent/development.js',
     qa:'assets/js/modules/core/qa-security.js',
@@ -86,14 +92,15 @@
     adminDemand:'assets/js/modules/core/admin-demand-v33.js'
   };
 
-  const adminBaseSet=new Set([F.workspaceCmd,F.workspaces,F.perf,F.runtime,F.core,F.adminDemand]);
+  const adminBaseSet=new Set([F.adminCore,F.adminData,F.adminViews,F.workspaceCmd,F.workspaces,F.perf,F.runtime,F.core,F.adminDemand]);
   const companyBaseSet=new Set([F.workspaceCmd,F.workspaces,F.perf,F.runtime,F.core]);
+  const studentBaseSet=new Set([F.comp,F.workspaceCmd,F.workspaces,F.perf,F.runtime,F.core,F.video]);
   const roleSets={
-    student:new Set([F.lp,F.qa,F.ops,F.ux,F.comp,F.compliance,F.teacher,F.workspaceCmd,F.workspaces,F.perf,F.runtime,F.core,F.video]),
-    // V34: Empresa arranca con un shell real. Academia, cumplimiento, desarrollo,
-    // Autopilot y onboarding se descargan al abrir su sección.
+    // V35: Alumno arranca con el flujo crítico. Rutas/vigencias se hidratan en idle,
+    // Actividades y soporte se descargan sólo al abrirlos.
+    student:studentBaseSet,
     company_admin:companyBaseSet,
-    instructor:new Set([F.qa,F.ux,F.teacher,F.workspaceCmd,F.workspaces,F.perf,F.runtime,F.core]),
+    instructor:new Set([F.teacher,F.workspaceCmd,F.workspaces,F.perf,F.runtime,F.core]),
     admin:adminBaseSet
   };
   const companySectionSets={
@@ -109,7 +116,10 @@
   const featureSets={
     talent:new Set([F.dev,F.super,F.auto,F.pre,F.intel,F.cv,F.evidence,F.zero,F.conecta,F.org,F.hub,F.panels]),
     companyConecta:new Set([F.super,F.pre,F.org]),
-    publicTalent:new Set([F.super,F.evidence])
+    publicTalent:new Set([F.super,F.evidence]),
+    studentEnhancements:new Set([F.lp,F.compliance]),
+    activities:new Set([F.teacher]),
+    support:new Set([F.ux])
   };
   const adminModuleSets={
     overview:new Set(),
@@ -157,12 +167,12 @@
   function loadCssOnce(file){
     const key=`v30-css:${file}`;if(state.loaded.has(key))return Promise.resolve(true);
     const existing=[...document.styleSheets].some(s=>String(s.href||'').includes(file));if(existing){state.loaded.add(key);return Promise.resolve(true);}
-    return new Promise(resolve=>{const link=document.createElement('link');link.rel='stylesheet';link.href=withVersion(file);link.dataset.lutminV30='css';let settled=false;const done=()=>{if(settled)return;settled=true;state.loaded.add(key);resolve(true);};link.onload=done;link.onerror=()=>{console.warn('[Lutmin V34] CSS no disponible:',file);done();};document.head.appendChild(link);setTimeout(done,4500);});
+    return new Promise(resolve=>{const link=document.createElement('link');link.rel='stylesheet';link.href=withVersion(file);link.dataset.lutminV30='css';let settled=false;const done=()=>{if(settled)return;settled=true;state.loaded.add(key);resolve(true);};link.onload=done;link.onerror=()=>{console.warn('[Lutmin V35] CSS no disponible:',file);done();};document.head.appendChild(link);setTimeout(done,4500);});
   }
 
   function preload(files){
     state.warmed=true;
-    // V34: no prepriorizamos un bundle entero. Chrome advertía decenas de preloads
+    // V35: no prepriorizamos un bundle entero. Chrome advertía decenas de preloads
     // no utilizados y se competía con los recursos realmente visibles.
     ordered(new Set(files)).slice(0,2).forEach(file=>{if(document.head.querySelector(`link[data-lutmin-v30-preload="${file}"]`))return;const link=document.createElement('link');link.rel='preload';link.as='script';link.href=withVersion(file);link.dataset.lutminV30Preload=file;document.head.appendChild(link);});
   }
@@ -202,7 +212,7 @@
   }
 
   function setForAccess(role,capabilities){
-    // V34: las capacidades disponibles NO definen qué runtime se descarga.
+    // V35: las capacidades disponibles NO definen qué runtime se descarga.
     // Sólo el workspace activo lo hace. Así un administrador que entra como Empresa
     // no arrastra Administración/Alumno dentro del mismo DOM/runtime.
     void capabilities;
@@ -212,13 +222,20 @@
   async function ensureAuthenticated(options={}){
     const role=options?.role||'student';state.lastRole=role;
     const set=setForAccess(role,options?.capabilities||{});
-    return loadSet(set,`authenticated:${role}`,`access:${role}`);
+    const ok=await loadSet(set,`authenticated:${role}`,`access:${role}`);
+    // La vista Admin puede haberse montado antes de que su loader exista.
+    // Forzamos el fragment activo una vez que el runtime lazy ya está listo.
+    if(ok&&role==='admin')await window.LutminV33AdminViews?.ensureActive?.();
+    return ok;
   }
 
   async function ensureFeature(name,options={}){
     if(name==='talent')return loadSet(featureSets.talent,'feature:talent','feature:talent');
     if(name==='company-conecta')return loadSet(featureSets.companyConecta,'feature:company-conecta','feature:company-conecta');
     if(name==='public-talent')return loadSet(featureSets.publicTalent,'feature:public-talent','feature:public-talent');
+    if(name==='student-enhancements')return loadSet(featureSets.studentEnhancements,'feature:student-enhancements','feature:student-enhancements');
+    if(name==='activities')return loadSet(featureSets.activities,'feature:activities','feature:activities');
+    if(name==='support')return loadSet(featureSets.support,'feature:support','feature:support');
     if(name==='full')return loadSet(new Set(scriptFiles),'fallback:full','full');
     return true;
   }
@@ -233,6 +250,8 @@
   async function ensureFeatureForTab(tab,role){
     if(tab==='talent'&&role==='student')return ensureFeature('talent',{role});
     if(tab==='company-conecta'&&role==='company_admin')return ensureFeature('company-conecta',{role});
+    if(tab==='activities'&&role==='student')return ensureFeature('activities',{role});
+    if(tab==='support')return ensureFeature('support',{role});
     if(tab==='admin'&&role==='admin')return ensureAdminModule((document.getElementById('adminModuleHostV32')?.dataset?.adminModuleV32)||localStorage.getItem('lutmin-admin-module-v19')||'overview');
     return true;
   }
@@ -243,7 +262,7 @@
 
   async function registerServiceWorker(){
     if(!('serviceWorker' in navigator)||location.protocol==='file:')return false;
-    try{const reg=await navigator.serviceWorker.register(`./sw.js?v=${VERSION}`,{scope:'./'});window.dispatchEvent(new CustomEvent('lutmin:v30:sw-registered',{detail:{registration:reg}}));reg.update().catch(()=>{});return reg;}catch(err){console.warn('[Lutmin V34] Service Worker no disponible:',err?.message||err);return false;}
+    try{const reg=await navigator.serviceWorker.register(`./sw.js?v=${VERSION}`,{scope:'./'});window.dispatchEvent(new CustomEvent('lutmin:v30:sw-registered',{detail:{registration:reg}}));reg.update().catch(()=>{});return reg;}catch(err){console.warn('[Lutmin V35] Service Worker no disponible:',err?.message||err);return false;}
   }
 
   function canAdaptivePrefetch(){

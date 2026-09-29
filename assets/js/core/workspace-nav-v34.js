@@ -1,10 +1,10 @@
 // =============================================================
-// LUTMIN V34.1 · WORKSPACE NAV NORMALIZER
+// LUTMIN V35.0 · WORKSPACE NAV NORMALIZER
 // Un workspace activo = una navegación. Evita tabs heredados duplicados.
 // =============================================================
 (function(){
   'use strict';
-  const VERSION='34.1';
+  const VERSION='35.0';
   const state={role:null,applies:0,duplicatesHidden:0};
   const allowed={
     student:new Set(['dashboard','courses','agenda','activities','certificates','talent','notifications','support','profile']),
@@ -61,7 +61,6 @@
     const desktop=document.getElementById('campusSidebarNavV183')||document.getElementById('campusSidebarRole')?.closest('aside')?.querySelector('nav');
     const mobile=document.getElementById('adminMobileTab')?.parentElement||document.getElementById('companyMobileTab')?.parentElement;
     normalize(desktop,role,'desktop');normalize(mobile,role,'mobile');
-    const studentSub=document.getElementById('studentConectaSubnavV183');visible(studentSub,role==='student');
     if(role==='company_admin')reorderCompany();
     return true;
   }

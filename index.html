@@ -11,17 +11,17 @@
   <link rel="shortcut icon" href="LOGO.png" type="image/x-icon" />
   <link rel="apple-touch-icon" href="LOGO.png" />
 
-  <!-- LUTMIN V34.1 · Administración modular + datos/runtime por demanda + recuperación de assets -->
-  <link rel="preload" href="assets/js/core/module-loader-v33.js?v=34.1" as="script">
-  <link rel="preload" href="assets/js/core/data-runtime-v30.js?v=34.1" as="script">
-  <link rel="preload" href="assets/js/core/view-loader-v32.js?v=34.1" as="script">
-  <link rel="preload" href="assets/js/core/workspace-nav-v34.js?v=34.1" as="script">
-  <link rel="preload" href="assets/js/core/app-core.js?v=34.1" as="script">
+  <!-- LUTMIN V35.0 · Administración modular + datos/runtime por demanda + recuperación de assets -->
+  <link rel="preload" href="assets/js/core/module-loader-v33.js?v=35.0" as="script">
+  <link rel="preload" href="assets/js/core/data-runtime-v30.js?v=35.0" as="script">
+  <link rel="preload" href="assets/js/core/view-loader-v32.js?v=35.0" as="script">
+  <link rel="preload" href="assets/js/core/workspace-nav-v34.js?v=35.0" as="script">
+  <link rel="preload" href="assets/js/core/app-core.js?v=35.0" as="script">
   <link rel="preconnect" href="https://kkpzycsjozrvbimpvfnl.supabase.co" crossorigin>
   <link rel="dns-prefetch" href="//kkpzycsjozrvbimpvfnl.supabase.co">
-  <link rel="stylesheet" href="assets/css/v30-loader.css?v=34.1">
-  <link rel="stylesheet" href="assets/css/v30-runtime.css?v=34.1">
-  <link rel="stylesheet" href="assets/css/v31-views.css?v=34.1">
+  <link rel="stylesheet" href="assets/css/v30-loader.css?v=35.0">
+  <link rel="stylesheet" href="assets/css/v30-runtime.css?v=35.0">
+  <link rel="stylesheet" href="assets/css/v31-views.css?v=35.0">
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -901,19 +901,7 @@
           <button data-student-only="true" class="campus-tab w-full text-left p-3 rounded-xl text-slate-300 hover:bg-white/10" data-campus-tab="agenda"><i class="fa-solid fa-calendar-days w-7"></i>Agenda</button>
           <button data-student-only="true" class="campus-tab w-full text-left p-3 rounded-xl text-slate-300 hover:bg-white/10" data-campus-tab="activities"><i class="fa-solid fa-list-check w-7"></i>Actividades</button>
           <button data-student-only="true" class="campus-tab w-full text-left p-3 rounded-xl text-slate-300 hover:bg-white/10" data-campus-tab="certificates"><i class="fa-solid fa-award w-7"></i>Certificados</button>
-          <button type="button" data-student-only="true" data-talent-tab="true" id="studentConectaParentV183" aria-expanded="false" aria-controls="studentConectaSubnavV183" class="campus-tab w-full text-left p-3 rounded-xl text-slate-300 hover:bg-white/10" data-campus-tab="talent"><i class="fa-solid fa-briefcase w-7"></i><span class="conecta-parent-label-v183">Lutmin Conecta</span><i id="studentConectaChevronV183" class="fa-solid fa-chevron-down"></i></button>
-          <div data-student-only="true" id="studentConectaSubnavV183" class="conecta-subnav-v183 is-collapsed">
-            <p class="conecta-subnav-label-v183">Tu perfil</p>
-            <button type="button" class="conecta-subitem-v183 active" data-conecta-key-v182="profile" onclick="openConectaSectionV182('profile')"><i class="fa-regular fa-id-card"></i><span>Perfil profesional</span></button>
-            <button type="button" class="conecta-subitem-v183" data-conecta-key-v182="career" onclick="openConectaSectionV182('career')"><i class="fa-solid fa-route"></i><span>Carrera y evidencias</span></button>
-            <p class="conecta-subnav-label-v183">Empleo</p>
-            <button type="button" class="conecta-subitem-v183" data-conecta-key-v182="jobs" onclick="openConectaSectionV182('jobs')"><i class="fa-solid fa-magnifying-glass"></i><span>Oportunidades laborales</span></button>
-            <button type="button" class="conecta-subitem-v183" data-conecta-key-v182="applications" onclick="openConectaSectionV182('applications')"><i class="fa-regular fa-file-lines"></i><span>Mis postulaciones</span></button>
-            <button type="button" class="conecta-subitem-v183" data-conecta-key-v182="interviews" onclick="openConectaSectionV182('interviews')"><i class="fa-regular fa-calendar-check"></i><span>Entrevistas</span></button>
-            <button type="button" class="conecta-subitem-v183" data-conecta-key-v182="saved" onclick="openConectaSectionV182('saved')"><i class="fa-regular fa-bookmark"></i><span>Guardadas</span></button>
-            <p class="conecta-subnav-label-v183">Herramientas</p>
-            <button type="button" class="conecta-subitem-v183" data-conecta-key-v182="agent" onclick="openConectaSectionV182('agent')"><i class="fa-solid fa-wand-magic-sparkles"></i><span>Agente de empleabilidad</span></button>
-          </div>
+          <button type="button" data-student-only="true" data-talent-tab="true" id="studentConectaParentV183" class="campus-tab w-full text-left p-3 rounded-xl text-slate-300 hover:bg-white/10" data-campus-tab="talent"><i class="fa-solid fa-briefcase w-7"></i><span class="flex-1 min-w-0">Lutmin Conecta</span></button>
           <button class="campus-tab w-full text-left p-3 rounded-xl text-slate-300 hover:bg-white/10 flex items-center" data-campus-tab="notifications"><i class="fa-solid fa-bell w-7"></i><span class="flex-1">Novedades</span><span id="notificationBadgeDesktop" class="hidden min-w-5 h-5 px-1 rounded-full bg-red-500 text-white text-[10px] font-black flex items-center justify-center">0</span></button>
           <button class="campus-tab w-full text-left p-3 rounded-xl text-slate-300 hover:bg-white/10" data-campus-tab="support"><i class="fa-solid fa-headset w-7"></i>Ayuda</button>
           <button class="campus-tab w-full text-left p-3 rounded-xl text-slate-300 hover:bg-white/10" data-campus-tab="profile"><i class="fa-solid fa-user w-7"></i>Mi cuenta</button>
@@ -1835,16 +1823,14 @@
   <!-- QR / PDF para certificados + Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <!-- LUTMIN V34.1 · Administración por datos/runtime bajo demanda y actualización segura. -->
-  <script src="assets/js/core/module-loader-v33.js?v=34.1"></script>
-  <script src="assets/js/core/data-runtime-v30.js?v=34.1"></script>
-  <script src="assets/js/core/view-loader-v32.js?v=34.1"></script>
-  <script src="assets/js/core/workspace-nav-v34.js?v=34.1"></script>
-  <script src="assets/js/core/app-core.js?v=34.1"></script>
-  <script src="assets/js/core/admin-data-runtime-v33.js?v=34.1"></script>
-  <script src="assets/js/core/lazy-core-bindings-v32.js?v=34.1"></script>
-  <script src="assets/js/core/admin-module-loader-v33.js?v=34.1"></script>
-  <script src="assets/js/core/ui-runtime-v30.js?v=34.1"></script>
-  <script src="assets/js/core/update-manager-v32.js?v=34.1"></script>
+  <!-- LUTMIN V35.0 · Administración por datos/runtime bajo demanda y actualización segura. -->
+  <script src="assets/js/core/module-loader-v33.js?v=35.0"></script>
+  <script src="assets/js/core/data-runtime-v30.js?v=35.0"></script>
+  <script src="assets/js/core/view-loader-v32.js?v=35.0"></script>
+  <script src="assets/js/core/workspace-nav-v34.js?v=35.0"></script>
+  <script src="assets/js/core/app-core.js?v=35.0"></script>
+  <script src="assets/js/core/lazy-core-bindings-v32.js?v=35.0"></script>
+  <script src="assets/js/core/ui-runtime-v30.js?v=35.0"></script>
+  <script src="assets/js/core/update-manager-v32.js?v=35.0"></script>
 </body>
 </html>

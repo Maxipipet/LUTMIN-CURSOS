@@ -77,7 +77,7 @@ function ensureStudentEngineV150(){
     const target=document.getElementById('talentEvidenceV140')||document.getElementById('talentApprovalCard');
     const box=document.createElement('div');box.id='talentEvidenceCareerV150';box.className='mt-5 rounded-[2rem] bg-white border border-slate-100 overflow-hidden';
     box.innerHTML=`<div class="p-5 sm:p-6 border-b border-slate-100"><div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4"><div><p class="text-[10px] uppercase tracking-widest font-black text-cyan-700">Evidence & Career Engine</p><h3 class="mt-1 text-2xl font-black text-lutmin-dark">Tu perfil vivo, explicado.</h3><p class="mt-2 text-xs text-slate-500">No sólo qué sabés: de dónde surge cada evidencia y qué te falta para el próximo objetivo.</p></div><button onclick="loadV150StudentData()" class="px-4 py-2.5 rounded-xl bg-lutmin-dark text-white text-xs font-bold"><i class="fa-solid fa-rotate mr-2"></i>Actualizar motor</button></div></div><div id="talentEvidenceCareerBodyV150" class="p-5 sm:p-6"><p class="text-sm text-slate-500">Cargando...</p></div>`;
-    target?.insertAdjacentElement('afterend',box);
+    const host=document.getElementById('talentCareerHostV342');if(host)host.appendChild(box);else target?.insertAdjacentElement('afterend',box);
   }
   if(!document.getElementById('talentDocumentAgentV150')){
     const cv=document.getElementById('talentCvAgentV140');const doc=document.createElement('div');doc.id='talentDocumentAgentV150';doc.className='mt-5 rounded-[2rem] border border-amber-100 bg-gradient-to-br from-amber-50 to-white p-5 sm:p-6';

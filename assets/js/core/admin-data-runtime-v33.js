@@ -1,11 +1,11 @@
 // =============================================================
-// LUTMIN V34.1 · ADMIN DATA RUNTIME
+// LUTMIN V35.0 · ADMIN DATA RUNTIME
 // Datos primarios de Administración por módulo/dominio.
 // Evita la carga monolítica de 14 tablas al abrir Administración.
 // =============================================================
 (function(){
   'use strict';
-  const VERSION='34.1';
+  const VERSION='35.0';
   const state={entries:new Map(),inFlight:new Map(),activeModule:'overview',loads:0,hits:0,errors:0,lastDuration:0,lastDatasets:[]};
   const DEFAULT_TTL=60000;
 
@@ -101,19 +101,8 @@
   async function refreshCurrent(){const module=currentModule();invalidate(module);return loadForModule(module,{force:true});}
   async function bootstrap(){return loadForModule(currentModule(),{force:false});}
 
-  // Compatibilidad: todas las mutaciones históricas que llaman loadAdminData()
-  // ahora refrescan únicamente el módulo activo, no las 14 tablas globales.
-  const legacyLoadAdminData=window.loadAdminData;
-  window.loadAdminData=async function(){
-    if(await (window.LutminV32Views||window.LutminV31Views)?.ensureForTab?.('admin')===false)return false;
-    if(!supabaseClient||!isAdmin())return false;
-    const module=currentModule();
-    invalidate(module);
-    const ok=await loadForModule(module,{force:true});
-    try{await window.LutminV30Admin?.loadForModule?.(module,{force:true});}catch(_){}
-    return ok;
-  };
-  window.loadAdminData.__lutminV33=true;
-
-  window.LutminV33AdminData={version:VERSION,loadForModule,loadDataset,refreshCurrent,bootstrap,invalidate,invalidateMany,status:()=>({version:VERSION,activeModule:state.activeModule,loads:state.loads,hits:state.hits,errors:state.errors,lastDuration:state.lastDuration,lastDatasets:[...state.lastDatasets],cached:[...state.entries.keys()],inFlight:[...state.inFlight.keys()],moduleMap}),legacyLoadAdminData};
+  // V35: loadAdminData es un dispatcher estable definido en app-core.
+  // Este runtime ya no lo reemplaza; así los módulos cargados en distinto orden
+  // conservan sus wrappers y no reaparece la carga monolítica por accidente.
+  window.LutminV33AdminData={version:VERSION,loadForModule,loadDataset,refreshCurrent,bootstrap,invalidate,invalidateMany,status:()=>({version:VERSION,activeModule:state.activeModule,loads:state.loads,hits:state.hits,errors:state.errors,lastDuration:state.lastDuration,lastDatasets:[...state.lastDatasets],cached:[...state.entries.keys()],inFlight:[...state.inFlight.keys()],moduleMap})};
 })();

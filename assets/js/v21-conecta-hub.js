@@ -28,37 +28,22 @@
   function ensureConectaHubV210(){
     const panel=document.querySelector('section[data-campus-panel="talent"]');
     if(!panel||document.getElementById('conectaHubV210'))return;
+    const host=document.getElementById('talentSummaryHostV342');
     const hub=document.createElement('div');hub.id='conectaHubV210';hub.className='conecta-hub-v210 conecta-hub-section-v210';
     hub.innerHTML=`
-      <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-        <div><p class="text-[10px] uppercase tracking-[.16em] font-black text-lutmin-light">Lutmin Conecta</p><h2 class="mt-1 text-2xl sm:text-3xl font-black text-lutmin-dark">Tu espacio profesional.</h2><p class="mt-1 text-sm text-slate-500">Perfil, oportunidades, carrera, evidencia y organizaciones en un mismo lugar.</p></div>
-        <button onclick="refreshConectaHubV210()" class="px-4 py-2.5 rounded-xl bg-white border border-slate-200 text-xs font-bold text-lutmin-dark"><i class="fa-solid fa-rotate mr-2"></i>Actualizar</button>
-      </div>
-      <div class="conecta-hub-card-v210 mt-5">
-        <div class="flex items-center justify-between gap-3"><div><p class="text-[9px] uppercase tracking-widest font-black text-lutmin-light">Módulos de Conecta</p><p class="mt-1 text-[10px] text-slate-500">Entrá directo a la herramienta que necesitás.</p></div><button onclick="openConectaModuleV210('summary')" class="px-3 py-2 rounded-xl bg-lutmin-light text-white text-[10px] font-black">Inicio Conecta</button></div>
-        <div id="conectaHubGridV210" class="conecta-hub-grid-v210 mt-3">${modulesV210.map(moduleButtonV210).join('')}</div>
-        <div class="conecta-hub-toolbar-v210">
-          <div class="conecta-hub-search-wrap-v210"><i class="fa-solid fa-magnifying-glass"></i><input id="conectaModuleSearchV210" oninput="filterConectaModulesV210(this.value)" class="conecta-hub-search-v210" placeholder="Buscar módulo o función..."></div>
-          <button onclick="quickImportCvV210()" class="conecta-hub-action-v210 primary"><i class="fa-solid fa-file-arrow-up"></i>Analizar CV</button>
-          <button onclick="openMyPublicProfileV40?.()" class="conecta-hub-action-v210"><i class="fa-solid fa-id-card"></i>Perfil público</button>
-        </div>
-      </div>
-      <div id="conectaSummaryV210" class="conecta-summary-v210 conecta-hub-section-v210">
-        <div class="flex items-start justify-between gap-3"><div><p class="text-[9px] uppercase tracking-widest font-black text-cyan-200">Resumen personal</p><h3 class="mt-1 text-xl font-black">Qué está pasando en tu perfil profesional.</h3></div><span class="px-3 py-1.5 rounded-full bg-white/10 text-[9px] font-black text-cyan-100">API $0</span></div>
+      <div class="conecta-summary-v210 mt-0">
+        <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4"><div><p class="text-[9px] uppercase tracking-widest font-black text-cyan-200">Resumen personal</p><h3 class="mt-1 text-xl font-black">Qué está pasando en tu perfil profesional.</h3><p class="mt-1 text-xs text-slate-300">Perfil, oportunidades, postulaciones y próximos pasos en una sola vista.</p></div><div class="flex flex-wrap gap-2"><button onclick="quickImportCvV210()" class="px-3 py-2 rounded-xl bg-white/10 text-white text-[10px] font-black"><i class="fa-solid fa-file-arrow-up mr-1"></i>Analizar CV</button><button onclick="refreshConectaHubV210()" class="px-3 py-2 rounded-xl bg-white text-lutmin-dark text-[10px] font-black"><i class="fa-solid fa-rotate mr-1"></i>Actualizar</button></div></div>
         <div id="conectaSummaryStatsV210" class="conecta-summary-grid-v210 mt-4"></div>
         <div id="conectaNextActionV210" class="conecta-next-v210"><p class="eyebrow">Siguiente mejor acción</p><h4>Cargando...</h4><p>Lutmin está revisando tu información disponible.</p></div>
       </div>`;
-    panel.insertAdjacentElement('afterbegin',hub);
-    // El encabezado viejo queda como encabezado de Perfil, no como encabezado general.
-    const old=document.getElementById('conectaProfileV182');if(old)old.classList.add('mt-6','conecta-hub-section-v210');
+    if(host)host.appendChild(hub);else panel.insertAdjacentElement('afterbegin',hub);
     V210.installed=true;
-    setConectaActiveV210('summary');
   }
 
   function setConectaActiveV210(key){
     V210.active=key;
-    document.querySelectorAll('[data-v210-module]').forEach(b=>b.classList.toggle('active',b.dataset.v210Module===key));
-    try{localStorage.setItem('lutmin-v210-conecta-active',key)}catch(_){ }
+    window.setTalentModuleV342?.(key);
+    try{sessionStorage.setItem('lutmin-talent-module-v342',key)}catch(_){ }
   }
 
   function scrollConectaV210(el){
@@ -104,19 +89,19 @@
 
   window.openConectaModuleV210=async function(key){
     if(currentLutminUser?.role!=='student')return;
-    ensureConectaHubV210();setConectaActiveV210(key);
+    ensureConectaHubV210();
     if(typeof goToCampusTab==='function')goToCampusTab('talent');
-    if(key==='summary'){renderConectaSummaryV210();return scrollConectaV210(document.getElementById('conectaSummaryV210'));}
-    if(key==='organizations'){if(typeof openConectaV200==='function')await openConectaV200('organizations');return setTimeout(()=>scrollConectaV210(document.getElementById('conectaOrganizationsV200')),80);}
-    if(key==='timeline'){if(typeof openConectaV200==='function')await openConectaV200('timeline');return setTimeout(()=>scrollConectaV210(document.getElementById('conectaTimelineV200')),80);}
+    if(key==='summary'){setConectaActiveV210('summary');renderConectaSummaryV210();return;}
+    if(key==='organizations'){if(typeof openConectaV200==='function')await openConectaV200('organizations');return;}
+    if(key==='timeline'){if(typeof openConectaV200==='function')await openConectaV200('timeline');return;}
     if(key==='passport'){
       try{if(typeof ensurePersonalAutopilotV110==='function')ensurePersonalAutopilotV110();if(typeof loadPersonalAutopilotV110==='function')await loadPersonalAutopilotV110();if(typeof setPersonalAgentTabV110==='function')setPersonalAgentTabV110('passport');}catch(_){ }
-      return setTimeout(()=>scrollConectaV210(document.getElementById('personalAutopilotV110')),100);
+      return setConectaActiveV210('passport');
     }
     if(typeof openConectaSectionV182==='function')await openConectaSectionV182(key);
-    const map={profile:'conectaProfileV182',jobs:'conectaJobsV182',applications:'conectaApplicationsV182',interviews:'conectaInterviewsV182',saved:'conectaSavedV182',agent:'talentAgentV100',career:'talentEvidenceCareerV150'};
-    setTimeout(()=>scrollConectaV210(document.getElementById(map[key])),90);
+    setConectaActiveV210(key);
   };
+
 
   window.refreshConectaHubV210=async function(){
     if(currentLutminUser?.role!=='student')return;
@@ -128,7 +113,6 @@
 
   function polishStudentSidebarV210(){
     const p=document.getElementById('studentConectaParentV183');if(p){p.setAttribute('aria-expanded','false');p.removeAttribute('aria-controls');}
-    const sub=document.getElementById('studentConectaSubnavV183');if(sub)sub.setAttribute('aria-hidden','true');
   }
 
   function installV210(){
@@ -152,7 +136,7 @@
 
   document.addEventListener('click',e=>{
     const tab=e.target.closest?.('#studentConectaParentV183');
-    if(tab)setTimeout(()=>{ensureConectaHubV210();renderConectaSummaryV210();setConectaActiveV210('summary');scrollConectaV210(document.getElementById('conectaHubV210'));},80);
+    if(tab)setTimeout(()=>{ensureConectaHubV210();renderConectaSummaryV210();setConectaActiveV210('summary');},80);
   },true);
 
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(installV210,1000));else setTimeout(installV210,1000);

@@ -19,17 +19,7 @@
       const anchor=document.getElementById('conectaJobsV182');
       const box=document.createElement('div');box.id='conectaOrganizationsV200';box.className='conecta-anchor-v182 mt-6 bg-white rounded-3xl border border-slate-100 overflow-hidden';
       box.innerHTML=`<div class="p-5 sm:p-6 border-b border-slate-100"><div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4"><div><p class="text-[10px] uppercase tracking-widest font-black text-cyan-700">Organizaciones</p><h3 class="mt-1 text-xl font-black text-lutmin-dark">Seguí empresas aunque hoy no tengan una búsqueda abierta.</h3><p class="mt-1 text-xs text-slate-500 max-w-2xl">Guardá organizaciones que te interesan y, si querés, manifestá interés laboral de forma directa. La empresa sólo ve ese interés porque vos lo decidiste.</p></div><div class="flex gap-2 flex-wrap"><input id="orgSearchV200" oninput="renderOrganizationsV200()" class="px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs min-w-[210px]" placeholder="Buscar organización"><label class="px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-[11px] font-bold flex items-center gap-2"><input id="orgFollowOnlyV200" type="checkbox" onchange="renderOrganizationsV200()"> Sólo seguidas</label></div></div><div id="orgStatsV200" class="mt-5 grid grid-cols-3 gap-3"></div></div><div id="organizationsGridV200" class="p-5 sm:p-6 grid md:grid-cols-2 xl:grid-cols-3 gap-4"><div class="md:col-span-2 xl:col-span-3 text-sm text-slate-500">Cargando organizaciones...</div></div>`;
-      if(anchor)anchor.insertAdjacentElement('beforebegin',box);else panel.appendChild(box);
-    }
-    const sub=document.getElementById('studentConectaSubnavV183');
-    if(sub&&!document.getElementById('conectaOrganizationsNavV200')){
-      const jobs=sub.querySelector('[data-conecta-key-v182="jobs"]');
-      jobs?.insertAdjacentHTML('beforebegin','<button id="conectaOrganizationsNavV200" type="button" class="conecta-subitem-v183" data-conecta-v200="organizations" onclick="openConectaV200(\'organizations\')"><i class="fa-regular fa-building"></i><span>Organizaciones</span></button>');
-    }
-    const mobile=document.getElementById('conectaMobileNavV182');
-    if(mobile&&!document.getElementById('conectaOrganizationsMobileV200')){
-      const jobs=mobile.querySelector('[data-conecta-mobile-key-v182="jobs"]');
-      jobs?.insertAdjacentHTML('beforebegin','<button id="conectaOrganizationsMobileV200" type="button" class="conecta-mobile-btn-v182" data-conecta-mobile-v200="organizations" onclick="openConectaV200(\'organizations\')">Organizaciones</button>');
+      const host=document.getElementById('talentOrganizationsHostV342');if(host)host.appendChild(box);else if(anchor)anchor.insertAdjacentElement('beforebegin',box);else panel.appendChild(box);
     }
   }
 
@@ -65,14 +55,8 @@
       const anchor=document.getElementById('conectaOrganizationsV200')||document.getElementById('conectaJobsV182');
       const box=document.createElement('div');box.id='conectaTimelineV200';box.className='conecta-anchor-v182 mt-6 bg-white rounded-3xl border border-slate-100 overflow-hidden';
       box.innerHTML=`<div class="p-5 sm:p-6 border-b border-slate-100"><div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4"><div><p class="text-[10px] uppercase tracking-widest font-black text-violet-600">Perfil vivo</p><h3 class="mt-1 text-xl font-black text-lutmin-dark">Mi trayectoria profesional</h3><p class="mt-1 text-xs text-slate-500">Experiencia, formación, certificados y procesos laborales ordenados automáticamente en una sola historia.</p></div><select id="timelineFilterV200" onchange="renderCareerTimelineV200()" class="px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs"><option value="all">Toda la trayectoria</option><option value="work">Experiencia</option><option value="learning">Formación</option><option value="career">Empleo</option></select></div><div id="timelineStatsV200" class="mt-5 grid grid-cols-3 gap-3"></div></div><div id="careerTimelineV200" class="p-5 sm:p-6"><div class="text-sm text-slate-500">Preparando trayectoria...</div></div>`;
-      if(anchor)anchor.insertAdjacentElement('beforebegin',box);else panel.appendChild(box);
+      const host=document.getElementById('talentTimelineHostV342');if(host)host.appendChild(box);else if(anchor)anchor.insertAdjacentElement('beforebegin',box);else panel.appendChild(box);
     }
-    const sub=document.getElementById('studentConectaSubnavV183');
-    if(sub&&!document.getElementById('conectaTimelineNavV200')){
-      const career=sub.querySelector('[data-conecta-key-v182="career"]');career?.insertAdjacentHTML('afterend','<button id="conectaTimelineNavV200" type="button" class="conecta-subitem-v183" data-conecta-v200="timeline" onclick="openConectaV200(\'timeline\')"><i class="fa-solid fa-timeline"></i><span>Mi trayectoria</span></button>');
-    }
-    const mobile=document.getElementById('conectaMobileNavV182');
-    if(mobile&&!document.getElementById('conectaTimelineMobileV200'))mobile.insertAdjacentHTML('beforeend','<button id="conectaTimelineMobileV200" type="button" class="conecta-mobile-btn-v182" data-conecta-mobile-v200="timeline" onclick="openConectaV200(\'timeline\')">Trayectoria</button>');
   }
 
   async function loadCareerTimelineV200(){
@@ -103,11 +87,9 @@
     if(currentLutminUser?.role!=='student')return;ensureOrganizationsUi();ensureTimelineUi();
     if(typeof goToCampusTab==='function')goToCampusTab('talent');
     if(typeof loadTalentCenter==='function')try{if(window.LutminV29Data?.load)await window.LutminV29Data.load('talent',()=>loadTalentCenter(),{ttl:18000});else await loadTalentCenter()}catch(_){ }
-    document.querySelectorAll('[data-conecta-key-v182],[data-conecta-mobile-key-v182]').forEach(x=>x.classList.remove('active'));
-    document.querySelectorAll('[data-conecta-v200],[data-conecta-mobile-v200]').forEach(x=>x.classList.toggle('active',x.dataset.conectaV200===key||x.dataset.conectaMobileV200===key));
-    const parent=document.getElementById('studentConectaParentV183'),sub=document.getElementById('studentConectaSubnavV183');if(parent&&sub){parent.setAttribute('aria-expanded','true');sub.classList.remove('is-collapsed');}
-    if(key==='organizations'){if(window.LutminV29Data?.load)await window.LutminV29Data.load('talent:organizations',()=>loadOrganizationsV200(),{ttl:30000});else await loadOrganizationsV200();document.getElementById('conectaOrganizationsV200')?.scrollIntoView({behavior:'smooth',block:'start'});}
-    if(key==='timeline'){if(window.LutminV29Data?.load)await window.LutminV29Data.load('talent:timeline',()=>loadCareerTimelineV200(),{ttl:30000});else await loadCareerTimelineV200();document.getElementById('conectaTimelineV200')?.scrollIntoView({behavior:'smooth',block:'start'});}
+    if(key==='organizations'){if(window.LutminV29Data?.load)await window.LutminV29Data.load('talent:organizations',()=>loadOrganizationsV200(),{ttl:30000});else await loadOrganizationsV200();}
+    if(key==='timeline'){if(window.LutminV29Data?.load)await window.LutminV29Data.load('talent:timeline',()=>loadCareerTimelineV200(),{ttl:30000});else await loadCareerTimelineV200();}
+    window.setTalentModuleV342?.(key);
   };
 
   // Si se navega a un submódulo anterior, quitamos el estado activo V20.

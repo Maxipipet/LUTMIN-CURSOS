@@ -1,18 +1,31 @@
 
+            <div class="flex flex-col xl:flex-row xl:items-end xl:justify-between gap-4">
+              <div><p class="text-[10px] sm:text-xs text-lutmin-light font-bold uppercase tracking-widest">Lutmin Conecta</p><h2 class="mt-1 sm:mt-2 text-2xl sm:text-3xl font-black text-lutmin-dark">Tu espacio profesional</h2><p class="mt-2 text-sm text-slate-500">Perfil, oportunidades, postulaciones, trayectoria y herramientas de empleabilidad en módulos separados.</p></div>
+            </div>
+
+            <div id="talentModuleNavV342" class="mt-6 bg-white rounded-2xl border border-slate-100 p-2.5 overflow-x-auto">
+              <div class="flex flex-wrap items-center gap-1.5 min-w-max lg:min-w-0">
+                <button type="button" data-talent-module-key="summary" aria-current="page" onclick="openConectaModuleV210('summary')" class="talent-module-btn-v342 px-3.5 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap"><i class="fa-solid fa-chart-pie mr-2"></i>Resumen</button>
+                <button type="button" data-talent-module-key="profile" onclick="openConectaSectionV182('profile')" class="talent-module-btn-v342 px-3.5 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap"><i class="fa-regular fa-id-card mr-2"></i>Perfil</button>
+                <button type="button" data-talent-module-key="jobs" onclick="openConectaSectionV182('jobs')" class="talent-module-btn-v342 px-3.5 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap"><i class="fa-solid fa-magnifying-glass mr-2"></i>Oportunidades</button>
+                <button type="button" data-talent-module-key="applications" onclick="openConectaSectionV182('applications')" class="talent-module-btn-v342 px-3.5 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap"><i class="fa-regular fa-file-lines mr-2"></i>Postulaciones</button>
+                <button type="button" data-talent-module-key="interviews" onclick="openConectaSectionV182('interviews')" class="talent-module-btn-v342 px-3.5 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap"><i class="fa-regular fa-calendar-check mr-2"></i>Entrevistas</button>
+                <button type="button" data-talent-module-key="organizations" onclick="openConectaV200('organizations')" class="talent-module-btn-v342 px-3.5 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap"><i class="fa-regular fa-building mr-2"></i>Organizaciones</button>
+                <button type="button" data-talent-module-key="career" onclick="openConectaSectionV182('career')" class="talent-module-btn-v342 px-3.5 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap"><i class="fa-solid fa-route mr-2"></i>Carrera y evidencias</button>
+                <button type="button" data-talent-module-key="timeline" onclick="openConectaV200('timeline')" class="talent-module-btn-v342 px-3.5 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap"><i class="fa-solid fa-timeline mr-2"></i>Trayectoria</button>
+                <button type="button" data-talent-module-key="saved" onclick="openConectaSectionV182('saved')" class="talent-module-btn-v342 px-3.5 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap"><i class="fa-regular fa-bookmark mr-2"></i>Guardadas</button>
+                <button type="button" data-talent-module-key="agent" onclick="openConectaSectionV182('agent')" class="talent-module-btn-v342 px-3.5 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap"><i class="fa-solid fa-wand-magic-sparkles mr-2"></i>Agente</button>
+                <button type="button" data-talent-module-key="passport" onclick="openConectaModuleV210('passport')" class="talent-module-btn-v342 px-3.5 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap"><i class="fa-regular fa-address-card mr-2"></i>Pasaporte</button>
+              </div>
+            </div>
+
+            <div data-talent-module-panel="summary" class="mt-6"><div id="talentSummaryHostV342"></div></div>
+
+            <div id="talentProfilePanelV342" data-talent-module-panel="profile" class="hidden mt-6">
             <div id="conectaProfileV182" class="conecta-anchor-v182 flex flex-col xl:flex-row xl:items-end xl:justify-between gap-4">
               <div><p class="text-[10px] sm:text-xs text-lutmin-light font-bold uppercase tracking-widest">Lutmin Conecta</p><h2 id="campusProfileHeading" class="mt-1 sm:mt-2 text-2xl sm:text-3xl font-black text-lutmin-dark">Mi perfil profesional</h2><p class="mt-2 text-sm text-slate-500">Completá tu perfil, decidí si querés aparecer en el banco de talento y postulate a oportunidades.</p></div>
               <div class="flex flex-wrap gap-2"><button onclick="copyMyTalentProfileLink()" class="px-4 py-2.5 rounded-xl bg-white border border-slate-200 text-sm font-bold"><i class="fa-solid fa-link mr-2"></i>Copiar perfil</button><button onclick="downloadTalentCvPdf()" class="px-4 py-2.5 rounded-xl bg-lutmin-dark text-white text-sm font-bold"><i class="fa-solid fa-file-pdf mr-2"></i>Descargar CV PDF</button></div>
             </div>
-            <div id="conectaMobileNavV182" class="conecta-mobile-nav-v182">
-              <button type="button" class="conecta-mobile-btn-v182 active" data-conecta-mobile-key-v182="profile" onclick="openConectaSectionV182('profile')">Perfil</button>
-              <button type="button" class="conecta-mobile-btn-v182" data-conecta-mobile-key-v182="jobs" onclick="openConectaSectionV182('jobs')">Oportunidades</button>
-              <button type="button" class="conecta-mobile-btn-v182" data-conecta-mobile-key-v182="applications" onclick="openConectaSectionV182('applications')">Postulaciones</button>
-              <button type="button" class="conecta-mobile-btn-v182" data-conecta-mobile-key-v182="interviews" onclick="openConectaSectionV182('interviews')">Entrevistas</button>
-              <button type="button" class="conecta-mobile-btn-v182" data-conecta-mobile-key-v182="agent" onclick="openConectaSectionV182('agent')">Agente</button>
-              <button type="button" class="conecta-mobile-btn-v182" data-conecta-mobile-key-v182="career" onclick="openConectaSectionV182('career')">Carrera</button>
-              <button type="button" class="conecta-mobile-btn-v182" data-conecta-mobile-key-v182="saved" onclick="openConectaSectionV182('saved')">Guardadas</button>
-            </div>
-
             <div class="mt-6 grid sm:grid-cols-4 gap-3">
               <div class="bg-white rounded-2xl border border-slate-100 p-4"><p class="text-[10px] uppercase font-bold text-slate-400">Perfil completo</p><p id="talentProfileStrength" class="mt-2 text-2xl font-black text-lutmin-light">0%</p><div class="mt-2 h-2 rounded-full bg-slate-100 overflow-hidden"><div id="talentProfileStrengthBar" class="h-full bg-lutmin-light rounded-full" style="width:0%"></div></div></div>
               <div class="bg-white rounded-2xl border border-slate-100 p-4"><p class="text-[10px] uppercase font-bold text-slate-400">Vistas de empresas · 30 días</p><p id="talentViews30Stat" class="mt-2 text-2xl font-black text-lutmin-dark">0</p></div>
@@ -67,11 +80,22 @@
                 <div class="bg-white rounded-3xl border border-slate-100 p-5 sm:p-6"><h3 class="font-extrabold text-lutmin-dark">Experiencia laboral</h3><form id="talentExperienceForm" class="mt-4 grid sm:grid-cols-2 gap-2"><input id="talentExpCompany" required maxlength="160" class="px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Empresa"><input id="talentExpPosition" required maxlength="160" class="px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Puesto"><input id="talentExpStart" type="date" class="px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm"><input id="talentExpEnd" type="date" class="px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm"><textarea id="talentExpDescription" rows="3" class="sm:col-span-2 px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Principales tareas / logros"></textarea><label class="flex items-center gap-2 text-xs"><input id="talentExpCurrent" type="checkbox"> Trabajo actualmente acá</label><button class="sm:justify-self-end px-4 py-2.5 rounded-xl bg-lutmin-dark text-white text-xs font-bold">Agregar experiencia</button></form><div id="talentExperiencesList" class="mt-4 space-y-2"></div></div>
               </div>
             </div>
+            </div>
 
-            <div class="mt-6 grid xl:grid-cols-[1.25fr_.75fr] gap-5">
+            <div data-talent-module-panel="jobs" class="hidden mt-6">
               <div id="conectaJobsV182" class="conecta-anchor-v182 bg-white rounded-3xl border border-slate-100 overflow-hidden"><div class="p-5 sm:p-6 border-b border-slate-100"><h3 class="font-extrabold text-lutmin-dark">Oportunidades laborales</h3><p class="mt-1 text-xs text-slate-500">Postulate con tu perfil y tus certificados Lutmin.</p></div><div id="talentJobsList" class="divide-y divide-slate-100"></div></div>
+            </div>
+            <div data-talent-module-panel="applications" class="hidden mt-6">
               <div id="conectaApplicationsV182" class="conecta-anchor-v182 bg-white rounded-3xl border border-slate-100 overflow-hidden"><div class="p-5 sm:p-6 border-b border-slate-100"><h3 class="font-extrabold text-lutmin-dark">Mis postulaciones</h3><p class="mt-1 text-xs text-slate-500">Seguimiento de tus procesos.</p></div><div id="talentApplicationsList" class="divide-y divide-slate-100"></div></div>
             </div>
+            <div data-talent-module-panel="interviews" class="hidden mt-6">
             <div id="conectaInterviewsV182" class="conecta-anchor-v182 mt-5 bg-white rounded-3xl border border-violet-100 overflow-hidden"><div class="p-5 sm:p-6 border-b border-violet-100 bg-violet-50"><h3 class="font-extrabold text-lutmin-dark"><i class="fa-solid fa-calendar-check text-violet-600 mr-2"></i>Próximas entrevistas</h3><p class="mt-1 text-xs text-slate-500">Fechas y datos de entrevistas coordinadas desde Lutmin Conecta.</p></div><div id="talentInterviewsList" class="divide-y divide-slate-100"></div></div>
+            </div>
+            <div data-talent-module-panel="organizations" class="hidden mt-6"><div id="talentOrganizationsHostV342"></div></div>
+            <div data-talent-module-panel="career" class="hidden mt-6"><div id="talentCareerHostV342"></div></div>
+            <div data-talent-module-panel="timeline" class="hidden mt-6"><div id="talentTimelineHostV342"></div></div>
+            <div data-talent-module-panel="saved" class="hidden mt-6">
             <div id="conectaSavedV182" class="conecta-anchor-v182 mt-5 bg-white rounded-3xl border border-slate-100 overflow-hidden"><div class="p-5 sm:p-6 border-b border-slate-100"><h3 class="font-extrabold text-lutmin-dark">Búsquedas guardadas</h3><p class="mt-1 text-xs text-slate-500">Guardá oportunidades para revisarlas después, sin postularte todavía.</p></div><div id="talentSavedJobsList" class="grid md:grid-cols-2 gap-3 p-5"></div></div>
-          
+            </div>
+            <div data-talent-module-panel="agent" class="hidden mt-6"><div id="talentAgentHostV342"></div></div>
+            <div data-talent-module-panel="passport" class="hidden mt-6"><div id="talentPassportHostV342"></div></div>

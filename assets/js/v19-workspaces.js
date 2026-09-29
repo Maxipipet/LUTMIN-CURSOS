@@ -162,7 +162,7 @@
         if(typeof loadCompanyAutopilotV110==='function')await loadCompanyAutopilotV110(false);
       }
       syncCompanyDynamicHostsV341();
-    }catch(err){console.warn('[Lutmin V34.1] Módulo Empresa no disponible:',key,err);}
+    }catch(err){console.warn('[Lutmin V35.0] Módulo Empresa no disponible:',key,err);}
     return true;
   }
   async function openCompanyV190(key){

@@ -1,22 +1,20 @@
-// LUTMIN V34.1 · cache versionada + vistas/workspaces y módulos admin por demanda.
-const CACHE='lutmin-runtime-v34-1';
-const CORE='lutmin-core-v34-1';
-const VERSION='34.1';
-const VERSION_TOKEN='v=34.1';
+// LUTMIN V35.0 · cache versionada + vistas/workspaces y módulos admin por demanda.
+const CACHE='lutmin-runtime-v35-0';
+const CORE='lutmin-core-v35-0';
+const VERSION='35.0';
+const VERSION_TOKEN='v=35.0';
 const CORE_ASSETS=[
-  './assets/css/v30-loader.css?v=34.1',
-  './assets/css/v30-runtime.css?v=34.1',
-  './assets/css/v31-views.css?v=34.1',
-  './assets/js/core/module-loader-v33.js?v=34.1',
-  './assets/js/core/data-runtime-v30.js?v=34.1',
-  './assets/js/core/view-loader-v32.js?v=34.1',
-  './assets/js/core/workspace-nav-v34.js?v=34.1',
-  './assets/js/core/app-core.js?v=34.1',
-  './assets/js/core/admin-data-runtime-v33.js?v=34.1',
-  './assets/js/core/lazy-core-bindings-v32.js?v=34.1',
-  './assets/js/core/admin-module-loader-v33.js?v=34.1',
-  './assets/js/core/ui-runtime-v30.js?v=34.1',
-  './assets/js/core/update-manager-v32.js?v=34.1'
+  './assets/css/v30-loader.css?v=35.0',
+  './assets/css/v30-runtime.css?v=35.0',
+  './assets/css/v31-views.css?v=35.0',
+  './assets/js/core/module-loader-v33.js?v=35.0',
+  './assets/js/core/data-runtime-v30.js?v=35.0',
+  './assets/js/core/view-loader-v32.js?v=35.0',
+  './assets/js/core/workspace-nav-v34.js?v=35.0',
+  './assets/js/core/app-core.js?v=35.0',
+  './assets/js/core/lazy-core-bindings-v32.js?v=35.0',
+  './assets/js/core/ui-runtime-v30.js?v=35.0',
+  './assets/js/core/update-manager-v32.js?v=35.0'
 ];
 self.addEventListener('install',event=>event.waitUntil((async()=>{const cache=await caches.open(CORE);await Promise.allSettled(CORE_ASSETS.map(url=>cache.add(url)));})()));
 self.addEventListener('activate',event=>event.waitUntil((async()=>{const keys=await caches.keys();await Promise.all(keys.filter(k=>k.startsWith('lutmin-')&&![CACHE,CORE].includes(k)).map(k=>caches.delete(k)));await self.clients.claim();})()));

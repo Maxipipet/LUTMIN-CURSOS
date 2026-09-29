@@ -28,9 +28,8 @@ function applyWorkspaceChromeV160(){
   if(profilePanel){const eyebrow=profilePanel.querySelector('p');if(eyebrow)eyebrow.textContent=isStudent?'Campus · identidad profesional':cfg.eyebrow;}
   const notif=document.querySelector('[data-campus-panel="notifications"]');
   if(notif){const desc=notif.querySelector('h2 + p');if(desc)desc.textContent=isStudent?'Cursos, pagos, certificados y avisos importantes en un solo lugar.':currentLutminUser.role==='admin'?'Alertas operativas, soporte, comunicaciones y eventos relevantes de la plataforma.':currentLutminUser.role==='company_admin'?'Avisos de capacitación, equipo, cumplimiento y novedades de la organización.':'Avisos de comisiones, alumnos, actividades y novedades académicas.';}
-  // Badge visible del contexto actual, también ayuda a evitar confundir perfiles.
-  const existing=document.getElementById('workspaceBadgeV160');if(existing)existing.remove();
-  const name=document.getElementById('campusSidebarName');if(name){const badge=document.createElement('div');badge.id='workspaceBadgeV160';badge.className='mt-2 v160-workspace-chip bg-white/10 text-blue-100';badge.innerHTML=`<i class="fa-solid ${cfg.icon}"></i>${cfg.label}`;name.insertAdjacentElement('afterend',badge);}
+  // V35.0: no repetimos el nombre del workspace en el pie. Rol + usuario ya identifican el acceso.
+  document.getElementById('workspaceBadgeV160')?.remove();
 }
 
 // Decorar y hacer explícito el acceso activo.

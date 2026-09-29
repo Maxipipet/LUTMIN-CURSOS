@@ -1,36 +1,31 @@
+// =========================================================
+// LUTMIN V35.0 · CONECTA STUDENT MODULE NAV
+// Un acceso en sidebar; módulos internos arriba; un panel activo.
+// =========================================================
 (function(){
-  const targetMapV182={
-    profile:'conectaProfileV182',
-    jobs:'conectaJobsV182',
-    applications:'conectaApplicationsV182',
-    interviews:'conectaInterviewsV182',
-    agent:'talentAgentV100',
-    career:'talentEvidenceCareerV150',
-    saved:'conectaSavedV182'
+  'use strict';
+  const targetMapV342={
+    summary:'conectaHubV210',profile:'talentProfilePanelV342',jobs:'conectaJobsV182',applications:'conectaApplicationsV182',
+    interviews:'conectaInterviewsV182',agent:'talentAgentV100',career:'talentEvidenceCareerV150',
+    saved:'conectaSavedV182',organizations:'conectaOrganizationsV200',timeline:'conectaTimelineV200',passport:'personalAutopilotV110'
   };
-  let activeConectaV182='profile';
-  let navBusyV182=false;
+  let activeConectaV342='summary';
+  let navBusyV342=false;
 
-  function setConectaActiveV182(key){
-    activeConectaV182=key;
-    document.querySelectorAll('[data-conecta-key-v182]').forEach(btn=>btn.classList.toggle('active',btn.dataset.conectaKeyV182===key));
-    document.querySelectorAll('[data-conecta-mobile-key-v182]').forEach(btn=>btn.classList.toggle('active',btn.dataset.conectaMobileKeyV182===key));
+  function setTalentModuleV342(key){
+    const valid=document.querySelector(`[data-talent-module-panel="${key}"]`)?key:'summary';
+    activeConectaV342=valid;
+    document.querySelectorAll('[data-talent-module-panel]').forEach(panel=>panel.classList.toggle('hidden',panel.dataset.talentModulePanel!==valid));
+    document.querySelectorAll('[data-talent-module-key]').forEach(btn=>{
+      const on=btn.dataset.talentModuleKey===valid;
+      btn.setAttribute('aria-current',on?'page':'false');
+    });
+    try{sessionStorage.setItem('lutmin-talent-module-v342',valid)}catch(_){ }
+    return valid;
   }
+  window.setTalentModuleV342=setTalentModuleV342;
 
-  function focusConectaTargetV182(el){
-    if(!el)return;
-    const root=document.querySelector('#campusModal .overflow-y-auto.modal-scroll.flex-1') || document.querySelector('#campusModal .modal-scroll.flex-1');
-    if(root){
-      const top=root.scrollTop + el.getBoundingClientRect().top - root.getBoundingClientRect().top - 18;
-      root.scrollTo({top:Math.max(0,top),behavior:'smooth'});
-    }else{
-      el.scrollIntoView({behavior:'smooth',block:'start'});
-    }
-    el.classList.add('conecta-nav-focus-v182');
-    setTimeout(()=>el.classList.remove('conecta-nav-focus-v182'),900);
-  }
-
-  async function prepareConectaDynamicV182(key){
+  async function prepareConectaDynamicV342(key){
     if(key==='agent' && typeof ensureTalentAgentV100==='function'){
       ensureTalentAgentV100();
       if(typeof refreshTalentAgentOptionsV100==='function')refreshTalentAgentOptionsV100();
@@ -44,65 +39,26 @@
   }
 
   window.openConectaSectionV182=async function(key){
-    if(navBusyV182)return;
-    if(currentLutminUser?.role!=='student')return;
-    navBusyV182=true;
+    if(navBusyV342||currentLutminUser?.role!=='student')return;
+    navBusyV342=true;
     try{
       if(typeof goToCampusTab==='function')goToCampusTab('talent');
       if(typeof loadTalentCenter==='function'){
         try{if(window.LutminV29Data?.load)await window.LutminV29Data.load('talent',()=>loadTalentCenter(),{ttl:18000});else await loadTalentCenter();}catch(_){ }
       }
-      await prepareConectaDynamicV182(key);
-      setConectaActiveV182(key);
-      let el=document.getElementById(targetMapV182[key]||targetMapV182.profile);
-      if(!el){
-        await new Promise(r=>setTimeout(r,120));
-        await prepareConectaDynamicV182(key);
-        el=document.getElementById(targetMapV182[key]||targetMapV182.profile);
-      }
-      if(el)focusConectaTargetV182(el);
-    }finally{
-      navBusyV182=false;
-    }
+      await prepareConectaDynamicV342(key);
+      setTalentModuleV342(key);
+    }finally{navBusyV342=false;}
   };
 
-  function setConectaMenuOpenV183(open){
-    const parent=document.getElementById('studentConectaParentV183');
-    const sub=document.getElementById('studentConectaSubnavV183');
-    if(!parent||!sub)return;
-    parent.setAttribute('aria-expanded',open?'true':'false');
-    sub.classList.toggle('is-collapsed',!open);
+  function initTalentModulesV342(){
+    if(currentLutminUser?.role!=='student')return;
+    let saved='summary';try{saved=sessionStorage.getItem('lutmin-talent-module-v342')||'summary'}catch(_){ }
+    // Al entrar a Conecta se conserva el último módulo si todavía existe.
+    setTalentModuleV342(saved);
   }
 
-  function installConectaV182(){
-    const parent=document.getElementById('studentConectaParentV183');
-    if(parent&&!parent.dataset.v183Bound){
-      parent.dataset.v183Bound='1';
-      parent.addEventListener('click',()=>{
-        const open=parent.getAttribute('aria-expanded')==='true';
-        setConectaMenuOpenV183(!open);
-        if(!open)setTimeout(()=>setConectaActiveV182(activeConectaV182||'profile'),0);
-      });
-    }
-
-    // Al cambiar a otro módulo principal, el desplegable se cierra.
-    document.querySelectorAll('#campusSidebarNavV183 .campus-tab').forEach(btn=>{
-      if(btn===parent||btn.dataset.v183CollapseBound)return;
-      btn.dataset.v183CollapseBound='1';
-      btn.addEventListener('click',()=>setConectaMenuOpenV183(false));
-    });
-
-    setConectaActiveV182(activeConectaV182);
-    setConectaMenuOpenV183(false);
-  }
-
-  // Los accesos internos siempre abren el árbol de Conecta.
-  const originalOpenConectaSectionV182=window.openConectaSectionV182;
-  window.openConectaSectionV182=async function(key){
-    setConectaMenuOpenV183(true);
-    return originalOpenConectaSectionV182(key);
-  };
-
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',installConectaV182);
-  else installConectaV182();
+  window.addEventListener('lutmin:v32:view-ready',e=>{if(e?.detail?.view==='talent')setTimeout(initTalentModulesV342,0)});
+  window.addEventListener('lutmin:v30:modules-ready',()=>setTimeout(initTalentModulesV342,0));
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initTalentModulesV342,{once:true});else initTalentModulesV342();
 })();

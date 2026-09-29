@@ -1,10 +1,10 @@
 // =============================================================
-// LUTMIN V34.1 · ADMIN SECONDARY DATA DEMAND CACHE
+// LUTMIN V35.0 · ADMIN SECONDARY DATA DEMAND CACHE
 // Evita consultar todos los módulos secundarios al abrir Administración.
 // =============================================================
 (function(){
   'use strict';
-  const VERSION='34.1';
+  const VERSION='35.0';
   const S={loaded:new Set(),inFlight:new Map(),activeModule:null,runs:0};
   const TTL=45000;
   function getUser(){try{return typeof currentLutminUser!=='undefined'?currentLutminUser:null;}catch(_){return null;}}
