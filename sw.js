@@ -1,23 +1,23 @@
-// LUTMIN V51.0 · cache versionada + actualización determinística.
-const CACHE='lutmin-runtime-v51-0';
-const CORE='lutmin-core-v51-0';
-const VERSION='51.0';
-const VERSION_TOKEN='v=51.0';
+// LUTMIN V52.0 · cache versionada + actualización determinística.
+const CACHE='lutmin-runtime-v52-0';
+const CORE='lutmin-core-v52-0';
+const VERSION='52.0';
+const VERSION_TOKEN='v=52.0';
 const CORE_ASSETS=[
-  './assets/css/tailwind-v36.css?v=51.0',
-  './assets/css/v30-loader.css?v=51.0',
-  './assets/css/v30-runtime.css?v=51.0',
-  './assets/css/v31-views.css?v=51.0',
-  './assets/css/public-shell.css?v=51.0',
-  './assets/js/core/public-analytics.js?v=51.0',
-  './assets/js/core/module-loader-v33.js?v=51.0',
-  './assets/js/core/data-runtime-v30.js?v=51.0',
-  './assets/js/core/view-loader-v32.js?v=51.0',
-  './assets/js/core/workspace-nav-v34.js?v=51.0',
-  './assets/js/core/app-core.js?v=51.0',
-  './assets/js/core/lazy-core-bindings-v32.js?v=51.0',
-  './assets/js/core/ui-runtime-v30.js?v=51.0',
-  './assets/js/core/update-manager-v32.js?v=51.0'
+  './assets/css/tailwind-v36.css?v=52.0',
+  './assets/css/v30-loader.css?v=52.0',
+  './assets/css/v30-runtime.css?v=52.0',
+  './assets/css/v31-views.css?v=52.0',
+  './assets/css/public-shell.css?v=52.0',
+  './assets/js/core/public-analytics.js?v=52.0',
+  './assets/js/core/module-loader.js?v=52.0',
+  './assets/js/core/data-runtime.js?v=52.0',
+  './assets/js/core/view-loader.js?v=52.0',
+  './assets/js/core/workspace-nav.js?v=52.0',
+  './assets/js/core/app-core.js?v=52.0',
+  './assets/js/core/core-bindings.js?v=52.0',
+  './assets/js/core/ui-runtime.js?v=52.0',
+  './assets/js/core/update-manager.js?v=52.0'
 ];
 self.addEventListener('install',event=>event.waitUntil((async()=>{const cache=await caches.open(CORE);await Promise.allSettled(CORE_ASSETS.map(url=>cache.add(url)));})()));
 self.addEventListener('activate',event=>event.waitUntil((async()=>{const keys=await caches.keys();await Promise.all(keys.filter(k=>k.startsWith('lutmin-')&&![CACHE,CORE].includes(k)).map(k=>caches.delete(k)));await self.clients.claim();})()));
