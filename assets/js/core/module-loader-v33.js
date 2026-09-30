@@ -6,7 +6,7 @@
 (function(){
   'use strict';
 
-  const VERSION='47.0';
+  const VERSION='49.0';
   const state={status:'idle',promise:null,loaded:new Set(),bundles:new Set(),startedAt:0,finishedAt:0,error:null,retries:0,warmed:false,lastReason:null,lastRole:null};
   const cssFiles=[
     'assets/css/v18-conecta.css',
@@ -43,6 +43,7 @@
     'assets/js/modules/talent/intelligence-core.js',
     'assets/js/modules/talent/cv-parser.js',
     'assets/js/modules/talent/evidence-career.js',
+    'assets/js/modules/talent/professional-progression-v49.js',
     'assets/js/modules/core/workspaces-command.js',
     'assets/js/modules/talent/zero-friction.js',
     'assets/js/v18-conecta.js',
@@ -84,6 +85,7 @@
     intel:'assets/js/modules/talent/intelligence-core.js',
     cv:'assets/js/modules/talent/cv-parser.js',
     evidence:'assets/js/modules/talent/evidence-career.js',
+    progression49:'assets/js/modules/talent/professional-progression-v49.js',
     workspaceCmd:'assets/js/modules/core/workspaces-command.js',
     zero:'assets/js/modules/talent/zero-friction.js',
     conecta:'assets/js/v18-conecta.js',
@@ -95,6 +97,7 @@
     dossier46:'assets/js/modules/talent/application-dossier-v46.js',
     processes46:'assets/js/modules/talent/application-processes-v46.js',
     tailor45:'assets/js/modules/talent/cv-tailor-engine-v45.js',
+    opportunityDev48:'assets/js/modules/talent/opportunity-development-v48.js',
     talentAgent46:'assets/js/modules/agents/talent-agent-v46.js',
     perf:'assets/js/v22-performance.js',
     runtime:'assets/js/v23-runtime.js',
@@ -142,7 +145,7 @@
     applications:new Set([F.dossier46,F.processes46]),
     interviews:new Set([F.super,F.pre]),
     organizations:new Set([F.org]),
-    career:new Set([F.super,F.intel,F.evidence]),
+    career:new Set([F.super,F.intel,F.evidence,F.dossier46,F.progression49]),
     timeline:new Set([F.org]),
     saved:new Set(),
     agent:new Set([F.dossier46,F.talentAgent46]),
@@ -285,7 +288,7 @@
     return loadSet(new Set([F.cv]),'talent:cv-parser','talent:cv-parser');
   }
   async function ensureTalentAgentEngine(){
-    return loadSet(new Set([F.tailor45]),'talent:agent-engine','talent:agent-engine');
+    return loadSet(new Set([F.tailor45,F.opportunityDev48]),'talent:agent-engine','talent:agent-engine');
   }
   async function ensureFeatureForTab(tab,role){
     if(tab==='talent'&&role==='student')return ensureFeature('talent',{role});

@@ -266,7 +266,7 @@ No priorizaría: ${t.hidden.skills.slice(0,6).join(', ')}.`:''}`;}
   // =========================================================
   // V40 · CV ADAPTADO COMO FLUJO PRINCIPAL
   // =========================================================
-  const V45_VERSION='46.0';
+  const V45_VERSION='49.0';
   function jobOptions(selected){const jobs=talentData?.jobs||[];return `<option value="">Elegí una oportunidad</option>${jobs.map(j=>`<option value="${esc(j.id)}" ${j.id===selected?'selected':''}>${esc(j.title)} · ${esc(j.company_name||'Lutmin')}</option>`).join('')}`;}
   function mode(){const s=state();return s.mode||'tailor';}
   function setMode(next){save({mode:next||'tailor'});render();}
@@ -379,6 +379,7 @@ No priorizaría: ${t.hidden.skills.slice(0,6).join(', ')}.`:''}`;}
     const interview=[...missing.slice(0,2),...partial.slice(0,2)].slice(0,3);
     return `<section class="agent-v47-plan"><div class="agent-v47-plan-head"><div><span>PLAN PARA ESTA OPORTUNIDAD</span><h5>Qué conviene hacer antes y después de postular</h5><p>No es un score: son acciones derivadas de la evidencia disponible.</p></div><strong>${documented.length}/${ledger.length||0}<small> requisitos documentados</small></strong></div><div class="agent-v47-plan-grid"><article><i class="fa-solid fa-id-card"></i><div><b>1 · Completar evidencia</b>${profile.map(x=>`<p>${esc(x)}</p>`).join('')}</div></article><article><i class="fa-solid fa-file-circle-check"></i><div><b>2 · Preparar postulación</b><p>Generá el CV enfocado para esta búsqueda y conservá el CV completo adaptado como respaldo.</p><p>Usá el mismo expediente para mensaje, entrevista y seguimiento: evita contradicciones.</p></div></article><article><i class="fa-solid fa-comments"></i><div><b>3 · Preparar entrevista</b>${interview.length?interview.map(x=>`<p><strong>${esc(x.requirement)}:</strong> ${x.status==='missing'?'explicá con claridad que hoy no tenés evidencia directa.':'prepará un ejemplo concreto y delimitá qué parte está documentada.'}</p>`).join(''):'<p>Prepará ejemplos concretos para los requisitos ya documentados y cómo verificaste resultados.</p>'}</div></article></div></section>`;
   }
+  function opportunityDevelopmentHtml(job,pack){return window.LutminOpportunityDevelopmentV48?.html?.(job,pack,esc)||'';}
   function professionalPassportHtml(pack){
     const rows=(pack?.evidence_ledger||[]).filter(x=>x.status!=='missing'),by={};rows.forEach(x=>{const k=x.evidence_source_label||'Otra evidencia';(by[k]||(by[k]=[])).push(x)});
     const groups=Object.entries(by);if(!groups.length)return '';
@@ -408,6 +409,7 @@ No priorizaría: ${t.hidden.skills.slice(0,6).join(', ')}.`:''}`;}
         <article><i class="fa-solid fa-comments"></i><div><strong>Guía de entrevista</strong><p>Requisitos, evidencia disponible y brechas reales.</p></div><button type="button" data-agent-v44-interview-pdf="${esc(job.id)}">Descargar</button></article>
       </section>
       ${opportunityPlanHtml(pack)}
+      ${opportunityDevelopmentHtml(job,pack)}
       ${professionalPassportHtml(pack)}
       ${vacancySpecHtml(pack)}
       ${evidenceLedgerHtml(pack)}
@@ -448,7 +450,7 @@ No priorizaría: ${t.hidden.skills.slice(0,6).join(', ')}.`:''}`;}
   }
   async function ensureApplicationExportV45(){
     if(window.LutminApplicationExportV45)return window.LutminApplicationExportV45;
-    return await new Promise((resolve,reject)=>{const src='assets/js/modules/talent/application-export-v45.js?v=47.0';const old=[...document.scripts].find(x=>String(x.src||'').includes('application-export-v45.js'));if(old){let n=0;const t=setInterval(()=>{n++;if(window.LutminApplicationExportV45){clearInterval(t);resolve(window.LutminApplicationExportV45)}else if(n>50){clearInterval(t);reject(new Error('No se pudo iniciar el exportador.'))}},80);return;}const sc=document.createElement('script');sc.src=src;sc.async=true;sc.onload=()=>window.LutminApplicationExportV45?resolve(window.LutminApplicationExportV45):reject(new Error('Exportador no disponible.'));sc.onerror=()=>reject(new Error('No se pudo cargar el exportador.'));document.body.appendChild(sc);});
+    return await new Promise((resolve,reject)=>{const src='assets/js/modules/talent/application-export-v45.js?v=49.0';const old=[...document.scripts].find(x=>String(x.src||'').includes('application-export-v45.js'));if(old){let n=0;const t=setInterval(()=>{n++;if(window.LutminApplicationExportV45){clearInterval(t);resolve(window.LutminApplicationExportV45)}else if(n>50){clearInterval(t);reject(new Error('No se pudo iniciar el exportador.'))}},80);return;}const sc=document.createElement('script');sc.src=src;sc.async=true;sc.onload=()=>window.LutminApplicationExportV45?resolve(window.LutminApplicationExportV45):reject(new Error('Exportador no disponible.'));sc.onerror=()=>reject(new Error('No se pudo cargar el exportador.'));document.body.appendChild(sc);});
   }
   async function saveDossierVersionV45(jobId=null){const job=jobById(jobId)||selectedJob();if(!job)return null;await ensureTailorV46();const pack=buildApplicationPackV44(job);if(!pack)return null;const result=dossierApi()?.saveVersion?.(job,pack,{source_cv:currentCv()?.file?.name||'Perfil Lutmin'});if(result?.created)showToast?.('Nueva versión del expediente guardada.');else if(result)showToast?.('El expediente ya estaba actualizado.');render();return result;}
   async function downloadTailoredCvV45(jobId=null,format='focused'){

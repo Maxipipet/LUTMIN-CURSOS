@@ -1,0 +1,23 @@
+LUTMIN V49.0 — PROGRESIÓN PROFESIONAL
+
+SALTO PRINCIPAL
+- Carrera y evidencias incorpora un tablero de Progresión Profesional.
+- Une evidencia documentada + oportunidades trabajadas + expedientes versionados + rutas de carrera.
+- Muestra “hoy estás acá”, oportunidades ya respaldadas, oportunidades con brechas, brechas recurrentes, evolución entre versiones y rutas de crecimiento.
+- Calcula una próxima acción útil sin decidir contrataciones ni inventar experiencia.
+
+REGLAS DE INTEGRIDAD
+- Una oportunidad sólo figura respaldada cuando su última versión de expediente no tiene requisitos obligatorios faltantes/parciales.
+- Cursos/certificados/competencias no se convierten en experiencia laboral.
+- Las brechas recurrentes se calculan sólo desde evidence_ledger real de expedientes existentes.
+- La evolución se calcula comparando versiones reales guardadas del mismo expediente.
+
+ARQUITECTURA
+- Nuevo runtime: assets/js/modules/talent/professional-progression-v49.js
+- Se carga sólo al abrir Carrera y evidencias.
+- Reutiliza Dossier V46 y Evidence & Career; no agrega API ni runtime global pesado.
+- Sin SQL nuevo.
+
+UX
+- No agrega otro módulo superior: Progresión vive arriba de Carrera y evidencias para evitar navegación innecesaria.
+- Accesos directos a Mis procesos, Agente y Carrera según la próxima acción.

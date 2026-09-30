@@ -93,6 +93,8 @@ async function loadV150StudentData(){
   v150State.graph=Array.isArray(g.data)?g.data:[];v150State.routes=Array.isArray(r.data)?r.data:[];v150State.documents=d.data||[];renderV150StudentEngine();
 }
 
+window.LutminEvidenceCareerV49={snapshot:()=>({graph:[...(v150State.graph||[])],routes:[...(v150State.routes||[])],documents:[...(v150State.documents||[])]})};
+
 function roleCoverageV150(role){const req=(role.requirements||[]).filter(x=>x.mandatory!==false);if(!req.length)return{pct:0,gaps:[]};const gaps=[];let ok=0;for(const x of req){const levelOk=Number(x.current_level||0)>=Number(x.required_level||1),valOk=!x.require_validation||x.validated===true;if(levelOk&&valOk)ok++;else gaps.push({...x,levelOk,valOk});}return{pct:Math.round(ok*100/req.length),gaps};}
 function renderV150StudentEngine(){
   const root=document.getElementById('talentEvidenceCareerBodyV150');if(!root)return;const graph=v150State.graph||[],routes=v150State.routes||[],docs=v150State.documents||[];

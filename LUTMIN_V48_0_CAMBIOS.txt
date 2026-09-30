@@ -1,0 +1,36 @@
+LUTMIN V48.0 — SALTO DE PRODUCTO
+
+1. PUENTE OPORTUNIDAD → DESARROLLO → EVIDENCIA
+- Cada brecha missing/partial de una oportunidad genera acciones concretas.
+- Busca cursos publicados relacionados por contenido local, sin API externa.
+- Un curso sugerido NO cubre automáticamente el requisito.
+- Regla explícita: curso aprobado = evidencia formativa, nunca experiencia laboral.
+- Si no existe curso relacionado, deriva a Carrera y evidencias para documentar evidencia real existente.
+
+2. PLAN PERSISTENTE POR OPORTUNIDAD
+- Checklist local independiente para cada oportunidad y usuario.
+- Permite revisar brechas sin alterar el expediente ni inventar cobertura.
+- Persistencia localStorage, sin SQL nuevo.
+
+3. INTEGRACIÓN ENTRE MÓDULOS
+- Desde el paquete personalizado se puede saltar a Carrera y evidencias o Cursos.
+- La recomendación nace del mismo evidence ledger usado por CV, entrevista y expediente.
+
+4. RENDIMIENTO
+- El nuevo runtime opportunity-development-v48.js NO entra en el shell inicial del Agente.
+- Se carga junto al motor pesado sólo después de seleccionar una oportunidad.
+- Shell del Agente validado: 101583 bytes (<105 KB).
+- Mis procesos: 29806 bytes (<45 KB).
+
+5. COSTOS / BASE
+- $0 APIs nuevas.
+- Sin SQL nuevo.
+- Sin servicios externos adicionales.
+
+6. PRUEBAS
+- Sintaxis de 48 scripts JS validada.
+- IDs duplicados: 0.
+- Rutas principales verificadas.
+- Tests de evidencia positiva/negativa, parser, expediente y seguimiento continúan pasando.
+- Nuevo test v48-opportunity-development.mjs.
+- Nuevo smoke integral v48-smoke.mjs.

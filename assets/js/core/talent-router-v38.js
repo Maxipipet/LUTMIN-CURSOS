@@ -54,7 +54,7 @@
       try{ensureTimelineUi?.();await loadCareerTimelineV200?.();}catch(e){console.warn('V44 timeline',e);}
     }
     if(key==='career'){
-      try{ensureV140StudentUI?.();ensureStudentEngineV150?.();await loadV140ProfileData?.();await loadV150StudentData?.();}catch(e){console.warn('V44 career',e);}
+      try{ensureV140StudentUI?.();ensureStudentEngineV150?.();await loadV140ProfileData?.();await loadV150StudentData?.();window.LutminProgressionV49?.render?.();}catch(e){console.warn('V49 career',e);}
     }
     if(key==='agent'){
       try{ensureTalentAgentV40?.();refreshTalentAgentV40?.();}catch(e){console.warn('V44 agent',e);}
