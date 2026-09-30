@@ -6,7 +6,7 @@
 (function(){
   'use strict';
 
-  const VERSION='49.0';
+  const VERSION='51.0';
   const state={status:'idle',promise:null,loaded:new Set(),bundles:new Set(),startedAt:0,finishedAt:0,error:null,retries:0,warmed:false,lastReason:null,lastRole:null};
   const cssFiles=[
     'assets/css/v18-conecta.css',
@@ -19,8 +19,8 @@
     'assets/css/v22-performance.css',
     'assets/css/v23-runtime.css',
     'assets/css/v25-control-center.css',
-    'assets/css/v45-agent.css',
-    'assets/css/v46-processes.css'
+    'assets/css/conecta-agent.css',
+    'assets/css/conecta-processes.css'
   ];
 
   // Orden histórico: cualquier subconjunto se filtra sobre esta lista.
@@ -43,7 +43,8 @@
     'assets/js/modules/talent/intelligence-core.js',
     'assets/js/modules/talent/cv-parser.js',
     'assets/js/modules/talent/evidence-career.js',
-    'assets/js/modules/talent/professional-progression-v49.js',
+    'assets/js/modules/talent/professional-progression.js',
+    'assets/js/modules/talent/professional-passport.js',
     'assets/js/modules/core/workspaces-command.js',
     'assets/js/modules/talent/zero-friction.js',
     'assets/js/v18-conecta.js',
@@ -52,10 +53,10 @@
     'assets/js/v21-conecta-hub.js',
     'assets/js/v21-conecta-panels.js',
     'assets/js/core/talent-router-v38.js',
-    'assets/js/modules/talent/application-dossier-v46.js',
-    'assets/js/modules/talent/application-processes-v46.js',
-    'assets/js/modules/talent/cv-tailor-engine-v45.js',
-    'assets/js/modules/agents/talent-agent-v46.js',
+    'assets/js/modules/talent/application-dossier.js',
+    'assets/js/modules/talent/application-processes.js',
+    'assets/js/modules/talent/cv-tailor-engine.js',
+    'assets/js/modules/agents/talent-agent.js',
     'assets/js/v22-performance.js',
     'assets/js/v23-runtime.js',
     'assets/js/v24-core.js',
@@ -85,7 +86,8 @@
     intel:'assets/js/modules/talent/intelligence-core.js',
     cv:'assets/js/modules/talent/cv-parser.js',
     evidence:'assets/js/modules/talent/evidence-career.js',
-    progression49:'assets/js/modules/talent/professional-progression-v49.js',
+    progression49:'assets/js/modules/talent/professional-progression.js',
+    passport50:'assets/js/modules/talent/professional-passport.js',
     workspaceCmd:'assets/js/modules/core/workspaces-command.js',
     zero:'assets/js/modules/talent/zero-friction.js',
     conecta:'assets/js/v18-conecta.js',
@@ -94,11 +96,11 @@
     hub:'assets/js/v21-conecta-hub.js',
     panels:'assets/js/v21-conecta-panels.js',
     talentRouter:'assets/js/core/talent-router-v38.js',
-    dossier46:'assets/js/modules/talent/application-dossier-v46.js',
-    processes46:'assets/js/modules/talent/application-processes-v46.js',
-    tailor45:'assets/js/modules/talent/cv-tailor-engine-v45.js',
-    opportunityDev48:'assets/js/modules/talent/opportunity-development-v48.js',
-    talentAgent46:'assets/js/modules/agents/talent-agent-v46.js',
+    dossier46:'assets/js/modules/talent/application-dossier.js',
+    processes46:'assets/js/modules/talent/application-processes.js',
+    tailor45:'assets/js/modules/talent/cv-tailor-engine.js',
+    opportunityDev48:'assets/js/modules/talent/opportunity-development.js',
+    talentAgent46:'assets/js/modules/agents/talent-agent.js',
     perf:'assets/js/v22-performance.js',
     runtime:'assets/js/v23-runtime.js',
     core:'assets/js/v24-core.js',
@@ -149,7 +151,7 @@
     timeline:new Set([F.org]),
     saved:new Set(),
     agent:new Set([F.dossier46,F.talentAgent46]),
-    passport:new Set([F.super,F.auto])
+    passport:new Set([F.super,F.auto,F.evidence,F.dossier46,F.passport50])
   };
   const adminModuleSets={
     overview:new Set(),
@@ -179,8 +181,8 @@
     [F.runtime,['assets/css/v23-runtime.css']],
     [F.control,['assets/css/v25-control-center.css']],
     [F.talentRouter,['assets/css/v18-conecta.css']],
-    [F.talentAgent46,['assets/css/v45-agent.css']],
-    [F.processes46,['assets/css/v46-processes.css']]
+    [F.talentAgent46,['assets/css/conecta-agent.css']],
+    [F.processes46,['assets/css/conecta-processes.css']]
   ]);
   const cssForSet=set=>{const out=new Set();set.forEach(file=>(cssByScript.get(file)||[]).forEach(css=>out.add(css)));return [...out];};
 

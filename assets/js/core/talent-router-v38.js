@@ -60,7 +60,7 @@
       try{ensureTalentAgentV40?.();refreshTalentAgentV40?.();}catch(e){console.warn('V44 agent',e);}
     }
     if(key==='passport'){
-      try{ensurePersonalAutopilotV110?.();await loadPersonalAutopilotV110?.();setPersonalAgentTabV110?.('passport');}catch(e){console.warn('V44 passport',e);}
+      try{ensurePersonalAutopilotV110?.();await loadPersonalAutopilotV110?.();setPersonalAgentTabV110?.('passport');window.LutminPassportV50?.render?.();}catch(e){console.warn('V50 passport',e);window.LutminPassportV50?.render?.();}
     }
   }
 
