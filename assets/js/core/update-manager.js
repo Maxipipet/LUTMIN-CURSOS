@@ -6,7 +6,7 @@
 // =============================================================
 (function(){
   'use strict';
-  const VERSION='52.0';
+  const VERSION='53.0';
   const TARGET_KEY='lutmin:update-target';
   const S={registration:null,waiting:null,waitingVersion:null,lastCheck:0,controllerReload:false,applying:false,silentActivation:false,online:navigator.onLine,assetRetries:0,lastModuleDuration:null};
 
@@ -88,9 +88,9 @@
   }
 
   function ensureAdminCard(){const host=document.getElementById('adminSystemGuideV19');if(!host||document.getElementById('v30DeployHealth'))return null;const card=document.createElement('div');card.id='v30DeployHealth';card.className='border-t border-slate-100 p-5 sm:p-6 bg-white';card.innerHTML='<div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3"><div><p class="text-[10px] uppercase tracking-widest font-extrabold text-lutmin-light">VERSIÓN Y RENDIMIENTO</p><h4 class="mt-1 font-extrabold text-lutmin-dark">Estado del frontend</h4><p class="mt-1 text-xs text-slate-500">Runtime, caché y estado real de despliegue de esta sesión.</p></div><div class="flex gap-2"><button type="button" data-v30-check class="px-4 py-2.5 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold">Buscar actualización</button><button type="button" data-v30-clean class="px-4 py-2.5 rounded-xl bg-lutmin-dark text-white text-xs font-bold">Limpiar cache</button></div></div><div data-v30-health-body class="mt-4 grid grid-cols-2 lg:grid-cols-5 gap-3"></div>';
-    host.appendChild(card);card.querySelector('[data-v30-check]')?.addEventListener('click',()=>check(true));card.querySelector('[data-v30-clean]')?.addEventListener('click',async()=>{await clearRuntimeCaches();window.LutminV30Data?.invalidate?.();if(typeof showToast==='function')showToast('Cache local limpiada. La próxima carga descargará los archivos nuevamente.');renderAdminCard();});return card;}
+    host.appendChild(card);card.querySelector('[data-v30-check]')?.addEventListener('click',()=>check(true));card.querySelector('[data-v30-clean]')?.addEventListener('click',async()=>{await clearRuntimeCaches();window.LutminData?.invalidate?.();if(typeof showToast==='function')showToast('Cache local limpiada. La próxima carga descargará los archivos nuevamente.');renderAdminCard();});return card;}
   function stat(label,value,detail,ok=true){return `<div class="rounded-2xl border border-slate-100 bg-slate-50 p-4"><p class="text-[10px] uppercase font-bold text-slate-400">${label}</p><p class="mt-1 text-lg font-black ${ok?'text-emerald-700':'text-amber-700'}">${value}</p><p class="mt-1 text-[10px] text-slate-500">${detail}</p></div>`;}
-  function renderAdminCard(){const card=ensureAdminCard();if(!card)return;const root=card.querySelector('[data-v30-health-body]');if(!root)return;const mods=window.LutminV30Modules?.status?.();const data=window.LutminV30Data?.status?.();const ui=window.LutminV30UI?.status?.();const admin=window.LutminV30Admin?.status?.();const pending=S.waiting&&S.waitingVersion!==VERSION;root.innerHTML=[
+  function renderAdminCard(){const card=ensureAdminCard();if(!card)return;const root=card.querySelector('[data-v30-health-body]');if(!root)return;const mods=window.LutminModules?.status?.();const data=window.LutminData?.status?.();const ui=window.LutminUI?.status?.();const admin=window.LutminAdminRuntime?.status?.();const pending=S.waiting&&S.waitingVersion!==VERSION;root.innerHTML=[
     stat('Versión',`V${VERSION}`,'Frontend publicado',true),
     stat('Conexión',S.online?'ONLINE':'OFFLINE',S.online?'Conectado a internet':'Modo sin conexión',S.online),
     stat('Runtime',mods?.loadedScripts!=null?`${mods.loadedScripts}/${mods.totalScripts}`:'EN ESPERA',mods?.bundles?.length?mods.bundles.join(' · '):'Se carga según acceso',mods?.status!=='error'),

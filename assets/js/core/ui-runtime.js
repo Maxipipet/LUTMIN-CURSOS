@@ -4,7 +4,7 @@
 // =============================================================
 (function(){
   'use strict';
-  const VERSION='52.0';
+  const VERSION='53.0';
   const S={activeTab:null,changes:0,restores:0,prefetches:0,lastChangeAt:0};
   const scrollMemory=new Map();
   let scroller=null;
@@ -49,7 +49,7 @@
     const user=getUser();if(!user)return;
     const run=()=>{
       if(document.visibilityState!=='visible')return;
-      const modules=window.LutminV30Modules;if(!modules?.prefetchFeature)return;
+      const modules=window.LutminModules;if(!modules?.prefetchFeature)return;
       if(user.role==='student'&&modules.prefetchFeature('talent'))S.prefetches+=1;
       if(user.role==='company_admin'&&modules.prefetchFeature('companyConecta'))S.prefetches+=1;
     };

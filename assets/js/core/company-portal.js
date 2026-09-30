@@ -1,5 +1,5 @@
 // =============================================================
-// LUTMIN V52.0 · COMPANY PORTAL RUNTIME
+// LUTMIN V53.0 · COMPANY PORTAL RUNTIME
 // Portal operativo de empresa. Carga sólo para acceso Empresa.
 // =============================================================
     // =========================================================
@@ -9,7 +9,7 @@
     let companyPortalCertificates = [];
 
     async function loadCompanyPortalData() {
-      if(await window.LutminV31Views?.ensureForTab?.('company')===false)return;
+      if(await window.LutminViews?.ensureForTab?.('company')===false)return;
       if (!supabaseClient || currentLutminUser?.role !== 'company_admin') return;
       const { data, error } = await supabaseClient.rpc('get_company_portal');
       if (error) {

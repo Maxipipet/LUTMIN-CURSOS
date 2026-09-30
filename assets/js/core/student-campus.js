@@ -1,5 +1,5 @@
 // =============================================================
-// LUTMIN V52.0 · STUDENT CAMPUS RUNTIME
+// LUTMIN V53.0 · STUDENT CAMPUS RUNTIME
 // Cursos, clases, evaluaciones y agenda. Carga sólo para Alumno.
 // =============================================================
     async function loadCampusData() {

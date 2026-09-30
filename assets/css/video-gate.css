@@ -1,0 +1,16 @@
+/* LUTMIN V24.1 · video gate reforzado · costo externo $0 */
+.v241-player-shell{width:100%;height:100%;display:flex;flex-direction:column;background:#020617;color:#fff;position:relative;outline:none}
+.v241-media-stage{position:relative;flex:1;min-height:0;background:#020617;overflow:hidden}
+.v241-media-stage>div,.v241-media-stage iframe,.v241-media-stage video{width:100%!important;height:100%!important;display:block;background:#020617}
+.v241-controls{display:grid;grid-template-columns:auto auto auto minmax(90px,1fr) auto auto;gap:.55rem;align-items:center;padding:.65rem .8rem;background:linear-gradient(180deg,#0f172a,#020617);border-top:1px solid rgba(255,255,255,.08)}
+.v241-control-btn{width:2.35rem;height:2.35rem;border-radius:.75rem;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.08);color:#fff;display:inline-flex;align-items:center;justify-content:center;transition:.16s ease}
+.v241-control-btn:hover{background:rgba(255,255,255,.15)}
+.v241-control-btn:focus-visible{outline:2px solid #56B8FF;outline-offset:2px}
+.v241-progress{height:.42rem;background:rgba(255,255,255,.16);border-radius:999px;overflow:hidden;pointer-events:none;user-select:none}
+.v241-progress>span{display:block;height:100%;width:0;background:linear-gradient(90deg,#2F8DFD,#56B8FF);border-radius:999px;transition:width .18s linear}
+.v241-time{font-size:.68rem;font-weight:800;color:#cbd5e1;white-space:nowrap;font-variant-numeric:tabular-nums}
+.v241-lock-note{position:absolute;top:.7rem;left:.7rem;z-index:4;display:flex;align-items:center;gap:.45rem;padding:.45rem .65rem;border-radius:999px;background:rgba(2,6,23,.78);backdrop-filter:blur(8px);font-size:.65rem;font-weight:800;color:#e2e8f0;border:1px solid rgba(255,255,255,.1);pointer-events:none}
+.v241-seek-flash{position:absolute;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;background:rgba(2,6,23,.4);opacity:0;pointer-events:none;transition:opacity .15s ease}
+.v241-seek-flash.show{opacity:1}
+.v241-seek-flash>span{padding:.65rem .9rem;border-radius:1rem;background:rgba(2,6,23,.9);font-size:.75rem;font-weight:900;border:1px solid rgba(255,255,255,.12)}
+@media(max-width:640px){.v241-controls{grid-template-columns:auto auto auto 1fr auto;padding:.55rem;gap:.4rem}.v241-time{display:none}.v241-control-btn{width:2.15rem;height:2.15rem}.v241-lock-note{font-size:.58rem;max-width:calc(100% - 1.4rem)}}

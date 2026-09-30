@@ -6,19 +6,19 @@
 (function(){
   'use strict';
 
-  const VERSION='52.0';
+  const VERSION='53.0';
   const state={status:'idle',promise:null,loaded:new Set(),bundles:new Set(),startedAt:0,finishedAt:0,error:null,retries:0,warmed:false,lastReason:null,lastRole:null};
   const cssFiles=[
-    'assets/css/v18-conecta.css',
-    'assets/css/v24-core.css',
-    'assets/css/v24-1-video-gate.css',
-    'assets/css/v19-workspaces.css',
-    'assets/css/v20-organizations-onboarding.css',
-    'assets/css/v21-conecta-hub.css',
-    'assets/css/v21-conecta-panels.css',
-    'assets/css/v22-performance.css',
-    'assets/css/v23-runtime.css',
-    'assets/css/v25-control-center.css',
+    'assets/css/conecta-navigation.css',
+    'assets/css/async-core.css',
+    'assets/css/video-gate.css',
+    'assets/css/workspace-sections.css',
+    'assets/css/organizations-onboarding.css',
+    'assets/css/conecta-hub.css',
+    'assets/css/conecta-panels.css',
+    'assets/css/performance.css',
+    'assets/css/app-runtime.css',
+    'assets/css/control-center.css',
     'assets/css/conecta-agent.css',
     'assets/css/conecta-processes.css'
   ];
@@ -51,23 +51,23 @@
     'assets/js/modules/talent/professional-passport.js',
     'assets/js/modules/core/workspaces-command.js',
     'assets/js/modules/talent/zero-friction.js',
-    'assets/js/v18-conecta.js',
-    'assets/js/v19-workspaces.js',
-    'assets/js/v20-organizations-onboarding.js',
-    'assets/js/v21-conecta-hub.js',
-    'assets/js/v21-conecta-panels.js',
+    'assets/js/modules/talent/conecta-navigation.js',
+    'assets/js/core/workspace-sections.js',
+    'assets/js/modules/platform/organizations-onboarding.js',
+    'assets/js/modules/talent/conecta-hub.js',
+    'assets/js/modules/talent/conecta-panels.js',
     'assets/js/core/talent-router.js',
     'assets/js/modules/talent/application-dossier.js',
     'assets/js/modules/talent/application-processes.js',
     'assets/js/modules/talent/cv-tailor-engine.js',
     'assets/js/modules/agents/talent-agent.js',
-    'assets/js/v22-performance.js',
-    'assets/js/v23-runtime.js',
-    'assets/js/v24-core.js',
-    'assets/js/v24-1-video-gate.js',
-    'assets/js/v25-control-center.js',
-    'assets/js/v26-health.js',
-    'assets/js/modules/core/admin-demand-v33.js',
+    'assets/js/core/single-flight.js',
+    'assets/js/core/app-runtime.js',
+    'assets/js/core/async-core.js',
+    'assets/js/modules/academy/video-gate.js',
+    'assets/js/modules/core/control-center.js',
+    'assets/js/modules/core/runtime-health.js',
+    'assets/js/modules/core/admin-demand.js',
     'assets/js/core/update-manager.js'
   ];
 
@@ -94,28 +94,28 @@
     intel:'assets/js/modules/talent/intelligence-core.js',
     cv:'assets/js/modules/talent/cv-parser.js',
     evidence:'assets/js/modules/talent/evidence-career.js',
-    progression49:'assets/js/modules/talent/professional-progression.js',
-    passport50:'assets/js/modules/talent/professional-passport.js',
+    progression:'assets/js/modules/talent/professional-progression.js',
+    passport:'assets/js/modules/talent/professional-passport.js',
     workspaceCmd:'assets/js/modules/core/workspaces-command.js',
     zero:'assets/js/modules/talent/zero-friction.js',
-    conecta:'assets/js/v18-conecta.js',
-    workspaces:'assets/js/v19-workspaces.js',
-    org:'assets/js/v20-organizations-onboarding.js',
-    hub:'assets/js/v21-conecta-hub.js',
-    panels:'assets/js/v21-conecta-panels.js',
+    conecta:'assets/js/modules/talent/conecta-navigation.js',
+    workspaces:'assets/js/core/workspace-sections.js',
+    org:'assets/js/modules/platform/organizations-onboarding.js',
+    hub:'assets/js/modules/talent/conecta-hub.js',
+    panels:'assets/js/modules/talent/conecta-panels.js',
     talentRouter:'assets/js/core/talent-router.js',
-    dossier46:'assets/js/modules/talent/application-dossier.js',
-    processes46:'assets/js/modules/talent/application-processes.js',
-    tailor45:'assets/js/modules/talent/cv-tailor-engine.js',
-    opportunityDev48:'assets/js/modules/talent/opportunity-development.js',
-    talentAgent46:'assets/js/modules/agents/talent-agent.js',
-    perf:'assets/js/v22-performance.js',
-    runtime:'assets/js/v23-runtime.js',
-    core:'assets/js/v24-core.js',
-    video:'assets/js/v24-1-video-gate.js',
-    control:'assets/js/v25-control-center.js',
-    health:'assets/js/v26-health.js',
-    adminDemand:'assets/js/modules/core/admin-demand-v33.js'
+    dossier:'assets/js/modules/talent/application-dossier.js',
+    processes:'assets/js/modules/talent/application-processes.js',
+    tailor:'assets/js/modules/talent/cv-tailor-engine.js',
+    opportunityDevelopment:'assets/js/modules/talent/opportunity-development.js',
+    talentAgent:'assets/js/modules/agents/talent-agent.js',
+    perf:'assets/js/core/single-flight.js',
+    runtime:'assets/js/core/app-runtime.js',
+    core:'assets/js/core/async-core.js',
+    video:'assets/js/modules/academy/video-gate.js',
+    control:'assets/js/modules/core/control-center.js',
+    health:'assets/js/modules/core/runtime-health.js',
+    adminDemand:'assets/js/modules/core/admin-demand.js'
   };
 
   const adminBaseSet=new Set([F.accountServices,F.adminCore,F.adminData,F.adminViews,F.workspaceCmd,F.workspaces,F.perf,F.runtime,F.core,F.adminDemand]);
@@ -152,14 +152,14 @@
     summary:new Set([F.hub,F.talentRouter]),
     profile:new Set([F.super,F.intel,F.cv,F.zero]),
     jobs:new Set([F.intel,F.super]),
-    applications:new Set([F.dossier46,F.processes46]),
+    applications:new Set([F.dossier,F.processes]),
     interviews:new Set([F.super,F.pre]),
     organizations:new Set([F.org]),
-    career:new Set([F.super,F.intel,F.evidence,F.dossier46,F.progression49]),
+    career:new Set([F.super,F.intel,F.evidence,F.dossier,F.progression]),
     timeline:new Set([F.org]),
     saved:new Set(),
-    agent:new Set([F.dossier46,F.talentAgent46]),
-    passport:new Set([F.super,F.auto,F.evidence,F.dossier46,F.passport50])
+    agent:new Set([F.dossier,F.talentAgent]),
+    passport:new Set([F.super,F.auto,F.evidence,F.dossier,F.passport])
   };
   const adminModuleSets={
     overview:new Set(),
@@ -178,19 +178,19 @@
   const warmSet=new Set([F.workspaceCmd,F.workspaces,F.perf,F.runtime,F.core]);
 
   const cssByScript=new Map([
-    [F.conecta,['assets/css/v18-conecta.css']],
-    [F.core,['assets/css/v24-core.css']],
-    [F.video,['assets/css/v24-1-video-gate.css']],
-    [F.workspaces,['assets/css/v19-workspaces.css']],
-    [F.org,['assets/css/v20-organizations-onboarding.css']],
-    [F.hub,['assets/css/v21-conecta-hub.css']],
-    [F.panels,['assets/css/v21-conecta-panels.css']],
-    [F.perf,['assets/css/v22-performance.css']],
-    [F.runtime,['assets/css/v23-runtime.css']],
-    [F.control,['assets/css/v25-control-center.css']],
-    [F.talentRouter,['assets/css/v18-conecta.css']],
-    [F.talentAgent46,['assets/css/conecta-agent.css']],
-    [F.processes46,['assets/css/conecta-processes.css']]
+    [F.conecta,['assets/css/conecta-navigation.css']],
+    [F.core,['assets/css/async-core.css']],
+    [F.video,['assets/css/video-gate.css']],
+    [F.workspaces,['assets/css/workspace-sections.css']],
+    [F.org,['assets/css/organizations-onboarding.css']],
+    [F.hub,['assets/css/conecta-hub.css']],
+    [F.panels,['assets/css/conecta-panels.css']],
+    [F.perf,['assets/css/performance.css']],
+    [F.runtime,['assets/css/app-runtime.css']],
+    [F.control,['assets/css/control-center.css']],
+    [F.talentRouter,['assets/css/conecta-navigation.css']],
+    [F.talentAgent,['assets/css/conecta-agent.css']],
+    [F.processes,['assets/css/conecta-processes.css']]
   ]);
   const cssForSet=set=>{const out=new Set();set.forEach(file=>(cssByScript.get(file)||[]).forEach(css=>out.add(css)));return [...out];};
 
@@ -210,7 +210,7 @@
   function loadCssOnce(file){
     const key=`v30-css:${file}`;if(state.loaded.has(key))return Promise.resolve(true);
     const existing=[...document.styleSheets].some(s=>String(s.href||'').includes(file));if(existing){state.loaded.add(key);return Promise.resolve(true);}
-    return new Promise(resolve=>{const link=document.createElement('link');link.rel='stylesheet';link.href=withVersion(file);link.dataset.lutminV30='css';let settled=false;const done=()=>{if(settled)return;settled=true;state.loaded.add(key);resolve(true);};link.onload=done;link.onerror=()=>{console.warn('[Lutmin V52] CSS no disponible:',file);done();};document.head.appendChild(link);setTimeout(done,4500);});
+    return new Promise(resolve=>{const link=document.createElement('link');link.rel='stylesheet';link.href=withVersion(file);link.dataset.lutminV30='css';let settled=false;const done=()=>{if(settled)return;settled=true;state.loaded.add(key);resolve(true);};link.onload=done;link.onerror=()=>{console.warn('[Lutmin V53] CSS no disponible:',file);done();};document.head.appendChild(link);setTimeout(done,4500);});
   }
 
   function preload(files){
@@ -268,7 +268,7 @@
     const ok=await loadSet(set,`authenticated:${role}`,`access:${role}`);
     // La vista Admin puede haberse montado antes de que su loader exista.
     // Forzamos el fragment activo una vez que el runtime lazy ya está listo.
-    if(ok&&role==='admin')await window.LutminV33AdminViews?.ensureActive?.();
+    if(ok&&role==='admin')await window.LutminAdminViews?.ensureActive?.();
     return ok;
   }
 
@@ -298,7 +298,7 @@
     return loadSet(new Set([F.cv]),'talent:cv-parser','talent:cv-parser');
   }
   async function ensureTalentAgentEngine(){
-    return loadSet(new Set([F.tailor45,F.opportunityDev48]),'talent:agent-engine','talent:agent-engine');
+    return loadSet(new Set([F.tailor,F.opportunityDevelopment]),'talent:agent-engine','talent:agent-engine');
   }
   async function ensureFeatureForTab(tab,role){
     if(tab==='talent'&&role==='student')return ensureFeature('talent',{role});
@@ -322,7 +322,7 @@
       await loadScriptOnce('assets/js/core/update-manager.js');
       window.dispatchEvent(new CustomEvent('lutmin:v30:sw-registered',{detail:{registration:reg}}));
       reg.update().catch(()=>{});return reg;
-    }catch(err){console.warn('[Lutmin V52] Service Worker no disponible:',err?.message||err);return false;}
+    }catch(err){console.warn('[Lutmin V53] Service Worker no disponible:',err?.message||err);return false;}
   }
 
   function canAdaptivePrefetch(){
@@ -338,7 +338,7 @@
   const api={version:VERSION,ensureAuthenticated,ensureFeature,ensureFeatureForTab,ensureTalentSection,ensureTalentCvParser,ensureTalentAgentEngine,ensureAdminModule,ensureCompanySection,warm,loadAll,prefetchFeature,status:()=>({...state,loaded:[...state.loaded],bundles:[...state.bundles],loadedScripts:[...state.loaded].filter(x=>x.startsWith('v30-js:')).length,totalScripts:scriptFiles.length,adminBaseScripts:adminBaseSet.size,companyBaseScripts:companyBaseSet.size,adminModuleSets:Object.fromEntries(Object.entries(adminModuleSets).map(([k,v])=>[k,[...v]])),companySectionSets:Object.fromEntries(Object.entries(companySectionSets).map(([k,v])=>[k,[...v]])),talentSectionSets:Object.fromEntries(Object.entries(talentSectionSets).map(([k,v])=>[k,[...v]]))}),files:{css:[...cssFiles],scripts:[...scriptFiles]},registerServiceWorker,clearRuntimeCaches};
   window.LutminModules=api;
   window.LutminV30Modules=api;
-  // Alias temporal: el core histórico sigue llamando V29 mientras terminamos de modularizarlo.
+  // Alias de compatibilidad para extensiones históricas todavía desplegadas.
   window.LutminV29Modules=api;
 
   const publicTalent=new URL(location.href).searchParams.get('talento');

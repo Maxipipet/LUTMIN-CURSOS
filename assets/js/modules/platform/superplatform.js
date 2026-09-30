@@ -113,7 +113,7 @@ async function confirmSmartApplyV100(){const p=pendingSmartApplicationV100;if(!p
 const _applyTalentJobV100=typeof applyTalentJob==='function'?applyTalentJob:null;
 if(_applyTalentJobV100)applyTalentJob=async function(jobId){
   try{
-    if(!window.LutminAgentV45?.openSmartApply)await window.LutminV30Modules?.ensureTalentSection?.('agent');
+    if(!window.LutminAgentV45?.openSmartApply)await window.LutminModules?.ensureTalentSection?.('agent');
     if(window.LutminAgentV45?.openSmartApply)return window.LutminAgentV45.openSmartApply(jobId);
   }catch(e){console.warn('V44 smart apply lazy-load',e);}
   return openSmartApplyV100(jobId);

@@ -12,23 +12,23 @@
   <link rel="shortcut icon" href="LOGO.png" type="image/x-icon" />
   <link rel="apple-touch-icon" href="LOGO.png" />
 
-  <!-- LUTMIN V52.0 · shell público liviano + runtimes autenticados bajo demanda -->
-  <link rel="preload" href="assets/js/core/module-loader.js?v=52.0" as="script">
-  <link rel="preload" href="assets/js/core/app-core.js?v=52.0" as="script">
+  <!-- LUTMIN V53.0 · shell público liviano + runtimes autenticados bajo demanda -->
+  <link rel="preload" href="assets/js/core/module-loader.js?v=53.0" as="script">
+  <link rel="preload" href="assets/js/core/app-core.js?v=53.0" as="script">
   <link rel="preconnect" href="https://kkpzycsjozrvbimpvfnl.supabase.co" crossorigin>
   <link rel="dns-prefetch" href="//kkpzycsjozrvbimpvfnl.supabase.co">
-  <link rel="stylesheet" href="assets/css/tailwind-v36.css?v=52.0">
-  <link rel="stylesheet" href="assets/css/v30-loader.css?v=52.0">
-  <link rel="stylesheet" href="assets/css/v30-runtime.css?v=52.0">
-  <link rel="stylesheet" href="assets/css/v31-views.css?v=52.0">
-  <script src="assets/js/core/public-analytics.js?v=52.0" defer></script>
+  <link rel="stylesheet" href="assets/css/tailwind.css?v=53.0">
+  <link rel="stylesheet" href="assets/css/app-loader.css?v=53.0">
+  <link rel="stylesheet" href="assets/css/runtime-shell.css?v=53.0">
+  <link rel="stylesheet" href="assets/css/lazy-views.css?v=53.0">
+  <script src="assets/js/core/public-analytics.js?v=53.0" defer></script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-  <link rel="stylesheet" href="assets/css/public-shell.css?v=52.0">
+  <link rel="stylesheet" href="assets/css/public-shell.css?v=53.0">
 
 </head>
 
@@ -780,306 +780,7 @@
     </div>
   </div>
 
-  <!-- =========================================================
-       MODAL CAMPUS
-  ========================================================== -->
-  <div id="campusModal" class="hidden fixed inset-0 z-[90] bg-slate-950/80 backdrop-blur-md p-2 sm:p-4 flex items-center justify-center">
-    <div class="w-full max-w-7xl mx-auto bg-slate-50 rounded-[1.5rem] shadow-2xl h-[95vh] overflow-hidden relative flex flex-col lg:grid lg:grid-cols-[240px_1fr]">
-      <button onclick="closeModal('campusModal')" class="absolute right-3 top-3 lg:right-4 lg:top-4 z-30 w-10 h-10 bg-white shadow rounded-full text-slate-600 hover:text-slate-900 flex items-center justify-center">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-
-      <aside class="hidden lg:flex bg-lutmin-dark text-white p-6 flex-col">
-        <div id="companySidebarBrand" class="hidden w-full mb-5">
-          <div id="companySidebarLogoWrap" class="w-20 h-20 rounded-2xl bg-white flex items-center justify-center overflow-hidden shadow-lg">
-            <img id="companySidebarLogo" class="hidden w-full h-full object-contain p-2" alt="Logo empresa">
-            <span id="companySidebarInitials" class="text-2xl font-black text-lutmin-dark">EM</span>
-          </div>
-          <h2 id="companySidebarName" class="mt-4 text-2xl font-black leading-tight text-white break-words">Mi empresa</h2>
-          <p id="companySidebarIndustry" class="mt-1 text-[11px] text-blue-200"></p>
-        </div>
-        <img id="lutminSidebarLogo" src="LOGO.png" alt="Lutmin" class="h-12 w-auto object-contain self-start">
-        <p id="campusSidebarProductLabel" class="mt-8 text-xs uppercase tracking-widest text-blue-200 font-bold">Campus Lutmin</p>
-        <nav id="campusSidebarNavV183" class="mt-5 space-y-2 text-sm">
-          <button data-student-only="true" class="campus-tab w-full text-left p-3 rounded-xl bg-white/10 font-bold" data-campus-tab="dashboard"><i class="fa-solid fa-house w-7"></i>Inicio</button>
-          <button data-student-only="true" class="campus-tab w-full text-left p-3 rounded-xl text-slate-300 hover:bg-white/10" data-campus-tab="courses"><i class="fa-solid fa-book w-7"></i>Mis cursos</button>
-          <button data-student-only="true" class="campus-tab w-full text-left p-3 rounded-xl text-slate-300 hover:bg-white/10" data-campus-tab="agenda"><i class="fa-solid fa-calendar-days w-7"></i>Agenda</button>
-          <button data-student-only="true" class="campus-tab w-full text-left p-3 rounded-xl text-slate-300 hover:bg-white/10" data-campus-tab="activities"><i class="fa-solid fa-list-check w-7"></i>Actividades</button>
-          <button data-student-only="true" class="campus-tab w-full text-left p-3 rounded-xl text-slate-300 hover:bg-white/10" data-campus-tab="certificates"><i class="fa-solid fa-award w-7"></i>Certificados</button>
-          <button type="button" data-student-only="true" data-talent-tab="true" id="studentConectaParentV183" class="campus-tab w-full text-left p-3 rounded-xl text-slate-300 hover:bg-white/10" data-campus-tab="talent"><i class="fa-solid fa-briefcase w-7"></i><span class="flex-1 min-w-0">Lutmin Conecta</span></button>
-          <button class="campus-tab w-full text-left p-3 rounded-xl text-slate-300 hover:bg-white/10 flex items-center" data-campus-tab="notifications"><i class="fa-solid fa-bell w-7"></i><span class="flex-1">Novedades</span><span id="notificationBadgeDesktop" class="hidden min-w-5 h-5 px-1 rounded-full bg-red-500 text-white text-[10px] font-black flex items-center justify-center">0</span></button>
-          <button class="campus-tab w-full text-left p-3 rounded-xl text-slate-300 hover:bg-white/10" data-campus-tab="support"><i class="fa-solid fa-headset w-7"></i>Ayuda</button>
-          <button class="campus-tab w-full text-left p-3 rounded-xl text-slate-300 hover:bg-white/10" data-campus-tab="profile"><i class="fa-solid fa-user w-7"></i>Mi cuenta</button>
-          <button id="companyConectaDesktopTab" class="campus-tab hidden w-full text-left p-3 rounded-xl text-slate-300 hover:bg-white/10" data-campus-tab="company-conecta"><i class="fa-solid fa-briefcase w-7"></i>Lutmin Conecta</button>
-          <button id="companyDesktopTab" class="campus-tab hidden w-full text-left p-3 rounded-xl text-slate-300 hover:bg-white/10" data-campus-tab="company"><i class="fa-solid fa-building w-7"></i>Mi empresa</button>
-          <button id="instructorDesktopTab" class="campus-tab hidden w-full text-left p-3 rounded-xl text-slate-300 hover:bg-white/10" data-campus-tab="instructor"><i class="fa-solid fa-chalkboard-user w-7"></i>Portal Docente</button>
-          <button id="adminDesktopTab" class="campus-tab hidden w-full text-left p-3 rounded-xl text-slate-300 hover:bg-white/10" data-campus-tab="admin"><i class="fa-solid fa-shield-halved w-7"></i>Administración</button>
-        </nav>
-        <div id="campusSidebarFooterV183" class="rounded-2xl bg-white/10 p-4">
-          <p id="campusSidebarRole" class="text-xs text-slate-300">Alumno</p>
-          <p id="campusSidebarName" class="font-bold text-sm mt-1">Alumno Lutmin</p>
-          <button id="switchAccessBtn" onclick="openAccessSwitcher()" class="hidden mt-3 w-full rounded-xl bg-cyan-400/15 hover:bg-cyan-400/25 px-3 py-2 text-xs font-bold text-left text-cyan-100">
-            <i class="fa-solid fa-repeat mr-2"></i>Cambiar acceso
-          </button>
-          <button onclick="logoutLutmin()" class="mt-2 w-full rounded-xl bg-white/10 hover:bg-white/15 px-3 py-2 text-xs font-bold text-left">
-            <i class="fa-solid fa-right-from-bracket mr-2"></i>Cerrar sesión
-          </button>
-        </div>
-      </aside>
-
-      <div class="flex flex-col h-full overflow-hidden">
-        <div class="lg:hidden bg-lutmin-dark text-white pt-14 pb-2 px-4 shadow-md z-20">
-            <div id="companyMobileBrand" class="hidden mb-3 items-center gap-3">
-              <div class="w-10 h-10 rounded-xl bg-white flex items-center justify-center overflow-hidden shrink-0"><img id="companyMobileLogo" class="hidden w-full h-full object-contain p-1" alt="Logo empresa"><span id="companyMobileInitials" class="font-black text-lutmin-dark">EM</span></div>
-              <div class="min-w-0"><p id="companyMobileName" class="font-black truncate">Mi empresa</p><p class="text-[10px] text-blue-200 uppercase font-bold">Portal Empresa · Lutmin</p></div>
-            </div>
-            <p id="campusMobileProductLabel" class="text-[10px] text-blue-200 font-bold uppercase mb-2 ml-1">Campus Lutmin</p>
-            <div class="flex overflow-x-auto hide-scrollbar gap-2 pb-2">
-                <button data-student-only="true" class="campus-tab whitespace-nowrap px-4 py-2 rounded-xl bg-white/10 font-bold text-xs" data-campus-tab="dashboard">Inicio</button>
-                <button data-student-only="true" class="campus-tab whitespace-nowrap px-4 py-2 rounded-xl text-slate-300 text-xs" data-campus-tab="courses">Cursos</button>
-                <button data-student-only="true" class="campus-tab whitespace-nowrap px-4 py-2 rounded-xl text-slate-300 text-xs" data-campus-tab="agenda">Agenda</button>
-                <button data-student-only="true" class="campus-tab whitespace-nowrap px-4 py-2 rounded-xl text-slate-300 text-xs" data-campus-tab="activities">Actividades</button>
-                <button data-student-only="true" class="campus-tab whitespace-nowrap px-4 py-2 rounded-xl text-slate-300 text-xs" data-campus-tab="certificates">Certificados</button>
-                <button data-student-only="true" data-talent-tab="true" class="campus-tab whitespace-nowrap px-4 py-2 rounded-xl text-slate-300 text-xs" data-campus-tab="talent">Conecta</button>
-                <button class="campus-tab whitespace-nowrap px-4 py-2 rounded-xl text-slate-300 text-xs flex items-center gap-2" data-campus-tab="notifications">Novedades <span id="notificationBadgeMobile" class="hidden min-w-5 h-5 px-1 rounded-full bg-red-500 text-white text-[10px] font-black items-center justify-center">0</span></button>
-                <button class="campus-tab whitespace-nowrap px-4 py-2 rounded-xl text-slate-300 text-xs" data-campus-tab="support">Ayuda</button>
-                <button class="campus-tab whitespace-nowrap px-4 py-2 rounded-xl text-slate-300 text-xs" data-campus-tab="profile">Mi cuenta</button>
-                <button id="companyConectaMobileTab" class="campus-tab hidden whitespace-nowrap px-4 py-2 rounded-xl text-slate-300 text-xs" data-campus-tab="company-conecta">Conecta</button>
-                <button id="companyMobileTab" class="campus-tab hidden whitespace-nowrap px-4 py-2 rounded-xl text-slate-300 text-xs" data-campus-tab="company">Mi empresa</button>
-                <button id="instructorMobileTab" class="campus-tab hidden whitespace-nowrap px-4 py-2 rounded-xl text-slate-300 text-xs" data-campus-tab="instructor">Docente</button>
-                <button id="adminMobileTab" class="campus-tab hidden whitespace-nowrap px-4 py-2 rounded-xl text-slate-300 text-xs" data-campus-tab="admin">Administración</button>
-            </div>
-        </div>
-
-        <div class="overflow-y-auto modal-scroll flex-1 p-4 sm:p-8 lg:p-10 relative">
-          
-          <section class="campus-panel" data-campus-panel="dashboard">
-            <p id="campusToday" class="text-xs sm:text-sm text-slate-500"></p>
-            <h2 class="mt-1 text-2xl sm:text-3xl font-black text-lutmin-dark">Hola, <span id="campusGreetingName">Alumno</span> 👋</h2>
-            <p class="mt-1 sm:mt-2 text-sm sm:text-base text-slate-500">Este progreso se guarda en tu cuenta.</p>
-
-            <div id="campusEmptyState" class="hidden mt-7 rounded-3xl bg-white border border-slate-100 p-7">
-              <div class="w-12 h-12 rounded-2xl bg-blue-50 text-lutmin-light flex items-center justify-center"><i class="fa-solid fa-book-open"></i></div>
-              <h3 class="mt-4 text-xl font-extrabold text-lutmin-dark">Todavía no tenés cursos asignados</h3>
-              <p class="mt-2 text-sm text-slate-500">Cuando Lutmin te inscriba a un curso, va a aparecer acá automáticamente.</p>
-            </div>
-
-            <div id="campusDashboardContent" class="mt-6 sm:mt-8 grid xl:grid-cols-[1.2fr_.8fr] gap-4 sm:gap-6">
-              <div class="rounded-3xl bg-lutmin-dark text-white p-5 sm:p-8">
-                <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-                  <div>
-                    <p class="text-[10px] sm:text-xs text-blue-200 uppercase font-bold tracking-widest">Curso en progreso</p>
-                    <h3 id="activeCourseTitle" class="text-xl sm:text-2xl font-black mt-1 sm:mt-2">Cargando...</h3>
-                    <p id="activeCourseLesson" class="text-xs sm:text-sm text-slate-300 mt-1 sm:mt-2">Buscando tu próxima clase...</p>
-                  </div>
-                  <span id="progressLabel" class="text-2xl sm:text-3xl font-black text-lutmin-light self-start sm:self-auto">0%</span>
-                </div>
-
-                <div class="mt-5 sm:mt-6 h-2 sm:h-3 rounded-full bg-white/10 overflow-hidden">
-                  <div id="progressBar" class="h-full bg-lutmin-light rounded-full transition-all" style="width:0%"></div>
-                </div>
-
-                <div class="mt-5 sm:mt-6 grid grid-cols-3 gap-2 sm:gap-3">
-                  <div class="bg-white/10 p-3 sm:p-4 rounded-xl sm:rounded-2xl text-center sm:text-left">
-                    <p class="text-[10px] sm:text-xs text-slate-300">Progreso</p>
-                    <p id="currentLessonCount" class="font-bold text-xs sm:text-sm mt-1">0 de 0</p>
-                  </div>
-                  <div class="bg-white/10 p-3 sm:p-4 rounded-xl sm:rounded-2xl text-center sm:text-left">
-                    <p class="text-[10px] sm:text-xs text-slate-300">Falta</p>
-                    <p id="remainingTime" class="font-bold text-xs sm:text-sm mt-1">—</p>
-                  </div>
-                  <div class="bg-white/10 p-3 sm:p-4 rounded-xl sm:rounded-2xl text-center sm:text-left">
-                    <p class="text-[10px] sm:text-xs text-slate-300">Estado</p>
-                    <p id="activeCourseStatus" class="font-bold text-xs sm:text-sm mt-1">En curso</p>
-                  </div>
-                </div>
-
-                <button id="completeClassBtn" onclick="openCurrentLesson()" class="mt-5 sm:mt-6 w-full sm:w-auto px-5 py-3 rounded-xl bg-white text-lutmin-dark font-extrabold text-sm hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed">
-                  Abrir próxima clase
-                </button>
-              </div>
-
-              <div class="grid grid-cols-1 sm:grid-cols-3 xl:grid-cols-1 gap-4">
-                <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-100 flex items-center sm:block gap-4">
-                  <div class="flex-1">
-                    <p class="text-[10px] sm:text-xs text-slate-400 font-bold">HORAS ASIGNADAS</p>
-                    <p id="campusHoursStat" class="mt-1 sm:mt-2 text-2xl sm:text-3xl font-black text-lutmin-dark">0 h</p>
-                  </div>
-                </div>
-                <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-100 flex items-center sm:block gap-4">
-                  <div class="flex-1">
-                    <p class="text-[10px] sm:text-xs text-slate-400 font-bold">CERTIFICADOS</p>
-                    <p id="campusCertificatesStat" class="mt-1 sm:mt-2 text-2xl sm:text-3xl font-black text-lutmin-dark">0</p>
-                  </div>
-                </div>
-                <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-100 flex items-center sm:block gap-4">
-                  <div class="flex-1">
-                    <p class="text-[10px] sm:text-xs text-slate-400 font-bold">CURSOS ACTIVOS</p>
-                    <p id="campusActiveStat" class="mt-1 sm:mt-2 text-2xl sm:text-3xl font-black text-lutmin-light">0</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div id="upcomingLessonsSection" class="mt-6 sm:mt-8">
-              <div class="flex items-center justify-between">
-                <h3 class="font-extrabold text-lutmin-dark text-base sm:text-lg">Próximas clases</h3>
-                <button onclick="goToCampusTab('courses')" class="text-lutmin-light text-xs sm:text-sm font-bold">Ver mis cursos</button>
-              </div>
-              <div id="nextLessonsGrid" class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4"></div>
-            </div>
-          </section>
-
-          <section class="campus-panel hidden" data-campus-panel="courses">
-            <p class="text-[10px] sm:text-xs text-lutmin-light font-bold uppercase tracking-widest">Campus</p>
-            <h2 class="mt-1 sm:mt-2 text-2xl sm:text-3xl font-black text-lutmin-dark">Mis cursos</h2>
-            <p class="mt-2 text-sm text-slate-500">Acá aparecen solamente los cursos que están asignados a tu cuenta.</p>
-            <div id="campusCoursesGrid" class="mt-6 sm:mt-8 grid sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5"></div>
-          </section>
-
-          <!-- =====================================================
-               AGENDA DEL ALUMNO - V1.1
-          ====================================================== -->
-          <section class="campus-panel hidden" data-campus-panel="agenda">
-            <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-              <div>
-                <p class="text-[10px] sm:text-xs text-lutmin-light font-bold uppercase tracking-widest">Agenda de capacitación</p>
-                <h2 class="mt-1 sm:mt-2 text-2xl sm:text-3xl font-black text-lutmin-dark">Mis próximos encuentros</h2>
-                <p class="mt-2 text-sm text-slate-500">Fechas, horarios, modalidad y asistencia de tus comisiones.</p>
-              </div>
-              <button onclick="loadStudentAgenda()" class="px-4 py-2.5 rounded-xl bg-white border border-slate-200 text-sm font-bold"><i class="fa-solid fa-rotate mr-2"></i>Actualizar</button>
-            </div>
-            <div id="studentAgendaStats" class="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3"></div>
-            <div id="studentAgendaList" class="mt-6 space-y-4"><div class="p-6 rounded-3xl bg-white border border-slate-100 text-sm text-slate-500">Cargando agenda...</div></div>
-          </section>
-
-          <!-- =====================================================
-               V5.0 · ACTIVIDADES PRÁCTICAS DEL ALUMNO
-          ====================================================== -->
-          <section class="campus-panel hidden" data-campus-panel="activities">
-            <div class="flex flex-col xl:flex-row xl:items-end xl:justify-between gap-4">
-              <div><p class="text-[10px] sm:text-xs text-emerald-600 font-extrabold uppercase tracking-widest">V5.0 · Actividades</p><h2 class="mt-1 sm:mt-2 text-2xl sm:text-3xl font-black text-lutmin-dark">Actividades y asistencia</h2><p class="mt-2 text-sm text-slate-500">Entregas prácticas, devoluciones del docente y check-in de jornadas desde un solo lugar.</p></div>
-              <button onclick="loadStudentActivitiesV50()" class="px-4 py-2.5 rounded-xl bg-white border border-slate-200 text-sm font-bold"><i class="fa-solid fa-rotate mr-2"></i>Actualizar</button>
-            </div>
-            <div class="mt-6 rounded-3xl bg-lutmin-dark text-white p-5 sm:p-6">
-              <div class="grid lg:grid-cols-[1fr_auto] gap-4 items-end"><div><p class="text-[10px] uppercase tracking-widest text-emerald-200 font-bold">Check-in de jornada</p><h3 class="mt-1 text-xl font-black">¿El docente mostró un código?</h3><p class="mt-1 text-xs text-slate-300">Ingresalo para registrar tu presencia mientras el check-in esté abierto.</p></div><form onsubmit="studentCheckinV50(event)" class="flex gap-2"><input id="studentCheckinCodeV50" maxlength="16" autocomplete="off" class="w-44 px-4 py-3 rounded-xl bg-white text-lutmin-dark uppercase font-black tracking-widest" placeholder="CÓDIGO"><button class="px-4 py-3 rounded-xl bg-emerald-500 text-white font-extrabold">Registrar</button></form></div>
-            </div>
-            <div id="studentActivitiesBodyV50" class="mt-6"><div class="rounded-3xl bg-white border border-slate-100 p-6 text-sm text-slate-500">Cargando actividades...</div></div>
-          </section>
-
-          <section class="campus-panel hidden" data-campus-panel="certificates">
-            <p class="text-[10px] sm:text-xs text-lutmin-light font-bold uppercase tracking-widest">Campus</p>
-            <h2 class="mt-1 sm:mt-2 text-2xl sm:text-3xl font-black text-lutmin-dark">Mis certificados</h2>
-            <div id="campusCertificatesGrid" class="mt-6 sm:mt-8 grid sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5"></div>
-          </section>
-
-
-          <!-- =====================================================
-               LUTMIN CONECTA - V1.2
-          ====================================================== -->
-          <section class="campus-panel hidden" data-campus-panel="talent" data-lutmin-view-host="talent" data-lutmin-view-state="idle">
-              <div class="lutmin-view-skeleton-v31" data-lutmin-view-loading="talent"><div class="lutmin-view-skeleton-card-v31"><span class="lutmin-view-spinner-v31"></span><div><strong>Preparando Lutmin Conecta</strong><small>Se carga sólo cuando lo necesitás.</small></div></div></div>
-            </section>
-
-          <!-- =====================================================
-               CENTRO DE NOVEDADES - V1.0
-          ====================================================== -->
-          <!-- =====================================================
-               MESA DE AYUDA - V1.3
-          ====================================================== -->
-          <section class="campus-panel hidden" data-campus-panel="support">
-            <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
-              <div><p class="text-[10px] sm:text-xs text-lutmin-light font-bold uppercase tracking-widest">Mesa de ayuda</p><h2 class="mt-1 sm:mt-2 text-2xl sm:text-3xl font-black text-lutmin-dark">Ayuda y consultas</h2><p id="supportIntro" class="mt-2 text-sm text-slate-500">Podés dejar una consulta y seguir la respuesta desde acá.</p></div>
-              <button onclick="loadSupportCenter()" class="px-4 py-2.5 rounded-xl bg-white border border-slate-200 text-sm font-bold"><i class="fa-solid fa-rotate mr-2"></i>Actualizar</button>
-            </div>
-            <div class="mt-6 grid xl:grid-cols-[.8fr_1.2fr] gap-5">
-              <form id="supportTicketForm" class="bg-white rounded-3xl border border-slate-100 p-5 sm:p-6">
-                <h3 class="font-extrabold text-lutmin-dark">Nueva consulta</h3><p class="mt-1 text-xs text-slate-500">Académica, pagos, técnica o relacionada con tu empresa.</p>
-                <input id="supportSubject" required maxlength="180" class="mt-4 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Asunto">
-                <div class="mt-3 grid grid-cols-2 gap-3"><select id="supportCategory" class="px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"><option value="general">General</option><option value="academico">Académico</option><option value="pagos">Pagos</option><option value="tecnico">Técnico</option><option value="empresa">Empresa</option></select><select id="supportPriority" class="px-3 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm"><option value="normal">Prioridad normal</option><option value="baja">Baja</option><option value="alta">Alta</option></select></div>
-                <textarea id="supportMessage" required rows="6" maxlength="5000" class="mt-3 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Contanos qué necesitás..."></textarea>
-                <button class="mt-4 w-full py-3 rounded-xl bg-lutmin-dark text-white font-extrabold">Enviar consulta</button>
-              </form>
-              <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden"><div class="p-5 sm:p-6 border-b border-slate-100"><h3 class="font-extrabold text-lutmin-dark">Tickets</h3><p class="mt-1 text-xs text-slate-500">Administración ve todos; cada alumno o empresa solo ve los que le corresponden.</p></div><div id="supportTicketsList" class="divide-y divide-slate-100"><div class="p-6 text-sm text-slate-500">Cargando...</div></div></div>
-            </div>
-          </section>
-
-          <section class="campus-panel hidden" data-campus-panel="notifications">
-            <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-              <div>
-                <p class="text-[10px] sm:text-xs text-lutmin-light font-bold uppercase tracking-widest">Centro de novedades</p>
-                <h2 class="mt-1 sm:mt-2 text-2xl sm:text-3xl font-black text-lutmin-dark">Notificaciones y comunicados</h2>
-                <p class="mt-2 text-sm text-slate-500">Cursos asignados, pagos, certificados y avisos importantes de Lutmin en un solo lugar.</p>
-              </div>
-              <button onclick="markAllNotificationCenterRead()" class="px-4 py-2.5 rounded-xl bg-white border border-slate-200 text-sm font-bold text-lutmin-dark"><i class="fa-solid fa-check-double mr-2"></i>Marcar todo como leído</button>
-            </div>
-            <div class="mt-6 grid sm:grid-cols-3 gap-4">
-              <div class="bg-white rounded-2xl border border-slate-100 p-5"><p class="text-[10px] font-bold text-slate-400 uppercase">Sin leer</p><p id="notificationUnreadStat" class="mt-2 text-3xl font-black text-red-500">0</p></div>
-              <div class="bg-white rounded-2xl border border-slate-100 p-5"><p class="text-[10px] font-bold text-slate-400 uppercase">Notificaciones</p><p id="notificationDirectStat" class="mt-2 text-3xl font-black text-lutmin-dark">0</p></div>
-              <div class="bg-white rounded-2xl border border-slate-100 p-5"><p class="text-[10px] font-bold text-slate-400 uppercase">Comunicados</p><p id="notificationAnnouncementStat" class="mt-2 text-3xl font-black text-lutmin-light">0</p></div>
-            </div>
-            <div id="notificationCenterList" class="mt-6 bg-white rounded-3xl border border-slate-100 divide-y divide-slate-100 overflow-hidden">
-              <div class="p-6 text-sm text-slate-500">Cargando novedades...</div>
-            </div>
-          </section>
-
-          <section class="campus-panel hidden" data-campus-panel="profile">
-            <p class="text-[10px] sm:text-xs text-lutmin-light font-bold uppercase tracking-widest">Campus</p>
-            <h2 class="mt-1 sm:mt-2 text-2xl sm:text-3xl font-black text-lutmin-dark">Mi perfil profesional</h2>
-
-            <div class="mt-6 sm:mt-8 bg-white rounded-3xl border border-slate-100 p-5 sm:p-8 max-w-3xl">
-              <div class="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-5">
-                <div id="campusProfileInitials" class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-lutmin-dark text-white flex items-center justify-center font-black text-xl sm:text-2xl shrink-0">AL</div>
-                <div>
-                  <h3 id="campusProfileName" class="text-xl sm:text-2xl font-black text-lutmin-dark">Alumno Lutmin</h3>
-                  <p id="campusProfileSubtitle" class="text-xs sm:text-sm text-slate-500 mt-1">Perfil profesional de alumno</p>
-                  <div class="mt-2 sm:mt-3 flex flex-wrap gap-2">
-                    <span id="campusProfileStatus" class="text-[10px] sm:text-xs bg-green-50 text-green-700 px-3 py-1 rounded-full font-bold">Disponible</span>
-                    <span id="campusProfileCertCount" class="text-[10px] sm:text-xs bg-blue-50 text-blue-700 px-3 py-1 rounded-full font-bold">0 certificados</span>
-                  </div>
-                </div>
-              </div>
-              <div class="mt-6 sm:mt-7 flex flex-col sm:flex-row gap-3">
-                <button onclick="openPasswordModal('change')" class="w-full sm:w-auto px-5 py-3 rounded-xl bg-lutmin-dark text-white font-bold text-sm sm:text-base"><i class="fa-solid fa-key mr-2"></i>Cambiar contraseña</button>
-                <button id="campusPublicProfileBtn" data-student-profile-action="true" onclick="openMyPublicProfileV40()" class="w-full sm:w-auto px-5 py-3 rounded-xl bg-blue-50 text-blue-700 font-bold text-sm sm:text-base hover:bg-blue-100"><i class="fa-solid fa-id-card mr-2"></i>Configurar perfil público</button>
-              </div>
-            </div>
-          </section>
-
-
-
-          <!-- =====================================================
-               LUTMIN CONECTA · PORTAL EMPRESA - V2.9
-          ====================================================== -->
-          <section class="campus-panel hidden" data-campus-panel="company-conecta" data-lutmin-view-host="company-conecta" data-lutmin-view-state="idle">
-              <div class="lutmin-view-skeleton-v31" data-lutmin-view-loading="company-conecta"><div class="lutmin-view-skeleton-card-v31"><span class="lutmin-view-spinner-v31"></span><div><strong>Preparando Conecta Empresa</strong><small>Se carga sólo cuando lo necesitás.</small></div></div></div>
-            </section>
-
-          <!-- =====================================================
-               PORTAL EMPRESAS - ETAPA 13
-          ====================================================== -->
-          <section class="campus-panel hidden" data-campus-panel="company" data-lutmin-view-host="company" data-lutmin-view-state="idle">
-              <div class="lutmin-view-skeleton-v31" data-lutmin-view-loading="company"><div class="lutmin-view-skeleton-card-v31"><span class="lutmin-view-spinner-v31"></span><div><strong>Preparando Mi Empresa</strong><small>Se carga sólo cuando lo necesitás.</small></div></div></div>
-            </section>
-
-          <!-- =====================================================
-               V5.0 · PORTAL DOCENTE
-          ====================================================== -->
-          <section class="campus-panel hidden" data-campus-panel="instructor" data-lutmin-view-host="instructor" data-lutmin-view-state="idle">
-              <div class="lutmin-view-skeleton-v31" data-lutmin-view-loading="instructor"><div class="lutmin-view-skeleton-card-v31"><span class="lutmin-view-spinner-v31"></span><div><strong>Preparando Portal Docente</strong><small>Se carga sólo cuando lo necesitás.</small></div></div></div>
-            </section>
-
-          <!-- =====================================================
-               ADMINISTRACIÓN LUTMIN - V1.0 OPERATIVA
-          ====================================================== -->
-          <section class="campus-panel hidden" data-campus-panel="admin" data-lutmin-view-host="admin" data-lutmin-view-state="idle">
-              <div class="lutmin-view-skeleton-v31" data-lutmin-view-loading="admin"><div class="lutmin-view-skeleton-card-v31"><span class="lutmin-view-spinner-v31"></span><div><strong>Preparando Administración</strong><small>Se carga sólo cuando lo necesitás.</small></div></div></div>
-            </section>
-
-        </div>
-      </div>
-    </div>
-  </div>
+  <!-- Campus autenticado: assets/views/campus-shell.html (lazy) -->
 
   <!-- =========================================================
        CONVERTIR INTERESADO EN ALUMNO - ETAPA 10
@@ -1728,13 +1429,14 @@
   <!-- QR / PDF para certificados + Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <!-- LUTMIN V52.0 · workspaces y capacidades bajo demanda + actualización segura. -->
-  <script src="assets/js/core/module-loader.js?v=52.0"></script>
-  <script src="assets/js/core/data-runtime.js?v=52.0"></script>
-  <script src="assets/js/core/view-loader.js?v=52.0"></script>
-  <script src="assets/js/core/workspace-nav.js?v=52.0"></script>
-  <script src="assets/js/core/app-core.js?v=52.0"></script>
-  <script src="assets/js/core/core-bindings.js?v=52.0"></script>
-  <script src="assets/js/core/ui-runtime.js?v=52.0"></script>
+  <!-- LUTMIN V53.0 · workspaces y capacidades bajo demanda + actualización segura. -->
+  <script src="assets/js/core/module-loader.js?v=53.0"></script>
+  <script src="assets/js/core/data-runtime.js?v=53.0"></script>
+  <script src="assets/js/core/app-shell.js?v=53.0"></script>
+  <script src="assets/js/core/view-loader.js?v=53.0"></script>
+  <script src="assets/js/core/workspace-nav.js?v=53.0"></script>
+  <script src="assets/js/core/core-bindings.js?v=53.0"></script>
+  <script src="assets/js/core/app-core.js?v=53.0"></script>
+  <script src="assets/js/core/ui-runtime.js?v=53.0"></script>
 </body>
 </html>

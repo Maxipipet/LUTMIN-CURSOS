@@ -1,5 +1,5 @@
 // =============================================================
-// LUTMIN V52.0 · AUTHENTICATED ACCOUNT SERVICES
+// LUTMIN V53.0 · AUTHENTICATED ACCOUNT SERVICES
 // Soporte y notificaciones compartidos por accesos autenticados.
 // =============================================================
     function supportStatusLabel(v){return({open:'Abierto',in_progress:'En gestión',waiting_user:'Esperando respuesta',closed:'Cerrado'})[v]||v;}

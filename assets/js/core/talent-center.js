@@ -1,11 +1,11 @@
 // =============================================================
-// LUTMIN V52.0 · TALENT CENTER RUNTIME
+// LUTMIN V53.0 · TALENT CENTER RUNTIME
 // Conecta autenticado: Alumno, Empresa y Administración.
 // Se descarga sólo cuando un flujo de talento realmente lo necesita.
 // =============================================================
     async function loadTalentCenter(){
-      if(await window.LutminV31Views?.ensureForTab?.('talent')===false)return;
-      if(await window.LutminV29Modules?.ensureFeatureForTab?.('talent',currentLutminUser?.role)===false)return;
+      if(await window.LutminViews?.ensureForTab?.('talent')===false)return;
+      if(await window.LutminModules?.ensureFeatureForTab?.('talent',currentLutminUser?.role)===false)return;
       if(!supabaseClient||currentLutminUser?.role!=='student')return;
       // V37: abrir Conecta es lectura. El perfil se crea/actualiza sólo cuando el usuario guarda.
       const [profileRes,skillsRes,expRes,appsRes,certRes,jobsRes,savedJobsRes,statsRes,detailsRes,requestRes]=await Promise.all([
@@ -58,7 +58,7 @@
     async function applyTalentJob(jobId){
       if(talentData?.profile?.approval_status!=='approved')return showToast('Completá tu perfil profesional para habilitar postulaciones automáticamente.');
       try{
-        if(typeof window.openSmartApplyV100!=='function')await window.LutminV30Modules?.ensureTalentSection?.('agent');
+        if(typeof window.openSmartApplyV100!=='function')await window.LutminModules?.ensureTalentSection?.('agent');
         if(typeof window.openSmartApplyV100==='function')return window.openSmartApplyV100(jobId);
       }catch(err){console.warn('[Lutmin V45] No pude abrir el paquete inteligente, uso fallback.',err);}
       const message=window.prompt('Mensaje opcional para acompañar tu postulación:','')||'';
@@ -78,8 +78,8 @@
     let companyConectaSummary=null;
 
     async function loadCompanyConectaData(){
-      if(await window.LutminV31Views?.ensureForTab?.('company-conecta')===false)return;
-      if(await window.LutminV29Modules?.ensureFeatureForTab?.('company-conecta',currentLutminUser?.role)===false)return;
+      if(await window.LutminViews?.ensureForTab?.('company-conecta')===false)return;
+      if(await window.LutminModules?.ensureFeatureForTab?.('company-conecta',currentLutminUser?.role)===false)return;
       if(!supabaseClient||currentLutminUser?.role!=='company_admin')return;
       const [pipelineRes,summaryRes]=await Promise.all([
         supabaseClient.rpc('company_job_pipeline'),

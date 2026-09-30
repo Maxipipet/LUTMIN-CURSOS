@@ -5,7 +5,7 @@
 // =============================================================
 (function(){
   'use strict';
-  const VERSION='52.0';
+  const VERSION='53.0';
   const state={entries:new Map(),metrics:new Map(),hits:0,misses:0,reused:0};
   const defaults={dashboard:18000,admin:20000,company:20000,'company-conecta':22000,instructor:22000,agenda:30000,activities:22000,talent:26000,notifications:18000,support:30000};
 
@@ -27,7 +27,7 @@
 
   async function openTab(tab){
     const role=(typeof currentLutminUser!=='undefined'&&currentLutminUser)?currentLutminUser.role:null;
-    const ready=await window.LutminV30Modules?.ensureFeatureForTab?.(tab,role);if(ready===false)return false;
+    const ready=await window.LutminModules?.ensureFeatureForTab?.(tab,role);if(ready===false)return false;
     if(typeof goToCampusTab==='function')goToCampusTab(tab);
     const map={
       admin:['admin',()=>loadAdminData(),12000],company:['company',()=>loadCompanyPortalData(),12000],

@@ -182,18 +182,18 @@
       if (!supabaseClient || currentLutminUser?.role !== 'admin') return false;
       const activeModule = document.getElementById('adminModuleHostV32')?.dataset?.adminModuleV32
         || localStorage.getItem('lutmin-admin-module-v19') || 'overview';
-      if (window.LutminV33AdminData?.loadForModule) {
-        const ok = await window.LutminV33AdminData.loadForModule(activeModule,{force:true});
-        try { await window.LutminV30Admin?.loadForModule?.(activeModule,{force:true}); } catch (_) {}
+      if (window.LutminAdminData?.loadForModule) {
+        const ok = await window.LutminAdminData.loadForModule(activeModule,{force:true});
+        try { await window.LutminAdminRuntime?.loadForModule?.(activeModule,{force:true}); } catch (_) {}
         return ok;
       }
       if (!window.LutminV35AdminCore?.loadLegacy) {
-        const ready = await window.LutminV30Modules?.ensureAdminModule?.(activeModule);
+        const ready = await window.LutminModules?.ensureAdminModule?.(activeModule);
         if (ready === false) return false;
       }
-      if (window.LutminV33AdminData?.loadForModule) {
-        const ok = await window.LutminV33AdminData.loadForModule(activeModule,{force:true});
-        try { await window.LutminV30Admin?.loadForModule?.(activeModule,{force:true}); } catch (_) {}
+      if (window.LutminAdminData?.loadForModule) {
+        const ok = await window.LutminAdminData.loadForModule(activeModule,{force:true});
+        try { await window.LutminAdminRuntime?.loadForModule?.(activeModule,{force:true}); } catch (_) {}
         return ok;
       }
       return window.LutminV35AdminCore?.loadLegacy?.() ?? false;
@@ -255,15 +255,21 @@
     // MODALES
     // =========================================================
     function openModal(id) {
-      document.getElementById(id).classList.remove('hidden');
+      const modal=document.getElementById(id);
+      if(!modal)return false;
+      modal.classList.remove('hidden');
       document.body.classList.add('overflow-hidden');
+      return true;
     }
 
     function closeModal(id) {
-      document.getElementById(id).classList.add('hidden');
+      const modal=document.getElementById(id);
+      if(!modal)return false;
+      modal.classList.add('hidden');
       if (!document.querySelector('.fixed:not(.hidden)[id$="Modal"]')) {
         document.body.classList.remove('overflow-hidden');
       }
+      return true;
     }
 
     document.addEventListener('keydown', event => {
@@ -271,7 +277,7 @@
         ['courseModal','interestModal','campusModal','lessonModal','assessmentModal','publicTalentModal','companyCandidateModal','profileModal','accessSwitcherModal','adminAccountPasswordModal','supportThreadModal','certificateModal','authModal','passwordModal','adminCourseEditModal','adminLessonEditModal','adminStudentDetailModal','leadConvertModal','paymentModal','adminCompanyEditModal','attendanceModal'].forEach(id => {
           const el = document.getElementById(id);
           if (id === 'passwordModal' && (passwordModalMode === 'first' || passwordModalMode === 'recovery')) return;
-          if (!el.classList.contains('hidden')) closeModal(id);
+          if (el && !el.classList.contains('hidden')) closeModal(id);
         });
       }
     });
@@ -484,7 +490,7 @@
 
     function openAuthModal(context = 'student') {
       // V29: mientras la persona completa el login, precargamos sólo el núcleo liviano.
-      window.LutminV29Modules?.warm?.('auth-modal');
+      window.LutminModules?.warm?.('auth-modal');
       authLoginContext = context === 'company' ? 'company' : 'student';
       document.getElementById('authStatus').textContent = '';
       document.getElementById('authForm').reset();
@@ -554,24 +560,27 @@
       if(!mode){showToast('La cuenta existe pero no tiene accesos activos.');return false;}
       currentAccessMode=mode; sessionStorage.setItem('lutmin-access-mode',mode);
       const effectiveRole=mode==='company'?'company_admin':mode==='admin'?'admin':mode==='instructor'?'instructor':'student';
+      // V53: el Campus autenticado se monta recién cuando existe un acceso válido.
+      const shellReady=await window.LutminAppShell?.ensureCampus?.();
+      if(shellReady===false){showToast('No pude preparar el Campus. Actualizá la página y volvé a intentar.');return false;}
       // V31: primero monta el HTML del workspace. Después carga su runtime.
-      const viewReadyV31=await window.LutminV31Views?.ensureForRole?.(effectiveRole);
+      const viewReadyV31=await window.LutminViews?.ensureForRole?.(effectiveRole);
       if(viewReadyV31===false){showToast('No pude preparar la interfaz de este acceso. Actualizá la página y volvé a intentar.');return false;}
       // V29/V30: carga únicamente el runtime que corresponde a los accesos disponibles.
-      if(window.LutminV29Modules?.ensureAuthenticated){
-        const modulesReady=await window.LutminV29Modules.ensureAuthenticated({role:effectiveRole,capabilities:currentAccessContext});
+      if(window.LutminModules?.ensureAuthenticated){
+        const modulesReady=await window.LutminModules.ensureAuthenticated({role:effectiveRole,capabilities:currentAccessContext});
         if(modulesReady===false){showToast('No pude cargar los módulos necesarios de Lutmin. Actualizá la página y volvé a intentar.');return false;}
       }
       currentLutminUser={id:user.id,email:profile?.email||user.email,fullName,role:effectiveRole,baseRole:profile?.role||'student',active:profile?.active!==false,mustChangePassword:Boolean(profile?.must_change_password)};
       paintCurrentLutminUser();
       try{await supabaseClient.rpc('touch_lutmin_last_seen')}catch(_){}
-      const v29InitialLoad=(key,loader,ttl=12000)=>window.LutminV29Data?.load?window.LutminV29Data.load(key,loader,{ttl,force:true}):loader();
+      const v29InitialLoad=(key,loader,ttl=12000)=>window.LutminData?.load?window.LutminData.load(key,loader,{ttl,force:true}):loader();
       if(effectiveRole==='company_admin'){goToCampusTab('company');setTimeout(()=>{if(typeof window.openWorkspaceSectionV190==='function')window.openWorkspaceSectionV190('company','summary');else v29InitialLoad('company',()=>loadCompanyPortalData(),12000);},0);}
       else if(effectiveRole==='admin'){goToCampusTab('admin');setTimeout(()=>v29InitialLoad('admin',()=>loadAdminData(),12000),0);}
       else if(effectiveRole==='instructor'){goToCampusTab('instructor');setTimeout(()=>v29InitialLoad('instructor',()=>loadInstructorPortalV50(),15000),0);}
-      else {goToCampusTab('dashboard');setTimeout(()=>v29InitialLoad('dashboard',()=>loadCampusData(),12000),0);if(new URL(location.href).searchParams.get('checkin'))setTimeout(async()=>{await window.LutminV30Modules?.ensureFeature?.('activities');await window.processPendingCheckinV50?.();},180);}
+      else {goToCampusTab('dashboard');setTimeout(()=>v29InitialLoad('dashboard',()=>loadCampusData(),12000),0);if(new URL(location.href).searchParams.get('checkin'))setTimeout(async()=>{await window.LutminModules?.ensureFeature?.('activities');await window.processPendingCheckinV50?.();},180);}
       setTimeout(()=>v29InitialLoad('notifications',()=>loadNotificationCenter(),12000),180);
-      if(effectiveRole==='student'){const hydrateStudent=async()=>{if(currentLutminUser?.role!=='student')return;const ready=await window.LutminV30Modules?.ensureFeature?.('student-enhancements');if(ready===false||currentLutminUser?.role!=='student')return;await Promise.allSettled([window.loadStudentPathsV25?.(),window.loadPendingSurveysV25?.(),window.loadStudentComplianceV40?.()]);};if('requestIdleCallback' in window)requestIdleCallback(()=>hydrateStudent(),{timeout:2600});else setTimeout(()=>hydrateStudent(),1600);}
+      if(effectiveRole==='student'){const hydrateStudent=async()=>{if(currentLutminUser?.role!=='student')return;const ready=await window.LutminModules?.ensureFeature?.('student-enhancements');if(ready===false||currentLutminUser?.role!=='student')return;await Promise.allSettled([window.loadStudentPathsV25?.(),window.loadPendingSurveysV25?.(),window.loadStudentComplianceV40?.()]);};if('requestIdleCallback' in window)requestIdleCallback(()=>hydrateStudent(),{timeout:2600});else setTimeout(()=>hydrateStudent(),1600);}
       if(currentLutminUser.mustChangePassword && effectiveRole!=='admin' && Date.now() > suppressPasswordGateUntil) {
         setTimeout(()=>{
           if(currentLutminUser?.mustChangePassword && Date.now() > suppressPasswordGateUntil && !passwordUpdateInFlight) openPasswordModal('first');
@@ -618,7 +627,7 @@
     async function logoutLutmin() {
       if (supabaseClient) await supabaseClient.auth.signOut();
       currentLutminUser = null;
-      window.LutminV29Data?.invalidate?.();
+      window.LutminData?.invalidate?.();
       currentAccessMode = null; currentAccessContext = {student:false,admin:false,companies:[],instructor:false,instructor_groups:[]}; sessionStorage.removeItem('lutmin-access-mode');
       notificationCenterData = { notifications: [], announcements: [], unread_count: 0 };
       adminProfiles = []; adminCourses = []; adminLessons = []; adminEnrollments = []; adminProgressRows = []; adminAssessments = []; adminAssessmentQuestions = []; adminAssessmentAttempts = []; adminCertificates = []; adminOfferings = []; adminCourseLeads = []; adminCompanies = []; adminCompanyMembers = []; companyPortalData = null;
@@ -651,31 +660,34 @@
     // =========================================================
     // openCampus() ya está definido arriba como alias de Acceso Alumno.
 
-    document.querySelectorAll('.campus-tab').forEach(button => {
-      button.addEventListener('click', async () => {
-        const tab = button.dataset.campusTab;
-        if (tab === 'admin' && currentLutminUser?.role !== 'admin') return;
-        if ((tab === 'company' || tab === 'company-conecta') && currentLutminUser?.role !== 'company_admin') return;
-        if (tab === 'instructor' && currentLutminUser?.role !== 'instructor') return;
-        if (tab === 'activities' && currentLutminUser?.role !== 'student') return;
-        if (currentLutminUser?.role === 'company_admin' && !['company','company-conecta','profile','notifications','support'].includes(tab)) return;
-        if (currentLutminUser?.role === 'instructor' && !['instructor','profile','notifications','support'].includes(tab)) return;
-        const viewReady=await window.LutminV31Views?.ensureForTab?.(tab);
-        if(viewReady===false){showToast('No pude preparar esta vista. Actualizá la página y volvé a intentar.');return;}
-        const featureReady=await window.LutminV29Modules?.ensureFeatureForTab?.(tab,currentLutminUser?.role);
-        if(featureReady===false){showToast('No pude preparar este módulo. Actualizá la página y volvé a intentar.');return;}
-        goToCampusTab(tab);
-        const v29NavLoad=(key,loader,ttl)=>window.LutminV29Data?.load?window.LutminV29Data.load(key,loader,{ttl}):loader();
-        if (tab === 'admin') await v29NavLoad('admin',()=>loadAdminData(),12000);
-        if (tab === 'company') await v29NavLoad('company',()=>loadCompanyPortalData(),12000);
-        if (tab === 'company-conecta') await v29NavLoad('company-conecta',()=>loadCompanyConectaData(),15000);
-        if (tab === 'instructor') await v29NavLoad('instructor',()=>loadInstructorPortalV50(),15000);
-        if (tab === 'agenda') await v29NavLoad('agenda',()=>loadStudentAgenda(),20000);
-        if (tab === 'activities') await v29NavLoad('activities',()=>loadStudentActivitiesV50(),15000);
-        if (tab === 'talent') await v29NavLoad('talent',()=>loadTalentCenter(),18000);
-        if (tab === 'notifications') await v29NavLoad('notifications',()=>loadNotificationCenter(),12000);
-        if (tab === 'support') await v29NavLoad('support',()=>loadSupportCenter(),25000);
-      });
+    // V53: navegación delegada. Funciona aunque el Campus se monte después
+    // del arranque y evita registrar un listener por cada botón.
+    document.addEventListener('click', async event => {
+      const button=event.target.closest?.('.campus-tab');
+      if(!button)return;
+      const tab = button.dataset.campusTab;
+      if(!tab)return;
+      if (tab === 'admin' && currentLutminUser?.role !== 'admin') return;
+      if ((tab === 'company' || tab === 'company-conecta') && currentLutminUser?.role !== 'company_admin') return;
+      if (tab === 'instructor' && currentLutminUser?.role !== 'instructor') return;
+      if (tab === 'activities' && currentLutminUser?.role !== 'student') return;
+      if (currentLutminUser?.role === 'company_admin' && !['company','company-conecta','profile','notifications','support'].includes(tab)) return;
+      if (currentLutminUser?.role === 'instructor' && !['instructor','profile','notifications','support'].includes(tab)) return;
+      const viewReady=await window.LutminViews?.ensureForTab?.(tab);
+      if(viewReady===false){showToast('No pude preparar esta vista. Actualizá la página y volvé a intentar.');return;}
+      const featureReady=await window.LutminModules?.ensureFeatureForTab?.(tab,currentLutminUser?.role);
+      if(featureReady===false){showToast('No pude preparar este módulo. Actualizá la página y volvé a intentar.');return;}
+      goToCampusTab(tab);
+      const v29NavLoad=(key,loader,ttl)=>window.LutminData?.load?window.LutminData.load(key,loader,{ttl}):loader();
+      if (tab === 'admin') await v29NavLoad('admin',()=>loadAdminData(),12000);
+      if (tab === 'company') await v29NavLoad('company',()=>loadCompanyPortalData(),12000);
+      if (tab === 'company-conecta') await v29NavLoad('company-conecta',()=>loadCompanyConectaData(),15000);
+      if (tab === 'instructor') await v29NavLoad('instructor',()=>loadInstructorPortalV50(),15000);
+      if (tab === 'agenda') await v29NavLoad('agenda',()=>loadStudentAgenda(),20000);
+      if (tab === 'activities') await v29NavLoad('activities',()=>loadStudentActivitiesV50(),15000);
+      if (tab === 'talent') await v29NavLoad('talent',()=>loadTalentCenter(),18000);
+      if (tab === 'notifications') await v29NavLoad('notifications',()=>loadNotificationCenter(),12000);
+      if (tab === 'support') await v29NavLoad('support',()=>loadSupportCenter(),25000);
     });
 
     // =========================================================
@@ -1127,8 +1139,8 @@
     }
 
     async function ensureStudentTalentRuntime() {
-      if (await window.LutminV31Views?.ensureForTab?.('talent') === false) return false;
-      if (await window.LutminV29Modules?.ensureFeatureForTab?.('talent','student') === false) return false;
+      if (await window.LutminViews?.ensureForTab?.('talent') === false) return false;
+      if (await window.LutminModules?.ensureFeatureForTab?.('talent','student') === false) return false;
       return typeof loadTalentCenter === 'function';
     }
 
@@ -1204,10 +1216,10 @@
     async function openProfile() {
       if (currentLutminUser?.role === 'student') {
         openModal('campusModal');
-        const ready=await window.LutminV29Modules?.ensureFeatureForTab?.('talent','student');
+        const ready=await window.LutminModules?.ensureFeatureForTab?.('talent','student');
         if(ready===false)return showToast('No pude preparar Lutmin Conecta.');
         goToCampusTab('talent');
-        if(window.LutminV29Data?.load)await window.LutminV29Data.load('talent',()=>loadTalentCenter(),{ttl:18000});
+        if(window.LutminData?.load)await window.LutminData.load('talent',()=>loadTalentCenter(),{ttl:18000});
         else await loadTalentCenter();
       } else { openConectaCampus(); }
     }

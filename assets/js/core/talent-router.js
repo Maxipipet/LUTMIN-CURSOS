@@ -29,7 +29,7 @@
 
   async function prepare(key){
     key=normalize(key);
-    const ok=await window.LutminV30Modules?.ensureTalentSection?.(key);
+    const ok=await window.LutminModules?.ensureTalentSection?.(key);
     if(ok===false)throw new Error('No pude preparar el módulo de Conecta.');
 
     if(key==='summary'){
@@ -71,7 +71,7 @@
       goToCampusTab?.('talent');
       // Los datos base se deduplican por TTL. No hacemos writes al entrar.
       if(!skipLoad&&typeof loadTalentCenter==='function'){
-        if(window.LutminV29Data?.load)await window.LutminV29Data.load('talent',()=>loadTalentCenter(),{ttl:18000});
+        if(window.LutminData?.load)await window.LutminData.load('talent',()=>loadTalentCenter(),{ttl:18000});
         else await loadTalentCenter();
       }
       await prepare(key);

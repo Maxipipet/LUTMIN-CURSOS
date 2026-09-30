@@ -4,7 +4,7 @@
 // =============================================================
 (function(){
   'use strict';
-  const VERSION='52.0';
+  const VERSION='53.0';
   const state={role:null,applies:0,duplicatesHidden:0};
   const allowed={
     student:new Set(['dashboard','courses','agenda','activities','certificates','talent','notifications','support','profile']),

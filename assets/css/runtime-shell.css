@@ -1,0 +1,9 @@
+/* LUTMIN V30.0 · UI lifecycle + render containment */
+#campusMainScrollerV30{scroll-behavior:auto;overscroll-behavior:contain}
+.campus-panel[aria-hidden="true"]{pointer-events:none}
+.campus-panel[data-lutmin-v30-active="true"]{contain:layout paint style}
+@supports (content-visibility:auto){
+  .campus-panel[data-lutmin-v30-active="true"]>div,
+  .campus-panel[data-lutmin-v30-active="true"]>[data-admin-module-v19]:not(.hidden){content-visibility:auto;contain-intrinsic-size:1px 560px}
+}
+@media (prefers-reduced-motion:reduce){#campusMainScrollerV30{scroll-behavior:auto!important}}
