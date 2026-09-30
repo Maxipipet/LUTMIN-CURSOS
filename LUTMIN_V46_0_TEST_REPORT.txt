@@ -1,0 +1,41 @@
+LUTMIN V46.0 · TEST REPORT
+==========================
+
+RESULTADO GENERAL: PASS
+
+VALIDACIONES ESTRUCTURALES
+- Sintaxis: 47 archivos JS/Service Worker verificados.
+- IDs estáticos: 746, sin duplicados.
+- Rutas locales verificadas: 66.
+- Smoke HTTP: 13/13 recursos críticos respondieron 200.
+- Versionado coherente: index, SW, view-loader, update-manager y module-loader en 46.0.
+
+PRUEBAS FUNCIONALES
+- Parser CV multipágina: PASS.
+- Evidencia positiva: PASS.
+- Caso negativo (retail != mantenimiento): PASS.
+- Oferta externa: PASS.
+- Exportación de expediente: PASS.
+- Expediente V46: versiones, eventos, status y planificación: PASS.
+- Próxima acción: PASS.
+- Seguimiento postulación: PASS.
+- Entrevista próxima: PASS.
+- Rutas/archivos de Mis procesos: PASS.
+
+RENDIMIENTO
+- V45 módulo Postulaciones: superplatform.js = 73.505 bytes.
+- V46 Mis procesos: dossier + process center = ~29.003 bytes.
+- Reducción aproximada al abrir seguimiento: 60,5%.
+- V45 shell Agente: ~125.438 bytes / 3 scripts.
+- V46 shell Agente: ~97.437 bytes / 2 scripts.
+- Reducción aproximada shell Agente: 22,3%.
+- cv-tailor-engine (~36 KB) se carga sólo cuando una oportunidad concreta necesita personalización.
+
+SEGURIDAD / AGENCIA
+- Sin APIs pagas.
+- Sin decisiones automáticas de contratación.
+- Sin invención de experiencia.
+- Fechas/notas privadas de seguimiento no se comparten con empresas.
+
+ADVERTENCIA HEREDADA
+- LOGO.png continúa referenciado pero no estaba en el deploy original recibido. No se generó un reemplazo artificial.

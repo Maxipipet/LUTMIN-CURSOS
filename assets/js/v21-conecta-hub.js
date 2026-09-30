@@ -1,6 +1,6 @@
 (()=>{
   // =========================================================
-  // LUTMIN V21.0 · CONECTA HUB
+  // LUTMIN V46.0 · CONECTA HUB
   // Navegación superior modular + resumen inteligente.
   // Sin SQL nuevo, sin APIs externas y costo adicional $0.
   // =========================================================
@@ -11,7 +11,7 @@
     ['summary','Resumen','fa-house'],
     ['profile','Perfil profesional','fa-id-card'],
     ['jobs','Oportunidades','fa-magnifying-glass'],
-    ['applications','Mis postulaciones','fa-file-circle-check'],
+    ['applications','Mis procesos','fa-list-check'],
     ['interviews','Entrevistas','fa-calendar-check'],
     ['organizations','Organizaciones','fa-building'],
     ['saved','Guardadas','fa-bookmark'],
@@ -58,20 +58,31 @@
     const n=Number(value||0);el.textContent=n>99?'99+':String(n);el.classList.toggle('hidden',n<=0);
   }
 
+  function localProcessPulseV46(){
+    try{
+      const s=JSON.parse(localStorage.getItem('lutmin-application-workspace-v45')||'{}')||{},now=Date.now();
+      const ext=(s.external_jobs||[]).filter(x=>!['closed'].includes(x.status));
+      const dossiers=Object.values(s.dossiers||{});let attention=0,overdue=0;
+      for(const d of dossiers){if(d?.status==='closed')continue;const m=d?.meta||{},dates=[m.follow_up_at,m.interview_at,m.deadline].filter(Boolean).map(x=>new Date(x).getTime()).filter(Number.isFinite);const nearest=dates.sort((a,b)=>a-b)[0];if(nearest&&nearest<=now+2*86400000){attention++;if(nearest<now)overdue++;}else if(!d?.versions?.length)attention++;}
+      return {external:ext.length,attention,overdue};
+    }catch(_){return{external:0,attention:0,overdue:0}}
+  }
   function renderConectaSummaryV210(){
     const stats=document.getElementById('conectaSummaryStatsV210'),next=document.getElementById('conectaNextActionV210');if(!stats||!next)return;
     const profile=talentData?.profile||{},jobs=talentData?.jobs||[],apps=talentData?.applications||[],saved=talentData?.savedJobs||talentData?.saved||[],interviews=talentData?.applicationDetails?.interviews||[];
     const strength=Number(document.getElementById('talentProfileStrength')?.textContent?.replace(/\D/g,'')||0);
     const openJobs=jobs.filter(j=>j.status==='published'||!j.status).length;
     const activeApps=apps.filter(a=>!['rejected','hired','withdrawn'].includes(a.status)).length;
+    const localPulse=localProcessPulseV46(),activeProcesses=activeApps+localPulse.external;
     const upcoming=interviews.filter(i=>!i.scheduled_at||new Date(i.scheduled_at)>=new Date()).length;
-    stats.innerHTML=[['Perfil',`${strength}%`],['Oportunidades',openJobs],['Postulaciones',activeApps],['Entrevistas',upcoming]].map(x=>`<div class="conecta-summary-stat-v210"><p>${x[0]}</p><strong>${x[1]}</strong></div>`).join('');
-    setBadgeV210('jobs',openJobs);setBadgeV210('applications',activeApps);setBadgeV210('interviews',upcoming);setBadgeV210('saved',Array.isArray(saved)?saved.length:0);
+    stats.innerHTML=[['Perfil',`${strength}%`],['Oportunidades',openJobs],['Procesos',activeProcesses],['Entrevistas',upcoming]].map(x=>`<div class="conecta-summary-stat-v210"><p>${x[0]}</p><strong>${x[1]}</strong></div>`).join('');
+    setBadgeV210('jobs',openJobs);setBadgeV210('applications',activeProcesses);setBadgeV210('interviews',upcoming);setBadgeV210('saved',Array.isArray(saved)?saved.length:0);
     const orgs=window.V200?.organizations||[];setBadgeV210('organizations',orgs.filter?.(x=>x.following)?.length||0);
     let title='Explorá oportunidades',detail='Tu perfil está listo para empezar a comparar oportunidades con evidencia real.',action='jobs';
     if(strength<70){title='Completá tu perfil profesional';detail='Cuanto más estructurado esté tu perfil, mejor funcionan el matching, el CV dinámico y la carrera.';action='profile';}
+    else if(localPulse.attention>0){title=localPulse.overdue?`Tenés ${localPulse.overdue} seguimiento${localPulse.overdue===1?'':'s'} vencido${localPulse.overdue===1?'':'s'}`:`Tenés ${localPulse.attention} proceso${localPulse.attention===1?'':'s'} para revisar`;detail='Lutmin detectó próximos pasos o fechas que requieren tu atención.';action='applications';}
     else if(upcoming>0){title='Prepará tu próxima entrevista';detail=`Tenés ${upcoming} entrevista${upcoming===1?'':'s'} próxima${upcoming===1?'':'s'}. Revisá las preguntas y evidencia del puesto.`;action='interviews';}
-    else if(activeApps>0){title='Revisá tus procesos activos';detail=`Tenés ${activeApps} postulación${activeApps===1?'':'es'} en curso.`;action='applications';}
+    else if(activeProcesses>0){title='Revisá tus procesos activos';detail=`Tenés ${activeProcesses} proceso${activeProcesses===1?'':'s'} en curso entre Lutmin y oportunidades externas.`;action='applications';}
     else if(openJobs>0){title='Analizá una oportunidad con el Agente';detail='Elegí una búsqueda y generá un CV adaptado usando sólo datos reales de tu perfil.';action='agent';}
     else if(!profile?.visible){title='Activá tu perfil público cuando quieras';detail='Podés decidir qué mostrar y compartirlo con una URL verificable de Lutmin.';action='profile';}
     next.innerHTML=`<p class="eyebrow">Siguiente mejor acción</p><h4>${esc(title)}</h4><p>${esc(detail)}</p><button onclick="openConectaModuleV210('${action}')" class="mt-3 px-3 py-2 rounded-xl bg-lutmin-dark text-white text-[10px] font-black">Ir ahora</button>`;

@@ -1,0 +1,30 @@
+LUTMIN V46.0
+============
+
+DEPLOY
+1. Reemplazar los archivos del deploy actual por el contenido completo del ZIP.
+2. Conservar LOGO.png oficial en raíz si ya existe en producción; no venía en el ZIP base recibido.
+3. No requiere SQL nuevo.
+4. Después del deploy, hacer una recarga normal. Si una pestaña muy antigua conserva recursos previos, hacer Ctrl+F5 una sola vez.
+
+CAMBIOS PRINCIPALES
+- Conecta Alumno: “Postulaciones” pasa a “Mis procesos”.
+- Centro operativo unificado para postulaciones Lutmin + oportunidades externas.
+- Próxima acción determinística por proceso.
+- Fechas privadas: límite, seguimiento e entrevista.
+- Nota privada por proceso.
+- Exportación de seguimiento/entrevista/fecha a calendario .ics.
+- El Resumen de Conecta detecta procesos que requieren atención.
+- El expediente registra versiones, cambios de estado y planificación.
+- Agente: muestra próxima acción y acceso directo a seguimiento.
+- Runtime “Mis procesos”: ~29 KB vs ~73 KB de superplatform en V45.
+- Shell del Agente: ~97 KB vs ~125 KB en V45. El motor de personalización queda lazy hasta necesitar una oportunidad.
+
+DATOS Y PRIVACIDAD
+- La planificación de oportunidades externas y notas privadas se guarda localmente en el navegador, como los expedientes externos existentes.
+- No se comparte con empresas.
+- No se agregó ninguna API paga.
+- El sistema no decide contrataciones ni inventa experiencia.
+
+SQL
+No corresponde para V46.0.

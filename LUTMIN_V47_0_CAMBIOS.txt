@@ -1,0 +1,31 @@
+LUTMIN V47.0 · SALTO DE PRODUCTO CONECTA
+
+1. PLAN PARA CADA OPORTUNIDAD
+- El paquete ahora muestra un plan accionable en 3 etapas: completar evidencia, preparar postulación y preparar entrevista.
+- Las acciones salen de la matriz requisito → evidencia; no de un score opaco.
+- Cuando no existe experiencia directa, lo dice explícitamente y propone reforzar sólo evidencia real existente.
+
+2. PASAPORTE DE EVIDENCIA
+- Nueva vista dentro del paquete que agrupa evidencia documentada por origen (experiencia, competencia, formación, certificación, trayectoria).
+- Está pensado como base reutilizable para futuras oportunidades sin cambiar la naturaleza de la evidencia.
+
+3. MIS PROCESOS: ESTADO SEGUIMIENTO
+- Se incorpora Seguimiento como estado real entre Postulado/a y Entrevista.
+- Tiene filtro, métrica, icono, selector y próxima acción propia.
+- Si no hay fecha de seguimiento, solicita definirla; si vence, la prioriza.
+
+4. UX
+- El CV enfocado continúa siendo la salida principal.
+- El nuevo plan aparece dentro de la misma oportunidad y no crea otro árbol de navegación.
+- El usuario ve acciones concretas, no parsers, motores ni terminología interna.
+
+5. ARQUITECTURA / COSTOS
+- Sin APIs externas ni servicios pagos.
+- Sin SQL nuevo.
+- Se mantiene el motor de personalización lazy: sólo carga con una oportunidad activa.
+- No se agregó un runtime global pesado.
+
+6. PRUEBAS
+- Sintaxis validada con node --check.
+- Suite V46 completa aprobada después de los cambios.
+- Nuevo test V47 para estado Seguimiento y próxima acción aprobado.

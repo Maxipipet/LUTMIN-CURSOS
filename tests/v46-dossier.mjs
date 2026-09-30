@@ -1,0 +1,15 @@
+import fs from 'node:fs';import vm from 'node:vm';import assert from 'node:assert/strict';
+const mem=new Map();const ctx={console,Date,JSON,Set,Map,localStorage:{getItem:k=>mem.get(k)||null,setItem:(k,v)=>mem.set(k,String(v)),removeItem:k=>mem.delete(k)},window:null};ctx.window=ctx;vm.createContext(ctx);
+vm.runInContext(fs.readFileSync(new URL('../assets/js/modules/talent/application-dossier-v46.js',import.meta.url),'utf8'),ctx,{filename:'application-dossier-v46.js'});
+const api=ctx.LutminDossierV46;assert.equal(api.version,'46.0');
+const job=api.upsertExternal({title:'Coordinador de mantenimiento',company_name:'ACME',description:'Mantenimiento preventivo y liderazgo de equipos',external:true});assert(job?.id);
+const pack={coverage_summary:{mandatory_total:3,mandatory_documented:2,mandatory_partial:0},composition:{source:{name:'CV.pdf'}},intro_message:'Hola',interview:[{requirement:'Mantenimiento'}],evidence_ledger:[{requirement:'Mantenimiento',status:'documented'}],requirements:[1,2,3],focused:{related:[]}};
+const saved=api.saveVersion(job,pack,{source_cv:'CV.pdf'});assert.equal(saved.created,true);assert.equal(api.dossier(job.id).versions.length,1);
+const p0=api.allProcesses([],[]).find(x=>x.id===job.id);assert.equal(p0.next_action.key,'evidence');
+api.setExternalStatus(job.id,'applied');
+const meta=api.processMeta(job.id);assert(meta.follow_up_at,'al marcar postulado debe programar seguimiento por defecto');
+const p1=api.allProcesses([],[]).find(x=>x.id===job.id);assert.equal(p1.status,'applied');assert(['follow_up','schedule_follow_up'].includes(p1.next_action.key));
+api.updateProcessMeta(job.id,{follow_up_at:new Date(Date.now()-3600000).toISOString(),note:'Escribir por mail'});const p2=api.allProcesses([],[]).find(x=>x.id===job.id);assert.equal(p2.next_action.key,'follow_up');assert(p2.next_action.priority>=90);
+api.setDossierStatus(job.id,'interview');api.updateProcessMeta(job.id,{interview_at:new Date(Date.now()+86400000).toISOString()});const p3=api.allProcesses([],[]).find(x=>x.id===job.id);assert.equal(p3.next_action.key,'prepare_interview');
+const timeline=api.processTimeline(job.id);assert(timeline.some(x=>x.type==='version'));assert(timeline.some(x=>x.type==='status'));assert(timeline.some(x=>x.type==='planning'));
+console.log(JSON.stringify({ok:true,version:api.version,events:timeline.length,next:p3.next_action.key},null,2));
