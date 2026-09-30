@@ -111,7 +111,13 @@ async function downloadSmartCvV100(jobId=null){const job=(talentData?.jobs||[]).
 async function openSmartApplyV100(jobId){const job=(talentData?.jobs||[]).find(x=>x.id===jobId);if(!job)return;if(talentData?.profile?.approval_status!=='approved')return showToast('Completá tu perfil profesional para habilitar postulaciones automáticamente.');const a=buildAgentAnalysisV100(job);pendingSmartApplicationV100={job,analysis:a,snapshot:buildCvSnapshotV100(a)};const m=ensureV100Modal('smartApplyModalV100','max-w-4xl'),b=m.querySelector('[data-v100-body]');b.innerHTML=`<p class="text-[10px] uppercase tracking-widest font-black text-lutmin-light">Agente Lutmin · postulación asistida</p><h2 class="mt-2 text-2xl sm:text-3xl font-black text-lutmin-dark">${v100Esc(job.title)}</h2><p class="mt-1 text-sm text-slate-500">${v100Esc(job.company_name||'Lutmin')} · ${v100Esc(job.location||'Ubicación a definir')}</p><div class="mt-5">${v100AgentSummaryHtml(a)}</div><div class="mt-5 rounded-2xl bg-slate-50 p-4"><p class="font-extrabold text-sm text-lutmin-dark">Qué hará el CV dinámico</p><p class="mt-2 text-xs text-slate-600">Priorizará ${v100Esc(a.skills.slice(0,4).map(x=>x.skill).join(', ')||'tus competencias cargadas')} y ordenará tu experiencia según esta búsqueda. No modifica tu perfil original y no agrega información inexistente.</p></div><label class="block mt-5 text-xs font-bold text-slate-600">Mensaje opcional</label><textarea id="smartApplyMessageV100" rows="4" class="mt-2 w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm" placeholder="Podés agregar una breve presentación personal."></textarea><div class="mt-5 grid sm:grid-cols-3 gap-2"><button onclick="downloadSmartCvV100('${job.id}')" class="py-3 rounded-xl bg-blue-50 text-blue-700 font-bold text-sm"><i class="fa-solid fa-file-pdf mr-2"></i>Ver CV adaptado</button><button onclick="hideV100Modal('smartApplyModalV100')" class="py-3 rounded-xl bg-slate-100 text-slate-600 font-bold text-sm">Cancelar</button><button onclick="confirmSmartApplyV100()" class="py-3 rounded-xl bg-lutmin-dark text-white font-extrabold text-sm"><i class="fa-solid fa-paper-plane mr-2"></i>Enviar postulación</button></div>`;showV100Modal('smartApplyModalV100');}
 async function confirmSmartApplyV100(){const p=pendingSmartApplicationV100;if(!p)return;const msg=document.getElementById('smartApplyMessageV100')?.value.trim()||null;const {data,error}=await supabaseClient.from('job_applications').insert({job_id:p.job.id,user_id:currentLutminUser.id,message:msg}).select('id').single();if(error)return showToast(error.code==='23505'?'Ya estás postulado/a a esta búsqueda.':error.message||'No pude registrar la postulación.');const save=await supabaseClient.rpc('save_application_cv_snapshot_v100',{p_application_id:data.id,p_job_id:p.job.id,p_affinity:p.analysis.score,p_matching_terms:p.analysis.matched,p_gap_terms:p.analysis.missing,p_snapshot:p.snapshot});if(save.error)console.error('Snapshot CV V10',save.error);hideV100Modal('smartApplyModalV100');pendingSmartApplicationV100=null;showToast('Postulación enviada con CV dinámico asociado.');await loadTalentCenter();}
 const _applyTalentJobV100=typeof applyTalentJob==='function'?applyTalentJob:null;
-if(_applyTalentJobV100)applyTalentJob=function(jobId){return openSmartApplyV100(jobId);};
+if(_applyTalentJobV100)applyTalentJob=async function(jobId){
+  try{
+    if(!window.LutminAgentV45?.openSmartApply)await window.LutminV30Modules?.ensureTalentSection?.('agent');
+    if(window.LutminAgentV45?.openSmartApply)return window.LutminAgentV45.openSmartApply(jobId);
+  }catch(e){console.warn('V44 smart apply lazy-load',e);}
+  return openSmartApplyV100(jobId);
+};
 
 async function loadTalentSnapshotsV100(){if(currentLutminUser?.role!=='student')return;const {data,error}=await supabaseClient.rpc('my_application_cv_snapshots_v100');talentSnapshotsV100=error?[]:(Array.isArray(data)?data:[]);}
 function enhanceTalentApplicationsV100(){const root=document.getElementById('talentApplicationsList');if(!root)return;const apps=talentData?.applications||[];[...root.children].forEach((el,i)=>{const app=apps[i];if(!app)return;const s=talentSnapshotsV100.find(x=>x.application_id===app.id);if(!s||el.querySelector('[data-v100-snapshot]'))return;const btn=document.createElement('button');btn.dataset.v100Snapshot='1';btn.className='mt-3 ml-2 text-[11px] text-blue-700 font-bold';btn.innerHTML='<i class="fa-solid fa-file-lines mr-1"></i>CV dinámico enviado';btn.onclick=()=>showOwnSnapshotV100(s);el.appendChild(btn);});}
@@ -182,16 +188,25 @@ async function submitCheckoutV100(e,offeringId){e.preventDefault();const code=do
 // D) Integración con cargas existentes
 // -------------------------------------------------------------
 const _loadTalentCenterV100=typeof loadTalentCenter==='function'?loadTalentCenter:null;
-if(_loadTalentCenterV100)loadTalentCenter=async function(){const r=await _loadTalentCenterV100.apply(this,arguments);await loadTalentSnapshotsV100();ensureTalentAgentV100();refreshTalentAgentOptionsV100();enhanceTalentApplicationsV100();return r;};
+if(_loadTalentCenterV100)loadTalentCenter=async function(){const r=await _loadTalentCenterV100.apply(this,arguments);await loadTalentSnapshotsV100();enhanceTalentApplicationsV100();if(window.LutminAgentV45?.render)window.LutminAgentV45.render();return r;};
 // V34: Panel de desarrollo Empresa se activa bajo demanda desde V19.
 const _loadAdminDataV100=typeof loadAdminData==='function'?loadAdminData:null;
 if(_loadAdminDataV100)loadAdminData=async function(){const r=await _loadAdminDataV100.apply(this,arguments);if(currentLutminUser?.role==='admin'){ensureAdminDevelopmentNavV100();ensureAdminDevelopmentPanelV100();ensureAdminCommercialV100();await Promise.allSettled([loadAdminDevelopmentV100(),loadCommercialV100()]);}return r;};
 
 function initV100(){
   document.title='Lutmin | Plataforma V10.0';
-  if(currentLutminUser?.role==='student'){ensureTalentAgentV100();refreshTalentAgentOptionsV100();}
+  if(currentLutminUser?.role==='student'&&window.LutminAgentV45?.render)window.LutminAgentV45.render();
   // Empresa: el panel se crea sólo al abrir Desarrollo y brechas.
   if(currentLutminUser?.role==='admin'){ensureAdminDevelopmentNavV100();ensureAdminDevelopmentPanelV100();ensureAdminCommercialV100();}
 }
 document.addEventListener('DOMContentLoaded',()=>setTimeout(initV100,1250),{once:true});
 
+
+// V44: si este runtime legacy se carga después del Agente, no pisa el flujo personalizado.
+setTimeout(()=>{
+  const agent=window.LutminAgentV45;
+  if(!agent?.openSmartApply)return;
+  window.openSmartApplyV100=agent.openSmartApply;
+  window.confirmSmartApplyV100=agent.confirmSmartApply;
+  try{openSmartApplyV100=agent.openSmartApply;confirmSmartApplyV100=agent.confirmSmartApply;}catch(_){ }
+},0);

@@ -1,12 +1,12 @@
 // =============================================================
-// LUTMIN V41.0 · ACTIVE-WORKSPACE MODULE LOADER
+// LUTMIN V45.0 · ACTIVE-WORKSPACE MODULE LOADER
 // Carga sólo el runtime necesario para cada acceso y deja Conecta
 // pesado bajo demanda. Mantiene costo API $0 y fallback completo.
 // =============================================================
 (function(){
   'use strict';
 
-  const VERSION='41.0';
+  const VERSION='45.0';
   const state={status:'idle',promise:null,loaded:new Set(),bundles:new Set(),startedAt:0,finishedAt:0,error:null,retries:0,warmed:false,lastReason:null,lastRole:null};
   const cssFiles=[
     'assets/css/v18-conecta.css',
@@ -19,7 +19,7 @@
     'assets/css/v22-performance.css',
     'assets/css/v23-runtime.css',
     'assets/css/v25-control-center.css',
-    'assets/css/v41-agent.css'
+    'assets/css/v45-agent.css'
   ];
 
   // Orden histórico: cualquier subconjunto se filtra sobre esta lista.
@@ -50,7 +50,9 @@
     'assets/js/v21-conecta-hub.js',
     'assets/js/v21-conecta-panels.js',
     'assets/js/core/talent-router-v38.js',
-    'assets/js/modules/agents/talent-agent-v41.js',
+    'assets/js/modules/talent/application-dossier-v45.js',
+    'assets/js/modules/talent/cv-tailor-engine-v45.js',
+    'assets/js/modules/agents/talent-agent-v45.js',
     'assets/js/v22-performance.js',
     'assets/js/v23-runtime.js',
     'assets/js/v24-core.js',
@@ -88,7 +90,9 @@
     hub:'assets/js/v21-conecta-hub.js',
     panels:'assets/js/v21-conecta-panels.js',
     talentRouter:'assets/js/core/talent-router-v38.js',
-    talentAgent41:'assets/js/modules/agents/talent-agent-v41.js',
+    dossier45:'assets/js/modules/talent/application-dossier-v45.js',
+    tailor45:'assets/js/modules/talent/cv-tailor-engine-v45.js',
+    talentAgent45:'assets/js/modules/agents/talent-agent-v45.js',
     perf:'assets/js/v22-performance.js',
     runtime:'assets/js/v23-runtime.js',
     core:'assets/js/v24-core.js',
@@ -138,7 +142,7 @@
     career:new Set([F.super,F.intel,F.evidence]),
     timeline:new Set([F.org]),
     saved:new Set(),
-    agent:new Set([F.super,F.intel,F.cv,F.talentAgent41]),
+    agent:new Set([F.dossier45,F.tailor45,F.talentAgent45]),
     passport:new Set([F.super,F.auto])
   };
   const adminModuleSets={
@@ -169,7 +173,7 @@
     [F.runtime,['assets/css/v23-runtime.css']],
     [F.control,['assets/css/v25-control-center.css']],
     [F.talentRouter,['assets/css/v18-conecta.css']],
-    [F.talentAgent41,['assets/css/v41-agent.css']]
+    [F.talentAgent45,['assets/css/v45-agent.css']]
   ]);
   const cssForSet=set=>{const out=new Set();set.forEach(file=>(cssByScript.get(file)||[]).forEach(css=>out.add(css)));return [...out];};
 
@@ -189,7 +193,7 @@
   function loadCssOnce(file){
     const key=`v30-css:${file}`;if(state.loaded.has(key))return Promise.resolve(true);
     const existing=[...document.styleSheets].some(s=>String(s.href||'').includes(file));if(existing){state.loaded.add(key);return Promise.resolve(true);}
-    return new Promise(resolve=>{const link=document.createElement('link');link.rel='stylesheet';link.href=withVersion(file);link.dataset.lutminV30='css';let settled=false;const done=()=>{if(settled)return;settled=true;state.loaded.add(key);resolve(true);};link.onload=done;link.onerror=()=>{console.warn('[Lutmin V41] CSS no disponible:',file);done();};document.head.appendChild(link);setTimeout(done,4500);});
+    return new Promise(resolve=>{const link=document.createElement('link');link.rel='stylesheet';link.href=withVersion(file);link.dataset.lutminV30='css';let settled=false;const done=()=>{if(settled)return;settled=true;state.loaded.add(key);resolve(true);};link.onload=done;link.onerror=()=>{console.warn('[Lutmin V45] CSS no disponible:',file);done();};document.head.appendChild(link);setTimeout(done,4500);});
   }
 
   function preload(files){
@@ -273,6 +277,9 @@
     const extra=companySectionSets[section]||new Set();
     return loadSet(union(companyBaseSet,extra),`company:${section}`,`company:${section}`);
   }
+  async function ensureTalentCvParser(){
+    return loadSet(new Set([F.cv]),'talent:cv-parser','talent:cv-parser');
+  }
   async function ensureFeatureForTab(tab,role){
     if(tab==='talent'&&role==='student')return ensureFeature('talent',{role});
     if(tab==='company-conecta'&&role==='company_admin')return ensureFeature('company-conecta',{role});
@@ -295,7 +302,7 @@
       await loadScriptOnce('assets/js/core/update-manager-v32.js');
       window.dispatchEvent(new CustomEvent('lutmin:v30:sw-registered',{detail:{registration:reg}}));
       reg.update().catch(()=>{});return reg;
-    }catch(err){console.warn('[Lutmin V38] Service Worker no disponible:',err?.message||err);return false;}
+    }catch(err){console.warn('[Lutmin V43] Service Worker no disponible:',err?.message||err);return false;}
   }
 
   function canAdaptivePrefetch(){
@@ -308,7 +315,7 @@
     if(!canAdaptivePrefetch())return false;
     const set=featureSets[name];if(!set)return false;preload(set);return true;
   }
-  const api={version:VERSION,ensureAuthenticated,ensureFeature,ensureFeatureForTab,ensureTalentSection,ensureAdminModule,ensureCompanySection,warm,loadAll,prefetchFeature,status:()=>({...state,loaded:[...state.loaded],bundles:[...state.bundles],loadedScripts:[...state.loaded].filter(x=>x.startsWith('v30-js:')).length,totalScripts:scriptFiles.length,adminBaseScripts:adminBaseSet.size,companyBaseScripts:companyBaseSet.size,adminModuleSets:Object.fromEntries(Object.entries(adminModuleSets).map(([k,v])=>[k,[...v]])),companySectionSets:Object.fromEntries(Object.entries(companySectionSets).map(([k,v])=>[k,[...v]])),talentSectionSets:Object.fromEntries(Object.entries(talentSectionSets).map(([k,v])=>[k,[...v]]))}),files:{css:[...cssFiles],scripts:[...scriptFiles]},registerServiceWorker,clearRuntimeCaches};
+  const api={version:VERSION,ensureAuthenticated,ensureFeature,ensureFeatureForTab,ensureTalentSection,ensureTalentCvParser,ensureAdminModule,ensureCompanySection,warm,loadAll,prefetchFeature,status:()=>({...state,loaded:[...state.loaded],bundles:[...state.bundles],loadedScripts:[...state.loaded].filter(x=>x.startsWith('v30-js:')).length,totalScripts:scriptFiles.length,adminBaseScripts:adminBaseSet.size,companyBaseScripts:companyBaseSet.size,adminModuleSets:Object.fromEntries(Object.entries(adminModuleSets).map(([k,v])=>[k,[...v]])),companySectionSets:Object.fromEntries(Object.entries(companySectionSets).map(([k,v])=>[k,[...v]])),talentSectionSets:Object.fromEntries(Object.entries(talentSectionSets).map(([k,v])=>[k,[...v]]))}),files:{css:[...cssFiles],scripts:[...scriptFiles]},registerServiceWorker,clearRuntimeCaches};
   window.LutminV30Modules=api;
   // Alias temporal: el core histórico sigue llamando V29 mientras terminamos de modularizarlo.
   window.LutminV29Modules=api;

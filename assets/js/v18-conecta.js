@@ -30,9 +30,9 @@
   window.setTalentModuleV342=setTalentModuleV342;
 
   async function prepareConectaDynamicV342(key){
-    if(key==='agent' && typeof ensureTalentAgentV100==='function'){
-      ensureTalentAgentV100();
-      if(typeof refreshTalentAgentOptionsV100==='function')refreshTalentAgentOptionsV100();
+    if(key==='agent'){
+      if(typeof ensureTalentAgentV40==='function')ensureTalentAgentV40();
+      if(typeof refreshTalentAgentV40==='function')refreshTalentAgentV40();
     }
     if(key==='career' && typeof ensureStudentEngineV150==='function'){
       ensureStudentEngineV150();

@@ -100,8 +100,8 @@
         if(typeof loadCareerTimelineV200==='function')await loadCareerTimelineV200();
       }
       if(key==='agent'){
-        if(typeof ensureTalentAgentV100==='function')ensureTalentAgentV100();
-        if(typeof refreshTalentAgentOptionsV100==='function')refreshTalentAgentOptionsV100();
+        if(typeof ensureTalentAgentV40==='function')ensureTalentAgentV40();
+        if(typeof refreshTalentAgentV40==='function')refreshTalentAgentV40();
       }
       if(key==='career'){
         if(typeof ensureV140StudentUI==='function')ensureV140StudentUI();

@@ -1,5 +1,5 @@
 // =========================================================
-// LUTMIN V41.0 · CONECTA STUDENT ROUTER
+// LUTMIN V45.0 · CONECTA STUDENT ROUTER
 // Un único router para módulos superiores. Evita wrappers legacy
 // que competían entre sí y deja cada runtime bajo demanda.
 // =========================================================
@@ -36,31 +36,31 @@
       try{ensureConectaHubV210?.();renderConectaSummaryV210?.();}catch(_){ }
     }
     if(key==='profile'){
-      try{ensureV140StudentUI?.();await loadV140ProfileData?.();}catch(e){console.warn('V37 profile',e);}
+      try{ensureV140StudentUI?.();await loadV140ProfileData?.();}catch(e){console.warn('V44 profile',e);}
     }
     if(key==='jobs'){
-      try{ensureV140StudentUI?.();await loadV140ProfileData?.();renderOpportunityRadarV140?.();}catch(e){console.warn('V37 jobs',e);}
+      try{ensureV140StudentUI?.();await loadV140ProfileData?.();renderOpportunityRadarV140?.();}catch(e){console.warn('V44 jobs',e);}
     }
     if(key==='applications'){
-      try{await loadTalentSnapshotsV100?.();enhanceTalentApplicationsV100?.();}catch(e){console.warn('V37 applications',e);}
+      try{await loadTalentSnapshotsV100?.();enhanceTalentApplicationsV100?.();}catch(e){console.warn('V44 applications',e);}
     }
     if(key==='interviews'){
-      try{await loadTalentPreInterviewsV130?.();}catch(e){console.warn('V37 interviews',e);}
+      try{await loadTalentPreInterviewsV130?.();}catch(e){console.warn('V44 interviews',e);}
     }
     if(key==='organizations'){
-      try{ensureOrganizationsUi?.();await loadOrganizationsV200?.();}catch(e){console.warn('V37 organizations',e);}
+      try{ensureOrganizationsUi?.();await loadOrganizationsV200?.();}catch(e){console.warn('V44 organizations',e);}
     }
     if(key==='timeline'){
-      try{ensureTimelineUi?.();await loadCareerTimelineV200?.();}catch(e){console.warn('V37 timeline',e);}
+      try{ensureTimelineUi?.();await loadCareerTimelineV200?.();}catch(e){console.warn('V44 timeline',e);}
     }
     if(key==='career'){
-      try{ensureV140StudentUI?.();ensureStudentEngineV150?.();await loadV140ProfileData?.();await loadV150StudentData?.();}catch(e){console.warn('V37 career',e);}
+      try{ensureV140StudentUI?.();ensureStudentEngineV150?.();await loadV140ProfileData?.();await loadV150StudentData?.();}catch(e){console.warn('V44 career',e);}
     }
     if(key==='agent'){
-      try{ensureTalentAgentV100?.();refreshTalentAgentOptionsV100?.();ensureTalentAgentV40?.();refreshTalentAgentV40?.();}catch(e){console.warn('V37 agent',e);}
+      try{ensureTalentAgentV40?.();refreshTalentAgentV40?.();}catch(e){console.warn('V44 agent',e);}
     }
     if(key==='passport'){
-      try{ensurePersonalAutopilotV110?.();await loadPersonalAutopilotV110?.();setPersonalAgentTabV110?.('passport');}catch(e){console.warn('V37 passport',e);}
+      try{ensurePersonalAutopilotV110?.();await loadPersonalAutopilotV110?.();setPersonalAgentTabV110?.('passport');}catch(e){console.warn('V44 passport',e);}
     }
   }
 
@@ -80,7 +80,7 @@
       if(key==='summary')try{renderConectaSummaryV210?.();}catch(_){ }
       return true;
     }catch(e){
-      console.error('[Lutmin V40] Conecta navigation',e);
+      console.error('[Lutmin V45] Conecta navigation',e);
       showToast?.('No pude abrir este módulo. Actualizá la vista e intentá nuevamente.');
       return false;
     }

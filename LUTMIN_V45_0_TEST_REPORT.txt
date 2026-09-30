@@ -1,0 +1,69 @@
+LUTMIN V45.0 - REPORTE DE PRUEBAS
+=================================
+
+RESULTADO GENERAL: PASS
+SQL NUEVO: NO
+
+CAMBIOS MAYORES VERIFICADOS
+---------------------------
+1. Expediente de postulación por oportunidad.
+   - Guarda hasta 8 versiones por proceso.
+   - No duplica una versión si el contenido y el CV fuente no cambiaron.
+   - Conserva requisito -> evidencia, estrategia, mensaje, entrevista y CV fuente.
+   - Calcula diferencias entre versiones (evidencia nueva/perdida y cambio de CV).
+
+2. Múltiples oportunidades externas.
+   - Hasta 30 ofertas externas locales.
+   - Selección y edición independientes.
+   - Estados: Guardada, Preparando, Postulado/a, Entrevista, Cerrada.
+   - Eliminación local del proceso y expediente asociado.
+
+3. "Mis procesos".
+   - Consolida postulaciones Lutmin y oportunidades externas.
+   - Muestra estado y cantidad de versiones del expediente.
+
+4. Exportación desacoplada.
+   - CV, guía de entrevista y expediente PDF viven en application-export-v45.js.
+   - El exportador NO forma parte del runtime inicial del Agente.
+   - Se carga solamente al solicitar una exportación.
+   - El parser de CV sigue cargándose únicamente cuando se selecciona un archivo.
+
+5. Integridad de producto.
+   - No convierte experiencia no relacionada en experiencia técnica.
+   - Mantiene trazabilidad requisito -> evidencia.
+   - "Sin evidencia" significa falta de documentación, no falta de capacidad.
+   - No decide contrataciones ni postula automáticamente a sitios externos.
+
+PRUEBAS AUTOMÁTICAS
+-------------------
+PASS  v45-cv-parser.mjs
+PASS  v45-dossier.mjs
+PASS  v45-evidence-negative.mjs
+PASS  v45-evidence-positive.mjs
+PASS  v45-export-dossier.mjs
+PASS  v45-external-opportunity.mjs
+PASS  v45-smoke.mjs
+
+MÉTRICAS DE SMOKE TEST
+----------------------
+- JavaScript / Service Worker verificados: 46
+- IDs HTML estáticos: 746, sin duplicados
+- Rutas locales declaradas verificadas: 64
+- Recursos HTTP críticos: 22/22 OK
+- Administración: 12 módulos superiores
+- Empresa: 8 módulos superiores
+- Conecta Alumno: 11 módulos superiores
+- Shell Empresa: 5 scripts / 48.448 bytes
+- Reducción del shell Empresa frente al runtime opcional total: 95,7%
+- Entrada de Conecta: 2 scripts / 15.326 bytes
+- Agente V45 inicial: 3 scripts / 125.438 bytes
+- Exportador PDF V45: lazy, fuera del runtime inicial
+- Alumno crítico: 7 scripts / 93.532 bytes
+- JS local estático: 7 scripts / 311.675 bytes
+- Tailwind local: 108.193 bytes
+- Update manager: misma versión = sin banner; versión nueva = banner
+- Admin data cache: Finanzas inicial 7 consultas; volver a Finanzas 0; Comunicaciones después de Finanzas 0; deduplicación concurrente 1
+
+ADVERTENCIA HEREDADA
+--------------------
+LOGO.png continúa referenciado por la aplicación pero no estaba en el deploy original recibido. No se generó ni sustituyó un logo artificial.

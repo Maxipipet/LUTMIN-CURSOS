@@ -1,0 +1,22 @@
+LUTMIN V45.0 - INSTRUCCIONES DE DEPLOY
+=======================================
+
+1. Reemplazar el contenido del deploy actual por el contenido de LUTMIN_V45_0_DEPLOY.zip.
+2. Conservar LOGO.png si ya existe en producción: el archivo no estaba incluido en el deploy original recibido.
+3. No requiere SQL nuevo.
+4. Publicar todos los archivos, incluido sw.js, para que la versión activa pase a 45.0.
+5. Si una pestaña permanece en una versión anterior, recargar una vez con Ctrl+F5.
+
+PRUEBA FUNCIONAL RECOMENDADA
+----------------------------
+Alumno > Lutmin Conecta > Agente
+
+- Elegir una oportunidad Lutmin y guardar el expediente.
+- Descargar CV enfocado.
+- Cambiar/cargar otro CV y volver a guardar: debe aparecer una nueva versión y el cambio de cobertura.
+- Ir a "Mis procesos": debe aparecer la oportunidad.
+- En "Ofertas externas", crear dos avisos distintos: ambos deben quedar guardados y seleccionables.
+- Cambiar el estado de una oferta externa entre Guardada / Preparando / Postulado/a / Entrevista / Cerrada.
+- Descargar "Expediente": debe generar un PDF con requisito → evidencia, mensaje e historial.
+
+V45 mantiene el costo de APIs externas en $0 para el análisis y no requiere servicios de IA pagos.

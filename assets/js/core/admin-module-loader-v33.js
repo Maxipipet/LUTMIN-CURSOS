@@ -1,11 +1,11 @@
 // =============================================================
-// LUTMIN V41.0 · ADMIN MODULE VIEW LOADER
+// LUTMIN V45.0 · ADMIN MODULE VIEW LOADER
 // Mantiene un shell mínimo y monta un único módulo interno a la vez.
 // Caché de HTML en memoria + cache HTTP/SW; sin servicios externos.
 // =============================================================
 (function(){
   'use strict';
-  const VERSION='41.0';
+  const VERSION='45.0';
   const modules=['overview','operations','academic','people','companies','commercial','finance','talent','communications','system'];
   const dynamicModules=new Set(['development','agents']);
   const paths=Object.fromEntries(modules.map(name=>[name,`assets/views/admin/${name}.html`]));
