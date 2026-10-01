@@ -6,7 +6,7 @@
 (function(){
   'use strict';
 
-  const VERSION='53.0';
+  const VERSION='54.0';
   const state={status:'idle',promise:null,loaded:new Set(),bundles:new Set(),startedAt:0,finishedAt:0,error:null,retries:0,warmed:false,lastReason:null,lastRole:null};
   const cssFiles=[
     'assets/css/conecta-navigation.css',
@@ -60,6 +60,7 @@
     'assets/js/modules/talent/application-dossier.js',
     'assets/js/modules/talent/application-processes.js',
     'assets/js/modules/talent/cv-tailor-engine.js',
+    'assets/js/modules/talent/opportunity-development.js',
     'assets/js/modules/agents/talent-agent.js',
     'assets/js/core/single-flight.js',
     'assets/js/core/app-runtime.js',
@@ -210,14 +211,17 @@
   function loadCssOnce(file){
     const key=`v30-css:${file}`;if(state.loaded.has(key))return Promise.resolve(true);
     const existing=[...document.styleSheets].some(s=>String(s.href||'').includes(file));if(existing){state.loaded.add(key);return Promise.resolve(true);}
-    return new Promise(resolve=>{const link=document.createElement('link');link.rel='stylesheet';link.href=withVersion(file);link.dataset.lutminV30='css';let settled=false;const done=()=>{if(settled)return;settled=true;state.loaded.add(key);resolve(true);};link.onload=done;link.onerror=()=>{console.warn('[Lutmin V53] CSS no disponible:',file);done();};document.head.appendChild(link);setTimeout(done,4500);});
+    return new Promise(resolve=>{const link=document.createElement('link');link.rel='stylesheet';link.href=withVersion(file);link.dataset.lutminV30='css';let settled=false;const done=()=>{if(settled)return;settled=true;state.loaded.add(key);resolve(true);};link.onload=done;link.onerror=()=>{console.warn('[Lutmin V54] CSS no disponible:',file);done();};document.head.appendChild(link);setTimeout(done,4500);});
   }
 
-  function preload(files){
+  function preload(files,limit=2){
     state.warmed=true;
-    // V40: no prepriorizamos un bundle entero. Chrome advertía decenas de preloads
-    // no utilizados y se competía con los recursos realmente visibles.
-    ordered(new Set(files)).slice(0,2).forEach(file=>{if(document.head.querySelector(`link[data-lutmin-v30-preload="${file}"]`))return;const link=document.createElement('link');link.rel='preload';link.as='script';link.href=withVersion(file);link.dataset.lutminV30Preload=file;document.head.appendChild(link);});
+    // V54: un warm especulativo sigue limitado, pero cuando el bundle YA fue pedido
+    // prepriorizamos todos sus archivos. Así la red descarga en paralelo mientras
+    // la ejecución conserva el orden determinístico de loadScriptOnce().
+    const list=ordered(new Set(files));
+    const take=Number.isFinite(limit)?Math.max(0,limit):list.length;
+    list.slice(0,take).forEach(file=>{if(document.head.querySelector(`link[data-lutmin-v30-preload="${file}"]`))return;const link=document.createElement('link');link.rel='preload';link.as='script';link.href=withVersion(file);link.dataset.lutminV30Preload=file;document.head.appendChild(link);});
   }
   function clearPreloads(){document.head.querySelectorAll('link[data-lutmin-v30-preload]').forEach(x=>x.remove());}
 
@@ -244,7 +248,7 @@
     if(state.promise)await state.promise;
     const files=ordered(set).filter(file=>!state.loaded.has(`v30-js:${file}`));
     if(!files.length){state.bundles.add(bundleName);return true;}
-    state.status='loading';state.startedAt=performance.now();state.error=null;state.lastReason=reason;document.documentElement.dataset.lutminModules='loading';setBootBar('loading');preload(files);
+    state.status='loading';state.startedAt=performance.now();state.error=null;state.lastReason=reason;document.documentElement.dataset.lutminModules='loading';setBootBar('loading');preload(files,files.length);
     state.promise=withLateDomReadyCompatibility(async()=>{
       await Promise.all(cssForSet(set).map(loadCssOnce));
       for(const file of files)await loadScriptOnce(file);
@@ -310,7 +314,15 @@
   }
 
   // Antes del login sólo calentamos un núcleo chico; V28 descargaba 28 módulos.
-  function warm(reason='intent'){preload(warmSet);cssForSet(warmSet).forEach(loadCssOnce);window.dispatchEvent(new CustomEvent('lutmin:v30:warm',{detail:{reason,count:warmSet.size}}));return Promise.resolve(true);}
+  function warm(reason='intent'){preload(warmSet,2);cssForSet(warmSet).forEach(loadCssOnce);window.dispatchEvent(new CustomEvent('lutmin:v30:warm',{detail:{reason,count:warmSet.size}}));return Promise.resolve(true);}
+  function warmAccess(role='student'){
+    const set=setForAccess(role,{});
+    // Sólo precarga: no ejecuta runtimes ni toca el DOM autenticado.
+    preload(set,set.size);
+    cssForSet(set).forEach(loadCssOnce);
+    window.dispatchEvent(new CustomEvent('lutmin:v54:access-warm',{detail:{role,count:set.size}}));
+    return Promise.resolve(true);
+  }
   async function loadAll(reason='manual'){return loadSet(new Set(scriptFiles),reason,'full');}
 
   async function registerServiceWorker(){
@@ -322,7 +334,7 @@
       await loadScriptOnce('assets/js/core/update-manager.js');
       window.dispatchEvent(new CustomEvent('lutmin:v30:sw-registered',{detail:{registration:reg}}));
       reg.update().catch(()=>{});return reg;
-    }catch(err){console.warn('[Lutmin V53] Service Worker no disponible:',err?.message||err);return false;}
+    }catch(err){console.warn('[Lutmin V54] Service Worker no disponible:',err?.message||err);return false;}
   }
 
   function canAdaptivePrefetch(){
@@ -335,7 +347,7 @@
     if(!canAdaptivePrefetch())return false;
     const set=featureSets[name];if(!set)return false;preload(set);return true;
   }
-  const api={version:VERSION,ensureAuthenticated,ensureFeature,ensureFeatureForTab,ensureTalentSection,ensureTalentCvParser,ensureTalentAgentEngine,ensureAdminModule,ensureCompanySection,warm,loadAll,prefetchFeature,status:()=>({...state,loaded:[...state.loaded],bundles:[...state.bundles],loadedScripts:[...state.loaded].filter(x=>x.startsWith('v30-js:')).length,totalScripts:scriptFiles.length,adminBaseScripts:adminBaseSet.size,companyBaseScripts:companyBaseSet.size,adminModuleSets:Object.fromEntries(Object.entries(adminModuleSets).map(([k,v])=>[k,[...v]])),companySectionSets:Object.fromEntries(Object.entries(companySectionSets).map(([k,v])=>[k,[...v]])),talentSectionSets:Object.fromEntries(Object.entries(talentSectionSets).map(([k,v])=>[k,[...v]]))}),files:{css:[...cssFiles],scripts:[...scriptFiles]},registerServiceWorker,clearRuntimeCaches};
+  const api={version:VERSION,ensureAuthenticated,ensureFeature,ensureFeatureForTab,ensureTalentSection,ensureTalentCvParser,ensureTalentAgentEngine,ensureAdminModule,ensureCompanySection,warm,warmAccess,loadAll,prefetchFeature,status:()=>({...state,loaded:[...state.loaded],bundles:[...state.bundles],loadedScripts:[...state.loaded].filter(x=>x.startsWith('v30-js:')).length,totalScripts:scriptFiles.length,adminBaseScripts:adminBaseSet.size,companyBaseScripts:companyBaseSet.size,adminModuleSets:Object.fromEntries(Object.entries(adminModuleSets).map(([k,v])=>[k,[...v]])),companySectionSets:Object.fromEntries(Object.entries(companySectionSets).map(([k,v])=>[k,[...v]])),talentSectionSets:Object.fromEntries(Object.entries(talentSectionSets).map(([k,v])=>[k,[...v]]))}),files:{css:[...cssFiles],scripts:[...scriptFiles]},registerServiceWorker,clearRuntimeCaches};
   window.LutminModules=api;
   window.LutminV30Modules=api;
   // Alias de compatibilidad para extensiones históricas todavía desplegadas.

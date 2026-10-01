@@ -97,6 +97,10 @@
       : null;
 
     let currentLutminUser = null;
+    // V54 · snapshot de identidad/accesos. Evita repetir 3 consultas cada vez que
+    // el usuario cierra y vuelve a abrir el Campus dentro de la misma sesión.
+    let identitySnapshotCache = { userId:null, at:0, profile:null, profileError:null, access:null, promise:null };
+    const LUTMIN_IDENTITY_CACHE_TTL = 60 * 1000;
 
     // V35 · puente explícito para runtimes cargados bajo demanda.
     // Los scripts clásicos comparten bindings léxicos globales, pero esos bindings
@@ -488,10 +492,37 @@
       return (ctx.student?1:0)+(ctx.admin?1:0)+(ctx.companies?.length?1:0)+(ctx.instructor?1:0);
     }
 
+    function invalidateIdentitySnapshot(userId=null){
+      if(userId&&identitySnapshotCache.userId&&identitySnapshotCache.userId!==userId)return;
+      identitySnapshotCache={userId:null,at:0,profile:null,profileError:null,access:null,promise:null};
+    }
+    async function loadIdentitySnapshot(user,{force=false}={}){
+      if(!user||!supabaseClient)return {profile:null,profileError:null,access:{student:false,admin:false,companies:[],instructor:false,instructor_groups:[]}};
+      const fresh=!force&&identitySnapshotCache.userId===user.id&&identitySnapshotCache.profile&&identitySnapshotCache.access&&(Date.now()-identitySnapshotCache.at<LUTMIN_IDENTITY_CACHE_TTL);
+      if(fresh)return {profile:identitySnapshotCache.profile,profileError:identitySnapshotCache.profileError,access:identitySnapshotCache.access};
+      if(!force&&identitySnapshotCache.userId===user.id&&identitySnapshotCache.promise)return identitySnapshotCache.promise;
+      const promise=(async()=>{
+        const [profileRes,access]=await Promise.all([
+          supabaseClient.from('profiles').select('full_name,email,role,active,must_change_password').eq('id',user.id).maybeSingle(),
+          loadAccessContext()
+        ]);
+        const snapshot={profile:profileRes.data||null,profileError:profileRes.error||null,access};
+        identitySnapshotCache={userId:user.id,at:Date.now(),profile:snapshot.profile,profileError:snapshot.profileError,access:snapshot.access,promise:null};
+        return snapshot;
+      })().catch(err=>{
+        if(identitySnapshotCache.userId===user.id)identitySnapshotCache.promise=null;
+        throw err;
+      });
+      identitySnapshotCache={...identitySnapshotCache,userId:user.id,promise};
+      return promise;
+    }
+
     function openAuthModal(context = 'student') {
-      // V29: mientras la persona completa el login, precargamos sólo el núcleo liviano.
-      window.LutminModules?.warm?.('auth-modal');
       authLoginContext = context === 'company' ? 'company' : 'student';
+      // V54: mientras la persona escribe sus credenciales, dejamos listo el acceso
+      // que efectivamente va a usar. No ejecuta los runtimes todavía.
+      window.LutminAppShell?.preload?.();
+      window.LutminModules?.warmAccess?.(authLoginContext==='company'?'company_admin':'student');
       document.getElementById('authStatus').textContent = '';
       document.getElementById('authForm').reset();
       const company = authLoginContext === 'company';
@@ -505,8 +536,17 @@
 
     async function openStudentAccess() {
       if (!supabaseClient) return openAuthModal('student');
+      // V54: empezamos a resolver shell + assets apenas existe intención de acceso.
+      window.LutminAppShell?.preload?.();
+      window.LutminModules?.warmAccess?.('student');
       const {data:{session}}=await supabaseClient.auth.getSession();
       if(!session) return openAuthModal('student');
+      // Reabrir el Campus no vuelve a consultar perfil + accesos + runtimes.
+      if(currentLutminUser?.id===session.user.id&&currentAccessMode==='student'&&document.getElementById('campusModal')){
+        openModal('campusModal');
+        goToCampusTab('dashboard');
+        return true;
+      }
       const ok=await loadCurrentLutminUser(session.user,'student');
       if(!ok) return;
       openModal('campusModal');
@@ -515,8 +555,13 @@
 
     async function openCompanyPortalAccess() {
       if (!supabaseClient) return openAuthModal('company');
+      window.LutminAppShell?.preload?.();
+      window.LutminModules?.warmAccess?.('company_admin');
       const { data: { session } } = await supabaseClient.auth.getSession();
       if (!session) return openAuthModal('company');
+      if(currentLutminUser?.id===session.user.id&&currentAccessMode==='company'&&document.getElementById('campusModal')){
+        openModal('campusModal');goToCampusTab('company');return true;
+      }
       const ok=await loadCurrentLutminUser(session.user,'company');
       if(!ok) return;
       openModal('campusModal');
@@ -545,11 +590,17 @@
 
     async function loadCurrentLutminUser(user, requestedMode = null) {
       if (!user || !supabaseClient) return false;
+      // V54: si este acceso ya está hidratado, no repetimos red ni carga de módulos.
+      if(currentLutminUser?.id===user.id&&document.getElementById('campusModal')&&(!requestedMode||requestedMode===currentAccessMode)){
+        paintCurrentLutminUser();
+        return true;
+      }
       let fullName=user.user_metadata?.full_name||user.email||'Usuario Lutmin';
-      const {data:profile,error}=await supabaseClient.from('profiles').select('full_name,email,role,active,must_change_password').eq('id',user.id).maybeSingle();
+      const identity=await loadIdentitySnapshot(user);
+      const profile=identity.profile,error=identity.profileError;
       if(!error&&profile?.full_name) fullName=profile.full_name;
-      if(!error&&profile?.active===false){await supabaseClient.auth.signOut();currentLutminUser=null;showToast('Tu cuenta está desactivada. Contactá a Lutmin.');closeModal('campusModal');return false;}
-      currentAccessContext=await loadAccessContext();
+      if(!error&&profile?.active===false){await supabaseClient.auth.signOut();currentLutminUser=null;invalidateIdentitySnapshot(user.id);showToast('Tu cuenta está desactivada. Contactá a Lutmin.');closeModal('campusModal');return false;}
+      currentAccessContext=identity.access;
       let mode=requestedMode||currentAccessMode;
       if(mode==='company'&&!currentAccessContext.companies.length){showToast('Este correo no tiene acceso Empresa habilitado.');return false;}
       if(mode==='instructor'&&!currentAccessContext.instructor){showToast('Este correo no tiene acceso Docente habilitado.');return false;}
@@ -560,7 +611,7 @@
       if(!mode){showToast('La cuenta existe pero no tiene accesos activos.');return false;}
       currentAccessMode=mode; sessionStorage.setItem('lutmin-access-mode',mode);
       const effectiveRole=mode==='company'?'company_admin':mode==='admin'?'admin':mode==='instructor'?'instructor':'student';
-      // V53: el Campus autenticado se monta recién cuando existe un acceso válido.
+      // V54: el Campus autenticado se monta recién cuando existe un acceso válido.
       const shellReady=await window.LutminAppShell?.ensureCampus?.();
       if(shellReady===false){showToast('No pude preparar el Campus. Actualizá la página y volvé a intentar.');return false;}
       // V31: primero monta el HTML del workspace. Después carga su runtime.
@@ -573,7 +624,8 @@
       }
       currentLutminUser={id:user.id,email:profile?.email||user.email,fullName,role:effectiveRole,baseRole:profile?.role||'student',active:profile?.active!==false,mustChangePassword:Boolean(profile?.must_change_password)};
       paintCurrentLutminUser();
-      try{await supabaseClient.rpc('touch_lutmin_last_seen')}catch(_){}
+      // Telemetría de presencia no forma parte del camino crítico de apertura.
+      Promise.resolve(supabaseClient.rpc('touch_lutmin_last_seen')).catch(()=>{});
       const v29InitialLoad=(key,loader,ttl=12000)=>window.LutminData?.load?window.LutminData.load(key,loader,{ttl,force:true}):loader();
       if(effectiveRole==='company_admin'){goToCampusTab('company');setTimeout(()=>{if(typeof window.openWorkspaceSectionV190==='function')window.openWorkspaceSectionV190('company','summary');else v29InitialLoad('company',()=>loadCompanyPortalData(),12000);},0);}
       else if(effectiveRole==='admin'){goToCampusTab('admin');setTimeout(()=>v29InitialLoad('admin',()=>loadAdminData(),12000),0);}
@@ -627,6 +679,7 @@
     async function logoutLutmin() {
       if (supabaseClient) await supabaseClient.auth.signOut();
       currentLutminUser = null;
+      invalidateIdentitySnapshot();
       window.LutminData?.invalidate?.();
       currentAccessMode = null; currentAccessContext = {student:false,admin:false,companies:[],instructor:false,instructor_groups:[]}; sessionStorage.removeItem('lutmin-access-mode');
       notificationCenterData = { notifications: [], announcements: [], unread_count: 0 };
@@ -642,13 +695,18 @@
 
     if (supabaseClient) {
       supabaseClient.auth.onAuthStateChange((event, session) => {
-        // updateUser({password}) dispara USER_UPDATED. Antes eso volvía a leer
-        // must_change_password=true unos milisegundos antes de que la RPC lo apagara,
-        // generando el loop infinito del modal.
-        if (session?.user && !(passwordUpdateInFlight && event === 'USER_UPDATED')) {
+        // V54: INITIAL_SESSION ya no hidrata todo el Campus a escondidas. Calienta
+        // identidad + assets en background y deja el trabajo visible para el clic.
+        if(event==='INITIAL_SESSION'&&session?.user){
+          loadIdentitySnapshot(session.user).catch(()=>{});
+          window.LutminAppShell?.preload?.();
+          const warmRole=currentAccessMode==='company'?'company_admin':currentAccessMode==='admin'?'admin':currentAccessMode==='instructor'?'instructor':'student';
+          window.LutminModules?.warmAccess?.(warmRole);
+        } else if (session?.user && !(passwordUpdateInFlight && event === 'USER_UPDATED')) {
+          if(event==='USER_UPDATED')invalidateIdentitySnapshot(session.user.id);
           loadCurrentLutminUser(session.user, currentAccessMode);
         }
-        if (!session) currentLutminUser = null;
+        if (!session) {currentLutminUser = null;invalidateIdentitySnapshot();}
         if (event === 'PASSWORD_RECOVERY') {
           setTimeout(() => openPasswordModal('recovery'), 100);
         }
@@ -660,7 +718,7 @@
     // =========================================================
     // openCampus() ya está definido arriba como alias de Acceso Alumno.
 
-    // V53: navegación delegada. Funciona aunque el Campus se monte después
+    // V54: navegación delegada. Funciona aunque el Campus se monte después
     // del arranque y evita registrar un listener por cada botón.
     document.addEventListener('click', async event => {
       const button=event.target.closest?.('.campus-tab');
