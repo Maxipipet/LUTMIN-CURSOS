@@ -5,7 +5,7 @@
 // =============================================================
 (function(){
   'use strict';
-  const VERSION='53.0';
+  const VERSION='55.0';
   const state={entries:new Map(),metrics:new Map(),hits:0,misses:0,reused:0};
   const defaults={dashboard:18000,admin:20000,company:20000,'company-conecta':22000,instructor:22000,agenda:30000,activities:22000,talent:26000,notifications:18000,support:30000};
 
@@ -27,13 +27,20 @@
 
   async function openTab(tab){
     const role=(typeof currentLutminUser!=='undefined'&&currentLutminUser)?currentLutminUser.role:null;
-    const ready=await window.LutminModules?.ensureFeatureForTab?.(tab,role);if(ready===false)return false;
+    // Navegación primero, hidratación después: la ruta nunca espera red para responder.
     if(typeof goToCampusTab==='function')goToCampusTab(tab);
+    const [viewReady,featureReady]=await Promise.all([
+      window.LutminViews?.ensureForTab?.(tab),
+      window.LutminModules?.ensureFeatureForTab?.(tab,role)
+    ]);
+    if(viewReady===false||featureReady===false)return false;
+    if(tab==='courses'&&role==='student')await Promise.allSettled([window.loadStudentPathsV25?.()]);
+    if(tab==='certificates'&&role==='student')await Promise.allSettled([window.loadPendingSurveysV25?.(),window.loadStudentComplianceV40?.()]);
     const map={
-      admin:['admin',()=>loadAdminData(),12000],company:['company',()=>loadCompanyPortalData(),12000],
-      'company-conecta':['company-conecta',()=>loadCompanyConectaData(),15000],instructor:['instructor',()=>loadInstructorPortalV50(),15000],
-      agenda:['agenda',()=>loadStudentAgenda(),20000],activities:['activities',()=>loadStudentActivitiesV50(),15000],
-      talent:['talent',()=>loadTalentCenter(),18000],notifications:['notifications',()=>loadNotificationCenter(),12000],support:['support',()=>loadSupportCenter(),25000]
+      admin:['admin',()=>loadAdminData(),20000],company:['company',()=>loadCompanyPortalData(),20000],
+      'company-conecta':['company-conecta',()=>loadCompanyConectaData(),22000],instructor:['instructor',()=>loadInstructorPortalV50(),22000],
+      agenda:['agenda',()=>loadStudentAgenda(),30000],activities:['activities',()=>loadStudentActivitiesV50(),22000],
+      talent:['talent',()=>window.LutminTalentCenterBase?.load?window.LutminTalentCenterBase.load():loadTalentCenter(),30000],notifications:['notifications',()=>loadNotificationCenter(),18000],support:['support',()=>loadSupportCenter(),30000]
     };
     const cfg=map[tab];if(cfg)await load(cfg[0],cfg[1],{ttl:cfg[2]});return true;
   }

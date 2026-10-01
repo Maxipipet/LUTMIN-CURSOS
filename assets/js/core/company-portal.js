@@ -1,5 +1,5 @@
 // =============================================================
-// LUTMIN V53.0 · COMPANY PORTAL RUNTIME
+// LUTMIN V55.0 · COMPANY PORTAL RUNTIME
 // Portal operativo de empresa. Carga sólo para acceso Empresa.
 // =============================================================
     // =========================================================

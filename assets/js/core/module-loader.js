@@ -6,7 +6,7 @@
 (function(){
   'use strict';
 
-  const VERSION='54.0';
+  const VERSION='55.0';
   const state={status:'idle',promise:null,loaded:new Set(),bundles:new Set(),startedAt:0,finishedAt:0,error:null,retries:0,warmed:false,lastReason:null,lastRole:null};
   const cssFiles=[
     'assets/css/conecta-navigation.css',
@@ -121,7 +121,7 @@
 
   const adminBaseSet=new Set([F.accountServices,F.adminCore,F.adminData,F.adminViews,F.workspaceCmd,F.workspaces,F.perf,F.runtime,F.core,F.adminDemand]);
   const companyBaseSet=new Set([F.accountServices,F.companyPortal,F.workspaceCmd,F.workspaces,F.perf,F.runtime,F.core]);
-  const studentBaseSet=new Set([F.accountServices,F.studentCampus,F.comp,F.workspaceCmd,F.workspaces,F.perf,F.runtime,F.core,F.video]);
+  const studentBaseSet=new Set([F.accountServices,F.studentCampus,F.workspaceCmd,F.workspaces,F.perf,F.runtime,F.core,F.video]);
   const roleSets={
     // V40: Alumno arranca con el flujo crítico. Rutas/vigencias se hidratan en idle,
     // Actividades y soporte se descargan sólo al abrirlos.
@@ -145,7 +145,7 @@
     talent:new Set([F.talentCenter,F.hub,F.talentRouter]),
     companyConecta:new Set([F.talentCenter,F.super,F.pre,F.org]),
     publicTalent:new Set([F.super,F.evidence]),
-    studentEnhancements:new Set([F.lp,F.compliance]),
+    studentEnhancements:new Set([F.lp,F.comp,F.compliance]),
     activities:new Set([F.teacher]),
     support:new Set([F.ux])
   };
@@ -211,19 +211,24 @@
   function loadCssOnce(file){
     const key=`v30-css:${file}`;if(state.loaded.has(key))return Promise.resolve(true);
     const existing=[...document.styleSheets].some(s=>String(s.href||'').includes(file));if(existing){state.loaded.add(key);return Promise.resolve(true);}
-    return new Promise(resolve=>{const link=document.createElement('link');link.rel='stylesheet';link.href=withVersion(file);link.dataset.lutminV30='css';let settled=false;const done=()=>{if(settled)return;settled=true;state.loaded.add(key);resolve(true);};link.onload=done;link.onerror=()=>{console.warn('[Lutmin V54] CSS no disponible:',file);done();};document.head.appendChild(link);setTimeout(done,4500);});
+    return new Promise(resolve=>{const link=document.createElement('link');link.rel='stylesheet';link.href=withVersion(file);link.dataset.lutminV30='css';let settled=false;const done=()=>{if(settled)return;settled=true;state.loaded.add(key);resolve(true);};link.onload=done;link.onerror=()=>{console.warn('[Lutmin V55] CSS no disponible:',file);done();};document.head.appendChild(link);setTimeout(done,4500);});
   }
 
   function preload(files,limit=2){
     state.warmed=true;
-    // V54: un warm especulativo sigue limitado, pero cuando el bundle YA fue pedido
+    // V55: un warm especulativo sigue limitado, pero cuando el bundle YA fue pedido
     // prepriorizamos todos sus archivos. Así la red descarga en paralelo mientras
     // la ejecución conserva el orden determinístico de loadScriptOnce().
     const list=ordered(new Set(files));
     const take=Number.isFinite(limit)?Math.max(0,limit):list.length;
     list.slice(0,take).forEach(file=>{if(document.head.querySelector(`link[data-lutmin-v30-preload="${file}"]`))return;const link=document.createElement('link');link.rel='preload';link.as='script';link.href=withVersion(file);link.dataset.lutminV30Preload=file;document.head.appendChild(link);});
   }
-  function clearPreloads(){document.head.querySelectorAll('link[data-lutmin-v30-preload]').forEach(x=>x.remove());}
+  function clearPreloads(files=null){
+    const wanted=files?new Set(files):null;
+    document.head.querySelectorAll('link[data-lutmin-v30-preload]').forEach(x=>{
+      if(!wanted||wanted.has(x.dataset.lutminV30Preload))x.remove();
+    });
+  }
 
   async function clearRuntimeCaches(){
     try{if(window.LutminV30Update?.clearRuntimeCaches)return await window.LutminV30Update.clearRuntimeCaches();if(!('caches' in window))return false;const keys=await caches.keys();await Promise.all(keys.filter(k=>k.startsWith('lutmin-')).map(k=>caches.delete(k)));return true;}catch(_){return false;}
@@ -243,18 +248,25 @@
   }
 
   async function loadSet(set,reason='runtime',bundleName='custom'){
-    // V33: serializa lotes concurrentes y recalcula faltantes después de esperar.
-    // Evita descargar dos veces el mismo runtime si el usuario cambia rápido de módulo.
-    if(state.promise)await state.promise;
+    // La ejecución sigue serializada para conservar el orden de los módulos legacy,
+    // pero la DESCARGA del siguiente bundle empieza inmediatamente. En V54/V55 un
+    // segundo clic esperaba a que terminara el bundle anterior antes incluso de pedir
+    // sus archivos, haciendo que navegar rápido se sintiera bloqueado.
+    const speculative=ordered(set).filter(file=>!state.loaded.has(`v30-js:${file}`));
+    if(speculative.length)preload(speculative,speculative.length);
+
+    // Más de una navegación puede quedar esperando el mismo lote. Revalidamos en bucle:
+    // el primer waiter toma el lock; los demás ven el nuevo state.promise y esperan.
+    while(state.promise)await state.promise;
     const files=ordered(set).filter(file=>!state.loaded.has(`v30-js:${file}`));
-    if(!files.length){state.bundles.add(bundleName);return true;}
-    state.status='loading';state.startedAt=performance.now();state.error=null;state.lastReason=reason;document.documentElement.dataset.lutminModules='loading';setBootBar('loading');preload(files,files.length);
+    if(!files.length){state.bundles.add(bundleName);clearPreloads(speculative);return true;}
+    state.status='loading';state.startedAt=performance.now();state.error=null;state.lastReason=reason;document.documentElement.dataset.lutminModules='loading';setBootBar('loading');
     state.promise=withLateDomReadyCompatibility(async()=>{
       await Promise.all(cssForSet(set).map(loadCssOnce));
       for(const file of files)await loadScriptOnce(file);
-      state.bundles.add(bundleName);state.status='ready';state.finishedAt=performance.now();document.documentElement.dataset.lutminModules='ready';setBootBar('ready');clearPreloads();
+      state.bundles.add(bundleName);state.status='ready';state.finishedAt=performance.now();document.documentElement.dataset.lutminModules='ready';setBootBar('ready');clearPreloads(files);
       window.dispatchEvent(new CustomEvent('lutmin:v30:modules-ready',{detail:{reason,bundle:bundleName,duration_ms:Math.round(state.finishedAt-state.startedAt),loaded_now:files.length,loaded_total:[...state.loaded].filter(x=>x.startsWith('v30-js:')).length,total_available:scriptFiles.length,retries:state.retries}}));return true;
-    }).catch(err=>{state.status='error';state.error=String(err?.message||err);document.documentElement.dataset.lutminModules='error';setBootBar('error');window.dispatchEvent(new CustomEvent('lutmin:v30:modules-error',{detail:{reason,bundle:bundleName,error:state.error}}));console.error('[Lutmin V30] Error cargando módulos:',err);return false;}).finally(()=>{state.promise=null;});
+    }).catch(err=>{state.status='error';state.error=String(err?.message||err);document.documentElement.dataset.lutminModules='error';setBootBar('error');clearPreloads(files);window.dispatchEvent(new CustomEvent('lutmin:v30:modules-error',{detail:{reason,bundle:bundleName,error:state.error}}));console.error('[Lutmin V55] Error cargando módulos:',err);return false;}).finally(()=>{state.promise=null;});
     return state.promise;
   }
 
@@ -307,6 +319,9 @@
   async function ensureFeatureForTab(tab,role){
     if(tab==='talent'&&role==='student')return ensureFeature('talent',{role});
     if(tab==='company-conecta'&&role==='company_admin')return ensureFeature('company-conecta',{role});
+    // Rutas, encuestas, competencias y vigencias pesan ~100 KB. No forman parte
+    // del arranque del Alumno: se ejecutan cuando Cursos/Certificados las necesitan.
+    if((tab==='courses'||tab==='certificates')&&role==='student')return ensureFeature('student-enhancements',{role});
     if(tab==='activities'&&role==='student')return ensureFeature('activities',{role});
     if(tab==='support')return ensureFeature('support',{role});
     if(tab==='admin'&&role==='admin')return ensureAdminModule((document.getElementById('adminModuleHostV32')?.dataset?.adminModuleV32)||localStorage.getItem('lutmin-admin-module-v19')||'overview');
@@ -320,7 +335,7 @@
     // Sólo precarga: no ejecuta runtimes ni toca el DOM autenticado.
     preload(set,set.size);
     cssForSet(set).forEach(loadCssOnce);
-    window.dispatchEvent(new CustomEvent('lutmin:v54:access-warm',{detail:{role,count:set.size}}));
+    window.dispatchEvent(new CustomEvent('lutmin:v55:access-warm',{detail:{role,count:set.size}}));
     return Promise.resolve(true);
   }
   async function loadAll(reason='manual'){return loadSet(new Set(scriptFiles),reason,'full');}
@@ -334,7 +349,7 @@
       await loadScriptOnce('assets/js/core/update-manager.js');
       window.dispatchEvent(new CustomEvent('lutmin:v30:sw-registered',{detail:{registration:reg}}));
       reg.update().catch(()=>{});return reg;
-    }catch(err){console.warn('[Lutmin V54] Service Worker no disponible:',err?.message||err);return false;}
+    }catch(err){console.warn('[Lutmin V55] Service Worker no disponible:',err?.message||err);return false;}
   }
 
   function canAdaptivePrefetch(){
@@ -345,9 +360,25 @@
   }
   function prefetchFeature(name){
     if(!canAdaptivePrefetch())return false;
-    const set=featureSets[name];if(!set)return false;preload(set);return true;
+    const set=featureSets[name];if(!set)return false;preload(set,set.size);cssForSet(set).forEach(loadCssOnce);return true;
   }
-  const api={version:VERSION,ensureAuthenticated,ensureFeature,ensureFeatureForTab,ensureTalentSection,ensureTalentCvParser,ensureTalentAgentEngine,ensureAdminModule,ensureCompanySection,warm,warmAccess,loadAll,prefetchFeature,status:()=>({...state,loaded:[...state.loaded],bundles:[...state.bundles],loadedScripts:[...state.loaded].filter(x=>x.startsWith('v30-js:')).length,totalScripts:scriptFiles.length,adminBaseScripts:adminBaseSet.size,companyBaseScripts:companyBaseSet.size,adminModuleSets:Object.fromEntries(Object.entries(adminModuleSets).map(([k,v])=>[k,[...v]])),companySectionSets:Object.fromEntries(Object.entries(companySectionSets).map(([k,v])=>[k,[...v]])),talentSectionSets:Object.fromEntries(Object.entries(talentSectionSets).map(([k,v])=>[k,[...v]]))}),files:{css:[...cssFiles],scripts:[...scriptFiles]},registerServiceWorker,clearRuntimeCaches};
+  function prefetchFeatureForTab(tab,role){
+    if(!canAdaptivePrefetch())return false;
+    let set=null;
+    if(tab==='talent'&&role==='student')set=featureSets.talent;
+    else if(tab==='company-conecta'&&role==='company_admin')set=featureSets.companyConecta;
+    else if((tab==='courses'||tab==='certificates')&&role==='student')set=featureSets.studentEnhancements;
+    else if(tab==='activities'&&role==='student')set=featureSets.activities;
+    else if(tab==='support')set=featureSets.support;
+    else if(tab==='admin'&&role==='admin')set=union(adminBaseSet,adminModuleSets[(document.getElementById('adminModuleHostV32')?.dataset?.adminModuleV32)||localStorage.getItem('lutmin-admin-module-v19')||'overview']);
+    if(!set)return false;preload(set,set.size);cssForSet(set).forEach(loadCssOnce);return true;
+  }
+  function prefetchTalentSection(section='summary'){
+    if(!canAdaptivePrefetch())return false;
+    const set=union(featureSets.talent,talentSectionSets[section]||new Set());
+    preload(set,set.size);cssForSet(set).forEach(loadCssOnce);return true;
+  }
+  const api={version:VERSION,ensureAuthenticated,ensureFeature,ensureFeatureForTab,ensureTalentSection,ensureTalentCvParser,ensureTalentAgentEngine,ensureAdminModule,ensureCompanySection,warm,warmAccess,loadAll,prefetchFeature,prefetchFeatureForTab,prefetchTalentSection,status:()=>({...state,loaded:[...state.loaded],bundles:[...state.bundles],loadedScripts:[...state.loaded].filter(x=>x.startsWith('v30-js:')).length,totalScripts:scriptFiles.length,adminBaseScripts:adminBaseSet.size,companyBaseScripts:companyBaseSet.size,adminModuleSets:Object.fromEntries(Object.entries(adminModuleSets).map(([k,v])=>[k,[...v]])),companySectionSets:Object.fromEntries(Object.entries(companySectionSets).map(([k,v])=>[k,[...v]])),talentSectionSets:Object.fromEntries(Object.entries(talentSectionSets).map(([k,v])=>[k,[...v]]))}),files:{css:[...cssFiles],scripts:[...scriptFiles]},registerServiceWorker,clearRuntimeCaches};
   window.LutminModules=api;
   window.LutminV30Modules=api;
   // Alias de compatibilidad para extensiones históricas todavía desplegadas.

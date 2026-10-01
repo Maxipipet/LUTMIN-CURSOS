@@ -5,7 +5,7 @@
 // =============================================================
 (function(){
   'use strict';
-  const VERSION='53.0';
+  const VERSION='55.0';
   const modules=['overview','operations','academic','people','companies','commercial','finance','talent','communications','system'];
   const dynamicModules=new Set(['development','agents']);
   const paths=Object.fromEntries(modules.map(name=>[name,`assets/views/admin/${name}.html`]));
@@ -34,12 +34,12 @@
     inFlight.set(name,p);return p;
   }
   async function hydrate(name){
-    try{await (window.LutminCoreBindings||window.LutminV32CoreBindings)?.bind?.('admin');}catch(err){console.warn('[Lutmin V53] binding admin',err);}
+    try{await (window.LutminCoreBindings||window.LutminV32CoreBindings)?.bind?.('admin');}catch(err){console.warn('[Lutmin V55] binding admin',err);}
     const jobs=[];
     if(window.LutminAdminData?.loadForModule)jobs.push(window.LutminAdminData.loadForModule(name).then(()=>{state.dataLoads+=1;}));
     if(window.LutminAdminRuntime?.loadForModule)jobs.push(window.LutminAdminRuntime.loadForModule(name));
     await Promise.allSettled(jobs);
-    try{if(typeof renderAdminPanel==='function')renderAdminPanel();}catch(err){console.warn('[Lutmin V53] render admin',err);}
+    try{if(typeof renderAdminPanel==='function')renderAdminPanel();}catch(err){console.warn('[Lutmin V55] render admin',err);}
     try{if(typeof refreshAdminWorkspaceV19==='function')refreshAdminWorkspaceV19();}catch(_){ }
     window.dispatchEvent(new CustomEvent('lutmin:v33:admin-module-ready',{detail:{module:name}}));
     window.dispatchEvent(new CustomEvent('lutmin:v32:admin-module-ready',{detail:{module:name}}));

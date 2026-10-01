@@ -146,9 +146,8 @@ async function openMyPublicProfileV40(){
   goToCampusTab('talent');showToast('Completá y habilitá tu perfil en Lutmin Conecta para verlo públicamente.');
 }
 
-// Integración con los loaders existentes sin reemplazar la lógica previa.
-const _loadCampusDataV40=loadCampusData;
-loadCampusData=async function(){const r=await _loadCampusDataV40.apply(this,arguments);if(currentLutminUser?.role==='student'){await loadStudentComplianceV40();updatePublicProfileButtonV40();}return r;};
+// V55: Cumplimiento del Alumno se consulta al abrir Certificados, no en cada
+// refresco del dashboard. Evita una RPC extra en el camino crítico de Inicio.
 // V34: Cumplimiento Empresa se activa bajo demanda desde V19.
 const _loadAdminDataV40=loadAdminData;
 loadAdminData=async function(){const r=await _loadAdminDataV40.apply(this,arguments);if(currentLutminUser?.role==='admin')await loadAdminComplianceV40();return r;};
@@ -157,7 +156,7 @@ if(typeof renderTalentCenter==='function'){
   renderTalentCenter=function(){const r=_renderTalentCenterV40.apply(this,arguments);updatePublicProfileButtonV40();return r;};
 }
 function initV40(){
-  if(currentLutminUser?.role==='student'){initStudentComplianceV40();updatePublicProfileButtonV40();loadStudentComplianceV40();}
+  if(currentLutminUser?.role==='student'){updatePublicProfileButtonV40();}
   // Empresa se inicializa únicamente desde su módulo superior bajo demanda.
   if(currentLutminUser?.role==='admin'){initAdminComplianceV40();loadAdminComplianceV40();}
 }

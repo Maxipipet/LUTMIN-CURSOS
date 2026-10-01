@@ -1,5 +1,5 @@
 // =============================================================
-// LUTMIN V53.0 · TALENT CENTER RUNTIME
+// LUTMIN V55.0 · TALENT CENTER RUNTIME
 // Conecta autenticado: Alumno, Empresa y Administración.
 // Se descarga sólo cuando un flujo de talento realmente lo necesita.
 // =============================================================
@@ -255,3 +255,8 @@
     // La carga normal de Conecta admin también incorpora solicitudes públicas.
     const originalLoadAdminConectaDataV31=loadAdminConectaData;
     loadAdminConectaData=async function(){await originalLoadAdminConectaDataV31();await loadAdminPublicTalentRequestsV31();};
+
+// V55: referencia estable al cargador base. Los módulos históricos pueden decorar
+// window.loadTalentCenter por compatibilidad, pero la navegación usa esta fuente
+// canónica para no disparar una cadena creciente de wrappers y consultas.
+window.LutminTalentCenterBase={version:'55.0',load:loadTalentCenter,render:renderTalentCenter};

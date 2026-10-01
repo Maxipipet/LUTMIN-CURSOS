@@ -1,7 +1,41 @@
 // =============================================================
-// LUTMIN V53.0 · STUDENT CAMPUS RUNTIME
+// LUTMIN V55.0 · STUDENT CAMPUS RUNTIME
 // Cursos, clases, evaluaciones y agenda. Carga sólo para Alumno.
 // =============================================================
+    // El dashboard trabaja con metadatos livianos. El contenido pesado de cada
+    // clase (texto, video y materiales) se consulta recién al abrir esa clase.
+    const campusLessonDetailCache = new Map();
+    const campusLessonDetailInflight = new Map();
+
+    async function ensureCampusLessonDetail(lesson) {
+      if (!lesson?.id || !supabaseClient) return lesson;
+      const cached = campusLessonDetailCache.get(lesson.id);
+      if (cached) { Object.assign(lesson, cached); return lesson; }
+      if (campusLessonDetailInflight.has(lesson.id)) {
+        const detail = await campusLessonDetailInflight.get(lesson.id);
+        if (detail) Object.assign(lesson, detail);
+        return lesson;
+      }
+      const request = (async () => {
+        const { data, error } = await supabaseClient
+          .from('lessons')
+          .select('id,course_id,title,description,content,duration_minutes,sort_order,video_url,video_path,material_url,material_path,published,required,video_completion_required,video_min_watch_percent')
+          .eq('id', lesson.id)
+          .maybeSingle();
+        if (error) throw error;
+        if (data) campusLessonDetailCache.set(lesson.id, data);
+        return data || null;
+      })();
+      campusLessonDetailInflight.set(lesson.id, request);
+      try {
+        const detail = await request;
+        if (detail) Object.assign(lesson, detail);
+        return lesson;
+      } finally {
+        campusLessonDetailInflight.delete(lesson.id);
+      }
+    }
+
     async function loadCampusData() {
       if (!currentLutminUser || !supabaseClient) return;
       setCampusToday();
@@ -21,56 +55,42 @@
       const validEnrollments = (enrollments || []).filter(item => item.course);
       const courseIds = validEnrollments.map(item => item.course.id);
 
-      let lessons = [];
-      if (courseIds.length) {
-        const { data, error } = await supabaseClient
-          .from('lessons')
-          .select('id,course_id,title,description,content,duration_minutes,sort_order,video_url,video_path,material_url,material_path,published,required,video_completion_required,video_min_watch_percent')
-          .in('course_id', courseIds)
-          .order('sort_order', { ascending: true });
-        if (error) console.error('Error cargando clases:', error);
-        lessons = data || [];
-      }
-
-      const { data: progressRows, error: progressError } = await supabaseClient
-        .from('lesson_progress')
-        .select('lesson_id,completed,completed_at')
-        .eq('user_id', currentLutminUser.id)
-        .eq('completed', true);
-
-      if (progressError) console.error('Error cargando progreso:', progressError);
-      const completedSet = new Set((progressRows || []).map(row => row.lesson_id));
-
-      campusAssessments = [];
-      campusAssessmentAttempts = [];
-      if (courseIds.length) {
-        const { data: assessmentRows, error: assessmentError } = await supabaseClient
-          .from('assessments')
-          .select('id,course_id,title,description,passing_score,published,max_attempts,random_question_count,time_limit_minutes,show_answer_review')
-          .in('course_id', courseIds)
-          .eq('published', true);
-        if (assessmentError) console.error('Error cargando evaluaciones:', assessmentError);
-        campusAssessments = assessmentRows || [];
-
-        if (campusAssessments.length) {
-          const { data: attemptRows, error: attemptError } = await supabaseClient
-            .from('assessment_attempts')
-            .select('id,assessment_id,score,passed,correct_count,total_questions,submitted_at')
-            .eq('user_id', currentLutminUser.id)
-            .in('assessment_id', campusAssessments.map(a => a.id))
-            .order('submitted_at', { ascending: false });
-          if (attemptError) console.error('Error cargando intentos:', attemptError);
-          campusAssessmentAttempts = attemptRows || [];
-        }
-      }
-
-      const { data: certificateRows, error: certificateError } = await supabaseClient
-        .from('certificates')
+      // V55: después de conocer los cursos, las lecturas independientes salen en paralelo.
+      // Antes eran varias esperas de red consecutivas y el Inicio quedaba en “Cargando…”.
+      const lessonsPromise=courseIds.length
+        ? supabaseClient.from('lessons')
+            .select('id,course_id,title,duration_minutes,sort_order,published,required,video_completion_required,video_min_watch_percent')
+            .in('course_id',courseIds).order('sort_order',{ascending:true})
+        : Promise.resolve({data:[],error:null});
+      const progressPromise=supabaseClient.from('lesson_progress')
+        .select('lesson_id,completed,completed_at').eq('user_id',currentLutminUser.id).eq('completed',true);
+      const assessmentsPromise=courseIds.length
+        ? supabaseClient.from('assessments')
+            .select('id,course_id,title,description,passing_score,published,max_attempts,random_question_count,time_limit_minutes,show_answer_review')
+            .in('course_id',courseIds).eq('published',true)
+        : Promise.resolve({data:[],error:null});
+      const certificatesPromise=supabaseClient.from('certificates')
         .select('id,user_id,course_id,code,full_name,course_title,duration_hours,score,status,issued_at,revoked_at,revoked_reason,certificate_kind,issuer_display_name,issuer_legal_name,issuer_tax_id,private_legend,verification_note,course_version,modality,training_location,instructor_name,responsible_name,responsible_role,expires_at')
-        .eq('user_id', currentLutminUser.id)
-        .order('issued_at', { ascending: false });
-      if (certificateError) console.error('Error cargando certificados:', certificateError);
-      campusCertificates = certificateRows || [];
+        .eq('user_id',currentLutminUser.id).order('issued_at',{ascending:false});
+      const attemptsPromise=supabaseClient.from('assessment_attempts')
+        .select('id,assessment_id,score,passed,correct_count,total_questions,submitted_at')
+        .eq('user_id',currentLutminUser.id).order('submitted_at',{ascending:false});
+
+      const [lessonsRes,progressRes,assessmentsRes,certificatesRes,attemptsRes]=await Promise.all([
+        lessonsPromise,progressPromise,assessmentsPromise,certificatesPromise,attemptsPromise
+      ]);
+      if(lessonsRes.error)console.error('Error cargando clases:',lessonsRes.error);
+      if(progressRes.error)console.error('Error cargando progreso:',progressRes.error);
+      if(assessmentsRes.error)console.error('Error cargando evaluaciones:',assessmentsRes.error);
+      if(certificatesRes.error)console.error('Error cargando certificados:',certificatesRes.error);
+      if(attemptsRes.error)console.error('Error cargando intentos:',attemptsRes.error);
+
+      const lessons=(lessonsRes.data||[]).map(row=>Object.assign(row,campusLessonDetailCache.get(row.id)||{}));
+      const completedSet=new Set((progressRes.data||[]).map(row=>row.lesson_id));
+      campusAssessments=assessmentsRes.data||[];
+      campusCertificates=certificatesRes.data||[];
+      const assessmentIds=new Set(campusAssessments.map(a=>a.id));
+      campusAssessmentAttempts=(attemptsRes.data||[]).filter(row=>assessmentIds.has(row.assessment_id));
 
       campusCourseSummaries = validEnrollments.map(enrollment => {
         const courseLessons = lessons
@@ -446,24 +466,16 @@
       activeCampusCourseId = summary.course.id;
       openLessonId = lesson.id;
 
+      // Abrimos primero y completamos el contenido pesado detrás. Así el clic nunca
+      // queda esperando una consulta de texto/video/material antes de responder.
       document.getElementById('lessonCourseName').textContent = summary.course.title;
       document.getElementById('lessonNumberBadge').textContent = `Clase ${lesson.sort_order} de ${summary.total}`;
       document.getElementById('lessonDurationBadge').textContent = formatMinutes(lesson.duration_minutes);
       document.getElementById('lessonTitle').textContent = lesson.title;
-      document.getElementById('lessonDescription').textContent = lesson.description || 'Clase del Campus Lutmin.';
-
-      const content = String(lesson.content || '').trim() || String(lesson.description || '').trim() || 'El administrador todavía no cargó contenido escrito para esta clase.';
-      document.getElementById('lessonContent').innerHTML = escapeHtml(content.replace(/\\n/g, '\n')).replace(/\n/g, '<br>');
-
-      await renderLessonVideo(lesson);
-
-      const materialArea = document.getElementById('lessonMaterialArea');
-      materialArea.innerHTML = `<p class="text-sm text-slate-400">Cargando material...</p>`;
-      const material = await resolveLessonMaterialUrl(lesson);
-      const isDriveMaterial = !!getGoogleDrivePreviewUrl(material);
-      materialArea.innerHTML = material
-        ? `<a href="${escapeHtml(material)}" target="_blank" rel="noopener noreferrer" class="inline-flex w-full items-center justify-center gap-2 px-4 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-lutmin-dark font-bold text-sm"><i class="${isDriveMaterial ? 'fa-brands fa-google-drive' : 'fa-solid fa-file-arrow-up'}"></i>${isDriveMaterial ? 'Abrir en Google Drive' : 'Abrir material'}</a>`
-        : `<p class="text-sm text-slate-400">Sin material adjunto por el momento.</p>`;
+      document.getElementById('lessonDescription').textContent = 'Cargando contenido de la clase…';
+      document.getElementById('lessonContent').innerHTML = '<span class="text-slate-400">Cargando contenido…</span>';
+      document.getElementById('lessonVideoArea').innerHTML = '<div class="text-center px-6 text-slate-400"><i class="fa-solid fa-spinner fa-spin text-3xl"></i><p class="mt-3 text-xs">Preparando video…</p></div>';
+      document.getElementById('lessonMaterialArea').innerHTML = '<p class="text-sm text-slate-400">Preparando material…</p>';
 
       const completed = summary.completedSet.has(lesson.id);
       document.getElementById('lessonCompletedBadge').classList.toggle('hidden', !completed);
@@ -488,6 +500,31 @@
       }).join('');
 
       openModal('lessonModal');
+      try {
+        await ensureCampusLessonDetail(lesson);
+        // Si el usuario cambió de clase mientras llegaba la respuesta, no pisamos
+        // la nueva vista con contenido de la clase anterior.
+        if (openLessonId !== lessonId) return;
+        document.getElementById('lessonDescription').textContent = lesson.description || 'Clase del Campus Lutmin.';
+        const content = String(lesson.content || '').trim() || String(lesson.description || '').trim() || 'El administrador todavía no cargó contenido escrito para esta clase.';
+        document.getElementById('lessonContent').innerHTML = escapeHtml(content.replace(/\\n/g, '\n')).replace(/\n/g, '<br>');
+        await renderLessonVideo(lesson);
+        if (openLessonId !== lessonId) return;
+        const materialArea = document.getElementById('lessonMaterialArea');
+        const material = await resolveLessonMaterialUrl(lesson);
+        if (openLessonId !== lessonId) return;
+        const isDriveMaterial = !!getGoogleDrivePreviewUrl(material);
+        materialArea.innerHTML = material
+          ? `<a href="${escapeHtml(material)}" target="_blank" rel="noopener noreferrer" class="inline-flex w-full items-center justify-center gap-2 px-4 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-lutmin-dark font-bold text-sm"><i class="${isDriveMaterial ? 'fa-brands fa-google-drive' : 'fa-solid fa-file-arrow-up'}"></i>${isDriveMaterial ? 'Abrir en Google Drive' : 'Abrir material'}</a>`
+          : '<p class="text-sm text-slate-400">Sin material adjunto por el momento.</p>';
+      } catch (error) {
+        console.error('No pude cargar el detalle de la clase:', error);
+        if (openLessonId !== lessonId) return;
+        document.getElementById('lessonDescription').textContent = 'No pude cargar el contenido completo de esta clase.';
+        document.getElementById('lessonContent').innerHTML = '<span class="text-red-600">Revisá la conexión e intentá abrir la clase nuevamente.</span>';
+        document.getElementById('lessonVideoArea').innerHTML = '<div class="text-center px-6 text-slate-400"><i class="fa-solid fa-triangle-exclamation text-3xl"></i><p class="mt-3 text-xs">Video no disponible por el momento.</p></div>';
+        document.getElementById('lessonMaterialArea').innerHTML = '<p class="text-sm text-slate-400">Material no disponible por el momento.</p>';
+      }
     }
 
     async function completeOpenLesson() {

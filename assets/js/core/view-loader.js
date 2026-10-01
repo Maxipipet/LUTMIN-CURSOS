@@ -4,7 +4,7 @@
 // =============================================================
 (function(){
   'use strict';
-  const VERSION='54.0';
+  const VERSION='55.0';
   const paths={
     talent:'assets/views/talent.html',
     'company-conecta':'assets/views/company-conecta.html',
@@ -30,10 +30,10 @@
         target.innerHTML=html;target.dataset.lutminViewState='ready';state.set(name,{status:'ready',promise:null,bytes:new Blob([html]).size,loadedAt:Date.now()});
         // Los bindings también son lazy y se esperan antes de publicar la vista lista.
         const bindings=window.LutminCoreBindings||window.LutminV32CoreBindings||window.LutminV31CoreBindings;
-        if(bindings?.bind){const bound=await bindings.bind(name);if(bound===false)console.warn('[Lutmin V54] bindings no disponibles para',name);}
+        if(bindings?.bind){const bound=await bindings.bind(name);if(bound===false)console.warn('[Lutmin V55] bindings no disponibles para',name);}
         window.dispatchEvent(new CustomEvent('lutmin:v32:view-ready',{detail:{view:name}}));return true;
       }catch(err){
-        console.error('[Lutmin V54] Vista no disponible:',name,err);target.dataset.lutminViewState='error';
+        console.error('[Lutmin V55] Vista no disponible:',name,err);target.dataset.lutminViewState='error';
         target.innerHTML=`<div class="rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-900"><strong>No pude cargar esta sección.</strong><br><span class="text-xs">Revisá la conexión y volvé a intentar.</span><div class="mt-3"><button type="button" onclick="window.LutminViews.retry('${name}')" class="px-4 py-2 rounded-xl bg-amber-900 text-white text-xs font-bold">Reintentar</button></div></div>`;
         state.set(name,{status:'error',promise:null,error:String(err?.message||err)});return false;
       }
