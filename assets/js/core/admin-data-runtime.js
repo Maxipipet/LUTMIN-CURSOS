@@ -5,7 +5,7 @@
 // =============================================================
 (function(){
   'use strict';
-  const VERSION='55.0';
+  const VERSION='56.0';
   const state={entries:new Map(),inFlight:new Map(),activeModule:'overview',loads:0,hits:0,errors:0,lastDuration:0,lastDatasets:[]};
   const DEFAULT_TTL=60000;
 

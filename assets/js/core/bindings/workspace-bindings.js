@@ -400,7 +400,7 @@
         bindOnce('riskSettingsFormV17','submit',async e=>{e.preventDefault();const payload={inactive_days:Number(document.getElementById('riskInactiveDaysV17').value||7),low_progress_percent:Number(document.getElementById('riskLowProgressV17').value||30),low_progress_after_days:Number(document.getElementById('riskAfterDaysV17').value||14),company_attention_percent:Number(document.getElementById('riskCompanyPercentV17').value||60),updated_by:currentLutminUser.id,updated_at:new Date().toISOString()};const {error}=await supabaseClient.from('executive_risk_settings').update(payload).eq('id',true);if(error){showToast(error.message);return;}closeRiskSettingsV17();showToast('Reglas de riesgo actualizadas.');await loadExecutiveV17();});
       }
       if(view!=='admin')host.dataset.lutminV31CoreBound='1';return true;
-    }catch(err){console.error('[Lutmin V55] No pude enlazar la vista',view,err);return false;}
+    }catch(err){console.error('[Lutmin V56] No pude enlazar la vista',view,err);return false;}
   }
   window.LutminWorkspaceBindings={version:'53.0',bind};
 })();

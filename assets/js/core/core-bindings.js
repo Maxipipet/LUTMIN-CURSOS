@@ -5,7 +5,7 @@
 // =============================================================
 (function(){
   'use strict';
-  const VERSION='55.0';
+  const VERSION='56.0';
   const SOURCE='assets/js/core/bindings/workspace-bindings.js';
   let promise=null;
   let error=null;

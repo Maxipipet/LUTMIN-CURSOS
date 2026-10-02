@@ -4,7 +4,7 @@
 // =============================================================
 (function(){
   'use strict';
-  const VERSION='55.0';
+  const VERSION='56.0';
   const paths={
     talent:'assets/views/talent.html',
     'company-conecta':'assets/views/company-conecta.html',
@@ -23,6 +23,7 @@
     const target=panel(name);if(!target)return false;if(loaded(name))return true;
     const existing=state.get(name);if(existing?.promise)return existing.promise;
     target.dataset.lutminViewState='loading';
+    if(!target.children.length){target.innerHTML='<div data-lutmin-view-loading class="rounded-3xl border border-slate-100 bg-white p-6 text-sm text-slate-500"><i class="fa-solid fa-spinner fa-spin mr-2 text-lutmin-light"></i>Preparando módulo…</div>';}
     const promise=(async()=>{
       try{
         const res=await fetch(src,{credentials:'same-origin',cache:'force-cache'});if(!res.ok)throw new Error(`HTTP ${res.status}`);
@@ -30,10 +31,10 @@
         target.innerHTML=html;target.dataset.lutminViewState='ready';state.set(name,{status:'ready',promise:null,bytes:new Blob([html]).size,loadedAt:Date.now()});
         // Los bindings también son lazy y se esperan antes de publicar la vista lista.
         const bindings=window.LutminCoreBindings||window.LutminV32CoreBindings||window.LutminV31CoreBindings;
-        if(bindings?.bind){const bound=await bindings.bind(name);if(bound===false)console.warn('[Lutmin V55] bindings no disponibles para',name);}
+        if(bindings?.bind){const bound=await bindings.bind(name);if(bound===false)console.warn('[Lutmin V56] bindings no disponibles para',name);}
         window.dispatchEvent(new CustomEvent('lutmin:v32:view-ready',{detail:{view:name}}));return true;
       }catch(err){
-        console.error('[Lutmin V55] Vista no disponible:',name,err);target.dataset.lutminViewState='error';
+        console.error('[Lutmin V56] Vista no disponible:',name,err);target.dataset.lutminViewState='error';
         target.innerHTML=`<div class="rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-900"><strong>No pude cargar esta sección.</strong><br><span class="text-xs">Revisá la conexión y volvé a intentar.</span><div class="mt-3"><button type="button" onclick="window.LutminViews.retry('${name}')" class="px-4 py-2 rounded-xl bg-amber-900 text-white text-xs font-bold">Reintentar</button></div></div>`;
         state.set(name,{status:'error',promise:null,error:String(err?.message||err)});return false;
       }

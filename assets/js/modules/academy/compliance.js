@@ -146,7 +146,7 @@ async function openMyPublicProfileV40(){
   goToCampusTab('talent');showToast('Completá y habilitá tu perfil en Lutmin Conecta para verlo públicamente.');
 }
 
-// V55: Cumplimiento del Alumno se consulta al abrir Certificados, no en cada
+// V56: Cumplimiento del Alumno se consulta al abrir Certificados, no en cada
 // refresco del dashboard. Evita una RPC extra en el camino crítico de Inicio.
 // V34: Cumplimiento Empresa se activa bajo demanda desde V19.
 const _loadAdminDataV40=loadAdminData;

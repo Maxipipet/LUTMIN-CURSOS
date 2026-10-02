@@ -89,7 +89,7 @@
       if(key==='summary')try{renderConectaSummaryV210?.();}catch(_){ }
       return true;
     }catch(e){
-      console.error('[Lutmin V55] Conecta navigation',e);
+      console.error('[Lutmin V56] Conecta navigation',e);
       showToast?.('No pude terminar de cargar este módulo. Intentá nuevamente.');
       return false;
     }finally{panel?.removeAttribute('aria-busy');}

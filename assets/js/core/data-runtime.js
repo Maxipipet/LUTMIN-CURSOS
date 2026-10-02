@@ -5,7 +5,7 @@
 // =============================================================
 (function(){
   'use strict';
-  const VERSION='55.0';
+  const VERSION='56.0';
   const state={entries:new Map(),metrics:new Map(),hits:0,misses:0,reused:0};
   const defaults={dashboard:18000,admin:20000,company:20000,'company-conecta':22000,instructor:22000,agenda:30000,activities:22000,talent:26000,notifications:18000,support:30000};
 

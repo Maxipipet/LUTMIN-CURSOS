@@ -1,5 +1,5 @@
 // =============================================================
-// LUTMIN V55.0 · TALENT CENTER RUNTIME
+// LUTMIN V56.0 · TALENT CENTER RUNTIME
 // Conecta autenticado: Alumno, Empresa y Administración.
 // Se descarga sólo cuando un flujo de talento realmente lo necesita.
 // =============================================================
@@ -7,21 +7,31 @@
       if(await window.LutminViews?.ensureForTab?.('talent')===false)return;
       if(await window.LutminModules?.ensureFeatureForTab?.('talent',currentLutminUser?.role)===false)return;
       if(!supabaseClient||currentLutminUser?.role!=='student')return;
-      // V37: abrir Conecta es lectura. El perfil se crea/actualiza sólo cuando el usuario guarda.
-      const [profileRes,skillsRes,expRes,appsRes,certRes,jobsRes,savedJobsRes,statsRes,detailsRes,requestRes]=await Promise.all([
+      // V56: dos etapas visuales, una sola tanda de red. Todo empieza en paralelo,
+      // pero perfil/evidencia puede pintarse sin esperar búsquedas, historial y métricas.
+      const primaryPromise=Promise.all([
         supabaseClient.from('talent_profiles').select('*').eq('user_id',currentLutminUser.id).maybeSingle(),
         supabaseClient.from('talent_skills').select('*').eq('user_id',currentLutminUser.id).order('level',{ascending:false}),
         supabaseClient.from('talent_experiences').select('*').eq('user_id',currentLutminUser.id).order('start_date',{ascending:false}),
+        supabaseClient.from('certificates').select('code,course_title,duration_hours,score,issued_at,status').eq('user_id',currentLutminUser.id).eq('status','valid').order('issued_at',{ascending:false})
+      ]);
+      const secondaryPromise=Promise.all([
         supabaseClient.from('job_applications').select('id,job_id,message,status,created_at,updated_at').eq('user_id',currentLutminUser.id).order('created_at',{ascending:false}),
-        supabaseClient.from('certificates').select('code,course_title,duration_hours,score,issued_at,status').eq('user_id',currentLutminUser.id).eq('status','valid').order('issued_at',{ascending:false}),
         supabaseClient.rpc('get_public_jobs'),
         supabaseClient.from('talent_saved_jobs').select('job_id,created_at').eq('user_id',currentLutminUser.id),
         supabaseClient.rpc('my_talent_conecta_stats'),
         supabaseClient.rpc('my_conecta_application_details'),
         supabaseClient.rpc('my_talent_profile_request_status')
       ]);
-      const err=[profileRes,skillsRes,expRes,appsRes,certRes,jobsRes,savedJobsRes,statsRes,detailsRes,requestRes].find(x=>x.error)?.error; if(err){console.error(err);return showToast('No pude cargar Lutmin Conecta. Revisá la conexión o el diagnóstico del sistema.');}
-      talentData={profile:profileRes.data||null,skills:skillsRes.data||[],experiences:expRes.data||[],applications:appsRes.data||[],certificates:certRes.data||[],jobs:Array.isArray(jobsRes.data)?jobsRes.data:[],savedJobs:savedJobsRes.data||[],stats:statsRes.data||{},applicationDetails:detailsRes.data||{history:[],interviews:[]},requestStatus:requestRes.data||{approval_status:'draft'}};
+      const [profileRes,skillsRes,expRes,certRes]=await primaryPromise;
+      const primaryErr=[profileRes,skillsRes,expRes,certRes].find(x=>x.error)?.error;
+      if(primaryErr){console.error(primaryErr);return showToast('No pude cargar tu perfil de Lutmin Conecta. Revisá la conexión.');}
+      talentData={...talentData,profile:profileRes.data||null,skills:skillsRes.data||[],experiences:expRes.data||[],certificates:certRes.data||[],applications:talentData.applications||[],jobs:talentData.jobs||[],savedJobs:talentData.savedJobs||[],stats:talentData.stats||{},applicationDetails:talentData.applicationDetails||{history:[],interviews:[]},requestStatus:talentData.requestStatus||{approval_status:'draft'}};
+      renderTalentCenter();
+      const [appsRes,jobsRes,savedJobsRes,statsRes,detailsRes,requestRes]=await secondaryPromise;
+      const secondaryErr=[appsRes,jobsRes,savedJobsRes,statsRes,detailsRes,requestRes].find(x=>x.error)?.error;
+      if(secondaryErr){console.error(secondaryErr);return;}
+      talentData={...talentData,applications:appsRes.data||[],jobs:Array.isArray(jobsRes.data)?jobsRes.data:[],savedJobs:savedJobsRes.data||[],stats:statsRes.data||{},applicationDetails:detailsRes.data||{history:[],interviews:[]},requestStatus:requestRes.data||{approval_status:'draft'}};
       renderTalentCenter();
     }
     function renderTalentCenter(){
@@ -256,7 +266,7 @@
     const originalLoadAdminConectaDataV31=loadAdminConectaData;
     loadAdminConectaData=async function(){await originalLoadAdminConectaDataV31();await loadAdminPublicTalentRequestsV31();};
 
-// V55: referencia estable al cargador base. Los módulos históricos pueden decorar
+// V56: referencia estable al cargador base. Los módulos históricos pueden decorar
 // window.loadTalentCenter por compatibilidad, pero la navegación usa esta fuente
 // canónica para no disparar una cadena creciente de wrappers y consultas.
-window.LutminTalentCenterBase={version:'55.0',load:loadTalentCenter,render:renderTalentCenter};
+window.LutminTalentCenterBase={version:'56.0',load:loadTalentCenter,render:renderTalentCenter};

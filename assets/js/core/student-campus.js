@@ -1,11 +1,29 @@
 // =============================================================
-// LUTMIN V55.0 · STUDENT CAMPUS RUNTIME
+// LUTMIN V56.0 · STUDENT CAMPUS RUNTIME
 // Cursos, clases, evaluaciones y agenda. Carga sólo para Alumno.
 // =============================================================
     // El dashboard trabaja con metadatos livianos. El contenido pesado de cada
     // clase (texto, video y materiales) se consulta recién al abrir esa clase.
     const campusLessonDetailCache = new Map();
     const campusLessonDetailInflight = new Map();
+
+
+    function renderCampusEnrollmentPreview(validEnrollments) {
+      const hasCourses=validEnrollments.length>0;
+      document.getElementById('campusEmptyState')?.classList.toggle('hidden',hasCourses);
+      document.getElementById('campusDashboardContent')?.classList.toggle('hidden',!hasCourses);
+      document.getElementById('upcomingLessonsSection')?.classList.toggle('hidden',true);
+      if(!hasCourses)return;
+      const preferred=validEnrollments.find(x=>x.status==='active')||validEnrollments[0];
+      const hours=validEnrollments.reduce((sum,x)=>sum+Number(x.course?.duration_hours||0),0);
+      const active=validEnrollments.filter(x=>x.status==='active').length;
+      const title=document.getElementById('activeCourseTitle');if(title)title.textContent=preferred.course?.title||'Curso asignado';
+      const lesson=document.getElementById('activeCourseLesson');if(lesson)lesson.textContent='Calculando tu progreso y próxima clase…';
+      const hoursEl=document.getElementById('campusHoursStat');if(hoursEl)hoursEl.textContent=`${hours} h`;
+      const activeEl=document.getElementById('campusActiveStat');if(activeEl)activeEl.textContent=String(active);
+      const status=document.getElementById('activeCourseStatus');if(status)status.textContent='Preparando';
+      const button=document.getElementById('completeClassBtn');if(button){button.disabled=true;button.textContent='Preparando curso…';}
+    }
 
     async function ensureCampusLessonDetail(lesson) {
       if (!lesson?.id || !supabaseClient) return lesson;
@@ -40,11 +58,23 @@
       if (!currentLutminUser || !supabaseClient) return;
       setCampusToday();
 
-      const { data: enrollments, error: enrollError } = await supabaseClient
+      // V56: las lecturas que sólo dependen del usuario arrancan al mismo tiempo que
+      // inscripciones. Antes esperábamos primero enrollments y recién después abríamos
+      // estas cuatro consultas, agregando una ronda completa de latencia.
+      const progressPromise=supabaseClient.from('lesson_progress')
+        .select('lesson_id,completed,completed_at').eq('user_id',currentLutminUser.id).eq('completed',true);
+      const certificatesPromise=supabaseClient.from('certificates')
+        .select('id,user_id,course_id,code,full_name,course_title,duration_hours,score,status,issued_at,revoked_at,revoked_reason,certificate_kind,issuer_display_name,issuer_legal_name,issuer_tax_id,private_legend,verification_note,course_version,modality,training_location,instructor_name,responsible_name,responsible_role,expires_at')
+        .eq('user_id',currentLutminUser.id).order('issued_at',{ascending:false});
+      const attemptsPromise=supabaseClient.from('assessment_attempts')
+        .select('id,assessment_id,score,passed,correct_count,total_questions,submitted_at')
+        .eq('user_id',currentLutminUser.id).order('submitted_at',{ascending:false});
+      const enrollmentsPromise=supabaseClient
         .from('enrollments')
         .select('id,status,enrolled_at,price_amount,payment_currency,payment_status,payment_due_date,access_granted_at,course:courses(id,slug,title,description,duration_hours,level,category)')
         .eq('user_id', currentLutminUser.id)
         .order('enrolled_at', { ascending: true });
+      const { data: enrollments, error: enrollError } = await enrollmentsPromise;
 
       if (enrollError) {
         console.error('Error cargando inscripciones:', enrollError);
@@ -54,27 +84,20 @@
 
       const validEnrollments = (enrollments || []).filter(item => item.course);
       const courseIds = validEnrollments.map(item => item.course.id);
+      // Primer contenido útil en cuanto llega la inscripción; progreso fino continúa debajo.
+      renderCampusEnrollmentPreview(validEnrollments);
 
-      // V55: después de conocer los cursos, las lecturas independientes salen en paralelo.
-      // Antes eran varias esperas de red consecutivas y el Inicio quedaba en “Cargando…”.
+      // Sólo clases/evaluaciones dependen de conocer los courseIds.
       const lessonsPromise=courseIds.length
         ? supabaseClient.from('lessons')
             .select('id,course_id,title,duration_minutes,sort_order,published,required,video_completion_required,video_min_watch_percent')
             .in('course_id',courseIds).order('sort_order',{ascending:true})
         : Promise.resolve({data:[],error:null});
-      const progressPromise=supabaseClient.from('lesson_progress')
-        .select('lesson_id,completed,completed_at').eq('user_id',currentLutminUser.id).eq('completed',true);
       const assessmentsPromise=courseIds.length
         ? supabaseClient.from('assessments')
             .select('id,course_id,title,description,passing_score,published,max_attempts,random_question_count,time_limit_minutes,show_answer_review')
             .in('course_id',courseIds).eq('published',true)
         : Promise.resolve({data:[],error:null});
-      const certificatesPromise=supabaseClient.from('certificates')
-        .select('id,user_id,course_id,code,full_name,course_title,duration_hours,score,status,issued_at,revoked_at,revoked_reason,certificate_kind,issuer_display_name,issuer_legal_name,issuer_tax_id,private_legend,verification_note,course_version,modality,training_location,instructor_name,responsible_name,responsible_role,expires_at')
-        .eq('user_id',currentLutminUser.id).order('issued_at',{ascending:false});
-      const attemptsPromise=supabaseClient.from('assessment_attempts')
-        .select('id,assessment_id,score,passed,correct_count,total_questions,submitted_at')
-        .eq('user_id',currentLutminUser.id).order('submitted_at',{ascending:false});
 
       const [lessonsRes,progressRes,assessmentsRes,certificatesRes,attemptsRes]=await Promise.all([
         lessonsPromise,progressPromise,assessmentsPromise,certificatesPromise,attemptsPromise

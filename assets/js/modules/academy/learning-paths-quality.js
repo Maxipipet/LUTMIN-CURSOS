@@ -188,7 +188,7 @@ async function loadPendingSurveysV25(){
 
 async function submitSurveyV25(event,surveyId){event.preventDefault();const fd=new FormData(event.target);const {error}=await supabaseClient.from('course_survey_responses').insert({survey_id:surveyId,user_id:currentLutminUser.id,satisfaction:Number(fd.get('satisfaction')),nps:Number(fd.get('nps')),comments:String(fd.get('comments')||'').trim()});if(error)return showToast(error.message||'No pude guardar tu respuesta.');showToast('¡Gracias por tu opinión!');await loadPendingSurveysV25();}
 
-// V55: el Campus base ya no dispara rutas/encuestas en cada refresco del Inicio.
+// V56: el Campus base ya no dispara rutas/encuestas en cada refresco del Inicio.
 // Esos datos se cargan al abrir Cursos/Certificados desde el router del Campus.
 const originalLoadAdminDataV25=loadAdminData;
 loadAdminData=async function(){await originalLoadAdminDataV25();await loadAdminV25();if(typeof refreshAdminWorkspaceV19==='function')refreshAdminWorkspaceV19();};

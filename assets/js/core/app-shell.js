@@ -1,11 +1,11 @@
 // =============================================================
 // LUTMIN · AUTHENTICATED APP SHELL LOADER
-// V55: mantiene el shell fuera del index, pero lo precarga en idle para
+// V56: mantiene el shell fuera del index, pero lo precarga en idle para
 // que Acceso Alumno/Empresa no pague una espera de red al hacer clic.
 // =============================================================
 (function(){
   'use strict';
-  const VERSION='55.0';
+  const VERSION='56.0';
   const URL=`assets/views/campus-shell.html?v=${encodeURIComponent(VERSION)}`;
   let promise=null;
   let prefetchPromise=null;
@@ -44,7 +44,7 @@
   async function preload(){
     if(mounted()||prefetchedHtml)return true;
     if(!canPrefetch())return false;
-    try{await fetchShell();return true;}catch(err){console.warn('[Lutmin V55] No pude precargar el shell:',err?.message||err);return false;}
+    try{await fetchShell();return true;}catch(err){console.warn('[Lutmin V56] No pude precargar el shell:',err?.message||err);return false;}
   }
   async function ensureCampus(){
     if(mounted()){status='ready';return true;}
@@ -63,7 +63,7 @@
         window.dispatchEvent(new CustomEvent('lutmin:campus-shell-ready',{detail:{bytes,version:VERSION,prefetchedAt}}));
         return true;
       }catch(err){
-        error=String(err?.message||err);status='error';console.error('[Lutmin V55] No pude cargar el shell autenticado:',err);return false;
+        error=String(err?.message||err);status='error';console.error('[Lutmin V56] No pude cargar el shell autenticado:',err);return false;
       }finally{promise=null;}
     })();
     return promise;

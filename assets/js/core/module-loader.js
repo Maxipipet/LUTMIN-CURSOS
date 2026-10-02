@@ -6,7 +6,7 @@
 (function(){
   'use strict';
 
-  const VERSION='55.0';
+  const VERSION='56.0';
   const state={status:'idle',promise:null,loaded:new Set(),bundles:new Set(),startedAt:0,finishedAt:0,error:null,retries:0,warmed:false,lastReason:null,lastRole:null};
   const cssFiles=[
     'assets/css/conecta-navigation.css',
@@ -211,12 +211,12 @@
   function loadCssOnce(file){
     const key=`v30-css:${file}`;if(state.loaded.has(key))return Promise.resolve(true);
     const existing=[...document.styleSheets].some(s=>String(s.href||'').includes(file));if(existing){state.loaded.add(key);return Promise.resolve(true);}
-    return new Promise(resolve=>{const link=document.createElement('link');link.rel='stylesheet';link.href=withVersion(file);link.dataset.lutminV30='css';let settled=false;const done=()=>{if(settled)return;settled=true;state.loaded.add(key);resolve(true);};link.onload=done;link.onerror=()=>{console.warn('[Lutmin V55] CSS no disponible:',file);done();};document.head.appendChild(link);setTimeout(done,4500);});
+    return new Promise(resolve=>{const link=document.createElement('link');link.rel='stylesheet';link.href=withVersion(file);link.dataset.lutminV30='css';let settled=false;const done=()=>{if(settled)return;settled=true;state.loaded.add(key);resolve(true);};link.onload=done;link.onerror=()=>{console.warn('[Lutmin V56] CSS no disponible:',file);done();};document.head.appendChild(link);setTimeout(done,4500);});
   }
 
   function preload(files,limit=2){
     state.warmed=true;
-    // V55: un warm especulativo sigue limitado, pero cuando el bundle YA fue pedido
+    // V56: un warm especulativo sigue limitado, pero cuando el bundle YA fue pedido
     // prepriorizamos todos sus archivos. Así la red descarga en paralelo mientras
     // la ejecución conserva el orden determinístico de loadScriptOnce().
     const list=ordered(new Set(files));
@@ -228,6 +228,16 @@
     document.head.querySelectorAll('link[data-lutmin-v30-preload]').forEach(x=>{
       if(!wanted||wanted.has(x.dataset.lutminV30Preload))x.remove();
     });
+  }
+
+  function prefetchLow(files,limit=Infinity){
+    if(!canAdaptivePrefetch())return false;
+    const list=ordered(new Set(files)).filter(file=>!state.loaded.has(`v30-js:${file}`));
+    list.slice(0,Number.isFinite(limit)?Math.max(0,limit):list.length).forEach(file=>{
+      if(document.head.querySelector(`link[data-lutmin-v56-prefetch="${file}"]`))return;
+      const link=document.createElement('link');link.rel='prefetch';link.as='script';link.href=withVersion(file);link.dataset.lutminV56Prefetch=file;document.head.appendChild(link);
+    });
+    return true;
   }
 
   async function clearRuntimeCaches(){
@@ -249,7 +259,7 @@
 
   async function loadSet(set,reason='runtime',bundleName='custom'){
     // La ejecución sigue serializada para conservar el orden de los módulos legacy,
-    // pero la DESCARGA del siguiente bundle empieza inmediatamente. En V54/V55 un
+    // pero la DESCARGA del siguiente bundle empieza inmediatamente. En V54/V56 un
     // segundo clic esperaba a que terminara el bundle anterior antes incluso de pedir
     // sus archivos, haciendo que navegar rápido se sintiera bloqueado.
     const speculative=ordered(set).filter(file=>!state.loaded.has(`v30-js:${file}`));
@@ -266,7 +276,7 @@
       for(const file of files)await loadScriptOnce(file);
       state.bundles.add(bundleName);state.status='ready';state.finishedAt=performance.now();document.documentElement.dataset.lutminModules='ready';setBootBar('ready');clearPreloads(files);
       window.dispatchEvent(new CustomEvent('lutmin:v30:modules-ready',{detail:{reason,bundle:bundleName,duration_ms:Math.round(state.finishedAt-state.startedAt),loaded_now:files.length,loaded_total:[...state.loaded].filter(x=>x.startsWith('v30-js:')).length,total_available:scriptFiles.length,retries:state.retries}}));return true;
-    }).catch(err=>{state.status='error';state.error=String(err?.message||err);document.documentElement.dataset.lutminModules='error';setBootBar('error');clearPreloads(files);window.dispatchEvent(new CustomEvent('lutmin:v30:modules-error',{detail:{reason,bundle:bundleName,error:state.error}}));console.error('[Lutmin V55] Error cargando módulos:',err);return false;}).finally(()=>{state.promise=null;});
+    }).catch(err=>{state.status='error';state.error=String(err?.message||err);document.documentElement.dataset.lutminModules='error';setBootBar('error');clearPreloads(files);window.dispatchEvent(new CustomEvent('lutmin:v30:modules-error',{detail:{reason,bundle:bundleName,error:state.error}}));console.error('[Lutmin V56] Error cargando módulos:',err);return false;}).finally(()=>{state.promise=null;});
     return state.promise;
   }
 
@@ -335,8 +345,13 @@
     // Sólo precarga: no ejecuta runtimes ni toca el DOM autenticado.
     preload(set,set.size);
     cssForSet(set).forEach(loadCssOnce);
-    window.dispatchEvent(new CustomEvent('lutmin:v55:access-warm',{detail:{role,count:set.size}}));
+    window.dispatchEvent(new CustomEvent('lutmin:v56:access-warm',{detail:{role,count:set.size}}));
     return Promise.resolve(true);
+  }
+  function idleWarmStudent(){
+    // Sólo descarga con prioridad baja. No ejecuta nada ni dispara consultas.
+    prefetchLow(union(featureSets.talent,new Set([F.lp])),8);
+    return true;
   }
   async function loadAll(reason='manual'){return loadSet(new Set(scriptFiles),reason,'full');}
 
@@ -348,8 +363,8 @@
       // después de registrar el SW y recibe el registro ya resuelto.
       await loadScriptOnce('assets/js/core/update-manager.js');
       window.dispatchEvent(new CustomEvent('lutmin:v30:sw-registered',{detail:{registration:reg}}));
-      reg.update().catch(()=>{});return reg;
-    }catch(err){console.warn('[Lutmin V55] Service Worker no disponible:',err?.message||err);return false;}
+      return reg;
+    }catch(err){console.warn('[Lutmin V56] Service Worker no disponible:',err?.message||err);return false;}
   }
 
   function canAdaptivePrefetch(){
@@ -378,7 +393,7 @@
     const set=union(featureSets.talent,talentSectionSets[section]||new Set());
     preload(set,set.size);cssForSet(set).forEach(loadCssOnce);return true;
   }
-  const api={version:VERSION,ensureAuthenticated,ensureFeature,ensureFeatureForTab,ensureTalentSection,ensureTalentCvParser,ensureTalentAgentEngine,ensureAdminModule,ensureCompanySection,warm,warmAccess,loadAll,prefetchFeature,prefetchFeatureForTab,prefetchTalentSection,status:()=>({...state,loaded:[...state.loaded],bundles:[...state.bundles],loadedScripts:[...state.loaded].filter(x=>x.startsWith('v30-js:')).length,totalScripts:scriptFiles.length,adminBaseScripts:adminBaseSet.size,companyBaseScripts:companyBaseSet.size,adminModuleSets:Object.fromEntries(Object.entries(adminModuleSets).map(([k,v])=>[k,[...v]])),companySectionSets:Object.fromEntries(Object.entries(companySectionSets).map(([k,v])=>[k,[...v]])),talentSectionSets:Object.fromEntries(Object.entries(talentSectionSets).map(([k,v])=>[k,[...v]]))}),files:{css:[...cssFiles],scripts:[...scriptFiles]},registerServiceWorker,clearRuntimeCaches};
+  const api={version:VERSION,ensureAuthenticated,ensureFeature,ensureFeatureForTab,ensureTalentSection,ensureTalentCvParser,ensureTalentAgentEngine,ensureAdminModule,ensureCompanySection,warm,warmAccess,idleWarmStudent,loadAll,prefetchFeature,prefetchFeatureForTab,prefetchTalentSection,status:()=>({...state,loaded:[...state.loaded],bundles:[...state.bundles],loadedScripts:[...state.loaded].filter(x=>x.startsWith('v30-js:')).length,totalScripts:scriptFiles.length,adminBaseScripts:adminBaseSet.size,companyBaseScripts:companyBaseSet.size,adminModuleSets:Object.fromEntries(Object.entries(adminModuleSets).map(([k,v])=>[k,[...v]])),companySectionSets:Object.fromEntries(Object.entries(companySectionSets).map(([k,v])=>[k,[...v]])),talentSectionSets:Object.fromEntries(Object.entries(talentSectionSets).map(([k,v])=>[k,[...v]]))}),files:{css:[...cssFiles],scripts:[...scriptFiles]},registerServiceWorker,clearRuntimeCaches};
   window.LutminModules=api;
   window.LutminV30Modules=api;
   // Alias de compatibilidad para extensiones históricas todavía desplegadas.
@@ -386,5 +401,11 @@
 
   const publicTalent=new URL(location.href).searchParams.get('talento');
   if(publicTalent){const boot=()=>ensureFeature('public-talent');if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();}
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',registerServiceWorker,{once:true});else registerServiceWorker();
+  // El Service Worker no forma parte del primer render ni del login. Registrarlo en
+  // DOMContentLoaded competía por red/CPU con Acceso Alumno en conexiones normales.
+  const scheduleServiceWorker=()=>{
+    const run=()=>registerServiceWorker();
+    if('requestIdleCallback' in window)requestIdleCallback(run,{timeout:5000});else setTimeout(run,2400);
+  };
+  if(document.readyState==='complete')scheduleServiceWorker();else window.addEventListener('load',scheduleServiceWorker,{once:true});
 })();

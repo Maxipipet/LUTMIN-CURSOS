@@ -4,7 +4,7 @@
 // =============================================================
 (function(){
   'use strict';
-  const VERSION='55.0';
+  const VERSION='56.0';
   const S={activeTab:null,changes:0,restores:0,prefetches:0,lastChangeAt:0};
   const scrollMemory=new Map();
   let scroller=null;

@@ -1,12 +1,12 @@
 // =============================================================
-// LUTMIN V55.0 · UPDATE MANAGER
+// LUTMIN V56.0 · UPDATE MANAGER
 // - sólo muestra una actualización cuando conoce una versión realmente posterior
 // - nunca deja el CTA trabado en “Actualizando…”
 // - una misma versión se activa en silencio
 // =============================================================
 (function(){
   'use strict';
-  const VERSION='55.0';
+  const VERSION='56.0';
   const TARGET_KEY='lutmin:update-target';
   const S={registration:null,waiting:null,waitingVersion:null,lastCheck:0,controllerReload:false,applying:false,silentActivation:false,online:navigator.onLine,assetRetries:0,lastModuleDuration:null,applyTimer:null};
 
@@ -93,7 +93,7 @@
     let target=null;try{target=sessionStorage.getItem(TARGET_KEY);}catch(_){ }
     const u=new URL(location.href);const marker=u.searchParams.get('_lutminv');
     // Limpiamos marcadores de actualizaciones ya aplicadas o antiguas. Un target
-    // viejo de V54 no debe sobrevivir en una sesión V55.
+    // viejo de V54 no debe sobrevivir en una sesión V56.
     const targetSettled=target&&!newerThan(target,VERSION);
     const markerSettled=marker&&!newerThan(marker,VERSION);
     if(targetSettled){try{sessionStorage.removeItem(TARGET_KEY)}catch(_){ }}
@@ -127,6 +127,7 @@
     if(S.controllerReload)return;hardReload(S.waitingVersion||(()=>{try{return sessionStorage.getItem(TARGET_KEY)}catch(_){return null}})()||VERSION);
   });
   document.addEventListener('click',e=>{if(e.target.closest?.('[data-admin-v19-btn],#adminDesktopTab,#adminMobileTab'))setTimeout(renderAdminCard,60);},true);
-  setTimeout(()=>{renderAdminCard();check(false);},1200);
+  const firstBackgroundCheck=()=>{renderAdminCard();check(false);};
+  if('requestIdleCallback' in window)requestIdleCallback(firstBackgroundCheck,{timeout:8000});else setTimeout(firstBackgroundCheck,6000);
   const api={version:VERSION,check,applyUpdate,clearRuntimeCaches,state:()=>({...S,applyTimer:Boolean(S.applyTimer)})};window.LutminUpdate=api;window.LutminV32Update=api;window.LutminV31Update=api;window.LutminV30Update=api;
 })();
