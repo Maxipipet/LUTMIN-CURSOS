@@ -5,7 +5,7 @@
 // =============================================================
 (function(){
   'use strict';
-  const VERSION='56.0';
+  const VERSION='59.0';
   const modules=['overview','operations','academic','people','companies','commercial','finance','talent','communications','system'];
   const dynamicModules=new Set(['development','agents']);
   const paths=Object.fromEntries(modules.map(name=>[name,`assets/views/admin/${name}.html`]));
@@ -64,8 +64,12 @@
     }
     const requestId=++state.requestId;target.dataset.adminModuleReadyV32='0';target.dataset.adminModuleV32=name;target.innerHTML=skeleton(name);
     try{
-      const [html]=await Promise.all([getHtml(name,{force}),window.LutminModules?.ensureAdminModule?.(name)||Promise.resolve(true)]);state.runtimeLoads+=1;if(requestId!==state.requestId)return false;
-      target.innerHTML=html;target.dataset.adminModuleReadyV32='1';state.active=name;state.mounts+=1;state.error=null;await hydrate(name);return true;
+      const html=await getHtml(name,{force});if(requestId!==state.requestId)return false;
+      target.innerHTML=html;
+      const runtimeReady=await window.LutminModules?.ensureAdminModule?.(name);
+      if(runtimeReady===false)throw new Error('No se pudo cargar el módulo');
+      state.runtimeLoads+=1;if(requestId!==state.requestId)return false;
+      target.dataset.adminModuleReadyV32='1';state.active=name;state.mounts+=1;state.error=null;await hydrate(name);return true;
     }catch(err){
       if(requestId!==state.requestId)return false;state.error=String(err?.message||err);target.dataset.adminModuleReadyV32='error';
       target.innerHTML=`<div class="mt-6 rounded-3xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-900"><strong>No pude cargar este módulo.</strong><p class="mt-1 text-xs">Revisá la conexión y volvé a intentar.</p><button type="button" data-admin-v32-retry class="mt-3 px-4 py-2 rounded-xl bg-amber-900 text-white text-xs font-bold">Reintentar</button></div>`;

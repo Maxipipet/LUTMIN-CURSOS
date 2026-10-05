@@ -12,7 +12,7 @@ let v25SurveyResponses=[];
 let v25UiReady=false;
 
 function initV25Ui(){
-  if(v25UiReady) return;
+  if(v25UiReady && (!document.querySelector('section[data-campus-panel="admin"]') || document.getElementById('adminAcademicV25'))) return;
   v25UiReady=true;
 
   const coursesPanel=document.querySelector('section[data-campus-panel="courses"]');
@@ -113,6 +113,8 @@ function v25FillSelects(){
 }
 
 async function loadAdminV25(){
+  if(currentLutminUser?.role!=='admin')return;
+  initV25Ui();
   if(!supabaseClient||currentLutminUser?.role!=='admin') return;
   initV25Ui();
   const [paths,pcs,assigns,surveys,responses,quality]=await Promise.all([
@@ -140,6 +142,7 @@ function renderAdminPathsV25(){
 }
 
 function renderQualityV25(rows){
+  if(!document.getElementById('qualityResponsesV25'))return;
   const total=v25SurveyResponses.length;
   const sat=total?v25SurveyResponses.reduce((s,r)=>s+Number(r.satisfaction||0),0)/total:null;
   const nps=total?v25SurveyResponses.reduce((s,r)=>s+Number(r.nps||0),0)/total:null;
@@ -358,16 +361,38 @@ function renderCompanyCompetencyMatrixV33(){const stats=document.getElementById(
 function exportCompanyCompetencyCsvV33(){const sel=document.getElementById('companyCompetencySelectV33'),cid=sel?.value,comp=(companyCompetencyDataV33.catalog||[]).find(c=>c.id===cid);if(!comp)return;const rows=[['Colaborador','Email','Competencia','Estado','Nivel declarado','Puntaje validación /10','Validado el','Vence']];for(const m of companyCompetencyDataV33.members||[]){const s=(m.skills||[]).find(x=>x.competency_id===cid),v=s?.validation;let state=v?(v.status==='valid'&&v.expires_at&&new Date(v.expires_at)<new Date()?'Vencida':'Validada'):s?'Declarada':'Sin registro';rows.push([m.full_name||'',m.email||'',comp.name,state,s?.level||'',v?.score_10??'',v?.validated_at?new Date(v.validated_at).toLocaleDateString('es-AR'):'',v?.expires_at?new Date(v.expires_at).toLocaleDateString('es-AR'):'']);}const csv='\ufeff'+rows.map(r=>r.map(v=>`"${String(v??'').replace(/"/g,'""')}"`).join(';')).join('\n');const blob=new Blob([csv],{type:'text/csv;charset=utf-8'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`Lutmin_Matriz_${slugifyLutmin(comp.name)}_${new Date().toISOString().slice(0,10)}.csv`;a.click();URL.revokeObjectURL(a.href);}
 
 // Mostrar validaciones destacadas dentro del perfil candidato sin reescribir el perfil entero.
-const _renderCompanyCandidateProfileV33=renderCompanyCandidateProfile;
+// Instalar la extensión cuando su workspace esté disponible, una sola vez.
+(()=>{let installed=false;const install=()=>{
+  if(installed||typeof window.renderCompanyCandidateProfile!=='function')return;
+  installed=true;
+  const _renderCompanyCandidateProfileV33=renderCompanyCandidateProfile;
 renderCompanyCandidateProfile=function(){_renderCompanyCandidateProfileV33();const root=document.getElementById('companyCandidateContent');if(!root||!companyCandidateData)return;const validated=(companyCandidateData.skills||[]).filter(s=>['valid','expired'].includes(s.validation_status));if(!validated.length)return;const card=document.createElement('div');card.className='mt-5 rounded-2xl border border-emerald-100 bg-emerald-50/60 p-4';card.innerHTML=`<div class="flex items-start gap-3"><i class="fa-solid fa-shield-check text-emerald-600 mt-1"></i><div><p class="font-extrabold text-sm text-lutmin-dark">Competencias con validación teórica Lutmin</p><p class="mt-1 text-[10px] text-slate-500">Puntajes obtenidos en evaluaciones internas. No equivalen a matrícula, habilitación profesional ni certificación oficial.</p><div class="mt-3 flex flex-wrap gap-2">${validated.map(s=>talentSkillBadgeHtmlV33(s,'company')).join('')}</div></div></div>`;root.firstElementChild?.insertAdjacentElement('afterend',card);};
+};install();window.addEventListener('lutmin:v30:modules-ready',install);})();
 
 // Integración con los loaders existentes.
-const _renderTalentCenterV33=renderTalentCenter;
+// Instalar la extensión cuando su workspace esté disponible, una sola vez.
+(()=>{let installed=false;const install=()=>{
+  if(installed||typeof window.renderTalentCenter!=='function')return;
+  installed=true;
+  const _renderTalentCenterV33=renderTalentCenter;
 renderTalentCenter=function(){_renderTalentCenterV33();renderTalentCompetenciesV33();};
-const _loadTalentCenterV33=loadTalentCenter;
+};install();window.addEventListener('lutmin:v30:modules-ready',install);})();
+// Instalar la extensión cuando su workspace esté disponible, una sola vez.
+(()=>{let installed=false;const install=()=>{
+  if(installed||typeof window.loadTalentCenter!=='function')return;
+  installed=true;
+  const _loadTalentCenterV33=loadTalentCenter;
 loadTalentCenter=async function(){await _loadTalentCenterV33();setTimeout(()=>loadCompetencyDataV33(),80);};
+};install();window.addEventListener('lutmin:v30:modules-ready',install);})();
 // V34: Empresa carga competencias sólo al abrir la sección correspondiente.
-const _loadAdminDataV33=loadAdminData;
+// Instalar la extensión cuando su workspace esté disponible, una sola vez.
+(()=>{let installed=false;const install=()=>{
+  if(installed||typeof window.loadAdminData!=='function')return;
+  installed=true;
+  const _loadAdminDataV33=loadAdminData;
 loadAdminData=async function(){await _loadAdminDataV33();setTimeout(()=>loadAdminCompetencyV33(),120);if(typeof refreshAdminWorkspaceV19==='function')refreshAdminWorkspaceV19();};
+};install();window.addEventListener('lutmin:v30:modules-ready',install);})();
 
 document.addEventListener('DOMContentLoaded',()=>{initV33Ui();},{once:true});
+
+window.addEventListener('lutmin:v32:view-ready',()=>{initV25Ui();initV33Ui();});

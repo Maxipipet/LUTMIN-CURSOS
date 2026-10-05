@@ -6,7 +6,7 @@
 (function(){
   'use strict';
 
-  const VERSION='56.0';
+  const VERSION='59.0';
   const state={status:'idle',promise:null,loaded:new Set(),bundles:new Set(),startedAt:0,finishedAt:0,error:null,retries:0,warmed:false,lastReason:null,lastRole:null};
   const cssFiles=[
     'assets/css/conecta-navigation.css',

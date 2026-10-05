@@ -105,16 +105,26 @@ function renderQuestionBankV39(){const root=document.getElementById('qBankRowsV3
 async function addBankQuestionV39(id){const assessmentId=document.getElementById('qBankAssessmentV39')?.value;if(!assessmentId)return showToast('Elegí primero la evaluación destino.');const {error}=await supabaseClient.rpc('admin_add_bank_question_to_assessment_v39',{p_bank_id:id,p_assessment_id:assessmentId});if(error)return showToast(error.message||'No pude agregar la pregunta.');showToast('Pregunta agregada desde el banco.');await loadAdminData();await loadQuestionBankV39();}
 
 // Completar defaults al abrir editor de clase.
-const _openAdminLessonEditorV39=openAdminLessonEditor;
+// Instalar la extensión cuando su workspace esté disponible, una sola vez.
+(()=>{let installed=false;const install=()=>{
+  if(installed||typeof window.openAdminLessonEditor!=='function')return;
+  installed=true;
+  const _openAdminLessonEditorV39=openAdminLessonEditor;
 openAdminLessonEditor=function(id){const r=_openAdminLessonEditorV39.apply(this,arguments);const l=adminLessons.find(x=>x.id===id);setTimeout(()=>{const p=document.getElementById('editLessonPublishedV39'),req=document.getElementById('editLessonRequiredV39');if(p)p.checked=l?.published!==false;if(req)req.checked=l?.required!==false;},0);return r;};
+};install();window.addEventListener('lutmin:v30:modules-ready',install);})();
 
 // Etiquetas reutilizadas por CV, perfil público y Conecta empresa.
 talentSkillTextV33=function(x){if(!x)return '';const st=x.validation_status||null;if(st==='valid'&&x.validated_score_10!=null)return `${x.skill} (Validada ${Number(x.validated_score_10).toFixed(1)}/10)`;if(st==='expired'&&x.validated_score_10!=null)return `${x.skill} (Validación vencida ${Number(x.validated_score_10).toFixed(1)}/10)`;if(Array.isArray(x.course_evidence)&&x.course_evidence.length)return `${x.skill} (Adquirida por curso)`;return `${x.skill} (Declarada ${x.level||0}/5)`;};
 talentSkillBadgeHtmlV33=function(x,mode='public'){const st=x?.validation_status||null,score=x?.validated_score_10;if(st==='valid'&&score!=null)return `<span class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-50 text-emerald-800 text-xs font-extrabold border border-emerald-100"><i class="fa-solid fa-circle-check text-emerald-500"></i>${escapeHtml(x.skill)} · ${Number(score).toFixed(1)}/10 <span class="font-semibold opacity-70">validada</span></span>`;if(st==='expired'&&score!=null)return `<span class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-amber-50 text-amber-800 text-xs font-bold border border-amber-100"><i class="fa-solid fa-clock"></i>${escapeHtml(x.skill)} · ${Number(score).toFixed(1)}/10 <span class="font-semibold opacity-70">vencida</span></span>`;if(Array.isArray(x?.course_evidence)&&x.course_evidence.length)return `<span class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-violet-50 text-violet-800 text-xs font-bold border border-violet-100"><i class="fa-solid fa-graduation-cap text-violet-500"></i>${escapeHtml(x.skill)} · ${Number(x.level||0)}/5 <span class="font-semibold opacity-70">por curso</span></span>`;return `<span class="inline-flex items-center gap-1 px-3 py-2 rounded-xl ${mode==='compact'?'bg-white':'bg-blue-50'} text-blue-800 text-xs font-bold">${escapeHtml(x?.skill||'Competencia')} · ${Number(x?.level||0)}/5 <span class="font-semibold opacity-60">declarada</span></span>`;};
 
 // Recargar banco cuando Administración termina de cargar.
-const _loadAdminDataV39=loadAdminData;
+// Instalar la extensión cuando su workspace esté disponible, una sola vez.
+(()=>{let installed=false;const install=()=>{
+  if(installed||typeof window.loadAdminData!=='function')return;
+  installed=true;
+  const _loadAdminDataV39=loadAdminData;
 loadAdminData=async function(){const r=await _loadAdminDataV39.apply(this,arguments);if(currentLutminUser?.role==='admin'){initQuestionBankV39();loadQuestionBankV39();}return r;};
+};install();window.addEventListener('lutmin:v30:modules-ready',install);})();
 
 function initV39(){initQuestionBankV39();if(currentLutminUser?.role==='admin'){renderAdminCourses();loadQuestionBankV39();}}
 document.addEventListener('DOMContentLoaded',()=>setTimeout(initV39,280),{once:true});

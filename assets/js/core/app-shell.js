@@ -5,7 +5,7 @@
 // =============================================================
 (function(){
   'use strict';
-  const VERSION='56.0';
+  const VERSION='59.0';
   const URL=`assets/views/campus-shell.html?v=${encodeURIComponent(VERSION)}`;
   let promise=null;
   let prefetchPromise=null;

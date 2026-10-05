@@ -172,10 +172,20 @@ renderCompanyCompetencyMatrixV33=function(){
 };
 
 // Integración loaders sin reestructurar la base visual.
-const _loadTalentCenterV34=loadTalentCenter;
+// Instalar la extensión cuando su workspace esté disponible, una sola vez.
+(()=>{let installed=false;const install=()=>{
+  if(installed||typeof window.loadTalentCenter!=='function')return;
+  installed=true;
+  const _loadTalentCenterV34=loadTalentCenter;
 loadTalentCenter=async function(){await _loadTalentCenterV34();setTimeout(()=>loadMyDevelopmentV34(),140);};
+};install();window.addEventListener('lutmin:v30:modules-ready',install);})();
 // V34: Desarrollo Empresa se activa bajo demanda desde V19.
-const _loadAdminDataV34=loadAdminData;
+// Instalar la extensión cuando su workspace esté disponible, una sola vez.
+(()=>{let installed=false;const install=()=>{
+  if(installed||typeof window.loadAdminData!=='function')return;
+  installed=true;
+  const _loadAdminDataV34=loadAdminData;
 loadAdminData=async function(){await _loadAdminDataV34();setTimeout(()=>loadAdminCompLinksV34(),160);if(typeof refreshAdminWorkspaceV19==='function')refreshAdminWorkspaceV19();};
+};install();window.addEventListener('lutmin:v30:modules-ready',install);})();
 
 document.addEventListener('DOMContentLoaded',()=>initV34Ui(),{once:true});

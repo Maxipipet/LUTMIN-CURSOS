@@ -1,12 +1,12 @@
 // =============================================================
-// LUTMIN V56.0 · UPDATE MANAGER
+// LUTMIN V59.0 · UPDATE MANAGER
 // - sólo muestra una actualización cuando conoce una versión realmente posterior
 // - nunca deja el CTA trabado en “Actualizando…”
 // - una misma versión se activa en silencio
 // =============================================================
 (function(){
   'use strict';
-  const VERSION='56.0';
+  const VERSION='59.0';
   const TARGET_KEY='lutmin:update-target';
   const S={registration:null,waiting:null,waitingVersion:null,lastCheck:0,controllerReload:false,applying:false,silentActivation:false,online:navigator.onLine,assetRetries:0,lastModuleDuration:null,applyTimer:null};
 

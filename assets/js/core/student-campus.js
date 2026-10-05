@@ -1,5 +1,5 @@
 // =============================================================
-// LUTMIN V56.0 · STUDENT CAMPUS RUNTIME
+// LUTMIN V59.0 · STUDENT CAMPUS RUNTIME
 // Cursos, clases, evaluaciones y agenda. Carga sólo para Alumno.
 // =============================================================
     // El dashboard trabaja con metadatos livianos. El contenido pesado de cada
@@ -56,19 +56,20 @@
 
     async function loadCampusData() {
       if (!currentLutminUser || !supabaseClient) return;
+      const loadingUserId=currentLutminUser.id;
       setCampusToday();
 
       // V56: las lecturas que sólo dependen del usuario arrancan al mismo tiempo que
       // inscripciones. Antes esperábamos primero enrollments y recién después abríamos
       // estas cuatro consultas, agregando una ronda completa de latencia.
       const progressPromise=supabaseClient.from('lesson_progress')
-        .select('lesson_id,completed,completed_at').eq('user_id',currentLutminUser.id).eq('completed',true);
+        .select('lesson_id,completed,completed_at').eq('user_id',currentLutminUser.id).eq('completed',true).then(result=>result);
       const certificatesPromise=supabaseClient.from('certificates')
         .select('id,user_id,course_id,code,full_name,course_title,duration_hours,score,status,issued_at,revoked_at,revoked_reason,certificate_kind,issuer_display_name,issuer_legal_name,issuer_tax_id,private_legend,verification_note,course_version,modality,training_location,instructor_name,responsible_name,responsible_role,expires_at')
-        .eq('user_id',currentLutminUser.id).order('issued_at',{ascending:false});
+        .eq('user_id',currentLutminUser.id).order('issued_at',{ascending:false}).then(result=>result);
       const attemptsPromise=supabaseClient.from('assessment_attempts')
         .select('id,assessment_id,score,passed,correct_count,total_questions,submitted_at')
-        .eq('user_id',currentLutminUser.id).order('submitted_at',{ascending:false});
+        .eq('user_id',currentLutminUser.id).order('submitted_at',{ascending:false}).then(result=>result);
       const enrollmentsPromise=supabaseClient
         .from('enrollments')
         .select('id,status,enrolled_at,price_amount,payment_currency,payment_status,payment_due_date,access_granted_at,course:courses(id,slug,title,description,duration_hours,level,category)')
@@ -82,6 +83,7 @@
         return;
       }
 
+      if(currentLutminUser?.id!==loadingUserId)return;
       const validEnrollments = (enrollments || []).filter(item => item.course);
       const courseIds = validEnrollments.map(item => item.course.id);
       // Primer contenido útil en cuanto llega la inscripción; progreso fino continúa debajo.
@@ -108,6 +110,7 @@
       if(certificatesRes.error)console.error('Error cargando certificados:',certificatesRes.error);
       if(attemptsRes.error)console.error('Error cargando intentos:',attemptsRes.error);
 
+      if(currentLutminUser?.id!==loadingUserId)return;
       const lessons=(lessonsRes.data||[]).map(row=>Object.assign(row,campusLessonDetailCache.get(row.id)||{}));
       const completedSet=new Set((progressRes.data||[]).map(row=>row.lesson_id));
       campusAssessments=assessmentsRes.data||[];

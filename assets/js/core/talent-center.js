@@ -1,5 +1,5 @@
 // =============================================================
-// LUTMIN V56.0 · TALENT CENTER RUNTIME
+// LUTMIN V59.0 · TALENT CENTER RUNTIME
 // Conecta autenticado: Alumno, Empresa y Administración.
 // Se descarga sólo cuando un flujo de talento realmente lo necesita.
 // =============================================================
@@ -269,4 +269,4 @@
 // V56: referencia estable al cargador base. Los módulos históricos pueden decorar
 // window.loadTalentCenter por compatibilidad, pero la navegación usa esta fuente
 // canónica para no disparar una cadena creciente de wrappers y consultas.
-window.LutminTalentCenterBase={version:'56.0',load:loadTalentCenter,render:renderTalentCenter};
+window.LutminTalentCenterBase={version:'59.0',load:loadTalentCenter,render:renderTalentCenter};

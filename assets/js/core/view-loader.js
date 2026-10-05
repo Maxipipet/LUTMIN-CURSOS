@@ -4,7 +4,7 @@
 // =============================================================
 (function(){
   'use strict';
-  const VERSION='56.0';
+  const VERSION='59.0';
   const paths={
     talent:'assets/views/talent.html',
     'company-conecta':'assets/views/company-conecta.html',

@@ -5,7 +5,7 @@
 // =============================================================
 (function(){
   'use strict';
-  const VERSION='56.0';
+  const VERSION='59.0';
   const state={entries:new Map(),metrics:new Map(),hits:0,misses:0,reused:0};
   const defaults={dashboard:18000,admin:20000,company:20000,'company-conecta':22000,instructor:22000,agenda:30000,activities:22000,talent:26000,notifications:18000,support:30000};
 
@@ -16,7 +16,7 @@
     if(e.inFlight){state.reused+=1;return e.inFlight;}
     if(!force&&e.lastSuccess&&now-e.lastSuccess<ttl){state.hits+=1;window.dispatchEvent(new CustomEvent('lutmin:v30:data-cache-hit',{detail:{key,age_ms:now-e.lastSuccess,ttl}}));return null;}
     state.misses+=1;const started=performance.now();
-    e.inFlight=Promise.resolve().then(loader).then(result=>{e.lastSuccess=Date.now();e.lastDuration=Math.round(performance.now()-started);e.runs+=1;state.metrics.set(key,{lastDuration:e.lastDuration,runs:e.runs,lastSuccess:e.lastSuccess});window.dispatchEvent(new CustomEvent('lutmin:v30:data-loaded',{detail:{key,duration_ms:e.lastDuration}}));return result;}).catch(err=>{e.errors+=1;throw err;}).finally(()=>{e.inFlight=null;});
+    e.inFlight=Promise.resolve().then(loader).then(result=>{if(result===false)return false;e.lastSuccess=Date.now();e.lastDuration=Math.round(performance.now()-started);e.runs+=1;state.metrics.set(key,{lastDuration:e.lastDuration,runs:e.runs,lastSuccess:e.lastSuccess});window.dispatchEvent(new CustomEvent('lutmin:v30:data-loaded',{detail:{key,duration_ms:e.lastDuration}}));return result;}).catch(err=>{e.errors+=1;throw err;}).finally(()=>{e.inFlight=null;});
     return e.inFlight;
   }
   function mark(key){const e=entry(key);e.lastSuccess=Date.now();}
@@ -26,13 +26,12 @@
   function status(){return {version:VERSION,hits:state.hits,misses:state.misses,reused:state.reused,entries:[...state.entries.entries()].map(([key,v])=>({key,lastSuccess:v.lastSuccess,lastDuration:v.lastDuration,runs:v.runs,errors:v.errors,inFlight:Boolean(v.inFlight)}))};}
 
   async function openTab(tab){
+    if(window.LutminCampusNavigation)return window.LutminCampusNavigation.open(tab);
     const role=(typeof currentLutminUser!=='undefined'&&currentLutminUser)?currentLutminUser.role:null;
     // Navegación primero, hidratación después: la ruta nunca espera red para responder.
     if(typeof goToCampusTab==='function')goToCampusTab(tab);
-    const [viewReady,featureReady]=await Promise.all([
-      window.LutminViews?.ensureForTab?.(tab),
-      window.LutminModules?.ensureFeatureForTab?.(tab,role)
-    ]);
+    const viewReady=await window.LutminViews?.ensureForTab?.(tab);
+    const featureReady=viewReady===false?false:await window.LutminModules?.ensureFeatureForTab?.(tab,role);
     if(viewReady===false||featureReady===false)return false;
     if(tab==='courses'&&role==='student')await Promise.allSettled([window.loadStudentPathsV25?.()]);
     if(tab==='certificates'&&role==='student')await Promise.allSettled([window.loadPendingSurveysV25?.(),window.loadStudentComplianceV40?.()]);

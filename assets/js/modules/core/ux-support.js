@@ -87,10 +87,20 @@ function renderV37CompanyPulse(){const root=document.getElementById('v37CompanyP
 }
 function renderV37Pulses(){initConectaPulseV37();renderV37TalentPulse();renderV37CompanyPulse();}
 
-const _renderTalentCenterV37=renderTalentCenter;
+// Instalar la extensión cuando su workspace esté disponible, una sola vez.
+(()=>{let installed=false;const install=()=>{
+  if(installed||typeof window.renderTalentCenter!=='function')return;
+  installed=true;
+  const _renderTalentCenterV37=renderTalentCenter;
 renderTalentCenter=function(){const r=_renderTalentCenterV37.apply(this,arguments);renderV37TalentPulse();return r;};
-const _renderCompanyConectaHubV37=renderCompanyConectaHub;
+};install();window.addEventListener('lutmin:v30:modules-ready',install);})();
+// Instalar la extensión cuando su workspace esté disponible, una sola vez.
+(()=>{let installed=false;const install=()=>{
+  if(installed||typeof window.renderCompanyConectaHub!=='function')return;
+  installed=true;
+  const _renderCompanyConectaHubV37=renderCompanyConectaHub;
 renderCompanyConectaHub=function(){const r=_renderCompanyConectaHubV37.apply(this,arguments);renderV37CompanyPulse();return r;};
+};install();window.addEventListener('lutmin:v30:modules-ready',install);})();
 
 // Agenda de entrevistas mejorada para empresa.
 function v37InterviewStatusLabel(s){return({scheduled:'Programada',completed:'Realizada',cancelled:'Cancelada',no_show:'No se presentó',rescheduled:'A reprogramar'})[s]||s;}
@@ -110,16 +120,51 @@ async function saveInterviewNoteV37(){const id=document.getElementById('v37Inter
 // ---------------------------------------------------------
 // Medición de loaders principales. No bloquea ni cambia datos.
 // ---------------------------------------------------------
-const _loadCampusDataV37=loadCampusData;loadCampusData=async function(){return v37Measure('Campus',()=>_loadCampusDataV37.apply(this,arguments));};
-const _loadAdminDataV37=loadAdminData;loadAdminData=async function(){return v37Measure('Administración',()=>_loadAdminDataV37.apply(this,arguments));};
-const _loadCompanyPortalDataV37=loadCompanyPortalData;loadCompanyPortalData=async function(){return v37Measure('Mi empresa',()=>_loadCompanyPortalDataV37.apply(this,arguments));};
-const _loadCompanyConectaDataV37=loadCompanyConectaData;loadCompanyConectaData=async function(){return v37Measure('Conecta empresa',()=>_loadCompanyConectaDataV37.apply(this,arguments));};
-const _loadTalentCenterV37Perf=loadTalentCenter;loadTalentCenter=async function(){return v37Measure('Conecta alumno',()=>_loadTalentCenterV37Perf.apply(this,arguments));};
-const _loadNotificationCenterV37=loadNotificationCenter;loadNotificationCenter=async function(){const r=await v37Measure('Notificaciones',()=>_loadNotificationCenterV37.apply(this,arguments));renderV37Pulses();return r;};
+// Instalar la extensión cuando su workspace esté disponible, una sola vez.
+(()=>{let installed=false;const install=()=>{
+  if(installed||typeof window.loadCampusData!=='function')return;
+  installed=true;
+  const _loadCampusDataV37=loadCampusData;loadCampusData=async function(){return v37Measure('Campus',()=>_loadCampusDataV37.apply(this,arguments));};
+};install();window.addEventListener('lutmin:v30:modules-ready',install);})();
+// Instalar la extensión cuando su workspace esté disponible, una sola vez.
+(()=>{let installed=false;const install=()=>{
+  if(installed||typeof window.loadAdminData!=='function')return;
+  installed=true;
+  const _loadAdminDataV37=loadAdminData;loadAdminData=async function(){return v37Measure('Administración',()=>_loadAdminDataV37.apply(this,arguments));};
+};install();window.addEventListener('lutmin:v30:modules-ready',install);})();
+// Instalar la extensión cuando su workspace esté disponible, una sola vez.
+(()=>{let installed=false;const install=()=>{
+  if(installed||typeof window.loadCompanyPortalData!=='function')return;
+  installed=true;
+  const _loadCompanyPortalDataV37=loadCompanyPortalData;loadCompanyPortalData=async function(){return v37Measure('Mi empresa',()=>_loadCompanyPortalDataV37.apply(this,arguments));};
+};install();window.addEventListener('lutmin:v30:modules-ready',install);})();
+// Instalar la extensión cuando su workspace esté disponible, una sola vez.
+(()=>{let installed=false;const install=()=>{
+  if(installed||typeof window.loadCompanyConectaData!=='function')return;
+  installed=true;
+  const _loadCompanyConectaDataV37=loadCompanyConectaData;loadCompanyConectaData=async function(){return v37Measure('Conecta empresa',()=>_loadCompanyConectaDataV37.apply(this,arguments));};
+};install();window.addEventListener('lutmin:v30:modules-ready',install);})();
+// Instalar la extensión cuando su workspace esté disponible, una sola vez.
+(()=>{let installed=false;const install=()=>{
+  if(installed||typeof window.loadTalentCenter!=='function')return;
+  installed=true;
+  const _loadTalentCenterV37Perf=loadTalentCenter;loadTalentCenter=async function(){return v37Measure('Conecta alumno',()=>_loadTalentCenterV37Perf.apply(this,arguments));};
+};install();window.addEventListener('lutmin:v30:modules-ready',install);})();
+// Instalar la extensión cuando su workspace esté disponible, una sola vez.
+(()=>{let installed=false;const install=()=>{
+  if(installed||typeof window.loadNotificationCenter!=='function')return;
+  installed=true;
+  const _loadNotificationCenterV37=loadNotificationCenter;loadNotificationCenter=async function(){const r=await v37Measure('Notificaciones',()=>_loadNotificationCenterV37.apply(this,arguments));renderV37Pulses();return r;};
+};install();window.addEventListener('lutmin:v30:modules-ready',install);})();
 
 // La empresa puede abrir notificaciones que apuntan a Conecta.
-const _openNotificationItemV37=openNotificationItem;
+// Instalar la extensión cuando su workspace esté disponible, una sola vez.
+(()=>{let installed=false;const install=()=>{
+  if(installed||typeof window.openNotificationItem!=='function')return;
+  installed=true;
+  const _openNotificationItemV37=openNotificationItem;
 openNotificationItem=async function(source,id,actionTab){if(currentLutminUser?.role==='company_admin'&&actionTab==='talent')actionTab='company-conecta';return _openNotificationItemV37(source,id,actionTab);};
+};install();window.addEventListener('lutmin:v30:modules-ready',install);})();
 
 function initV37(){initConectaPulseV37();initNotificationFiltersV37();initPerfV37();renderV37Pulses();}
 document.addEventListener('DOMContentLoaded',()=>setTimeout(initV37,80),{once:true});

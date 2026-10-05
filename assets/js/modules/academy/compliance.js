@@ -149,8 +149,13 @@ async function openMyPublicProfileV40(){
 // V56: Cumplimiento del Alumno se consulta al abrir Certificados, no en cada
 // refresco del dashboard. Evita una RPC extra en el camino crítico de Inicio.
 // V34: Cumplimiento Empresa se activa bajo demanda desde V19.
-const _loadAdminDataV40=loadAdminData;
+// Instalar la extensión cuando su workspace esté disponible, una sola vez.
+(()=>{let installed=false;const install=()=>{
+  if(installed||typeof window.loadAdminData!=='function')return;
+  installed=true;
+  const _loadAdminDataV40=loadAdminData;
 loadAdminData=async function(){const r=await _loadAdminDataV40.apply(this,arguments);if(currentLutminUser?.role==='admin')await loadAdminComplianceV40();return r;};
+};install();window.addEventListener('lutmin:v30:modules-ready',install);})();
 if(typeof renderTalentCenter==='function'){
   const _renderTalentCenterV40=renderTalentCenter;
   renderTalentCenter=function(){const r=_renderTalentCenterV40.apply(this,arguments);updatePublicProfileButtonV40();return r;};

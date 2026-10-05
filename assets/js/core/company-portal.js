@@ -1,5 +1,5 @@
 // =============================================================
-// LUTMIN V56.0 · COMPANY PORTAL RUNTIME
+// LUTMIN V59.0 · COMPANY PORTAL RUNTIME
 // Portal operativo de empresa. Carga sólo para acceso Empresa.
 // =============================================================
     // =========================================================
@@ -28,12 +28,6 @@
       return 'Sin comenzar';
     }
 
-    function resetCompanyBranding(){
-      document.getElementById('companySidebarBrand')?.classList.add('hidden'); document.getElementById('lutminSidebarLogo')?.classList.remove('hidden');
-      const label=document.getElementById('campusSidebarProductLabel'); if(label){label.textContent='Campus Lutmin';label.classList.add('mt-8');}
-      document.getElementById('companyMobileBrand')?.classList.add('hidden'); document.getElementById('companyMobileBrand')?.classList.remove('flex');
-      const ml=document.getElementById('campusMobileProductLabel'); if(ml)ml.textContent='Campus Lutmin';
-    }
     function paintCompanyBranding(company){
       if(!company)return; const name=company.display_name||company.name||'Mi empresa', initials=companyInitials(name), url=companyBrandingPublicUrl(company.logo_path);
       const brand=document.getElementById('companySidebarBrand'); brand?.classList.remove('hidden'); document.getElementById('lutminSidebarLogo')?.classList.add('hidden');
@@ -148,3 +142,5 @@
       const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `Lutmin_Empresa_${new Date().toISOString().slice(0,10)}.csv`; a.click(); URL.revokeObjectURL(a.href);
     }
 
+
+window.LutminCompanyPortal={reset(){companyPortalData=null;companyPortalCertificates=[];}};

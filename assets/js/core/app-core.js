@@ -482,7 +482,7 @@
         supabaseClient.rpc('get_my_access_context'),
         supabaseClient.rpc('my_instructor_access_v50')
       ]);
-      if (baseRes.error) console.error('Access context',baseRes.error);
+      if (baseRes.error) throw new Error('No pude verificar tus accesos. Revisá la conexión y volvé a intentar.');
       if (instructorRes.error && !String(instructorRes.error.message||'').toLowerCase().includes('function')) console.error('Instructor context',instructorRes.error);
       const data=baseRes.data||{}; const instructor=instructorRes.data||{};
       return { student:Boolean(data?.student), admin:Boolean(data?.admin), companies:Array.isArray(data?.companies)?data.companies:[], instructor:Boolean(instructor?.instructor), instructor_groups:Array.isArray(instructor?.groups)?instructor.groups:[] };
@@ -492,8 +492,12 @@
       return (ctx.student?1:0)+(ctx.admin?1:0)+(ctx.companies?.length?1:0)+(ctx.instructor?1:0);
     }
 
+    let identityEpoch=0;
+    let identityLoadQueue=Promise.resolve();
+    const identityLoads=new Map();
     function invalidateIdentitySnapshot(userId=null){
       if(userId&&identitySnapshotCache.userId&&identitySnapshotCache.userId!==userId)return;
+      identityEpoch++;
       identitySnapshotCache={userId:null,at:0,profile:null,profileError:null,access:null,promise:null};
     }
     async function loadIdentitySnapshot(user,{force=false}={}){
@@ -501,11 +505,14 @@
       const fresh=!force&&identitySnapshotCache.userId===user.id&&identitySnapshotCache.profile&&identitySnapshotCache.access&&(Date.now()-identitySnapshotCache.at<LUTMIN_IDENTITY_CACHE_TTL);
       if(fresh)return {profile:identitySnapshotCache.profile,profileError:identitySnapshotCache.profileError,access:identitySnapshotCache.access};
       if(!force&&identitySnapshotCache.userId===user.id&&identitySnapshotCache.promise)return identitySnapshotCache.promise;
+      const snapshotEpoch=identityEpoch;
       const promise=(async()=>{
         const [profileRes,access]=await Promise.all([
           supabaseClient.from('profiles').select('full_name,email,role,active,must_change_password').eq('id',user.id).maybeSingle(),
           loadAccessContext()
         ]);
+        if(snapshotEpoch!==identityEpoch)throw new Error('La sesión cambió. Volvé a ingresar.');
+        if(profileRes.error)throw new Error('No pude verificar tu perfil. Volvé a intentar.');
         const snapshot={profile:profileRes.data||null,profileError:profileRes.error||null,access};
         identitySnapshotCache={userId:user.id,at:Date.now(),profile:snapshot.profile,profileError:snapshot.profileError,access:snapshot.access,promise:null};
         return snapshot;
@@ -522,7 +529,6 @@
       // V56: mientras la persona escribe sus credenciales, dejamos listo el acceso
       // que efectivamente va a usar. No ejecuta los runtimes todavía.
       window.LutminAppShell?.preload?.();
-      window.LutminModules?.warmAccess?.(authLoginContext==='company'?'company_admin':'student');
       document.getElementById('authStatus').textContent = '';
       document.getElementById('authForm').reset();
       const company = authLoginContext === 'company';
@@ -538,7 +544,6 @@
       if (!supabaseClient) return openAuthModal('student');
       // Empezamos shell + runtime con la intención, sin esperar uno para iniciar el otro.
       window.LutminAppShell?.preload?.();
-      window.LutminModules?.warmAccess?.('student');
       const {data:{session}}=await supabaseClient.auth.getSession();
       if(!session) return openAuthModal('student');
       // Reabrir el Campus no vuelve a consultar perfil + accesos + runtimes.
@@ -547,17 +552,9 @@
         goToCampusTab('dashboard');
         return true;
       }
-      // V56: arrancamos identidad + shell en el mismo instante. El modal se muestra
-      // apenas el shell está listo, mientras el runtime continúa hidratándose.
-      const hydratePromise=loadCurrentLutminUser(session.user,'student');
-      const shellReady=await window.LutminAppShell?.ensureCampus?.();
-      if(shellReady===false)return showToast('No pude preparar el Campus. Actualizá la página y volvé a intentar.');
+      const ok=await loadCurrentLutminUser(session.user,'student');
+      if(!ok)return false;
       openModal('campusModal');
-      goToCampusTab('dashboard');
-      document.getElementById('campusModal')?.setAttribute('aria-busy','true');
-      const ok=await hydratePromise;
-      document.getElementById('campusModal')?.removeAttribute('aria-busy');
-      if(!ok){ closeModal('campusModal'); return false; }
       return true;
     }
     async function openCampus(){ return openStudentAccess(); }
@@ -565,7 +562,6 @@
     async function openCompanyPortalAccess() {
       if (!supabaseClient) return openAuthModal('company');
       window.LutminAppShell?.preload?.();
-      window.LutminModules?.warmAccess?.('company_admin');
       const { data: { session } } = await supabaseClient.auth.getSession();
       if (!session) return openAuthModal('company');
       if(currentLutminUser?.id===session.user.id&&currentAccessMode==='company'&&document.getElementById('campusModal')){
@@ -597,7 +593,23 @@
       } finally { btn.disabled=false; btn.textContent='Ingresar'; }
     });
 
-    async function loadCurrentLutminUser(user, requestedMode = null) {
+    function loadCurrentLutminUser(user, requestedMode=null) {
+      if(!user)return Promise.resolve(false);
+      const epoch=identityEpoch, key=`${epoch}:${user.id}:${requestedMode||''}`;
+      if(identityLoads.has(key))return identityLoads.get(key);
+      const task=identityLoadQueue.catch(()=>{}).then(()=>{
+        if(epoch!==identityEpoch)return false;
+        return hydrateCurrentLutminUser(user,requestedMode,epoch);
+      }).catch(error=>{
+        console.error('[Lutmin] Acceso:',error);
+        const message=error.message||'No pude preparar tu acceso. Volvé a intentar.';
+        const status=document.getElementById('authStatus');if(status)status.textContent=message;
+        showToast(message);return false;
+      }).finally(()=>identityLoads.delete(key));
+      identityLoads.set(key,task);identityLoadQueue=task;return task;
+    }
+
+    async function hydrateCurrentLutminUser(user, requestedMode = null, epoch=identityEpoch) {
       if (!user || !supabaseClient) return false;
       // V56: si este acceso ya está hidratado, no repetimos red ni carga de módulos.
       if(currentLutminUser?.id===user.id&&document.getElementById('campusModal')&&(!requestedMode||requestedMode===currentAccessMode)){
@@ -622,7 +634,7 @@
       if(mode==='student'&&currentAccessContext.admin&&!currentAccessContext.student) mode='admin';
       if(mode==='admin'&&!currentAccessContext.admin) mode=currentAccessContext.student?'student':currentAccessContext.companies.length?'company':currentAccessContext.instructor?'instructor':null;
       if(!mode){showToast('La cuenta existe pero no tiene accesos activos.');return false;}
-      currentAccessMode=mode; sessionStorage.setItem('lutmin-access-mode',mode);
+
       const effectiveRole=mode==='company'?'company_admin':mode==='admin'?'admin':mode==='instructor'?'instructor':'student';
       // El shell ya se estaba resolviendo mientras consultábamos identidad/accesos.
       const shellReady=await shellPromise;
@@ -638,6 +650,8 @@
         const modulesReady=await window.LutminModules.ensureAuthenticated({role:effectiveRole,capabilities:currentAccessContext});
         if(modulesReady===false){showToast('No pude cargar los módulos necesarios de Lutmin. Actualizá la página y volvé a intentar.');return false;}
       }
+      if(epoch!==identityEpoch)return false;
+      currentAccessMode=mode; sessionStorage.setItem('lutmin-access-mode',mode);
       currentLutminUser={id:user.id,email:profile?.email||user.email,fullName,role:effectiveRole,baseRole:profile?.role||'student',active:profile?.active!==false,mustChangePassword:Boolean(profile?.must_change_password)};
       paintCurrentLutminUser();
       // Telemetría de presencia no forma parte del camino crítico de apertura.
@@ -659,6 +673,13 @@
         },50);
       }
       return true;
+    }
+
+    function resetCompanyBranding(){
+      document.getElementById('companySidebarBrand')?.classList.add('hidden'); document.getElementById('lutminSidebarLogo')?.classList.remove('hidden');
+      const label=document.getElementById('campusSidebarProductLabel'); if(label){label.textContent='Campus Lutmin';label.classList.add('mt-8');}
+      document.getElementById('companyMobileBrand')?.classList.add('hidden'); document.getElementById('companyMobileBrand')?.classList.remove('flex');
+      const ml=document.getElementById('campusMobileProductLabel'); if(ml)ml.textContent='Campus Lutmin';
     }
 
     function paintCurrentLutminUser() {
@@ -693,7 +714,7 @@
     async function switchAccessMode(mode){
       const {data:{session}}=await supabaseClient.auth.getSession(); if(!session)return;
       closeModal('accessSwitcherModal'); const ok=await loadCurrentLutminUser(session.user,mode); if(!ok)return; openModal('campusModal');
-      goToCampusTab(mode==='company'?'company':mode==='admin'?'admin':mode==='instructor'?'instructor':'dashboard');
+      goToCampusTab(currentAccessMode==='company'?'company':currentAccessMode==='admin'?'admin':currentAccessMode==='instructor'?'instructor':'dashboard');
     }
 
     async function logoutLutmin() {
@@ -703,7 +724,7 @@
       window.LutminData?.invalidate?.();
       currentAccessMode = null; currentAccessContext = {student:false,admin:false,companies:[],instructor:false,instructor_groups:[]}; sessionStorage.removeItem('lutmin-access-mode');
       notificationCenterData = { notifications: [], announcements: [], unread_count: 0 };
-      adminProfiles = []; adminCourses = []; adminLessons = []; adminEnrollments = []; adminProgressRows = []; adminAssessments = []; adminAssessmentQuestions = []; adminAssessmentAttempts = []; adminCertificates = []; adminOfferings = []; adminCourseLeads = []; adminCompanies = []; adminCompanyMembers = []; companyPortalData = null;
+      adminProfiles = []; adminCourses = []; adminLessons = []; adminEnrollments = []; adminProgressRows = []; adminAssessments = []; adminAssessmentQuestions = []; adminAssessmentAttempts = []; adminCertificates = []; adminOfferings = []; adminCourseLeads = []; adminCompanies = []; adminCompanyMembers = []; window.LutminCompanyPortal?.reset?.();
       adminAuditRows = []; adminAnnouncements = []; adminControlCenter = {};
       adminTrainingGroups = []; adminTrainingMembers = []; adminTrainingSessions = []; adminAttendance = []; adminTrainingPlans=[]; adminTrainingPlanCourses=[]; studentAgendaData = { sessions: [] }; adminAccessRoles=[]; supportTickets=[]; supportMessages=[];
       talentData = { profile:null, skills:[], experiences:[], jobs:[], applications:[], certificates:[] }; companyTalentData=[]; companyJobPipelineData={jobs:[],applications:[]}; adminTalentProfiles=[]; adminTalentSkills=[]; adminJobs=[]; adminJobApplications=[];
@@ -714,40 +735,19 @@
     }
 
     if (supabaseClient) {
-      const scheduleAuthenticatedWarmup=(user)=>{
-        const run=async()=>{
-          try{
-            // Un usuario con sesión abierta no debería pagar shell + runtime recién al hacer clic.
-            const identity=await loadIdentitySnapshot(user);
-            const access=identity?.access||{};
-            let warmRole=currentAccessMode==='company'?'company_admin':currentAccessMode==='admin'?'admin':currentAccessMode==='instructor'?'instructor':currentAccessMode==='student'?'student':null;
-            const roleAllowed=warmRole==='admin'?access.admin:warmRole==='student'?access.student:warmRole==='company_admin'?Boolean(access.companies?.length):warmRole==='instructor'?access.instructor:false;
-            if(!roleAllowed){
-              warmRole=access.admin?'admin':access.student?'student':access.companies?.length?'company_admin':access.instructor?'instructor':'student';
-            }
-            await window.LutminAppShell?.ensureCampus?.();
-            await window.LutminModules?.ensureAuthenticated?.({role:warmRole,capabilities:access});
-            // No precargamos Conecta entero durante el arranque del Campus. Su botón
-            // ya hace prewarm por intención; el Inicio conserva prioridad de red/CPU.
-          }catch(err){console.warn('[Lutmin V56] warmup autenticado omitido:',err?.message||err);}
-        };
-        if('requestIdleCallback' in window)requestIdleCallback(()=>run(),{timeout:900});
-        else setTimeout(run,220);
-      };
       supabaseClient.auth.onAuthStateChange((event, session) => {
-        if(event==='INITIAL_SESSION'&&session?.user){
-          // V56: hidratación silenciosa sólo para sesiones ya válidas. El acceso visible
-          // queda inmediato, pero un visitante anónimo sigue cargando la landing liviana.
-          window.LutminAppShell?.preload?.();
-          scheduleAuthenticatedWarmup(session.user);
-        } else if (session?.user && !(passwordUpdateInFlight && event === 'USER_UPDATED')) {
-          if(event==='USER_UPDATED')invalidateIdentitySnapshot(session.user.id);
-          loadCurrentLutminUser(session.user, currentAccessMode);
+        // No consultar Supabase desde su callback de autenticación ni hidratar dos veces.
+        if(!session){
+          currentLutminUser=null;invalidateIdentitySnapshot();
+          currentAccessMode=null;
+          currentAccessContext={student:false,admin:false,companies:[],instructor:false,instructor_groups:[]};
+          window.LutminData?.invalidate?.();closeModal('campusModal');
         }
-        if (!session) {currentLutminUser = null;invalidateIdentitySnapshot();}
-        if (event === 'PASSWORD_RECOVERY') {
-          setTimeout(() => openPasswordModal('recovery'), 100);
+        if(event==='USER_UPDATED' && session?.user && !passwordUpdateInFlight){
+          invalidateIdentitySnapshot(session.user.id);
+          if(currentLutminUser){currentLutminUser=null;setTimeout(()=>loadCurrentLutminUser(session.user,currentAccessMode),0);}
         }
+        if(event==='PASSWORD_RECOVERY')setTimeout(()=>openPasswordModal('recovery'),0);
       });
     }
 
@@ -760,7 +760,7 @@
     // Si el usuario cambia de módulo rápido, no esperamos ni lanzamos datos del panel
     // que ya abandonó. Los assets que alcanzaron a pedirse quedan útiles en caché.
     const canOpenCampusTab=(tab)=>{
-      if(!tab)return false;
+      if(!tab||!currentLutminUser)return false;
       if (tab === 'admin' && currentLutminUser?.role !== 'admin') return false;
       if ((tab === 'company' || tab === 'company-conecta') && currentLutminUser?.role !== 'company_admin') return false;
       if (tab === 'instructor' && currentLutminUser?.role !== 'instructor') return false;
@@ -774,10 +774,9 @@
       const panel=document.querySelector(`[data-campus-panel="${tab}"]`);
       panel?.setAttribute('aria-busy','true');
       try{
-        const [viewReady,featureReady]=await Promise.all([
-          window.LutminViews?.ensureForTab?.(tab),
-          window.LutminModules?.ensureFeatureForTab?.(tab,currentLutminUser?.role)
-        ]);
+        const viewReady=await window.LutminViews?.ensureForTab?.(tab);
+        if(mySeq!==campusNavigationSeq)return false;
+        const featureReady=viewReady===false?false:await window.LutminModules?.ensureFeatureForTab?.(tab,currentLutminUser?.role);
         if(viewReady===false)throw new Error('vista no disponible');
         if(featureReady===false)throw new Error('módulo no disponible');
         if(mySeq!==campusNavigationSeq)return false;
@@ -799,14 +798,17 @@
         return false;
       }finally{panel?.removeAttribute('aria-busy');}
     };
-    document.addEventListener('click', event => {
+    window.LutminCampusNavigation={
+      async open(tab){
+        if(!canOpenCampusTab(tab))return false;
+        const seq=++campusNavigationSeq;
+        goToCampusTab(tab);
+        return hydrateCampusTab(tab,seq);
+      }
+    };
+    document.addEventListener('click',event=>{
       const button=event.target.closest?.('.campus-tab');
-      if(!button)return;
-      const tab=button.dataset.campusTab;
-      if(!canOpenCampusTab(tab))return;
-      const mySeq=++campusNavigationSeq;
-      goToCampusTab(tab);
-      hydrateCampusTab(tab,mySeq);
+      if(button)window.LutminCampusNavigation.open(button.dataset.campusTab);
     });
     const prewarmCampusIntent=(event)=>{
       const button=event.target.closest?.('.campus-tab');
